@@ -1,7 +1,7 @@
 ---
 description: Analyze git status and create purpose-based atomic commits
 allowed-tools: Bash, Read, Write, TodoWrite, TodoRead
-argument-hint: "[scope] [--dry-run]"
+argument-hint: '[scope] [--dry-run]'
 ---
 
 # Git Commit Command
@@ -46,12 +46,12 @@ Load the **git-master** skill and execute in COMMIT mode:
 
 ## Commit Rules (NON-NEGOTIABLE)
 
-| Rule | Enforcement |
-|------|-------------|
-| Same purpose = same commit | Even if 10+ files across directories |
-| Different purposes = different commits | Even if in same directory |
-| Test + implementation = same commit | Always |
-| Format: `type(scope): description` | Always use this format |
+| Rule                                   | Enforcement                          |
+| -------------------------------------- | ------------------------------------ |
+| Same purpose = same commit             | Even if 10+ files across directories |
+| Different purposes = different commits | Even if in same directory            |
+| Test + implementation = same commit    | Always                               |
+| Format: `type(scope): description`     | Always use this format               |
 
 ### Anti-Pattern: Over-Splitting
 
@@ -61,15 +61,16 @@ Load the **git-master** skill and execute in COMMIT mode:
 
 ## Safety
 
-| Action | Requirement |
-|--------|-------------|
-| NEVER skip hooks | No `--no-verify` |
-| NEVER amend pushed commits | Unless explicitly requested |
-| NEVER commit sensitive files | Warn on .env, credentials |
+| Action                       | Requirement                 |
+| ---------------------------- | --------------------------- |
+| NEVER skip hooks             | No `--no-verify`            |
+| NEVER amend pushed commits   | Unless explicitly requested |
+| NEVER commit sensitive files | Warn on .env, credentials   |
 
 ## Output
 
 ### Success
+
 ```
 COMMIT SUMMARY
 ==============
@@ -84,6 +85,7 @@ Created N commits:
 ```
 
 ### Dry Run
+
 ```
 COMMIT PLAN (dry-run)
 =====================

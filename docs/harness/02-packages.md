@@ -17,17 +17,17 @@
   "exports": {
     ".": {
       "types": "./src/index.ts",
-      "default": "./src/index.ts"
-    }
+      "default": "./src/index.ts",
+    },
   },
   "scripts": {
     "typecheck": "tsc -b",
-    "test": "vitest run --passWithNoTests"
+    "test": "vitest run --passWithNoTests",
   },
   "devDependencies": {
     "typescript": "catalog:",
-    "vitest": "catalog:"
-  }
+    "vitest": "catalog:",
+  },
 }
 ```
 
@@ -43,8 +43,8 @@
     "declaration": true,
     "declarationMap": true,
     "outDir": "dist",
-    "rootDir": "src"
-  }
+    "rootDir": "src",
+  },
 }
 ```
 
@@ -58,12 +58,12 @@
 
 ### 설계 결정
 
-| 항목 | 결정 | 근거 |
-|------|------|------|
-| 명세 도구 | TypeSpec (`.tsp`) | OpenAPI보다 간결, 제네릭/유니온 지원, 이식성 (Kotlin/Go) |
-| 생성 대상 | OpenAPI 3.1 YAML + TS 타입 | `openapi.yaml`은 git commit (언어 무관 계약), `types.ts`는 gitignore (재생성) |
-| TS 타입 생성 | `openapi-typescript` | OpenAPI → TS 타입, `paths`/`components` 인터페이스 생성 |
-| codegen 트리거 | `pnpm --filter @fullstack-forge/api-spec codegen` 또는 `npx nx run-many -t codegen` | `build`, `typecheck` 전에 자동 실행 (`dependsOn`) |
+| 항목           | 결정                                                                                      | 근거                                                                          |
+| -------------- | ----------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------- |
+| 명세 도구      | TypeSpec (`.tsp`)                                                                         | OpenAPI보다 간결, 제네릭/유니온 지원, 이식성 (Kotlin/Go)                      |
+| 생성 대상      | OpenAPI 3.1 YAML + TS 타입                                                                | `openapi.yaml`은 git commit (언어 무관 계약), `types.ts`는 gitignore (재생성) |
+| TS 타입 생성   | `openapi-typescript`                                                                      | OpenAPI → TS 타입, `paths`/`components` 인터페이스 생성                       |
+| codegen 트리거 | `pnpm --filter @fullstack-forge/api-spec codegen` 또는 `pnpm exec nx run-many -t codegen` | `build`, `typecheck` 전에 자동 실행 (`dependsOn`)                             |
 
 ### package.json
 
@@ -76,22 +76,22 @@
   "exports": {
     "./types": {
       "types": "./generated/types.ts",
-      "default": "./generated/types.ts"
+      "default": "./generated/types.ts",
     },
-    "./openapi": "./generated/openapi.yaml"
+    "./openapi": "./generated/openapi.yaml",
   },
   "scripts": {
     "codegen": "tsp compile src/main.tsp --emit @typespec/openapi3 && openapi-typescript generated/openapi.yaml -o generated/types.ts",
     "codegen:check": "tsp compile src/main.tsp --no-emit",
-    "typecheck": "tsp compile src/main.tsp --no-emit"
+    "typecheck": "tsp compile src/main.tsp --no-emit",
   },
   "devDependencies": {
     "@typespec/compiler": "catalog:",
     "@typespec/http": "catalog:",
     "@typespec/openapi3": "catalog:",
     "@typespec/openapi": "catalog:",
-    "openapi-typescript": "catalog:"
-  }
+    "openapi-typescript": "catalog:",
+  },
 }
 ```
 
@@ -121,10 +121,10 @@ pnpm --filter @fullstack-forge/api-spec codegen
 
 ### Generated 파일 정책 (필수 규칙)
 
-| 파일 | 정책 | 이유 |
-|------|------|------|
-| `packages/api-spec/generated/openapi.yaml` | **git commit** | 언어 무관 계약(SSOT), 리뷰 가능한 변경 이력 |
-| `packages/api-spec/generated/types.ts` | **gitignore** | `openapi.yaml`에서 재생성 가능한 파생 산출물 |
+| 파일                                       | 정책           | 이유                                         |
+| ------------------------------------------ | -------------- | -------------------------------------------- |
+| `packages/api-spec/generated/openapi.yaml` | **git commit** | 언어 무관 계약(SSOT), 리뷰 가능한 변경 이력  |
+| `packages/api-spec/generated/types.ts`     | **gitignore**  | `openapi.yaml`에서 재생성 가능한 파생 산출물 |
 
 원칙: 계약 파일은 commit, 언어별 파생 파일은 regenerate.
 
@@ -364,18 +364,17 @@ const api = ky.create({ prefixUrl: '/api' })
 
 type MeResponse = paths['/auth/me']['get']['responses']['200']['content']['application/json']
 type ReviewCreateBody = paths['/reviews']['post']['requestBody']['content']['application/json']
-type InquiryDetail = paths['/inquiries/{id}']['get']['responses']['200']['content']['application/json']
+type InquiryDetail =
+  paths['/inquiries/{id}']['get']['responses']['200']['content']['application/json']
 
 const meQueryOptions = queryOptions({
   queryKey: ['auth', 'me'],
   queryFn: () => api.get('auth/me').json<MeResponse>(),
 })
 
-const createReview = (body: ReviewCreateBody) =>
-  api.post('reviews', { json: body }).json()
+const createReview = (body: ReviewCreateBody) => api.post('reviews', { json: body }).json()
 
-const inquiryDetailQuery = (id: string) =>
-  api.get(`inquiries/${id}`).json<InquiryDetail>()
+const inquiryDetailQuery = (id: string) => api.get(`inquiries/${id}`).json<InquiryDetail>()
 
 // 백엔드 — 타입 계약 준수
 import type { components } from '@fullstack-forge/api-spec/types'
@@ -400,35 +399,35 @@ Base UI + shadcn 컴포넌트 라이브러리. Tailwind v4 + CVA 패턴.
     "./components/*": {
       "@fullstack-forge/source": "./src/components/*.tsx",
       "types": "./dist/components/*.d.ts",
-      "default": "./dist/components/*.js"
+      "default": "./dist/components/*.js",
     },
     "./lib/*": {
       "@fullstack-forge/source": "./src/lib/*.ts",
       "types": "./dist/lib/*.d.ts",
-      "default": "./dist/lib/*.js"
+      "default": "./dist/lib/*.js",
     },
     "./hooks/*": {
       "@fullstack-forge/source": "./src/hooks/*.ts",
       "types": "./dist/hooks/*.d.ts",
-      "default": "./dist/hooks/*.js"
+      "default": "./dist/hooks/*.js",
     },
-    "./styles/*.css": "./src/styles/*.css"
+    "./styles/*.css": "./src/styles/*.css",
   },
   "scripts": {
-    "build": "tsc -b tsconfig.build.json && tsc-alias -p tsconfig.build.json",
+    "build": "tsdown",
     "typecheck": "tsc -b",
-    "test": "vitest run --passWithNoTests"
+    "test": "vitest run --passWithNoTests",
   },
   "dependencies": {
     "@base-ui/react": "^1.2.0",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "lucide-react": "^0.511.0",
-    "tailwind-merge": "^3.3.0"
+    "tailwind-merge": "^3.3.0",
   },
   "peerDependencies": {
     "react": "^19.2.4",
-    "react-dom": "^19.2.4"
+    "react-dom": "^19.2.4",
   },
   "devDependencies": {
     "@tailwindcss/vite": "catalog:",
@@ -438,11 +437,11 @@ Base UI + shadcn 컴포넌트 라이브러리. Tailwind v4 + CVA 패턴.
     "@types/react-dom": "catalog:",
     "jsdom": "catalog:",
     "tailwindcss": "catalog:",
-    "tsc-alias": "catalog:",
+    "tsdown": "catalog:",
     "tw-animate-css": "catalog:",
     "typescript": "catalog:",
-    "vitest": "catalog:"
-  }
+    "vitest": "catalog:",
+  },
 }
 ```
 
@@ -466,8 +465,8 @@ Base UI + shadcn 컴포넌트 라이브러리. Tailwind v4 + CVA 패턴.
 
     // ★ 프론트 런타임 선언 (base에 없으므로 여기서 추가)
     "jsx": "react-jsx",
-    "lib": ["DOM", "DOM.Iterable", "ES2022"]
-  }
+    "lib": ["DOM", "DOM.Iterable", "ES2022"],
+  },
 }
 ```
 
@@ -481,8 +480,8 @@ Base UI + shadcn 컴포넌트 라이브러리. Tailwind v4 + CVA 패턴.
     "src/**/*.spec.*",
     "src/**/*.figma.*",
     "vitest.config.ts",
-    "vitest.setup.ts"
-  ]
+    "vitest.setup.ts",
+  ],
 }
 ```
 
@@ -498,7 +497,7 @@ Base UI + shadcn 컴포넌트 라이브러리. Tailwind v4 + CVA 패턴.
     "config": "",
     "css": "src/styles/globals.css",
     "baseColor": "zinc",
-    "cssVariables": true
+    "cssVariables": true,
   },
   "iconLibrary": "lucide",
   "aliases": {
@@ -506,8 +505,8 @@ Base UI + shadcn 컴포넌트 라이브러리. Tailwind v4 + CVA 패턴.
     "hooks": "@/hooks",
     "lib": "@/lib",
     "ui": "@/components",
-    "utils": "@/lib/utils"
-  }
+    "utils": "@/lib/utils",
+  },
 }
 ```
 

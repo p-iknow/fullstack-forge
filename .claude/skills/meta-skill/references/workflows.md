@@ -30,11 +30,13 @@ For tasks with branching logic, guide through decision points:
    **Modifying existing content?** → Follow "Editing Workflow"
 
 ### Creation Workflow
+
 1. Select template
 2. Enter data
 3. Validate and output
 
 ### Editing Workflow
+
 1. Load file
 2. Apply changes
 3. Backup and save
@@ -62,10 +64,12 @@ Maximum iterations: 3 (notify user if exceeded)
 ## Error Handling
 
 ### Retryable Errors
+
 - Network timeout → Retry up to 3 times
 - Transient API errors → Retry with exponential backoff
 
 ### Non-Recoverable Errors
+
 - File corruption → Notify user and abort
 - Insufficient permissions → Guide on required permissions and abort
 ```
@@ -76,6 +80,7 @@ Maximum iterations: 3 (notify user if exceeded)
 ## Verification Checklist
 
 After each task completion:
+
 - [ ] Verify output file exists
 - [ ] Validate file format
 - [ ] Compare with expected results

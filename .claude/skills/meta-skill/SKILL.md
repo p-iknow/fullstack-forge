@@ -17,16 +17,16 @@ Create and validate skills for AI agents following Anthropic's official skill sp
 
 The context window is a public good. Skills share it with system prompt, conversation history, other skills, and the user request.
 
-**Default assumption: Claude is already very smart.** Only add context Claude doesn't already have. For each piece of content, ask: *"Does Claude really need this? Does this paragraph justify its token cost?"*
+**Default assumption: Claude is already very smart.** Only add context Claude doesn't already have. For each piece of content, ask: _"Does Claude really need this? Does this paragraph justify its token cost?"_
 
 Prefer concise examples over verbose explanations. See [references/official-examples.md](references/official-examples.md) for how Anthropic's own skills demonstrate this — ranging from 33-line reference skills to 400-line generative skills, each sized appropriately for their domain.
 
 ## Workflow Routing
 
-| Intent | Workflow |
-|--------|----------|
-| Create a new skill (full process) | [Phase-by-phase below](#skill-creation-workflow-7-phases) |
-| Validate existing skill(s) | [workflows/validate-skill.md](workflows/validate-skill.md) |
+| Intent                            | Workflow                                                   |
+| --------------------------------- | ---------------------------------------------------------- |
+| Create a new skill (full process) | [Phase-by-phase below](#skill-creation-workflow-7-phases)  |
+| Validate existing skill(s)        | [workflows/validate-skill.md](workflows/validate-skill.md) |
 
 ## Quick Start
 
@@ -54,6 +54,7 @@ Follow these phases in order. Each phase has specific deliverables and exit crit
 **Goal**: Define concrete use cases and trigger conditions.
 
 **Questions to Ask**:
+
 1. "What specific scenarios trigger this skill?"
 2. "Can you provide 2-3 concrete use cases?" (with trigger, steps, result format)
 3. "What keywords should activate this skill?"
@@ -61,6 +62,7 @@ Follow these phases in order. Each phase has specific deliverables and exit crit
 5. "What tools are needed (built-in or MCP)?"
 
 **Use Case Format** (from Anthropic guide):
+
 ```text
 Use Case: [Name]
 Trigger: User says "[phrase]" or "[phrase]"
@@ -71,6 +73,7 @@ Result: [Concrete outcome]
 ```
 
 **Deliverables**:
+
 - 2-3 concrete use cases in the format above
 - Trigger condition list
 - Expected input/output format
@@ -83,31 +86,32 @@ Result: [Concrete outcome]
 
 **Content Type Decision**:
 
-| Content Type | When to Include | Examples |
-|-------------|-----------------|----------|
-| `scripts/` | Repetitive code, deterministic operations | File processing, API calls, automation |
-| `references/` | Detailed docs, schemas, lengthy guides | API docs, database schemas, workflow guides |
-| `assets/` | Output templates, images, fonts | HTML templates, config files, boilerplate |
+| Content Type  | When to Include                           | Examples                                    |
+| ------------- | ----------------------------------------- | ------------------------------------------- |
+| `scripts/`    | Repetitive code, deterministic operations | File processing, API calls, automation      |
+| `references/` | Detailed docs, schemas, lengthy guides    | API docs, database schemas, workflow guides |
+| `assets/`     | Output templates, images, fonts           | HTML templates, config files, boilerplate   |
 
 **Freedom Level Decision**:
 
-| Level | When to Use | Implementation |
-|-------|-------------|----------------|
-| High | Multiple valid approaches | Text instructions only |
-| Medium | Preferred pattern exists | Pseudocode or parameterized scripts |
-| Low | Fragile operations, consistency critical | Specific scripts with minimal parameters |
+| Level  | When to Use                              | Implementation                           |
+| ------ | ---------------------------------------- | ---------------------------------------- |
+| High   | Multiple valid approaches                | Text instructions only                   |
+| Medium | Preferred pattern exists                 | Pseudocode or parameterized scripts      |
+| Low    | Fragile operations, consistency critical | Specific scripts with minimal parameters |
 
 **Skill Pattern Selection** (choose one):
 
-| Pattern | Use When | Reference |
-|---------|----------|-----------|
-| Sequential Workflow | Multi-step processes in specific order | [references/skill-patterns.md](references/skill-patterns.md) |
-| Multi-MCP Coordination | Workflows spanning multiple services | [references/skill-patterns.md](references/skill-patterns.md) |
-| Iterative Refinement | Output quality improves with iteration | [references/skill-patterns.md](references/skill-patterns.md) |
-| Context-Aware Selection | Same outcome, different tools depending on context | [references/skill-patterns.md](references/skill-patterns.md) |
-| Domain-Specific Intelligence | Specialized knowledge beyond tool access | [references/skill-patterns.md](references/skill-patterns.md) |
+| Pattern                      | Use When                                           | Reference                                                    |
+| ---------------------------- | -------------------------------------------------- | ------------------------------------------------------------ |
+| Sequential Workflow          | Multi-step processes in specific order             | [references/skill-patterns.md](references/skill-patterns.md) |
+| Multi-MCP Coordination       | Workflows spanning multiple services               | [references/skill-patterns.md](references/skill-patterns.md) |
+| Iterative Refinement         | Output quality improves with iteration             | [references/skill-patterns.md](references/skill-patterns.md) |
+| Context-Aware Selection      | Same outcome, different tools depending on context | [references/skill-patterns.md](references/skill-patterns.md) |
+| Domain-Specific Intelligence | Specialized knowledge beyond tool access           | [references/skill-patterns.md](references/skill-patterns.md) |
 
 **Deliverables**:
+
 - Directory structure design
 - Progressive Disclosure strategy
 - Selected skill pattern
@@ -121,6 +125,7 @@ bun scripts/init-skill.ts <skill-name> --path <output-directory>
 ```
 
 Creates:
+
 ```
 skill-name/
 ├── SKILL.md              # Template with placeholders
@@ -152,6 +157,7 @@ description: [What it does] in natural prose. Use when [specific triggers/contex
 ```
 
 **Description field rules** (see [references/frontmatter-spec.md](references/frontmatter-spec.md)):
+
 - **Natural prose** — write 1-3 sentences, not structured labels or bullet lists
 - Weave trigger phrases into natural sentences (e.g., "Use when users want to..." not `USE WHEN:\n- "keyword"`)
 - Under 1024 characters
@@ -160,6 +166,7 @@ description: [What it does] in natural prose. Use when [specific triggers/contex
 - See [references/official-examples.md](references/official-examples.md) for real Anthropic skill descriptions
 
 **Security considerations**:
+
 - No XML angle brackets in frontmatter (appears in system prompt — injection risk)
 - No "claude" or "anthropic" in skill name (reserved by Anthropic)
 - YAML uses safe parsing (no code execution)
@@ -174,29 +181,32 @@ Study [references/official-examples.md](references/official-examples.md) for how
 
 **Observed patterns from official skills**:
 
-| Skill Domain | Body Structure |
-|-------------|----------------|
-| Creative (art, design) | Philosophy → Process → Technical Requirements → Resources |
-| Tool-based (testing, MCP) | Decision Tree → Examples → Best Practices |
-| Workflow (doc-coauthoring) | When to Offer → Stage 1 → Stage 2 → Stage 3 |
-| Simple reference (brand, theme) | Overview → Details → Usage Instructions |
-| Multi-step creation (skill-creator) | Core Principles → Anatomy → Step-by-step Process |
+| Skill Domain                        | Body Structure                                            |
+| ----------------------------------- | --------------------------------------------------------- |
+| Creative (art, design)              | Philosophy → Process → Technical Requirements → Resources |
+| Tool-based (testing, MCP)           | Decision Tree → Examples → Best Practices                 |
+| Workflow (doc-coauthoring)          | When to Offer → Stage 1 → Stage 2 → Stage 3               |
+| Simple reference (brand, theme)     | Overview → Details → Usage Instructions                   |
+| Multi-step creation (skill-creator) | Core Principles → Anatomy → Step-by-step Process          |
 
 **Key principle**: Let the domain dictate the structure. A 33-line reference skill and a 400-line generative art skill should look nothing alike.
 
 **Optional elements** (include only when they add value):
+
 - **Workflow Routing table** — only if the skill has multiple distinct workflows (e.g., "create" vs "validate")
 - **Examples section** — helpful for user-facing skills with trigger phrases
 - **Troubleshooting section** — helpful for skills involving scripts or MCP integrations
 - **Reference Files section** — when bundled resources exist in references/, scripts/, or assets/
 
 **Writing best practices** (see [references/writing-guide.md](references/writing-guide.md)):
+
 - Be specific and actionable (not "validate the data" but `run scripts/validate.py --input {file}`)
 - Reference bundled resources clearly (`Before writing queries, consult references/api-patterns.md`)
 - Put critical instructions at the top
 - Match Degrees of Freedom to task fragility (see writing-guide.md)
 
 **Output format guidance** (see [references/output-patterns.md](references/output-patterns.md)):
+
 - **Strict template**: API contracts, data exports — use exact template with `ALWAYS` prefix
 - **Flexible template**: Analysis, docs — template with "adjust as needed"
 - **Examples pattern**: Style-sensitive output — provide 2-3 input/output pairs
@@ -228,19 +238,19 @@ bun scripts/validate-skill.ts <skill-folder>
 
 **Validation Checklist**:
 
-| Category | Check | Requirement |
-|----------|-------|-------------|
-| Frontmatter | `name` field | kebab-case, max 64 chars, matches directory |
-| Frontmatter | `description` field | [What] + [When], under 1024 chars, no XML brackets |
-| Frontmatter | No reserved names | No "claude" or "anthropic" in name |
-| Structure | SKILL.md exists | Exact case: `SKILL.md` |
-| Structure | No README.md | Must not exist in skill folder |
-| Structure | Line count | Under 500 lines (split to references if exceeded) |
-| Content | No unresolved placeholders | All TODO markers resolved |
-| Content | Examples section | Recommended if skill has user-facing triggers |
-| Content | Error handling | Recommended if skill involves MCP/scripts |
-| Scripts | Execution test | All scripts run without errors |
-| References | Explicit links | All refs linked from SKILL.md |
+| Category    | Check                      | Requirement                                        |
+| ----------- | -------------------------- | -------------------------------------------------- |
+| Frontmatter | `name` field               | kebab-case, max 64 chars, matches directory        |
+| Frontmatter | `description` field        | [What] + [When], under 1024 chars, no XML brackets |
+| Frontmatter | No reserved names          | No "claude" or "anthropic" in name                 |
+| Structure   | SKILL.md exists            | Exact case: `SKILL.md`                             |
+| Structure   | No README.md               | Must not exist in skill folder                     |
+| Structure   | Line count                 | Under 500 lines (split to references if exceeded)  |
+| Content     | No unresolved placeholders | All TODO markers resolved                          |
+| Content     | Examples section           | Recommended if skill has user-facing triggers      |
+| Content     | Error handling             | Recommended if skill involves MCP/scripts          |
+| Scripts     | Execution test             | All scripts run without errors                     |
+| References  | Explicit links             | All refs linked from SKILL.md                      |
 
 See [workflows/validate-skill.md](workflows/validate-skill.md) for full validation workflow.
 
@@ -249,6 +259,7 @@ See [workflows/validate-skill.md](workflows/validate-skill.md) for full validati
 **Goal**: Verify skill triggers correctly and produces expected output.
 
 **6.1 Triggering Tests**:
+
 ```text
 Should trigger:
 - "[obvious trigger phrase 1]"
@@ -261,6 +272,7 @@ Should NOT trigger:
 ```
 
 **6.2 Functional Tests**:
+
 ```text
 Test: [Scenario name]
 Given: [Input conditions]
@@ -272,6 +284,7 @@ Then:
 ```
 
 **6.3 Performance Comparison** (optional — for distribution/sharing):
+
 - Compare same task WITH and WITHOUT skill
 - Measure: tool calls, total tokens, user corrections needed
 - Most useful when proving value to external users; skip for internal-only skills
@@ -287,32 +300,42 @@ bun scripts/package-skill.ts <skill-folder> [output-dir]
 **Output**: `<skill-name>.skill` file (ZIP format with .skill extension)
 
 **Post-Package**:
+
 1. Test the packaged skill in target environment
 2. Collect usage feedback
 3. Iterate based on real usage (go back to Phase 6)
 
 ## Progressive Disclosure Patterns
 
-| Level | When Loaded | Size Limit | Content |
-|-------|-------------|------------|---------|
-| 1 | Always | ~100 words | `name` + `description` (frontmatter) |
-| 2 | On trigger | <5k words | SKILL.md body |
-| 3 | On demand | Unlimited | scripts/, references/, assets/ |
+| Level | When Loaded | Size Limit | Content                              |
+| ----- | ----------- | ---------- | ------------------------------------ |
+| 1     | Always      | ~100 words | `name` + `description` (frontmatter) |
+| 2     | On trigger  | <5k words  | SKILL.md body                        |
+| 3     | On demand   | Unlimited  | scripts/, references/, assets/       |
 
 ### Pattern 1: High-level Guide with References
+
 ```markdown
 # Main Skill
+
 ## Quick Start
+
 [Essential instructions]
+
 ## Advanced Features
+
 - **Feature A**: See [references/feature_a.md](references/feature_a.md)
 ```
 
 ### Pattern 2: Conditional Details
+
 ```markdown
 ## Basic Usage
+
 [Simple instructions]
+
 ## Advanced (when needed)
+
 **For complex scenarios**: See [references/advanced.md](references/advanced.md)
 ```
 
@@ -329,19 +352,19 @@ A skill should only contain files that directly support its functionality. Do NO
 
 ## Anti-Patterns
 
-| Anti-Pattern | Problem | Solution |
-|-------------|---------|----------|
-| Vague description | Skill won't trigger | Include specific trigger phrases in natural prose |
-| Structured labels in description | Doesn't match official style | Write natural sentences, not `USE WHEN:` bullet lists |
-| Unnecessary negative triggers | Clutter without value | Add "Do NOT use for..." only if realistic confusion with sibling skills |
-| XML brackets in frontmatter | Security violation | Use plain text only |
-| SKILL.md > 500 lines | Context bloat | Split to references/ |
-| Extraneous docs (README, CHANGELOG) | Clutter and confusion | Remove — see "What NOT to Include" above |
-| Untested scripts | Runtime failures | Test all scripts before packaging |
-| Deeply nested refs | Hard to navigate | Keep references 1 level deep |
-| Verbose instructions | Claude ignores them | Be concise, use bullet points |
-| Missing error handling | Users get stuck | Add Troubleshooting section |
-| No output examples | Inconsistent results | Add output-patterns (template or examples) |
+| Anti-Pattern                        | Problem                      | Solution                                                                |
+| ----------------------------------- | ---------------------------- | ----------------------------------------------------------------------- |
+| Vague description                   | Skill won't trigger          | Include specific trigger phrases in natural prose                       |
+| Structured labels in description    | Doesn't match official style | Write natural sentences, not `USE WHEN:` bullet lists                   |
+| Unnecessary negative triggers       | Clutter without value        | Add "Do NOT use for..." only if realistic confusion with sibling skills |
+| XML brackets in frontmatter         | Security violation           | Use plain text only                                                     |
+| SKILL.md > 500 lines                | Context bloat                | Split to references/                                                    |
+| Extraneous docs (README, CHANGELOG) | Clutter and confusion        | Remove — see "What NOT to Include" above                                |
+| Untested scripts                    | Runtime failures             | Test all scripts before packaging                                       |
+| Deeply nested refs                  | Hard to navigate             | Keep references 1 level deep                                            |
+| Verbose instructions                | Claude ignores them          | Be concise, use bullet points                                           |
+| Missing error handling              | Users get stuck              | Add Troubleshooting section                                             |
+| No output examples                  | Inconsistent results         | Add output-patterns (template or examples)                              |
 
 ## References
 

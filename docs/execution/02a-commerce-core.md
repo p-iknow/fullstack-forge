@@ -81,7 +81,7 @@
 
 ```bash
 pnpm --filter @fullstack-forge/api-spec codegen
-npx nx reset
+pnpm exec nx reset
 pnpm typecheck
 ```
 

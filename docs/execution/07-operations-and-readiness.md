@@ -29,7 +29,7 @@
 ### 통합 검증 (한 줄)
 
 ```bash
-npx nx run-many -t codegen && pnpm check && pnpm build && pnpm test
+pnpm exec nx run-many -t codegen && pnpm check && pnpm build && pnpm test
 ```
 
 ## Troubleshooting

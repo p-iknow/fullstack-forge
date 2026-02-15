@@ -3,21 +3,15 @@
 ## vitest.workspace.ts
 
 ```ts
-export default [
-  'packages/shared',
-  'packages/base-ui',
-  'apps/store',
-  'apps/admin',
-  'apps/api',
-]
+export default ['packages/shared', 'packages/base-ui', 'apps/store', 'apps/admin', 'apps/api']
 ```
 
-| 프로젝트 | 환경 | 비고 |
-|----------|------|------|
-| apps/* | `jsdom` | 브라우저 시뮬레이션, setupFiles 있음 (`store`=고객용, `admin`=운영용) |
-| packages/base-ui | `jsdom` | React 컴포넌트 테스트 |
-| packages/shared | 기본 (node) | 순수 로직 |
-| apps/api | `node` | 서버 로직 |
+| 프로젝트         | 환경        | 비고                                                                  |
+| ---------------- | ----------- | --------------------------------------------------------------------- |
+| apps/\*          | `jsdom`     | 브라우저 시뮬레이션, setupFiles 있음 (`store`=고객용, `admin`=운영용) |
+| packages/base-ui | `jsdom`     | React 컴포넌트 테스트                                                 |
+| packages/shared  | 기본 (node) | 순수 로직                                                             |
+| apps/api         | `node`      | 서버 로직                                                             |
 
 > `packages/api-spec`은 vitest 대상 아님 — TypeSpec 검증은 `pnpm --filter @fullstack-forge/api-spec typecheck`로 처리.
 
@@ -28,35 +22,40 @@ export default [
   "$schema": "https://unpkg.com/knip@5/schema.json",
   "ignoreFiles": [".claude/**", "sheriff.config.ts"],
   "ignoreDependencies": [
-    "tailwindcss", "@tailwindcss/vite", "@testing-library/react",
-    "@typespec/compiler", "@typespec/http", "@typespec/openapi3", "@typespec/openapi"
+    "tailwindcss",
+    "@tailwindcss/vite",
+    "@testing-library/react",
+    "@typespec/compiler",
+    "@typespec/http",
+    "@typespec/openapi3",
+    "@typespec/openapi",
   ],
   "workspaces": {
     ".": {
-      "ignoreDependencies": ["@vitest/coverage-v8", "vitest"]
+      "ignoreDependencies": ["@vitest/coverage-v8", "vitest"],
     },
     "apps/*": {
       "entry": ["src/router.tsx", "src/routes/**/*.tsx", "src/routeTree.gen.ts"],
       "project": ["src/**/*.{ts,tsx}"],
-      "ignore": ["src/routeTree.gen.ts"]
+      "ignore": ["src/routeTree.gen.ts"],
     },
     "apps/api": {
       "entry": ["src/index.ts"],
-      "project": ["src/**/*.ts"]
+      "project": ["src/**/*.ts"],
     },
     "packages/shared": {
-      "includeEntryExports": true
+      "includeEntryExports": true,
     },
     "packages/api-spec": {
       "entry": ["generated/types.ts"],
       "project": ["src/**/*.tsp"],
-      "ignore": ["generated/**"]
+      "ignore": ["generated/**"],
     },
     "packages/base-ui": {
       "entry": ["src/components/*.tsx", "src/lib/*.ts", "src/hooks/*.ts"],
-      "project": ["src/**/*.{ts,tsx}"]
-    }
-  }
+      "project": ["src/**/*.{ts,tsx}"],
+    },
+  },
 }
 ```
 
@@ -69,9 +68,9 @@ export const config: SheriffConfig = {
   enableBarrelLess: true,
 
   entryPoints: {
-    'store': './apps/store/src/router.tsx',
-    'admin': './apps/admin/src/router.tsx',
-    'api': './apps/api/src/index.ts',
+    store: './apps/store/src/router.tsx',
+    admin: './apps/admin/src/router.tsx',
+    api: './apps/api/src/index.ts',
   },
 
   modules: {
@@ -86,13 +85,18 @@ export const config: SheriffConfig = {
 
   depRules: {
     'app:*': [sameTag, 'lib:shared', 'lib:base-ui', 'lib:api-spec'],
-    'svc:*': [sameTag, 'lib:shared', 'lib:api-spec'],   // base-ui 의존 금지
+    'svc:*': [sameTag, 'lib:shared', 'lib:api-spec'], // base-ui 의존 금지
     'lib:shared': noDependencies,
     'lib:base-ui': noDependencies,
     'lib:api-spec': noDependencies,
     root: [
-      'app:store', 'app:admin', 'svc:api',
-      'lib:shared', 'lib:base-ui', 'lib:api-spec', 'noTag',
+      'app:store',
+      'app:admin',
+      'svc:api',
+      'lib:shared',
+      'lib:base-ui',
+      'lib:api-spec',
+      'noTag',
     ],
     noTag: ['noTag', 'lib:shared', 'lib:base-ui', 'lib:api-spec'],
   },
@@ -117,13 +121,13 @@ svc:workers:*  → lib:shared ✓  lib:api-spec ✓  lib:base-ui ✗
 
 ### 테스트 분류
 
-| 유형 | 대상 | 도구 | 실행 환경 |
-|------|------|------|-----------|
-| 단위 테스트 | 도메인 로직 (상태 전이, 재고 차감, 권한 검증) | vitest | node |
-| 컴포넌트 테스트 | React 컴포넌트 (폼, 목록, 상태 표시) | vitest + testing-library | jsdom |
-| API 통합 테스트 | Hono 라우트 + DB 연동 | vitest + `app.request` | node |
-| 계약 테스트 | TypeSpec 계약 vs 실제 응답 일치 | `pnpm typecheck` | - |
-| E2E 테스트 (향후) | 전체 사용자 흐름 | Playwright 등 | 브라우저 |
+| 유형              | 대상                                          | 도구                     | 실행 환경 |
+| ----------------- | --------------------------------------------- | ------------------------ | --------- |
+| 단위 테스트       | 도메인 로직 (상태 전이, 재고 차감, 권한 검증) | vitest                   | node      |
+| 컴포넌트 테스트   | React 컴포넌트 (폼, 목록, 상태 표시)          | vitest + testing-library | jsdom     |
+| API 통합 테스트   | Hono 라우트 + DB 연동                         | vitest + `app.request`   | node      |
+| 계약 테스트       | TypeSpec 계약 vs 실제 응답 일치               | `pnpm typecheck`         | -         |
+| E2E 테스트 (향후) | 전체 사용자 흐름                              | Playwright 등            | 브라우저  |
 
 ### 계층별 테스트 패턴
 
@@ -226,14 +230,14 @@ jobs:
 
       - run: pnpm install --frozen-lockfile
 
-      - run: npx nx run-many -t codegen
+      - run: pnpm exec nx run-many -t codegen
       - run: git diff --exit-code packages/api-spec/generated/openapi.yaml
         # openapi.yaml이 stale이면 CI 실패 → codegen 후 커밋 필요
       - run: pnpm lint
       - run: pnpm format:check
       - run: pnpm sheriff
       - run: pnpm knip
-      - run: npx nx run-many -t typecheck build test
+      - run: pnpm exec nx run-many -t typecheck build test
 ```
 
 > `codegen` 단계가 lint/typecheck/build 전에 실행되어 `generated/types.ts`가 최신 상태임을 보장.
@@ -355,13 +359,13 @@ jobs:
           node-version: 24
           cache: 'pnpm'
       - run: pnpm install --frozen-lockfile
-      - run: npx nx run-many -t codegen
+      - run: pnpm exec nx run-many -t codegen
       - run: git diff --exit-code packages/api-spec/generated/openapi.yaml
       - run: pnpm lint
       - run: pnpm format:check
       - run: pnpm sheriff
       - run: pnpm knip
-      - run: npx nx run-many -t typecheck build test
+      - run: pnpm exec nx run-many -t typecheck build test
 
   infra:
     runs-on: ubuntu-latest

@@ -16,13 +16,16 @@ ALWAYS use this exact template:
 # [Analysis Title]
 
 ## Executive Summary
+
 [One-paragraph overview of key findings]
 
 ## Key Findings
+
 - Finding 1 with supporting data
 - Finding 2 with supporting data
 
 ## Recommendations
+
 1. Specific actionable recommendation
 2. Specific actionable recommendation
 ```
@@ -37,22 +40,25 @@ Sensible default format — adjust sections as needed:
 # [Analysis Title]
 
 ## Executive Summary
+
 [Overview]
 
 ## Key Findings
+
 [Adapt sections based on what you discover]
 
 ## Recommendations
+
 [Tailor to the specific context]
 ```
 
 **When to use which**:
 
-| Strictness | Use Case | Implementation |
-|------------|----------|----------------|
-| Strict | API contracts, compliance reports, data exports | Exact template with `ALWAYS` prefix |
-| Flexible | Analysis, summaries, documentation | Template with "adjust as needed" note |
-| None | Creative content, exploration | No template — describe intent only |
+| Strictness | Use Case                                        | Implementation                        |
+| ---------- | ----------------------------------------------- | ------------------------------------- |
+| Strict     | API contracts, compliance reports, data exports | Exact template with `ALWAYS` prefix   |
+| Flexible   | Analysis, summaries, documentation              | Template with "adjust as needed" note |
+| None       | Creative content, exploration                   | No template — describe intent only    |
 
 ## Pattern 2: Examples Pattern
 
@@ -84,11 +90,11 @@ Follow this style: type(scope): brief description, then detailed explanation.
 
 ### When to Use Each
 
-| Pattern | Best For | Signal |
-|---------|----------|--------|
-| Template | Structured output (reports, configs, API responses) | "Must follow this format" |
-| Examples | Style-sensitive output (commit msgs, docs, emails) | "Should look like this" |
-| Both | Complex output with structure AND style | Reports with specific tone |
+| Pattern  | Best For                                            | Signal                     |
+| -------- | --------------------------------------------------- | -------------------------- |
+| Template | Structured output (reports, configs, API responses) | "Must follow this format"  |
+| Examples | Style-sensitive output (commit msgs, docs, emails)  | "Should look like this"    |
+| Both     | Complex output with structure AND style             | Reports with specific tone |
 
 ## Pattern 3: Validation Pattern
 
@@ -98,6 +104,7 @@ Pair output patterns with validation to ensure consistency.
 ## Output Validation
 
 After generating output, verify:
+
 - [ ] All required sections present
 - [ ] No placeholder text remaining
 - [ ] Format matches template exactly
@@ -108,9 +115,9 @@ If validation fails, regenerate the failing section only.
 
 ## Anti-Patterns
 
-| Anti-Pattern | Problem | Fix |
-|-------------|---------|-----|
-| Template too rigid | Claude forces content into wrong structure | Add "adjust as needed" escape hatch |
-| No examples for style | Inconsistent tone across outputs | Add 2-3 input/output examples |
-| Too many examples | Context bloat | 2-3 representative examples suffice |
-| Examples without explanation | Claude copies format but misses intent | Add brief pattern explanation after examples |
+| Anti-Pattern                 | Problem                                    | Fix                                          |
+| ---------------------------- | ------------------------------------------ | -------------------------------------------- |
+| Template too rigid           | Claude forces content into wrong structure | Add "adjust as needed" escape hatch          |
+| No examples for style        | Inconsistent tone across outputs           | Add 2-3 input/output examples                |
+| Too many examples            | Context bloat                              | 2-3 representative examples suffice          |
+| Examples without explanation | Claude copies format but misses intent     | Add brief pattern explanation after examples |

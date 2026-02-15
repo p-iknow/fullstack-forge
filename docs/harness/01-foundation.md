@@ -20,31 +20,32 @@
     "module": "ESNext",
     "moduleResolution": "Bundler",
     "target": "ES2022",
-    "lib": ["ES2022"],                   // ★ DOM 없음
+    "lib": ["ES2022"], // ★ DOM 없음
     "isolatedModules": true,
     "esModuleInterop": true,
     "resolveJsonModule": true,
-    "verbatimModuleSyntax": true,        // import type 강제
+    "verbatimModuleSyntax": true, // import type 강제
 
     // --- 빌드 ---
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
     "allowJs": true,
     "noEmit": true,
+    "erasableSyntaxOnly": true, // enum, namespace 등 금지
 
     // --- 모노레포 ---
-    "customConditions": ["@fullstack-forge/source"]
-  }
+    "customConditions": ["@fullstack-forge/source"],
+  },
 }
 ```
 
 **각 프로젝트에서 추가할 내용:**
 
-| 프로젝트 타입 | 추가 설정 | 이유 |
-|--------------|-----------|------|
-| 프론트 앱/UI 패키지 | `"jsx": "react-jsx"`, `"lib": ["DOM", "DOM.Iterable", "ES2022"]` | React + 브라우저 API |
-| 백엔드 서비스 | `"types": ["node"]` | Node.js API |
-| 순수 타입/유틸 패키지 | 추가 없음 | base 그대로 사용 |
+| 프로젝트 타입         | 추가 설정                                                        | 이유                 |
+| --------------------- | ---------------------------------------------------------------- | -------------------- |
+| 프론트 앱/UI 패키지   | `"jsx": "react-jsx"`, `"lib": ["DOM", "DOM.Iterable", "ES2022"]` | React + 브라우저 API |
+| 백엔드 서비스         | `"types": ["node"]`                                              | Node.js API          |
+| 순수 타입/유틸 패키지 | 추가 없음                                                        | base 그대로 사용     |
 
 ## tsconfig.json (solution-style)
 
@@ -58,8 +59,8 @@
     { "path": "apps/admin" },
     { "path": "packages/base-ui" },
     { "path": "packages/shared" },
-    { "path": "apps/api" }
-  ]
+    { "path": "apps/api" },
+  ],
 }
 ```
 
@@ -95,15 +96,18 @@ catalog:
   # --- Backend ---
   hono: ^4.11.9
   '@hono/node-server': ^1.19.9
+  '@hono/vite-dev-server': ^0.25.0
+  '@hono/vite-build': ^1.9.3
   drizzle-orm: ^0.45.1
   drizzle-kit: ^0.31.9
   pg: ^8.16.3
   '@types/pg': ^8.15.5
   redis: ^5.8.2
   prom-client: ^15.1.3
-  tsx: ^4.21.0
-  tsup: ^8.5.1
   '@types/node': ^24.10.13
+
+  # --- Package Build ---
+  tsdown: ^0.20.3
 
   # --- API Spec (TypeSpec → OpenAPI → TS) ---
   '@typespec/compiler': ^1.9.0
@@ -123,7 +127,6 @@ catalog:
   '@testing-library/jest-dom': ^6.9.1
   '@testing-library/react': ^16.3.2
   jsdom: ^27.4.0
-  tsc-alias: ^1.8.15
 
   # --- Storybook ---
   storybook: ^10.2.8
@@ -144,12 +147,12 @@ catalog:
     "production": [
       "default",
       "!{projectRoot}/**/?(*.)+(spec|test).[jt]s?(x)?",
-      "!{projectRoot}/tsconfig.spec.json"
+      "!{projectRoot}/tsconfig.spec.json",
     ],
     "sharedGlobals": [
       "{workspaceRoot}/.github/workflows/ci.yml",
-      "{workspaceRoot}/pnpm-workspace.yaml"
-    ]
+      "{workspaceRoot}/pnpm-workspace.yaml",
+    ],
   },
   "targetDefaults": {
     "codegen": { "dependsOn": ["^codegen"], "cache": true },
@@ -159,8 +162,8 @@ catalog:
     "lint": { "cache": true },
     "test": { "cache": true },
     "storybook": { "cache": false },
-    "build-storybook": { "cache": true }
-  }
+    "build-storybook": { "cache": true },
+  },
 }
 ```
 
@@ -182,7 +185,7 @@ catalog:
     "test": "nx run-many -t test",
     "sheriff": "sheriff verify",
     "knip": "knip",
-    "check": "pnpm lint && pnpm format:check && pnpm typecheck && pnpm sheriff && pnpm knip"
+    "check": "pnpm lint && pnpm format:check && pnpm typecheck && pnpm sheriff && pnpm knip",
   },
   "devDependencies": {
     "@softarc/sheriff-core": "^0.19.6",
@@ -192,22 +195,23 @@ catalog:
     "oxfmt": "^0.27.0",
     "oxlint": "^1.42.0",
     "typescript": "catalog:",
-    "vitest": "catalog:"
+    "vitest": "catalog:",
   },
   "pnpm": {
-    "onlyBuiltDependencies": ["esbuild", "nx"]
-  }
+    "onlyBuiltDependencies": ["esbuild", "nx"],
+  },
 }
 ```
 
 ## .npmrc
 
 ```ini
-hoist-pattern[]=storybook
-hoist-pattern[]=@storybook/*
-shamefully-hoist=false
-strict-peer-dependencies=false
-auto-install-peers=true
+# pnpm v10 defaults are sufficient for now.
+# Storybook hoist-pattern will be added when Storybook is set up.
+#
+# Deferred (add when Storybook is configured):
+#   hoist-pattern[]=*storybook*
+#   hoist-pattern[]=@storybook/*
 ```
 
 ## .oxlintrc.json
@@ -219,15 +223,22 @@ auto-install-peers=true
   "categories": {
     "correctness": "error",
     "suspicious": "warn",
-    "pedantic": "off"
+    "pedantic": "off",
   },
   "rules": {
     "no-console": "warn",
     "eqeqeq": "error",
-    "react/react-in-jsx-scope": "off"
+    "react/react-in-jsx-scope": "off",
   },
   "env": { "browser": true, "node": true, "es6": true },
-  "ignorePatterns": ["node_modules", "dist", ".output", "*.gen.ts", "routeTree.gen.ts", "**/generated/**"]
+  "ignorePatterns": [
+    "node_modules",
+    "dist",
+    ".output",
+    "*.gen.ts",
+    "routeTree.gen.ts",
+    "**/generated/**",
+  ],
 }
 ```
 
@@ -245,10 +256,14 @@ auto-install-peers=true
   "bracketSpacing": true,
   "arrowParens": "always",
   "ignorePatterns": [
-    "node_modules", "dist", ".output",
-    "pnpm-lock.yaml", "*.gen.ts", "routeTree.gen.ts",
-    "**/generated/**"
-  ]
+    "node_modules",
+    "dist",
+    ".output",
+    "pnpm-lock.yaml",
+    "*.gen.ts",
+    "routeTree.gen.ts",
+    "**/generated/**",
+  ],
 }
 ```
 

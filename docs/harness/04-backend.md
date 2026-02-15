@@ -5,22 +5,22 @@
 
 ## 결정사항
 
-| 항목 | 결정 | 근거 |
-|------|------|------|
-| 런타임 | Node.js (`@hono/node-server`) | 안정성 우선 |
-| 웹 프레임워크 | Hono | 작고 타입 친화적인 라우팅 |
-| ORM | Drizzle ORM | SQL 가시성 + 타입 안전 스키마 |
-| DB | PostgreSQL | 운영 검증된 관계형 DB |
-| 캐시 | Redis | 세션/리프레시 토큰/인증 rate-limit 캐시 |
-| 메트릭 | Prometheus + Grafana | `/metrics` 스크레이프 기반 관측 |
-| 컨테이너 | Docker | 로컬/CI 환경 일관성 |
-| 오케스트레이션 | Kubernetes | 확장/롤링 배포/자가복구 |
-| 마이그레이션 | drizzle-kit | schema.ts 기반 DDL 생성/적용 |
-| Dev 서버 | `tsx watch` | 빌드 없이 TypeScript 직접 실행 |
-| Prod 빌드 | tsup (esbuild 기반) | ESM 단일 번들, 빠른 빌드 |
-| 포트 | 8080 | 프론트 3000번대와 구분 |
-| 경로 별칭 | `~/` → `./src/` | 프론트 앱과 동일 컨벤션 |
-| 로그인 채널 | Email + Google OAuth + Kakao OAuth | 사용자 진입 경로 다양화 + 소셜 간편 로그인 |
+| 항목           | 결정                               | 근거                                       |
+| -------------- | ---------------------------------- | ------------------------------------------ |
+| 런타임         | Node.js (`@hono/node-server`)      | 안정성 우선                                |
+| 웹 프레임워크  | Hono                               | 작고 타입 친화적인 라우팅                  |
+| ORM            | Drizzle ORM                        | SQL 가시성 + 타입 안전 스키마              |
+| DB             | PostgreSQL                         | 운영 검증된 관계형 DB                      |
+| 캐시           | Redis                              | 세션/리프레시 토큰/인증 rate-limit 캐시    |
+| 메트릭         | Prometheus + Grafana               | `/metrics` 스크레이프 기반 관측            |
+| 컨테이너       | Docker                             | 로컬/CI 환경 일관성                        |
+| 오케스트레이션 | Kubernetes                         | 확장/롤링 배포/자가복구                    |
+| 마이그레이션   | drizzle-kit                        | schema.ts 기반 DDL 생성/적용               |
+| Dev 서버       | `vite` (@hono/vite-dev-server)     | HMR, Vite 기반 백엔드 dev 서버             |
+| Prod 빌드      | `vite build` (@hono/vite-build)    | Node.js 타겟 프로덕션 번들                 |
+| 포트           | 8080                               | 프론트 3000번대와 구분                     |
+| 경로 별칭      | `~/` → `./src/`                    | 프론트 앱과 동일 컨벤션                    |
+| 로그인 채널    | Email + Google OAuth + Kakao OAuth | 사용자 진입 경로 다양화 + 소셜 간편 로그인 |
 
 ## 목표 범위
 
@@ -49,17 +49,17 @@
 
 ## 도메인 모델 (인증 + 커머스 확장 예시)
 
-| 엔티티 | 설명 |
-|--------|------|
-| `users` | 사용자 계정 |
-| `user_credentials` | 비밀번호 해시/인증 정보 |
+| 엔티티                | 설명                                   |
+| --------------------- | -------------------------------------- |
+| `users`               | 사용자 계정                            |
+| `user_credentials`    | 비밀번호 해시/인증 정보                |
 | `user_oauth_accounts` | OAuth provider 계정 연결(google/kakao) |
-| `user_sessions` | 세션/리프레시 토큰 메타 |
-| `audit_logs` | 로그인/로그아웃/보안 이벤트 |
-| `reviews` | 구매 검증 기반 상품 리뷰 |
-| `review_comments` | 리뷰 댓글(고객/운영 상호작용) |
-| `customer_inquiries` | 고객 문의(주문/상품/배송/계정 등) |
-| `inquiry_replies` | 운영자/고객 문의 답변 이력 |
+| `user_sessions`       | 세션/리프레시 토큰 메타                |
+| `audit_logs`          | 로그인/로그아웃/보안 이벤트            |
+| `reviews`             | 구매 검증 기반 상품 리뷰               |
+| `review_comments`     | 리뷰 댓글(고객/운영 상호작용)          |
+| `customer_inquiries`  | 고객 문의(주문/상품/배송/계정 등)      |
+| `inquiry_replies`     | 운영자/고객 문의 답변 이력             |
 
 ## package.json
 
@@ -71,20 +71,20 @@
   "type": "module",
   "exports": {
     ".": {
-      "default": "./dist/index.mjs"
-    }
+      "default": "./dist/index.js",
+    },
   },
   "scripts": {
-    "dev": "tsx watch src/index.ts",
-    "build": "tsup",
-    "start": "node dist/index.mjs",
+    "dev": "vite",
+    "build": "vite build",
+    "start": "node dist/index.js",
     "typecheck": "tsc --noEmit",
     "test": "vitest run --passWithNoTests",
     "db:generate": "drizzle-kit generate",
     "db:migrate": "drizzle-kit migrate",
     "db:studio": "drizzle-kit studio",
     "docker:build": "docker build -t repo-api:local -f Dockerfile ../..",
-    "docker:run": "docker run --rm -p 8080:8080 --env-file .env repo-api:local"
+    "docker:run": "docker run --rm -p 8080:8080 --env-file .env repo-api:local",
   },
   "dependencies": {
     "@fullstack-forge/shared": "workspace:*",
@@ -94,17 +94,17 @@
     "drizzle-orm": "catalog:",
     "pg": "catalog:",
     "prom-client": "catalog:",
-    "redis": "catalog:"
+    "redis": "catalog:",
   },
   "devDependencies": {
     "@types/node": "catalog:",
     "@types/pg": "catalog:",
     "drizzle-kit": "catalog:",
-    "tsx": "catalog:",
-    "tsup": "catalog:",
+    "@hono/vite-dev-server": "catalog:",
+    "@hono/vite-build": "catalog:",
     "typescript": "catalog:",
-    "vitest": "catalog:"
-  }
+    "vitest": "catalog:",
+  },
 }
 ```
 
@@ -556,7 +556,7 @@ apps/api/
 ├── drizzle.config.ts
 ├── package.json
 ├── tsconfig.json
-├── tsup.config.ts
+├── vite.config.ts
 └── vitest.config.ts
 ```
 

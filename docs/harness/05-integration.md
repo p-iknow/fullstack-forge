@@ -102,13 +102,13 @@ Event path (primary app flow)
 
 ### 기존(Hono RPC) 대비 차이
 
-| 항목 | Hono RPC (제거됨) | TypeSpec spec-first (신규) |
-|------|-------------------|---------------------------|
-| 타입 원천 | `typeof app` (TS 런타임에서 추론) | `.tsp` 소스 (언어 무관 명세) |
-| 프론트 클라이언트 | `hc<AppType>('/api')` | `ky.create({ prefixUrl: '/api' })` + `queryOptions` |
-| 프론트 deps | `hono` (클라이언트 번들에 포함) | `ky` + `@tanstack/react-query` + `@suspensive/react-query` |
-| 백엔드 export | `AppType` export 필수 | export 없음 — 생성된 타입 import |
-| 이식성 | TypeScript only | OpenAPI → 모든 언어 |
+| 항목              | Hono RPC (제거됨)                 | TypeSpec spec-first (신규)                                 |
+| ----------------- | --------------------------------- | ---------------------------------------------------------- |
+| 타입 원천         | `typeof app` (TS 런타임에서 추론) | `.tsp` 소스 (언어 무관 명세)                               |
+| 프론트 클라이언트 | `hc<AppType>('/api')`             | `ky.create({ prefixUrl: '/api' })` + `queryOptions`        |
+| 프론트 deps       | `hono` (클라이언트 번들에 포함)   | `ky` + `@tanstack/react-query` + `@suspensive/react-query` |
+| 백엔드 export     | `AppType` export 필수             | export 없음 — 생성된 타입 import                           |
+| 이식성            | TypeScript only                   | OpenAPI → 모든 언어                                        |
 
 ## 프론트엔드 API 클라이언트
 
@@ -170,9 +170,7 @@ export function AuthGate() {
   return (
     <>
       <button onClick={() => loginMutation.mutate()}>Login</button>
-      <SuspenseQuery {...meQueryOptions}>
-        {({ data }) => <p>{data.user.email}</p>}
-      </SuspenseQuery>
+      <SuspenseQuery {...meQueryOptions}>{({ data }) => <p>{data.user.email}</p>}</SuspenseQuery>
     </>
   )
 }
@@ -185,18 +183,15 @@ import { apiClient } from '~/lib/api-client'
 
 export function SignupForm() {
   const signupMutation = useMutation({
-    mutationFn: () => apiClient.signup({
-      email: 'new@example.com',
-      password: 'Passw0rd!',
-      name: 'New User',
-    }),
+    mutationFn: () =>
+      apiClient.signup({
+        email: 'new@example.com',
+        password: 'Passw0rd!',
+        name: 'New User',
+      }),
   })
 
-  return (
-    <button onClick={() => signupMutation.mutate()}>
-      Sign up
-    </button>
-  )
+  return <button onClick={() => signupMutation.mutate()}>Sign up</button>
 }
 ```
 
@@ -304,7 +299,7 @@ server: {
 pnpm --filter @fullstack-forge/api-spec codegen
 
 # 또는 Nx를 통해 (모든 codegen 대상 실행)
-npx nx run-many -t codegen
+pnpm exec nx run-many -t codegen
 ```
 
 ### 자동 실행
@@ -316,7 +311,7 @@ Nx `targetDefaults`에 의해 `build`, `typecheck` 실행 시 `codegen`이 선�
 {
   "codegen": { "dependsOn": ["^codegen"], "cache": true },
   "build": { "dependsOn": ["codegen", "^build"], "cache": true },
-  "typecheck": { "dependsOn": ["codegen", "^typecheck"], "cache": true }
+  "typecheck": { "dependsOn": ["codegen", "^typecheck"], "cache": true },
 }
 ```
 
@@ -363,7 +358,7 @@ TypeSpec 변경
   - `pnpm --filter @fullstack-forge/api-spec codegen`
 - spec을 바꿨는데 타입이 반영되지 않음
   - `pnpm --filter @fullstack-forge/api-spec codegen`
-  - `npx nx reset`
+  - `pnpm exec nx reset`
 - CI에서 openapi stale 실패
   - 로컬 codegen 실행 후 `openapi.yaml`만 커밋
 
@@ -374,7 +369,7 @@ TypeSpec 변경
 pnpm --filter @fullstack-forge/api-spec codegen
 
 # 터미널 2: 백엔드
-pnpm --filter @fullstack-forge/api dev          # tsx watch, port 8080
+pnpm --filter @fullstack-forge/api dev          # vite dev, port 8080
 
 # 터미널 3: 프론트엔드
 pnpm --filter @fullstack-forge/store dev        # vite dev, port 3001
