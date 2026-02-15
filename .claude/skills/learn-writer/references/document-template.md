@@ -1,59 +1,82 @@
+<!-- Translate all section headers to Korean using the mapping table in SKILL.md. -->
+
 # {NN}. {DOCUMENT_TITLE}
 
-## 핵심 질문
+## Core Question
 
 > {CORE_QUESTION}
 
-## 한 줄 답
+## One-Line Answer
 
 {ONE_LINE_ANSWER}
 
 ---
 
-## 현재 설정
+<!-- Context section: choose ONE based on the document's decision-unit mode. -->
+
+<!-- MODE: Option (config key/flag) -->
+## Current Config
 
 ```{CONFIG_LANG}
 {CURRENT_CONFIGURATION_SNIPPET}
 ```
 
+<!-- MODE: Pattern (design pattern/composition) — replace Current Config with: -->
+<!-- ## Current Approach -->
+<!-- {DESCRIPTION_WITH_CODE_POINTERS_AND_FILE_PATHS} -->
+
+<!-- MODE: Workflow (multi-step process) — replace Current Config with: -->
+<!-- ## Current Flow -->
+<!-- {STEP_DIAGRAM_OR_SEQUENCE} -->
+
+<!-- If config/setting does not exist yet: -->
+<!-- > Current Config: N/A (not yet implemented). {PLANNED_STATE_WITH_ADR_OR_HARNESS_REFERENCE} -->
+
 ---
 
-<!-- PAR block: repeat per option/decision. Each block is self-contained and cohesive. -->
-<!-- The Caveat section is OPTIONAL — include only when a real trade-off or gotcha exists. -->
+<!-- PAR block: repeat per decision unit. Each block is self-contained and cohesive. -->
+<!-- Code examples are encouraged but optional — config-only or conceptual blocks are acceptable. -->
+<!-- The Caveat section is OPTIONAL — include only when a real trade-off or gotcha exists. Omit entirely otherwise. -->
 
-## `{OPTION_NAME}` — {SHORT_DESCRIPTION}
+## `{DECISION_NAME}` — {SHORT_DESCRIPTION}
 
 **Problem** — {WHAT_GOES_WRONG_WITHOUT_THIS}
 
 ```{CODE_LANG}
-// without {OPTION_NAME}
+// without {DECISION_NAME}
 {PROBLEM_CODE_EXAMPLE}
 ```
 
-**Action** — {WHAT_THIS_OPTION_DOES_AND_WHY_CHOSEN}
+**Action** — {WHAT_THIS_DOES_AND_WHY_CHOSEN}
 
 ```{CODE_LANG}
-// with {OPTION_NAME}
+// with {DECISION_NAME}
 {SOLUTION_CODE_EXAMPLE}
 ```
 
 **Result** — {CONCRETE_OUTCOME_AND_CURRENT_ASSESSMENT}
 
-> **Caveat**: {TRADE_OFF_OR_EDGE_CASE_OR_INTERACTION_WITH_OTHER_OPTIONS}
+> **Caveat**: {TRADE_OFF_OR_GOTCHA}
 
 ---
 
 <!-- End of PAR blocks -->
 
-## 이 프로젝트에서의 적용
+## Application in This Project
 
-| 옵션 | 해결하는 문제 |
-|------|-------------|
-| `{OPTION_01}` | {PROBLEM_IT_SOLVES_01} |
-| `{OPTION_02}` | {PROBLEM_IT_SOLVES_02} |
+| Decision | Problem Solved |
+|----------|---------------|
+| `{DECISION_01}` | {PROBLEM_IT_SOLVES_01} |
+| `{DECISION_02}` | {PROBLEM_IT_SOLVES_02} |
 
 ---
 
-## 다음 문서
+<!-- ADR traceability: link to the owning ADR(s) when applicable. Omit if no ADR exists for this topic. -->
+
+> **Source Decision**: [{ADR_ID}: {ADR_TITLE}](../../adr/{ADR_FILE}.md)
+
+---
+
+## Next Document
 
 [{NEXT_NN}. {NEXT_DOCUMENT_TITLE}](./{NEXT_FILE_NAME}.md) — {NEXT_CORE_QUESTION}
