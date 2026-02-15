@@ -1,0 +1,323 @@
+import { db } from '~/db/client'
+import {
+  auditLogs,
+  couponRedemptions,
+  coupons,
+  customerInquiries,
+  deliveries,
+  inquiryReplies,
+  inventory,
+  loyaltyAccounts,
+  orderPromotions,
+  orderItems,
+  orders,
+  payments,
+  pointLedgers,
+  pointPolicies,
+  pointRedemptions,
+  promotionCategories,
+  promotions,
+  products,
+  reviewComments,
+  reviews,
+  substitutions,
+  userCredentials,
+  userOauthAccounts,
+  userSessions,
+  users,
+} from '~/db/schema'
+
+async function seed(): Promise<void> {
+  await db.delete(orderPromotions)
+  await db.delete(couponRedemptions)
+  await db.delete(coupons)
+  await db.delete(promotionCategories)
+  await db.delete(promotions)
+
+  await db.delete(pointRedemptions)
+  await db.delete(pointLedgers)
+  await db.delete(pointPolicies)
+  await db.delete(loyaltyAccounts)
+
+  await db.delete(inquiryReplies)
+  await db.delete(customerInquiries)
+  await db.delete(reviewComments)
+  await db.delete(reviews)
+  await db.delete(substitutions)
+  await db.delete(deliveries)
+  await db.delete(payments)
+  await db.delete(orderItems)
+  await db.delete(orders)
+  await db.delete(inventory)
+  await db.delete(products)
+  await db.delete(auditLogs)
+  await db.delete(userOauthAccounts)
+  await db.delete(userSessions)
+  await db.delete(userCredentials)
+  await db.delete(users)
+
+  const insertedUsers = await db
+    .insert(users)
+    .values([
+      {
+        email: 'customer@fullstack-forge.local',
+        name: 'Seed Customer',
+        role: 'customer',
+        status: 'active',
+      },
+      {
+        email: 'operator@fullstack-forge.local',
+        name: 'Seed Operator',
+        role: 'operator',
+        status: 'active',
+      },
+      {
+        email: 'admin@fullstack-forge.local',
+        name: 'Seed Admin',
+        role: 'admin',
+        status: 'active',
+      },
+    ])
+    .returning({ id: users.id, email: users.email })
+
+  await db.insert(userCredentials).values(
+    insertedUsers.map((user) => ({
+      userId: user.id,
+      passwordHash: `seed-hash-${user.email}`,
+    })),
+  )
+
+  const seededProducts = Array.from({ length: 48 }, (_, index) => {
+    const status: 'active' | 'low_stock' = index % 10 === 0 ? 'low_stock' : 'active'
+    return {
+      name: `Seed Product ${index + 1}`,
+      description: `Seeded product description ${index + 1}`,
+      price: 1200 + index * 90,
+      status,
+      categoryId: `cat-${(index % 6) + 1}`,
+      imageUrl: `https://example.com/products/${index + 1}.png`,
+      isSubstitutable: index % 4 !== 0,
+    }
+  })
+
+  const insertedProducts = await db
+    .insert(products)
+    .values(seededProducts)
+    .returning({ id: products.id, status: products.status })
+
+  await db.insert(inventory).values(
+    insertedProducts.map((product, index) => {
+      const onHand = 20 + (index % 12)
+      const reserved = index % 5
+      return {
+        productId: product.id,
+        onHand,
+        reserved,
+        safetyThreshold: product.status === 'low_stock' ? onHand : 8,
+        version: 1,
+      }
+    }),
+  )
+
+  const customerUser = insertedUsers.find((user) => user.email === 'customer@fullstack-forge.local')
+  if (!customerUser) {
+    throw new Error('seed customer account not found')
+  }
+
+  const seedOrder = await db
+    .insert(orders)
+    .values({
+      userId: customerUser.id,
+      status: 'paid',
+      totalAmount: 17800,
+    })
+    .returning({ id: orders.id })
+
+  const firstOrder = seedOrder[0]
+  const firstProduct = insertedProducts[0]
+  const secondProduct = insertedProducts[1]
+
+  await db.insert(orderItems).values([
+    {
+      orderId: firstOrder.id,
+      productId: firstProduct.id,
+      quantity: 2,
+      unitPrice: 3500,
+    },
+    {
+      orderId: firstOrder.id,
+      productId: secondProduct.id,
+      quantity: 1,
+      unitPrice: 2200,
+    },
+  ])
+
+  await db.insert(payments).values({
+    orderId: firstOrder.id,
+    method: 'card',
+    status: 'captured',
+    amount: 17800,
+    paidAt: new Date(),
+  })
+
+  const now = new Date()
+  const oneYearLater = new Date(now)
+  oneYearLater.setFullYear(now.getFullYear() + 1)
+
+  const [seedCouponPromotion] = await db
+    .insert(promotions)
+    .values({
+      name: 'Welcome 5% coupon',
+      type: 'coupon',
+      discountType: 'percentage',
+      discountValue: 5,
+      minOrderAmount: 15000,
+      startsAt: now,
+      endsAt: oneYearLater,
+      status: 'active',
+    })
+    .returning({ id: promotions.id })
+
+  const [seedCategoryPromotion] = await db
+    .insert(promotions)
+    .values({
+      name: 'Fruit category fixed discount',
+      type: 'category_discount',
+      discountType: 'fixed_amount',
+      discountValue: 1200,
+      minOrderAmount: 10000,
+      startsAt: now,
+      endsAt: oneYearLater,
+      status: 'active',
+    })
+    .returning({ id: promotions.id })
+
+  await db.insert(promotionCategories).values({
+    promotionId: seedCategoryPromotion.id,
+    categoryId: 'cat-1',
+  })
+
+  const [welcomeCoupon] = await db
+    .insert(coupons)
+    .values({
+      promotionId: seedCouponPromotion.id,
+      code: 'WELCOME-5PCT',
+      maxUses: 1000,
+      perUserLimit: 1,
+      usedCount: 1,
+      expiresAt: oneYearLater,
+    })
+    .returning({ id: coupons.id })
+
+  const [couponUse] = await db
+    .insert(couponRedemptions)
+    .values({
+      couponId: welcomeCoupon.id,
+      userId: customerUser.id,
+      orderId: firstOrder.id,
+      discountAmount: 890,
+    })
+    .returning({ id: couponRedemptions.id })
+
+  await db.insert(orderPromotions).values({
+    orderId: firstOrder.id,
+    promotionId: seedCouponPromotion.id,
+    couponRedemptionId: couponUse.id,
+    discountAmount: 890,
+    selectedByRule: 'best_price_policy',
+  })
+
+  const [activePointPolicy] = await db
+    .insert(pointPolicies)
+    .values({
+      name: 'Default paid order point policy',
+      accrualType: 'percentage',
+      accrualValue: 2,
+      minOrderAmount: 10000,
+      maxEarnPerOrder: 1000,
+      minRedeemPoints: 100,
+      pointToCurrencyRate: 1,
+      startsAt: now,
+      endsAt: oneYearLater,
+      status: 'active',
+    })
+    .returning({ id: pointPolicies.id })
+
+  await db.insert(loyaltyAccounts).values(
+    insertedUsers.map((user) => {
+      if (user.email === 'customer@fullstack-forge.local') {
+        return {
+          userId: user.id,
+          availablePoints: 100,
+          pendingPoints: 50,
+          lifetimeEarned: 300,
+          lifetimeRedeemed: 200,
+        }
+      }
+      return {
+        userId: user.id,
+        availablePoints: 0,
+        pendingPoints: 0,
+        lifetimeEarned: 0,
+        lifetimeRedeemed: 0,
+      }
+    }),
+  )
+
+  await db.insert(pointLedgers).values([
+    {
+      userId: customerUser.id,
+      orderId: firstOrder.id,
+      policyId: activePointPolicy.id,
+      transactionType: 'earn',
+      sourceType: 'order_payment',
+      points: 300,
+      status: 'confirmed',
+      description: '2% cashback for paid order',
+      availableAt: now,
+      expiresAt: oneYearLater,
+    },
+    {
+      userId: customerUser.id,
+      orderId: firstOrder.id,
+      policyId: activePointPolicy.id,
+      transactionType: 'redeem',
+      sourceType: 'order_payment',
+      points: 200,
+      status: 'confirmed',
+      description: 'point redemption at checkout',
+      availableAt: now,
+      expiresAt: oneYearLater,
+    },
+    {
+      userId: customerUser.id,
+      transactionType: 'earn',
+      sourceType: 'review_reward',
+      points: 50,
+      status: 'pending',
+      description: 'review reward pending moderation',
+      availableAt: oneYearLater,
+      expiresAt: oneYearLater,
+    },
+  ])
+
+  await db.insert(pointRedemptions).values({
+    userId: customerUser.id,
+    orderId: firstOrder.id,
+    pointsUsed: 200,
+    discountAmount: 200,
+  })
+
+  // eslint-disable-next-line no-console
+  console.log(
+    `Seeded users=${insertedUsers.length}, products=${insertedProducts.length}, orders=1, promotions=2, point_ledgers=3`,
+  )
+}
+
+seed()
+  .then(() => process.exit(0))
+  .catch((error: unknown) => {
+    // eslint-disable-next-line no-console
+    console.error('Seed failed', error)
+    process.exit(1)
+  })
