@@ -299,7 +299,7 @@ server: {
 pnpm --filter @fullstack-forge/api-spec codegen
 
 # 또는 Nx를 통해 (모든 codegen 대상 실행)
-npx nx run-many -t codegen
+pnpm exec nx run-many -t codegen
 ```
 
 ### 자동 실행
@@ -358,7 +358,7 @@ TypeSpec 변경
   - `pnpm --filter @fullstack-forge/api-spec codegen`
 - spec을 바꿨는데 타입이 반영되지 않음
   - `pnpm --filter @fullstack-forge/api-spec codegen`
-  - `npx nx reset`
+  - `pnpm exec nx reset`
 - CI에서 openapi stale 실패
   - 로컬 codegen 실행 후 `openapi.yaml`만 커밋
 

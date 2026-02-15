@@ -206,11 +206,12 @@ catalog:
 ## .npmrc
 
 ```ini
-hoist-pattern[]=storybook
-hoist-pattern[]=@storybook/*
-shamefully-hoist=false
-strict-peer-dependencies=false
-auto-install-peers=true
+# pnpm v10 defaults are sufficient for now.
+# Storybook hoist-pattern will be added when Storybook is set up.
+#
+# Deferred (add when Storybook is configured):
+#   hoist-pattern[]=*storybook*
+#   hoist-pattern[]=@storybook/*
 ```
 
 ## .oxlintrc.json

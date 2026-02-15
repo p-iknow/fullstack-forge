@@ -230,14 +230,14 @@ jobs:
 
       - run: pnpm install --frozen-lockfile
 
-      - run: npx nx run-many -t codegen
+      - run: pnpm exec nx run-many -t codegen
       - run: git diff --exit-code packages/api-spec/generated/openapi.yaml
         # openapi.yaml이 stale이면 CI 실패 → codegen 후 커밋 필요
       - run: pnpm lint
       - run: pnpm format:check
       - run: pnpm sheriff
       - run: pnpm knip
-      - run: npx nx run-many -t typecheck build test
+      - run: pnpm exec nx run-many -t typecheck build test
 ```
 
 > `codegen` 단계가 lint/typecheck/build 전에 실행되어 `generated/types.ts`가 최신 상태임을 보장.
@@ -359,13 +359,13 @@ jobs:
           node-version: 24
           cache: 'pnpm'
       - run: pnpm install --frozen-lockfile
-      - run: npx nx run-many -t codegen
+      - run: pnpm exec nx run-many -t codegen
       - run: git diff --exit-code packages/api-spec/generated/openapi.yaml
       - run: pnpm lint
       - run: pnpm format:check
       - run: pnpm sheriff
       - run: pnpm knip
-      - run: npx nx run-many -t typecheck build test
+      - run: pnpm exec nx run-many -t typecheck build test
 
   infra:
     runs-on: ubuntu-latest

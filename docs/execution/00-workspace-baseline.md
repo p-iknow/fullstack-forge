@@ -58,8 +58,8 @@ Step 7 ─── 품질 도구
 ### 기본 동작
 
 - [ ] `pnpm install` — 정상 설치
-- [ ] `npx nx show projects` — 6개 프로젝트 (store, admin, api, shared, api-spec, base-ui)
-- [ ] `npx nx graph` — 의존성 그래프 정상
+- [ ] `pnpm exec nx show projects` — 6개 프로젝트 (store, admin, api, shared, api-spec, base-ui)
+- [ ] `pnpm exec nx graph` — 의존성 그래프 정상
 
 ### API Spec / Codegen
 
@@ -117,7 +117,7 @@ pnpm --filter @fullstack-forge/api-spec codegen
 
 ```bash
 pnpm --filter @fullstack-forge/api-spec codegen
-npx nx reset
+pnpm exec nx reset
 pnpm typecheck
 ```
 

@@ -121,7 +121,7 @@ pnpm --filter @fullstack-forge/api dev
 pnpm --filter @fullstack-forge/store dev
 
 # 통합 검증
-npx nx run-many -t codegen && pnpm check && pnpm build && pnpm test
+pnpm exec nx run-many -t codegen && pnpm check && pnpm build && pnpm test
 ```
 
 ## NOTES

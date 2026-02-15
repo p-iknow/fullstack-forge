@@ -2,16 +2,16 @@
 
 ## Progress Summary
 
-| Unit | Branch                           | Status         | Notes                                                        |
-| ---- | -------------------------------- | -------------- | ------------------------------------------------------------ |
-| 1    | `config/workspace-foundation`    | 🟡 In Progress | Root configs exist. Exit criteria partially met (see below). |
-| 2    | `config/packages-shared-apispec` | ⬜ Not Started | Blocked by Unit 1 merge.                                     |
-| 3    | `config/packages-base-ui`        | ⬜ Not Started | Blocked by Unit 2 merge.                                     |
-| 4    | `config/apps-api`                | ⬜ Not Started | Blocked by Unit 3 merge.                                     |
-| 5    | `config/apps-frontend`           | ⬜ Not Started | Blocked by Unit 4 merge.                                     |
-| 6    | `config/quality-tooling`         | ⬜ Not Started | Blocked by Unit 5 merge.                                     |
+| Unit | Branch                           | Status        | Notes                                  |
+| ---- | -------------------------------- | ------------- | -------------------------------------- |
+| 1    | `config/workspace-foundation`    | ✅ Complete   | All exit criteria pass. Ready for PR.  |
+| 2    | `config/packages-shared-apispec` | ⬜ Not Started | Blocked by Unit 1 merge.              |
+| 3    | `config/packages-base-ui`        | ⬜ Not Started | Blocked by Unit 2 merge.              |
+| 4    | `config/apps-api`                | ⬜ Not Started | Blocked by Unit 3 merge.              |
+| 5    | `config/apps-frontend`           | ⬜ Not Started | Blocked by Unit 4 merge.              |
+| 6    | `config/quality-tooling`         | ⬜ Not Started | Blocked by Unit 5 merge.              |
 
-**Last updated:** 2026-02-15 · Commit: `42797b2`
+**Last updated:** 2026-02-15 · Commit: `dd63a94`
 
 ## Gap Analysis
 
@@ -41,7 +41,7 @@ config/workspace-foundation
   -> config/quality-tooling
 ```
 
-## Unit 1: `config/workspace-foundation` 🟡
+## Unit 1: `config/workspace-foundation` ✅
 
 ### Step Objective
 
@@ -68,11 +68,13 @@ config/workspace-foundation
 ### Exit Criteria
 
 - [x] Root config files exist with content aligned to harness foundation.
-- [ ] `pnpm install` succeeds. ⚠️ Lockfile mismatch after dep bumps (knip, oxfmt, oxlint). Needs `pnpm install` to regenerate lockfile.
+- [x] `pnpm install` succeeds (lockfile regenerated after dep bumps).
 - [x] `pnpm lint` succeeds (0 warnings, 0 errors).
-- [ ] `pnpm format:check` succeeds. ⚠️ 13 files have format issues. Needs `pnpm format` to fix.
-- [ ] `pnpm typecheck`, `pnpm build`, `pnpm test` succeed. ⚠️ Blocked by lockfile fix.
-- [ ] `npx nx show projects` runs without errors.
+- [x] `pnpm format:check` succeeds (all 94 files pass).
+- [x] `pnpm typecheck` succeeds (no tasks — expected, no packages yet).
+- [x] `pnpm build` succeeds (no tasks — expected, no packages yet).
+- [x] `pnpm test` succeeds (no tasks — expected, no packages yet).
+- [x] `pnpm exec nx show projects` runs without errors.
 
 ### Commits (on branch `config/workspace-foundation`)
 
@@ -90,13 +92,16 @@ config/workspace-foundation
 | `6c62935` | feat(skills): add learn-writer skill for docs/learn generation |
 | `ff3c3c5` | refactor(learn): rewrite TypeScript docs in PAR format         |
 | `42797b2` | refactor(skills): improve learn-writer from cross-agent review |
+| `30a4928` | docs(plans): update scaffolding plan with Unit 1 progress |
+| `981eeac` | config(deps): regenerate lockfile after dependency bumps |
+| `dd63a94` | style: apply oxfmt formatting to all files |
 
 ### Remaining Work
 
-1. Run `pnpm install` to regenerate lockfile after dependency bumps.
-2. Run `pnpm format` to fix 13 formatting issues.
-3. Verify all exit criteria commands pass.
-4. PR review and merge.
+1. [x] ~~Run `pnpm install` to regenerate lockfile after dependency bumps.~~
+2. [x] ~~Run `pnpm format` to fix 13 formatting issues.~~
+3. [x] ~~Verify all exit criteria commands pass.~~
+4. [ ] PR review and merge.
 
 ### Side Deliverables (produced during Unit 1, not in original plan)
 
@@ -311,7 +316,7 @@ config/workspace-foundation
 - [ ] `pnpm sheriff` succeeds.
 - [ ] `pnpm knip` succeeds.
 - [ ] `pnpm check` succeeds.
-- [ ] Integrated verification command succeeds: `npx nx run-many -t codegen && pnpm check && pnpm build && pnpm test`.
+- [ ] Integrated verification command succeeds: `pnpm exec nx run-many -t codegen && pnpm check && pnpm build && pnpm test`.
 
 ### Evidence
 

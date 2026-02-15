@@ -63,7 +63,7 @@
 | 명세 도구      | TypeSpec (`.tsp`)                                                                   | OpenAPI보다 간결, 제네릭/유니온 지원, 이식성 (Kotlin/Go)                      |
 | 생성 대상      | OpenAPI 3.1 YAML + TS 타입                                                          | `openapi.yaml`은 git commit (언어 무관 계약), `types.ts`는 gitignore (재생성) |
 | TS 타입 생성   | `openapi-typescript`                                                                | OpenAPI → TS 타입, `paths`/`components` 인터페이스 생성                       |
-| codegen 트리거 | `pnpm --filter @fullstack-forge/api-spec codegen` 또는 `npx nx run-many -t codegen` | `build`, `typecheck` 전에 자동 실행 (`dependsOn`)                             |
+| codegen 트리거 | `pnpm --filter @fullstack-forge/api-spec codegen` 또는 `pnpm exec nx run-many -t codegen` | `build`, `typecheck` 전에 자동 실행 (`dependsOn`)                             |
 
 ### package.json
 

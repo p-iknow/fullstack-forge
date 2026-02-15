@@ -45,7 +45,7 @@ pnpm --filter @fullstack-forge/store dev
 ## 통합 검증 (한 줄)
 
 ```bash
-npx nx run-many -t codegen && pnpm check && pnpm build && pnpm test
+pnpm exec nx run-many -t codegen && pnpm check && pnpm build && pnpm test
 ```
 
 ## 연관 문서
