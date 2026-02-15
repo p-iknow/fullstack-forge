@@ -2,16 +2,16 @@
 
 ## Progress Summary
 
-| Unit | Branch                           | Status         | Notes                                 |
-| ---- | -------------------------------- | -------------- | ------------------------------------- |
-| 1    | `config/workspace-foundation`    | ✅ Complete    | All exit criteria pass. Ready for PR. |
-| 2    | `config/packages-shared-apispec` | ⬜ Not Started | Blocked by Unit 1 merge.              |
-| 3    | `config/packages-base-ui`        | ⬜ Not Started | Blocked by Unit 2 merge.              |
-| 4    | `config/apps-api`                | ⬜ Not Started | Blocked by Unit 3 merge.              |
-| 5    | `config/apps-frontend`           | ⬜ Not Started | Blocked by Unit 4 merge.              |
-| 6    | `config/quality-tooling`         | ⬜ Not Started | Blocked by Unit 5 merge.              |
+| Unit | Branch                           | Status         | Notes                                   |
+| ---- | -------------------------------- | -------------- | --------------------------------------- |
+| 1    | `config/workspace-foundation`    | ✅ Complete    | All exit criteria pass. Ready for PR.   |
+| 2    | `config/packages-shared-apispec` | 🔄 In Progress | Unit 1 merged. shared deferred (YAGNI). |
+| 3    | `config/packages-base-ui`        | ⬜ Not Started | Blocked by Unit 2 merge.                |
+| 4    | `config/apps-api`                | ⬜ Not Started | Blocked by Unit 3 merge.                |
+| 5    | `config/apps-frontend`           | ⬜ Not Started | Blocked by Unit 4 merge.                |
+| 6    | `config/quality-tooling`         | ⬜ Not Started | Blocked by Unit 5 merge.                |
 
-**Last updated:** 2026-02-15 · Commit: `dd63a94`
+**Last updated:** 2026-02-15
 
 ## Gap Analysis
 
@@ -129,13 +129,19 @@ config/workspace-foundation
 
 ### Step Objective
 
-- Implementation goal: Create `packages/shared` and `packages/api-spec` with codegen pipeline.
+- Implementation goal: Create `packages/api-spec` with TypeSpec codegen pipeline.
 - Learning/operational goal: Establish spec-first contract flow for frontend/backend.
+
+### Design Decision: `packages/shared` deferred
+
+원래 계획에 포함된 `packages/shared`는 YAGNI 원칙에 따라 이 단계에서 생성하지 않는다.
+범용 "shared" 패키지 대신, 실제 공유 코드가 필요해지는 시점에 **목적별로 명확히 분리된 패키지**
+(예: `@fullstack-forge/domain`, `@fullstack-forge/validation`)를 생성한다.
 
 ### Prerequisite
 
-- [ ] Unit 1 merged.
-- [ ] Root workspace settings validated.
+- [x] Unit 1 merged.
+- [x] Root workspace settings validated.
 
 ### References
 
@@ -145,29 +151,29 @@ config/workspace-foundation
 
 ### Progressive Tasks
 
-1. Create `packages/shared` package with runtime-neutral TypeScript baseline.
-2. Create `packages/api-spec` with TypeSpec source and codegen scripts.
-3. Run API spec codegen.
-4. Register new packages in root TypeScript references and test workspace as needed.
+1. ~~Create `packages/shared` package with runtime-neutral TypeScript baseline.~~ → Deferred (YAGNI).
+2. [x] Create `packages/api-spec` with TypeSpec source and codegen scripts.
+3. [x] Run API spec codegen.
+4. Root TypeScript references update not needed (api-spec uses `tsp compile`, not `tsc -b`).
 
 ### Exit Criteria
 
-- [ ] `packages/shared` and `packages/api-spec` are created and wired.
-- [ ] `pnpm --filter @fullstack-forge/api-spec codegen` succeeds.
-- [ ] `packages/api-spec/generated/openapi.yaml` is generated.
-- [ ] `packages/api-spec/generated/types.ts` is generated.
-- [ ] `pnpm --filter @fullstack-forge/api-spec typecheck` succeeds.
+- [x] `packages/api-spec` is created and wired.
+- [x] `pnpm --filter @fullstack-forge/api-spec codegen` succeeds.
+- [x] `packages/api-spec/generated/openapi.yaml` is generated.
+- [x] `packages/api-spec/generated/types.ts` is generated.
+- [x] `pnpm --filter @fullstack-forge/api-spec typecheck` succeeds.
 
 ### Evidence
 
 - Command logs: codegen + api-spec typecheck output.
 - Artifacts: generated OpenAPI and types files.
-- Notes: stale generation handling steps documented.
+- Notes: TypeSpec 1.9.0 requires `#{}` object literal syntax (harness doc uses older `{}` syntax).
 
 ### Output for Next Step
 
-- Shared utility package available.
 - API contract and generated types available for UI/API packages.
+- Purpose-scoped shared packages to be created when actual need arises.
 
 ## Unit 3: `config/packages-base-ui`
 
