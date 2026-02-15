@@ -93,7 +93,7 @@
     "jsx": "react-jsx",
     "lib": ["DOM", "DOM.Iterable", "ES2022"],
   },
-    "references": [{ "path": "../../packages/design-system" }, { "path": "../../packages/shared" }],
+  "references": [{ "path": "../../packages/design-system" }, { "path": "../../packages/shared" }],
 }
 ```
 
@@ -149,7 +149,6 @@ export default defineProject({
     css: true,
   },
 })
-
 ```
 
 ## 디렉토리 구조

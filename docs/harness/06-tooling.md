@@ -6,12 +6,12 @@
 export default ['packages/shared', 'packages/design-system', 'apps/store', 'apps/admin', 'apps/api']
 ```
 
-| 프로젝트              | 환경        | 비고                                                                  |
-| --------------------- | ----------- | --------------------------------------------------------------------- |
-| apps/\*               | `jsdom`     | 브라우저 시뮬레이션, setupFiles 있음 (`store`=고객용, `admin`=운영용) |
+| 프로젝트               | 환경        | 비고                                                                  |
+| ---------------------- | ----------- | --------------------------------------------------------------------- |
+| apps/\*                | `jsdom`     | 브라우저 시뮬레이션, setupFiles 있음 (`store`=고객용, `admin`=운영용) |
 | packages/design-system | `jsdom`     | React 컴포넌트 테스트                                                 |
-| packages/shared       | 기본 (node) | 순수 로직                                                             |
-| apps/api              | `node`      | 서버 로직                                                             |
+| packages/shared        | 기본 (node) | 순수 로직                                                             |
+| apps/api               | `node`      | 서버 로직                                                             |
 
 > `packages/api-spec`은 vitest 대상 아님 — TypeSpec 검증은 `pnpm --filter @fullstack-forge/api-spec typecheck`로 처리.
 

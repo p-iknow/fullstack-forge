@@ -19,7 +19,7 @@ auth/API/infra 문서는 분리되어 있지만, 모두 같은 앱을 완성하�
 | --------------- | ------------------------------------------------------------------------------ |
 | **API 명세**    | **TypeSpec → OpenAPI 3.1 생성**                                                |
 | 프론트엔드      | TanStack Start + React 19 + Tailwind v4                                        |
-| UI 라이브러리   | shadcn/ui 디자인 시스템 (Base UI 프리미티브 + CVA)                              |
+| UI 라이브러리   | shadcn/ui 디자인 시스템 (Base UI 프리미티브 + CVA)                             |
 | 백엔드          | Hono + `@hono/node-server` + Drizzle ORM + PostgreSQL + Redis (Node.js 24 LTS) |
 | 이벤트 메시징   | SNS -> SQS fanout (LocalStack 로컬 에뮬레이션 + AWS 전이)                      |
 | 엣지/게이트웨이 | Nginx reverse proxy (로컬) + Ingress (k8s)                                     |
@@ -158,12 +158,12 @@ workers(추가 예정) ──→ shared, api-spec
 
 ### 금지 관계 (Sheriff로 강제)
 
-| from                           | to                          | 사유                          |
-| ------------------------------ | --------------------------- | ----------------------------- |
-| `@fullstack-forge/api`         | `@fullstack-forge/design-system` | 백엔드에 UI 의존성 유입 차단  |
-| `@fullstack-forge/design-system` | `@fullstack-forge/api-spec` | UI 라이브러리에 API 의존 차단 |
-| `@fullstack-forge/shared`      | 어디든                      | 순수 유틸, 외부 의존 없음     |
-| `@fullstack-forge/api-spec`    | 어디든                      | 순수 명세, 외부 의존 없음     |
+| from                             | to                               | 사유                          |
+| -------------------------------- | -------------------------------- | ----------------------------- |
+| `@fullstack-forge/api`           | `@fullstack-forge/design-system` | 백엔드에 UI 의존성 유입 차단  |
+| `@fullstack-forge/design-system` | `@fullstack-forge/api-spec`      | UI 라이브러리에 API 의존 차단 |
+| `@fullstack-forge/shared`        | 어디든                           | 순수 유틸, 외부 의존 없음     |
+| `@fullstack-forge/api-spec`      | 어디든                           | 순수 명세, 외부 의존 없음     |
 
 ## 문서 구조
 
