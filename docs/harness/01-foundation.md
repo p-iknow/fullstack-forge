@@ -31,6 +31,7 @@
     "forceConsistentCasingInFileNames": true,
     "allowJs": true,
     "noEmit": true,
+    "erasableSyntaxOnly": true, // enum, namespace 등 금지
 
     // --- 모노레포 ---
     "customConditions": ["@fullstack-forge/source"],
