@@ -24,6 +24,10 @@
 1. [roadmap-index](./roadmap/README.md)
 2. [00-roadmap-overview](./roadmap/00-roadmap-overview.md)
 
+### 4) 기술 스택의 "왜"를 깊이 이해하고 싶은 경우
+
+- [learn/](./learn/README.md) — 설정과 도구 선택의 근거를 상세히 정리한 학습 문서
+
 ## 문서 맵
 
 - 설계/아키텍처: `00`
