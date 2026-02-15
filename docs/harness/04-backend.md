@@ -16,8 +16,8 @@
 | 컨테이너       | Docker                             | 로컬/CI 환경 일관성                        |
 | 오케스트레이션 | Kubernetes                         | 확장/롤링 배포/자가복구                    |
 | 마이그레이션   | drizzle-kit                        | schema.ts 기반 DDL 생성/적용               |
-| Dev 서버       | `tsx watch`                        | 빌드 없이 TypeScript 직접 실행             |
-| Prod 빌드      | tsup (esbuild 기반)                | ESM 단일 번들, 빠른 빌드                   |
+| Dev 서버       | `vite` (@hono/vite-dev-server)     | HMR, Vite 기반 백엔드 dev 서버             |
+| Prod 빌드      | `vite build` (@hono/vite-build)    | Node.js 타겟 프로덕션 번들                 |
 | 포트           | 8080                               | 프론트 3000번대와 구분                     |
 | 경로 별칭      | `~/` → `./src/`                    | 프론트 앱과 동일 컨벤션                    |
 | 로그인 채널    | Email + Google OAuth + Kakao OAuth | 사용자 진입 경로 다양화 + 소셜 간편 로그인 |
@@ -71,13 +71,13 @@
   "type": "module",
   "exports": {
     ".": {
-      "default": "./dist/index.mjs",
+      "default": "./dist/index.js",
     },
   },
   "scripts": {
-    "dev": "tsx watch src/index.ts",
-    "build": "tsup",
-    "start": "node dist/index.mjs",
+    "dev": "vite",
+    "build": "vite build",
+    "start": "node dist/index.js",
     "typecheck": "tsc --noEmit",
     "test": "vitest run --passWithNoTests",
     "db:generate": "drizzle-kit generate",
@@ -100,8 +100,8 @@
     "@types/node": "catalog:",
     "@types/pg": "catalog:",
     "drizzle-kit": "catalog:",
-    "tsx": "catalog:",
-    "tsup": "catalog:",
+    "@hono/vite-dev-server": "catalog:",
+    "@hono/vite-build": "catalog:",
     "typescript": "catalog:",
     "vitest": "catalog:",
   },
@@ -556,7 +556,7 @@ apps/api/
 ├── drizzle.config.ts
 ├── package.json
 ├── tsconfig.json
-├── tsup.config.ts
+├── vite.config.ts
 └── vitest.config.ts
 ```
 

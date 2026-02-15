@@ -95,15 +95,18 @@ catalog:
   # --- Backend ---
   hono: ^4.11.9
   '@hono/node-server': ^1.19.9
+  '@hono/vite-dev-server': ^0.25.0
+  '@hono/vite-build': ^1.9.3
   drizzle-orm: ^0.45.1
   drizzle-kit: ^0.31.9
   pg: ^8.16.3
   '@types/pg': ^8.15.5
   redis: ^5.8.2
   prom-client: ^15.1.3
-  tsx: ^4.21.0
-  tsup: ^8.5.1
   '@types/node': ^24.10.13
+
+  # --- Package Build ---
+  tsdown: ^0.20.3
 
   # --- API Spec (TypeSpec → OpenAPI → TS) ---
   '@typespec/compiler': ^1.9.0
@@ -123,7 +126,7 @@ catalog:
   '@testing-library/jest-dom': ^6.9.1
   '@testing-library/react': ^16.3.2
   jsdom: ^27.4.0
-  tsc-alias: ^1.8.15
+
 
   # --- Storybook ---
   storybook: ^10.2.8

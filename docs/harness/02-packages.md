@@ -414,7 +414,7 @@ Base UI + shadcn 컴포넌트 라이브러리. Tailwind v4 + CVA 패턴.
     "./styles/*.css": "./src/styles/*.css",
   },
   "scripts": {
-    "build": "tsc -b tsconfig.build.json && tsc-alias -p tsconfig.build.json",
+    "build": "tsdown",
     "typecheck": "tsc -b",
     "test": "vitest run --passWithNoTests",
   },
@@ -437,7 +437,7 @@ Base UI + shadcn 컴포넌트 라이브러리. Tailwind v4 + CVA 패턴.
     "@types/react-dom": "catalog:",
     "jsdom": "catalog:",
     "tailwindcss": "catalog:",
-    "tsc-alias": "catalog:",
+    "tsdown": "catalog:",
     "tw-animate-css": "catalog:",
     "typescript": "catalog:",
     "vitest": "catalog:",

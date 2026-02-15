@@ -369,7 +369,7 @@ TypeSpec 변경
 pnpm --filter @fullstack-forge/api-spec codegen
 
 # 터미널 2: 백엔드
-pnpm --filter @fullstack-forge/api dev          # tsx watch, port 8080
+pnpm --filter @fullstack-forge/api dev          # vite dev, port 8080
 
 # 터미널 3: 프론트엔드
 pnpm --filter @fullstack-forge/store dev        # vite dev, port 3001

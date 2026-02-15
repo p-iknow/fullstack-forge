@@ -26,7 +26,7 @@ auth/API/infra 문서는 분리되어 있지만, 모두 같은 앱을 완성하�
 | 모니터링        | Prometheus + Grafana (`/metrics` 스크레이프)                                   |
 | 배포/운영       | Docker + Kubernetes                                                            |
 | 프론트 API 계층 | ky + TanStack Query + Suspensive (`@fullstack-forge/api-spec` 타입 소비)       |
-| 빌드/번들       | Vite (프론트), tsup (백엔드), tsx (백엔드 dev)                                 |
+| 빌드/번들       | Vite (프론트/백엔드), tsdown (패키지)                                          |
 | 태스크 러너     | Nx (pure — 플러그인/제너레이터 없음)                                           |
 | 패키지 매니저   | pnpm (workspaces, catalog, hoist=false)                                        |
 | 린트/포맷       | oxlint + oxfmt                                                                 |
