@@ -2,9 +2,9 @@
 
 ## Progress Summary
 
-| Unit | Branch                           | Status        | Notes                                  |
-| ---- | -------------------------------- | ------------- | -------------------------------------- |
-| 1    | `config/workspace-foundation`    | ✅ Complete   | All exit criteria pass. Ready for PR.  |
+| Unit | Branch                           | Status         | Notes                                 |
+| ---- | -------------------------------- | -------------- | ------------------------------------- |
+| 1    | `config/workspace-foundation`    | ✅ Complete    | All exit criteria pass. Ready for PR. |
 | 2    | `config/packages-shared-apispec` | ⬜ Not Started | Blocked by Unit 1 merge.              |
 | 3    | `config/packages-base-ui`        | ⬜ Not Started | Blocked by Unit 2 merge.              |
 | 4    | `config/apps-api`                | ⬜ Not Started | Blocked by Unit 3 merge.              |
@@ -92,28 +92,33 @@ config/workspace-foundation
 | `6c62935` | feat(skills): add learn-writer skill for docs/learn generation |
 | `ff3c3c5` | refactor(learn): rewrite TypeScript docs in PAR format         |
 | `42797b2` | refactor(skills): improve learn-writer from cross-agent review |
-| `30a4928` | docs(plans): update scaffolding plan with Unit 1 progress |
-| `981eeac` | config(deps): regenerate lockfile after dependency bumps |
-| `dd63a94` | style: apply oxfmt formatting to all files |
+| `30a4928` | docs(plans): update scaffolding plan with Unit 1 progress      |
+| `981eeac` | config(deps): regenerate lockfile after dependency bumps       |
+| `dd63a94` | style: apply oxfmt formatting to all files                     |
+| `ab03d60` | config(pnpm): clean up .npmrc defaults, add packageManager field, and replace npx with pnpm exec |
+| `TBD`     | docs(learn): add package-manager deep-dive documentation       |
 
 ### Remaining Work
 
 1. [x] ~~Run `pnpm install` to regenerate lockfile after dependency bumps.~~
 2. [x] ~~Run `pnpm format` to fix 13 formatting issues.~~
 3. [x] ~~Verify all exit criteria commands pass.~~
-4. [ ] PR review and merge.
+4. [x] ~~Clean up .npmrc (remove v10 defaults), add `packageManager` field, replace `npx` → `pnpm exec`.~~
+5. [x] ~~Generate `docs/learn/package-manager/` documentation.~~
+6. [ ] PR review and merge.
 
 ### Side Deliverables (produced during Unit 1, not in original plan)
 
 - `docs/learn/typescript/` — 5 TypeScript tsconfig deep-dive documents (PAR format)
+- `docs/learn/package-manager/` — 4 pnpm package manager deep-dive documents (PAR format)
 - `.claude/skills/learn-writer/` — Reusable skill for generating docs/learn documentation
 - `cspell.json` — Standalone spell-check dictionary
 
 ### Evidence
 
-- Command logs: install/lint/format/build/typecheck/test/show-projects output. _(pending final verification)_
-- Artifacts: list of newly added root config files.
-- Notes: deferred items (`sheriff`, `knip`, CI) explicitly tracked for Unit 6.
+- Command logs: All 7 exit criteria passed (pnpm install, lint, format:check, typecheck, build, test, `pnpm exec nx show projects`).
+- Artifacts: root config files, `.npmrc` (cleaned to comments-only), `package.json` with `packageManager` field.
+- Notes: deferred items (`sheriff`, `knip`, CI) explicitly tracked for Unit 6. Storybook hoist-pattern deferred to Unit 3+.
 
 ### Output for Next Step
 
