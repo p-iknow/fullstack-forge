@@ -57,7 +57,7 @@
   "references": [
     { "path": "apps/store" },
     { "path": "apps/admin" },
-    { "path": "packages/base-ui" },
+    { "path": "packages/design-system" },
     { "path": "packages/shared" },
     { "path": "apps/api" },
   ],

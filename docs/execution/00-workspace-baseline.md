@@ -35,9 +35,9 @@ Step 3 ─── API codegen 실행 ★
   │         ⚠️ codegen 세부 정책(자동 실행/장애 대응)은
   │            05-integration.md `Codegen 워크플로`를 단일 기준으로 따름
   │
-Step 4 ─── packages/base-ui
-  │         packages/base-ui (컴포넌트 + shadcn)
-  │         → 02-packages.md
+Step 4 ─── packages/design-system
+   │         packages/design-system (컴포넌트 + shadcn)
+   │         → 02-packages.md
   │
 Step 5 ─── apps/api 계층
   │         apps/api (Hono + Drizzle + PostgreSQL + Redis)
@@ -58,7 +58,7 @@ Step 7 ─── 품질 도구
 ### 기본 동작
 
 - [ ] `pnpm install` — 정상 설치
-- [ ] `pnpm exec nx show projects` — 6개 프로젝트 (store, admin, api, shared, api-spec, base-ui)
+- [ ] `pnpm exec nx show projects` — 6개 프로젝트 (store, admin, api, shared, api-spec, design-system)
 - [ ] `pnpm exec nx graph` — 의존성 그래프 정상
 
 ### API Spec / Codegen
@@ -85,7 +85,7 @@ Step 7 ─── 품질 도구
 
 - [ ] `pnpm test` — vitest 전체 통과
 - [ ] api 테스트 = node 환경
-- [ ] app/base-ui 테스트 = jsdom 환경
+- [ ] app/design-system 테스트 = jsdom 환경
 
 ### 린트/포맷
 
@@ -95,7 +95,7 @@ Step 7 ─── 품질 도구
 ### 품질
 
 - [ ] `pnpm sheriff` — 의존성 규칙 통과
-  - 특히: `svc:api → lib:base-ui` 차단 확인
+  - 특히: `svc:api → lib:design-system` 차단 확인
 - [ ] `pnpm knip` — 미사용 코드 없음
 
 ### Dev 서버 기본 확인

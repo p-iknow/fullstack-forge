@@ -6,7 +6,7 @@
 | ---- | -------------------------------- | -------------- | --------------------------------------- |
 | 1    | `config/workspace-foundation`    | ✅ Complete    | All exit criteria pass. Ready for PR.   |
 | 2    | `config/packages-shared-apispec` | 🔄 In Progress | Unit 1 merged. shared deferred (YAGNI). |
-| 3    | `config/packages-base-ui`        | ⬜ Not Started | Blocked by Unit 2 merge.                |
+| 3    | `config/packages-design-system`  | ⬜ Not Started | Blocked by Unit 2 merge.                |
 | 4    | `config/apps-api`                | ⬜ Not Started | Blocked by Unit 3 merge.                |
 | 5    | `config/apps-frontend`           | ⬜ Not Started | Blocked by Unit 4 merge.                |
 | 6    | `config/quality-tooling`         | ⬜ Not Started | Blocked by Unit 5 merge.                |
@@ -18,7 +18,7 @@
 | Item                | Current                                | Target (harness)                                |
 | ------------------- | -------------------------------------- | ----------------------------------------------- |
 | Root config files   | Not present (only `docs/`, `.claude/`) | tsconfig, workspace, nx, lint/format, gitignore |
-| `packages/` layer   | Not present                            | `shared`, `api-spec`, `base-ui`                 |
+| `packages/` layer   | Not present                            | `shared`, `api-spec`, `design-system`           |
 | `apps/` layer       | Not present                            | `store`, `admin`, `api`                         |
 | Quality tooling     | Not present                            | vitest workspace, knip, sheriff, CI             |
 | Runtime/infra setup | Not present                            | Added in later execution stages                 |
@@ -35,7 +35,7 @@ Unit 1 -> Unit 2 -> Unit 3 -> Unit 4 -> Unit 5 -> Unit 6
 
 config/workspace-foundation
   -> config/packages-shared-apispec
-  -> config/packages-base-ui
+  -> config/packages-design-system
   -> config/apps-api
   -> config/apps-frontend
   -> config/quality-tooling
@@ -175,11 +175,11 @@ config/workspace-foundation
 - API contract and generated types available for UI/API packages.
 - Purpose-scoped shared packages to be created when actual need arises.
 
-## Unit 3: `config/packages-base-ui`
+## Unit 3: `config/packages-design-system`
 
 ### Step Objective
 
-- Implementation goal: Create `packages/base-ui` with base components and style foundation.
+- Implementation goal: Create `packages/design-system` with base components and style foundation.
 - Learning/operational goal: Establish reusable UI layer consumed by app frontends.
 
 ### Prerequisite
@@ -194,20 +194,20 @@ config/workspace-foundation
 
 ### Progressive Tasks
 
-1. Create `packages/base-ui` package structure (`components`, `hooks`, `lib`, `styles`).
+1. Create `packages/design-system` package structure (`components`, `hooks`, `lib`, `styles`).
 2. Configure package exports and TypeScript build settings.
 3. Add baseline utility (`cn`) and initial component set.
 4. Register package in root references and test workspace as needed.
 
 ### Exit Criteria
 
-- [ ] `packages/base-ui` package exists with build/typecheck scripts.
-- [ ] `pnpm --filter @fullstack-forge/base-ui build` succeeds.
-- [ ] `pnpm --filter @fullstack-forge/base-ui typecheck` succeeds.
+- [ ] `packages/design-system` package exists with build/typecheck scripts.
+- [ ] `pnpm --filter @fullstack-forge/design-system build` succeeds.
+- [ ] `pnpm --filter @fullstack-forge/design-system typecheck` succeeds.
 
 ### Evidence
 
-- Command logs: base-ui build/typecheck output.
+- Command logs: design-system build/typecheck output.
 - Artifacts: initial component and style files list.
 - Notes: additional UI deps deferred policy captured.
 
@@ -278,7 +278,7 @@ config/workspace-foundation
 
 1. Create `apps/store` and `apps/admin` project structures.
 2. Configure router/dev/build/typecheck scripts.
-3. Wire dependencies to `shared`, `base-ui`, and `api-spec`.
+3. Wire dependencies to `shared`, `design-system`, and `api-spec`.
 4. Ensure dev entrypoints are runnable on expected ports.
 
 ### Exit Criteria

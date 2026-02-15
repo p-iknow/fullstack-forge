@@ -3,15 +3,15 @@
 ## vitest.workspace.ts
 
 ```ts
-export default ['packages/shared', 'packages/base-ui', 'apps/store', 'apps/admin', 'apps/api']
+export default ['packages/shared', 'packages/design-system', 'apps/store', 'apps/admin', 'apps/api']
 ```
 
-| 프로젝트         | 환경        | 비고                                                                  |
-| ---------------- | ----------- | --------------------------------------------------------------------- |
-| apps/\*          | `jsdom`     | 브라우저 시뮬레이션, setupFiles 있음 (`store`=고객용, `admin`=운영용) |
-| packages/base-ui | `jsdom`     | React 컴포넌트 테스트                                                 |
-| packages/shared  | 기본 (node) | 순수 로직                                                             |
-| apps/api         | `node`      | 서버 로직                                                             |
+| 프로젝트               | 환경        | 비고                                                                  |
+| ---------------------- | ----------- | --------------------------------------------------------------------- |
+| apps/\*                | `jsdom`     | 브라우저 시뮬레이션, setupFiles 있음 (`store`=고객용, `admin`=운영용) |
+| packages/design-system | `jsdom`     | React 컴포넌트 테스트                                                 |
+| packages/shared        | 기본 (node) | 순수 로직                                                             |
+| apps/api               | `node`      | 서버 로직                                                             |
 
 > `packages/api-spec`은 vitest 대상 아님 — TypeSpec 검증은 `pnpm --filter @fullstack-forge/api-spec typecheck`로 처리.
 
@@ -51,7 +51,7 @@ export default ['packages/shared', 'packages/base-ui', 'apps/store', 'apps/admin
       "project": ["src/**/*.tsp"],
       "ignore": ["generated/**"],
     },
-    "packages/base-ui": {
+    "packages/design-system": {
       "entry": ["src/components/*.tsx", "src/lib/*.ts", "src/hooks/*.ts"],
       "project": ["src/**/*.{ts,tsx}"],
     },
@@ -78,27 +78,27 @@ export const config: SheriffConfig = {
     'apps/<app>/src/routes': 'app:<app>',
     'apps/<svc>/src': 'svc:<svc>',
     'packages/shared/src': 'lib:shared',
-    'packages/base-ui/src': 'lib:base-ui',
+    'packages/design-system/src': 'lib:design-system',
     'packages/api-spec/src': 'lib:api-spec',
     'packages/api-spec/generated': 'lib:api-spec',
   },
 
   depRules: {
-    'app:*': [sameTag, 'lib:shared', 'lib:base-ui', 'lib:api-spec'],
-    'svc:*': [sameTag, 'lib:shared', 'lib:api-spec'], // base-ui 의존 금지
+    'app:*': [sameTag, 'lib:shared', 'lib:design-system', 'lib:api-spec'],
+    'svc:*': [sameTag, 'lib:shared', 'lib:api-spec'], // design-system 의존 금지
     'lib:shared': noDependencies,
-    'lib:base-ui': noDependencies,
+    'lib:design-system': noDependencies,
     'lib:api-spec': noDependencies,
     root: [
       'app:store',
       'app:admin',
       'svc:api',
       'lib:shared',
-      'lib:base-ui',
+      'lib:design-system',
       'lib:api-spec',
       'noTag',
     ],
-    noTag: ['noTag', 'lib:shared', 'lib:base-ui', 'lib:api-spec'],
+    noTag: ['noTag', 'lib:shared', 'lib:design-system', 'lib:api-spec'],
   },
 }
 ```
@@ -106,15 +106,15 @@ export const config: SheriffConfig = {
 ### 의존 규칙 요약
 
 ```
-app:*  → lib:shared ✓  lib:base-ui ✓  lib:api-spec ✓
-svc:*  → lib:shared ✓  lib:base-ui ✗  lib:api-spec ✓
+app:*  → lib:shared ✓  lib:design-system ✓  lib:api-spec ✓
+svc:*  → lib:shared ✓  lib:design-system ✗  lib:api-spec ✓
 lib:*  → (없음)
 ```
 
 worker를 별도 서비스로 분리하는 경우 권장 규칙:
 
 ```text
-svc:workers:*  → lib:shared ✓  lib:api-spec ✓  lib:base-ui ✗
+svc:workers:*  → lib:shared ✓  lib:api-spec ✓  lib:design-system ✗
 ```
 
 ## 테스트 전략
