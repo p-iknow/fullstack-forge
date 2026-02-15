@@ -14,45 +14,49 @@ Optimize an existing prompt for better quality outputs.
 
 Evaluate against checklist:
 
-| Element | Present? | Quality |
-|---------|----------|---------|
-| Clear role/persona | Y/N | 1-5 |
-| Specific task description | Y/N | 1-5 |
-| Input format defined | Y/N | 1-5 |
-| Output format specified | Y/N | 1-5 |
-| Examples provided | Y/N | Count: _ |
-| Constraints/guardrails | Y/N | 1-5 |
-| Structure (XML/sections) | Y/N | 1-5 |
+| Element                   | Present? | Quality   |
+| ------------------------- | -------- | --------- |
+| Clear role/persona        | Y/N      | 1-5       |
+| Specific task description | Y/N      | 1-5       |
+| Input format defined      | Y/N      | 1-5       |
+| Output format specified   | Y/N      | 1-5       |
+| Examples provided         | Y/N      | Count: \_ |
+| Constraints/guardrails    | Y/N      | 1-5       |
+| Structure (XML/sections)  | Y/N      | 1-5       |
 
 ### Step 2: Identify Gaps
 
 Common issues to fix:
 
-| Problem | Symptom | Solution |
-|---------|---------|----------|
-| **Vague instructions** | Inconsistent outputs | Add specific constraints |
-| **No examples** | Wrong format | Add 1-3 few-shot examples |
-| **Missing structure** | Disorganized output | Add XML tags |
-| **No reasoning** | Shallow analysis | Add chain-of-thought |
-| **Weak guardrails** | Unwanted behavior | Add DO/DON'T constraints |
+| Problem                | Symptom              | Solution                  |
+| ---------------------- | -------------------- | ------------------------- |
+| **Vague instructions** | Inconsistent outputs | Add specific constraints  |
+| **No examples**        | Wrong format         | Add 1-3 few-shot examples |
+| **Missing structure**  | Disorganized output  | Add XML tags              |
+| **No reasoning**       | Shallow analysis     | Add chain-of-thought      |
+| **Weak guardrails**    | Unwanted behavior    | Add DO/DON'T constraints  |
 
 ### Step 3: Apply Anthropic's 4-Step Improvement
 
 **Phase 1: Example Identification**
+
 - Locate existing examples in the prompt
 - Note their format and quality
 
 **Phase 2: Initial Draft Restructuring**
+
 - Organize with clear sections
 - Add XML tags for inputs/outputs
 - Separate instructions from context
 
 **Phase 3: Chain of Thought Refinement**
+
 - Add reasoning instructions for complex tasks
 - Include "think step by step" where appropriate
 - Structure the thinking process
 
 **Phase 4: Example Enhancement**
+
 - Update examples to show reasoning process
 - Ensure examples match output format exactly
 - Add edge case examples if needed
@@ -62,11 +66,13 @@ Common issues to fix:
 Transform unstructured prompts:
 
 **Before:**
+
 ```
 Summarize this article. Make it short. Here's the article: {text}
 ```
 
 **After:**
+
 ```xml
 You are a professional editor specializing in executive summaries.
 
@@ -98,12 +104,14 @@ Summarize the article for busy executives who need key insights quickly.
 Transform basic examples into reasoning demonstrations:
 
 **Before:**
+
 ```
 Input: "The product is great"
 Output: Positive
 ```
 
 **After:**
+
 ```xml
 <example>
 <input>The product is great but shipping took forever</input>
@@ -128,16 +136,19 @@ Standard guardrails to consider:
 ## Constraints
 
 ALWAYS:
+
 - Cite specific evidence from the input
 - Maintain consistent output format
 - Handle edge cases gracefully
 
 NEVER:
+
 - Make assumptions not supported by input
 - Include personal opinions
 - Exceed specified length limits
 
 IF UNCERTAIN:
+
 - State confidence level
 - Ask for clarification
 - Provide best effort with caveats
@@ -147,12 +158,12 @@ IF UNCERTAIN:
 
 Compare before/after:
 
-| Aspect | Before | After |
-|--------|--------|-------|
-| Structure | Poor/Good | Improved |
-| Examples | 0/1/2+ | Added/Enhanced |
-| Constraints | Weak/Strong | Strengthened |
-| Output format | Vague/Clear | Specified |
+| Aspect        | Before      | After          |
+| ------------- | ----------- | -------------- |
+| Structure     | Poor/Good   | Improved       |
+| Examples      | 0/1/2+      | Added/Enhanced |
+| Constraints   | Weak/Strong | Strengthened   |
+| Output format | Vague/Clear | Specified      |
 
 ## Output Format
 
@@ -167,15 +178,18 @@ Return:
 ## Example
 
 **Original Prompt:**
+
 ```
 Write a good email response
 ```
 
 **Improved Prompt:**
+
 ```markdown
 You are a professional communication specialist who writes clear, concise business emails.
 
 ## Task
+
 Write a professional email response to the message below.
 
 <original_email>
@@ -189,12 +203,14 @@ Tone needed: {{tone}}
 </context>
 
 ## Requirements
+
 - Match the formality level of the original email
 - Address all questions/points raised
 - Keep response under 150 words
 - Include clear next steps if applicable
 
 ## Output Format
+
 Subject: Re: [Original Subject]
 
 [Greeting],
@@ -205,6 +221,7 @@ Subject: Re: [Original Subject]
 [Your name]
 
 ## Example
+
 <example>
 <input>
 Original: "Hi, can we reschedule tomorrow's meeting?"
@@ -225,6 +242,7 @@ Best,
 </example>
 
 ## Constraints
+
 - DO: Mirror the sender's tone and formality
 - DO: Be concise and action-oriented
 - DON'T: Use overly casual language with external contacts
@@ -232,6 +250,7 @@ Best,
 ```
 
 **Changes Made:**
+
 - Added professional communicator role
 - Structured input with XML tags
 - Specified output format with template

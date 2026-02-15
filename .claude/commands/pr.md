@@ -1,7 +1,7 @@
 ---
 description: Create or update a draft PR with Summary and Test sections
 allowed-tools: Bash, Read, Write, Question
-argument-hint: "[--update | -u] [#PR_NUMBER]"
+argument-hint: '[--update | -u] [#PR_NUMBER]'
 ---
 
 # Draft PR Command
@@ -17,11 +17,11 @@ $ARGUMENTS
 
 ## Mode Selection
 
-| Command | Mode | Action |
-|---------|------|--------|
-| `/pr` | CREATE | Create new draft PR |
-| `/pr -u` | UPDATE | Update current branch's PR |
-| `/pr -u #123` | UPDATE | Update specific PR #123 |
+| Command       | Mode   | Action                     |
+| ------------- | ------ | -------------------------- |
+| `/pr`         | CREATE | Create new draft PR        |
+| `/pr -u`      | UPDATE | Update current branch's PR |
+| `/pr -u #123` | UPDATE | Update specific PR #123    |
 
 ## Instructions
 
@@ -35,6 +35,7 @@ git branch --show-current
 ```
 
 **Fail if:**
+
 - Uncommitted changes exist → "Commit changes first"
 - On main/master → "Create a feature branch first"
 
@@ -59,12 +60,15 @@ Generate Summary and Test table **from commit history** — do NOT ask the user.
 ## Summary
 
 ### Goal
+
 [why — inferred from commits and branch name]
 
 ### Implementation
+
 [what — bullet points from each commit]
 
 ## Test
+
 | Before / Requirements | After / Implementation |
 | --------------------- | ---------------------- |
 | [inferred gap]        | [what commits deliver] |
@@ -111,6 +115,7 @@ gh pr edit $PR_NUMBER --body "$BODY"
 ## Output
 
 ### CREATE Success
+
 ```
 ✅ Draft PR created: https://github.com/user/repo/pull/123
 
@@ -120,11 +125,13 @@ Next steps:
 ```
 
 ### UPDATE Success
+
 ```
 ✅ PR #123 updated: https://github.com/user/repo/pull/123
 ```
 
 ### Failure
+
 ```
 ❌ Cannot create/update PR: [reason]
    [suggested action]
@@ -132,7 +139,7 @@ Next steps:
 
 ## Safety
 
-| Check | Action |
-|-------|--------|
-| CREATE: Always `--draft` | Never create ready-for-review PR |
-| UPDATE: Confirm before edit | Show preview of new body |
+| Check                       | Action                           |
+| --------------------------- | -------------------------------- |
+| CREATE: Always `--draft`    | Never create ready-for-review PR |
+| UPDATE: Confirm before edit | Show preview of new body         |

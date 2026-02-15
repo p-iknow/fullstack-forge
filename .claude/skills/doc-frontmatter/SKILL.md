@@ -11,13 +11,13 @@ Generate and validate YAML frontmatter for docs folder documents.
 
 ## Quick Reference
 
-| Field | Required | Description |
-|-------|----------|-------------|
-| `title` | Yes | Document title (from H1 or filename) |
-| `description` | Yes | 50-160 char summary |
-| `type` | Yes | `tutorial`, `guide`, `reference`, `explanation`, `adr`, `troubleshooting`, `pattern`, `index` |
-| `tags` | No | Max 5 tags from controlled vocabulary |
-| `order` | No | Numeric order (from filename prefix like `00-`) |
+| Field         | Required | Description                                                                                   |
+| ------------- | -------- | --------------------------------------------------------------------------------------------- |
+| `title`       | Yes      | Document title (from H1 or filename)                                                          |
+| `description` | Yes      | 50-160 char summary                                                                           |
+| `type`        | Yes      | `tutorial`, `guide`, `reference`, `explanation`, `adr`, `troubleshooting`, `pattern`, `index` |
+| `tags`        | No       | Max 5 tags from controlled vocabulary                                                         |
+| `order`       | No       | Numeric order (from filename prefix like `00-`)                                               |
 
 **Full schema, types, and tags** → [schema.md](references/schema.md)
 
@@ -53,8 +53,8 @@ bun scripts/generate-frontmatter.ts docs/path/to/file.md
 
 ## Resources
 
-| Resource | Purpose |
-|----------|---------|
+| Resource                          | Purpose                                                        |
+| --------------------------------- | -------------------------------------------------------------- |
 | [schema.md](references/schema.md) | **Source of Truth** - Complete schema, types, tags definitions |
-| `scripts/generate-frontmatter.ts` | Auto-generate frontmatter from document content |
-| `scripts/validate-frontmatter.ts` | Validate frontmatter against schema |
+| `scripts/generate-frontmatter.ts` | Auto-generate frontmatter from document content                |
+| `scripts/validate-frontmatter.ts` | Validate frontmatter against schema                            |

@@ -20,11 +20,11 @@
     "module": "ESNext",
     "moduleResolution": "Bundler",
     "target": "ES2022",
-    "lib": ["ES2022"],                   // ★ DOM 없음
+    "lib": ["ES2022"], // ★ DOM 없음
     "isolatedModules": true,
     "esModuleInterop": true,
     "resolveJsonModule": true,
-    "verbatimModuleSyntax": true,        // import type 강제
+    "verbatimModuleSyntax": true, // import type 강제
 
     // --- 빌드 ---
     "skipLibCheck": true,
@@ -33,18 +33,18 @@
     "noEmit": true,
 
     // --- 모노레포 ---
-    "customConditions": ["@fullstack-forge/source"]
-  }
+    "customConditions": ["@fullstack-forge/source"],
+  },
 }
 ```
 
 **각 프로젝트에서 추가할 내용:**
 
-| 프로젝트 타입 | 추가 설정 | 이유 |
-|--------------|-----------|------|
-| 프론트 앱/UI 패키지 | `"jsx": "react-jsx"`, `"lib": ["DOM", "DOM.Iterable", "ES2022"]` | React + 브라우저 API |
-| 백엔드 서비스 | `"types": ["node"]` | Node.js API |
-| 순수 타입/유틸 패키지 | 추가 없음 | base 그대로 사용 |
+| 프로젝트 타입         | 추가 설정                                                        | 이유                 |
+| --------------------- | ---------------------------------------------------------------- | -------------------- |
+| 프론트 앱/UI 패키지   | `"jsx": "react-jsx"`, `"lib": ["DOM", "DOM.Iterable", "ES2022"]` | React + 브라우저 API |
+| 백엔드 서비스         | `"types": ["node"]`                                              | Node.js API          |
+| 순수 타입/유틸 패키지 | 추가 없음                                                        | base 그대로 사용     |
 
 ## tsconfig.json (solution-style)
 
@@ -58,8 +58,8 @@
     { "path": "apps/admin" },
     { "path": "packages/base-ui" },
     { "path": "packages/shared" },
-    { "path": "apps/api" }
-  ]
+    { "path": "apps/api" },
+  ],
 }
 ```
 
@@ -144,12 +144,12 @@ catalog:
     "production": [
       "default",
       "!{projectRoot}/**/?(*.)+(spec|test).[jt]s?(x)?",
-      "!{projectRoot}/tsconfig.spec.json"
+      "!{projectRoot}/tsconfig.spec.json",
     ],
     "sharedGlobals": [
       "{workspaceRoot}/.github/workflows/ci.yml",
-      "{workspaceRoot}/pnpm-workspace.yaml"
-    ]
+      "{workspaceRoot}/pnpm-workspace.yaml",
+    ],
   },
   "targetDefaults": {
     "codegen": { "dependsOn": ["^codegen"], "cache": true },
@@ -159,8 +159,8 @@ catalog:
     "lint": { "cache": true },
     "test": { "cache": true },
     "storybook": { "cache": false },
-    "build-storybook": { "cache": true }
-  }
+    "build-storybook": { "cache": true },
+  },
 }
 ```
 
@@ -182,7 +182,7 @@ catalog:
     "test": "nx run-many -t test",
     "sheriff": "sheriff verify",
     "knip": "knip",
-    "check": "pnpm lint && pnpm format:check && pnpm typecheck && pnpm sheriff && pnpm knip"
+    "check": "pnpm lint && pnpm format:check && pnpm typecheck && pnpm sheriff && pnpm knip",
   },
   "devDependencies": {
     "@softarc/sheriff-core": "^0.19.6",
@@ -192,11 +192,11 @@ catalog:
     "oxfmt": "^0.27.0",
     "oxlint": "^1.42.0",
     "typescript": "catalog:",
-    "vitest": "catalog:"
+    "vitest": "catalog:",
   },
   "pnpm": {
-    "onlyBuiltDependencies": ["esbuild", "nx"]
-  }
+    "onlyBuiltDependencies": ["esbuild", "nx"],
+  },
 }
 ```
 
@@ -219,15 +219,22 @@ auto-install-peers=true
   "categories": {
     "correctness": "error",
     "suspicious": "warn",
-    "pedantic": "off"
+    "pedantic": "off",
   },
   "rules": {
     "no-console": "warn",
     "eqeqeq": "error",
-    "react/react-in-jsx-scope": "off"
+    "react/react-in-jsx-scope": "off",
   },
   "env": { "browser": true, "node": true, "es6": true },
-  "ignorePatterns": ["node_modules", "dist", ".output", "*.gen.ts", "routeTree.gen.ts", "**/generated/**"]
+  "ignorePatterns": [
+    "node_modules",
+    "dist",
+    ".output",
+    "*.gen.ts",
+    "routeTree.gen.ts",
+    "**/generated/**",
+  ],
 }
 ```
 
@@ -245,10 +252,14 @@ auto-install-peers=true
   "bracketSpacing": true,
   "arrowParens": "always",
   "ignorePatterns": [
-    "node_modules", "dist", ".output",
-    "pnpm-lock.yaml", "*.gen.ts", "routeTree.gen.ts",
-    "**/generated/**"
-  ]
+    "node_modules",
+    "dist",
+    ".output",
+    "pnpm-lock.yaml",
+    "*.gen.ts",
+    "routeTree.gen.ts",
+    "**/generated/**",
+  ],
 }
 ```
 

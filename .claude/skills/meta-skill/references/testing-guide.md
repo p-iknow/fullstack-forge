@@ -6,11 +6,11 @@ Complete testing methodology for skills based on Anthropic's official skill guid
 
 ## Testing Levels
 
-| Level | Approach | Setup Required |
-|-------|----------|---------------|
-| Manual | Run queries directly in Claude.ai | None |
-| Scripted | Automate test cases in Claude Code | Minimal |
-| Programmatic | Evaluation suites via skills API | Moderate |
+| Level        | Approach                           | Setup Required |
+| ------------ | ---------------------------------- | -------------- |
+| Manual       | Run queries directly in Claude.ai  | None           |
+| Scripted     | Automate test cases in Claude Code | Minimal        |
+| Programmatic | Evaluation suites via skills API   | Moderate       |
 
 Choose based on quality requirements and skill visibility.
 
@@ -81,40 +81,40 @@ Then:
 
 ### Measurement Template
 
-| Metric | Without Skill | With Skill |
-|--------|--------------|------------|
-| Messages needed | 15 back-and-forth | 2 clarifying questions |
-| Failed API calls | 3 requiring retry | 0 |
-| Tokens consumed | 12,000 | 6,000 |
-| User corrections | Multiple | None |
-| Time to complete | ~10 min | ~2 min |
+| Metric           | Without Skill     | With Skill             |
+| ---------------- | ----------------- | ---------------------- |
+| Messages needed  | 15 back-and-forth | 2 clarifying questions |
+| Failed API calls | 3 requiring retry | 0                      |
+| Tokens consumed  | 12,000            | 6,000                  |
+| User corrections | Multiple          | None                   |
+| Time to complete | ~10 min           | ~2 min                 |
 
 ## 4. Iteration Signals
 
 ### Undertriggering
 
-| Signal | Solution |
-|--------|----------|
-| Skill doesn't load when it should | Add more detail and nuance to description |
-| Users manually enabling it | Add keywords for technical terms |
-| Support questions about when to use | Make trigger phrases more explicit |
+| Signal                              | Solution                                  |
+| ----------------------------------- | ----------------------------------------- |
+| Skill doesn't load when it should   | Add more detail and nuance to description |
+| Users manually enabling it          | Add keywords for technical terms          |
+| Support questions about when to use | Make trigger phrases more explicit        |
 
 ### Overtriggering
 
-| Signal | Solution |
-|--------|----------|
+| Signal                             | Solution                                    |
+| ---------------------------------- | ------------------------------------------- |
 | Skill loads for irrelevant queries | Add negative triggers ("Do NOT use for...") |
-| Users disabling it | Be more specific in description |
-| Confusion about purpose | Clarify scope in description |
+| Users disabling it                 | Be more specific in description             |
+| Confusion about purpose            | Clarify scope in description                |
 
 ### Execution Issues
 
-| Signal | Solution |
-|--------|----------|
-| Inconsistent results | Improve instructions, add validation |
-| API call failures | Add error handling, retry logic |
+| Signal                  | Solution                                |
+| ----------------------- | --------------------------------------- |
+| Inconsistent results    | Improve instructions, add validation    |
+| API call failures       | Add error handling, retry logic         |
 | User corrections needed | Make steps more specific and actionable |
-| Claude skips steps | Add "CRITICAL: Do not skip..." emphasis |
+| Claude skips steps      | Add "CRITICAL: Do not skip..." emphasis |
 
 ## 5. Pre-Upload Checklist
 

@@ -41,7 +41,7 @@
     "typecheck": "tsc --noEmit",
     "test": "vitest run --passWithNoTests",
     "storybook": "storybook dev -p 6006",
-    "build-storybook": "storybook build"
+    "build-storybook": "storybook build",
   },
   "dependencies": {
     "@fullstack-forge/api-spec": "workspace:*",
@@ -55,7 +55,7 @@
     "@suspensive/react-query": "catalog:",
     "ky": "catalog:",
     "react": "catalog:",
-    "react-dom": "catalog:"
+    "react-dom": "catalog:",
   },
   "devDependencies": {
     "@storybook/addon-a11y": "catalog:",
@@ -72,8 +72,8 @@
     "typescript": "catalog:",
     "vite": "catalog:",
     "vite-tsconfig-paths": "catalog:",
-    "vitest": "catalog:"
-  }
+    "vitest": "catalog:",
+  },
 }
 ```
 
@@ -91,12 +91,9 @@
 
     // ★ 프론트 런타임 (base에 없으므로 앱에서 선언)
     "jsx": "react-jsx",
-    "lib": ["DOM", "DOM.Iterable", "ES2022"]
+    "lib": ["DOM", "DOM.Iterable", "ES2022"],
   },
-  "references": [
-    { "path": "../../packages/base-ui" },
-    { "path": "../../packages/shared" }
-  ]
+  "references": [{ "path": "../../packages/base-ui" }, { "path": "../../packages/shared" }],
 }
 ```
 
@@ -142,7 +139,7 @@ import tsConfigPaths from 'vite-tsconfig-paths'
 export default defineProject({
   plugins: [tsConfigPaths()],
   resolve: {
-    conditions: ['@fullstack-forge/source'],  // ★ base-ui 소스 레벨 해석
+    conditions: ['@fullstack-forge/source'], // ★ base-ui 소스 레벨 해석
   },
   test: {
     name: 'store',
@@ -229,7 +226,7 @@ export const queryClient = new QueryClient({
 })
 ```
 
-### src/routes/__root.tsx
+### src/routes/\_\_root.tsx
 
 ```tsx
 import type { ReactNode } from 'react'

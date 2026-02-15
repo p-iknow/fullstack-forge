@@ -24,52 +24,55 @@
 
 ## WHERE TO LOOK
 
-| Task | Location | Notes |
-|------|----------|-------|
-| 프로젝트 비전·범위 이해 | `docs/prd/01-product-scope.md` | KPI, MVP 범위, 비기능 요구사항 |
-| 아키텍처·스택 파악 | `docs/harness/00-overview.md` | 스택 테이블, 설계 원칙, 디렉토리 구조 |
-| 기술 결정 근거 확인 | `docs/adr/ADR-0001~0005` | PRD 추적성 포함 |
-| 구현 순서 확인 | `docs/execution/README.md` | 00→07 순차 진행 |
-| 학습 로드맵 진행 | `docs/roadmap/00-roadmap-overview.md` | 8단계, 난이도·소요시간 포함 |
-| 도메인 정책 (주문·리뷰·문의) | `docs/prd/03-commerce-domain-policy.md` | 상태 머신, 재고 정책 |
-| 인증·보안 정책 | `docs/prd/02-user-flows-and-auth-policy.md` | OAuth, 세션, RBAC |
-| 이벤트 신뢰성 정책 | `docs/prd/04-event-reliability-and-ops-policy.md` | SNS-SQS, 멱등성, DLQ |
-| AI 스킬 생성·수정 | `.claude/skills/meta-skill/SKILL.md` | 7-phase 워크플로 |
-| 문서 프론트매터 추가 | `.claude/skills/doc-frontmatter/SKILL.md` | YAML 스키마 검증 포함 |
-| 프롬프트 작성 | `.claude/skills/meta-prompt-engineer/SKILL.md` | 기법·템플릿·안티패턴 |
-| git 브랜치 생성 | `.claude/commands/branch.md` | `type/kebab-case` 포맷 |
-| git 커밋 | `.claude/commands/commit.md` | `type(scope): description` 포맷 |
-| PR 생성 | `.claude/commands/pr.md` | 항상 `--draft` |
+| Task                         | Location                                          | Notes                                 |
+| ---------------------------- | ------------------------------------------------- | ------------------------------------- |
+| 프로젝트 비전·범위 이해      | `docs/prd/01-product-scope.md`                    | KPI, MVP 범위, 비기능 요구사항        |
+| 아키텍처·스택 파악           | `docs/harness/00-overview.md`                     | 스택 테이블, 설계 원칙, 디렉토리 구조 |
+| 기술 결정 근거 확인          | `docs/adr/ADR-0001~0005`                          | PRD 추적성 포함                       |
+| 구현 순서 확인               | `docs/execution/README.md`                        | 00→07 순차 진행                       |
+| 학습 로드맵 진행             | `docs/roadmap/00-roadmap-overview.md`             | 8단계, 난이도·소요시간 포함           |
+| 도메인 정책 (주문·리뷰·문의) | `docs/prd/03-commerce-domain-policy.md`           | 상태 머신, 재고 정책                  |
+| 인증·보안 정책               | `docs/prd/02-user-flows-and-auth-policy.md`       | OAuth, 세션, RBAC                     |
+| 이벤트 신뢰성 정책           | `docs/prd/04-event-reliability-and-ops-policy.md` | SNS-SQS, 멱등성, DLQ                  |
+| AI 스킬 생성·수정            | `.claude/skills/meta-skill/SKILL.md`              | 7-phase 워크플로                      |
+| 문서 프론트매터 추가         | `.claude/skills/doc-frontmatter/SKILL.md`         | YAML 스키마 검증 포함                 |
+| 프롬프트 작성                | `.claude/skills/meta-prompt-engineer/SKILL.md`    | 기법·템플릿·안티패턴                  |
+| git 브랜치 생성              | `.claude/commands/branch.md`                      | `type/kebab-case` 포맷                |
+| git 커밋                     | `.claude/commands/commit.md`                      | `type(scope): description` 포맷       |
+| PR 생성                      | `.claude/commands/pr.md`                          | 항상 `--draft`                        |
 
 ## PLANNED TECH STACK (미구현)
 
-| Layer | Tech |
-|-------|------|
-| API 명세 | TypeSpec → OpenAPI 3.1 |
-| 프론트엔드 | TanStack Start + React 19 + Tailwind v4 |
-| UI | Base UI + shadcn (CVA) |
-| 백엔드 | Hono + Drizzle ORM + PostgreSQL + Redis |
-| 이벤트 | SNS → SQS fanout (LocalStack) |
-| 모니터링 | Prometheus + Grafana |
-| 배포 | Docker + Kubernetes (minikube) |
-| 태스크 러너 | Nx (pure, 플러그인 없음) |
-| 패키지 매니저 | pnpm (workspaces, catalog) |
-| 린트/포맷 | oxlint + oxfmt |
-| 테스트 | vitest (workspace mode) |
+| Layer         | Tech                                    |
+| ------------- | --------------------------------------- |
+| API 명세      | TypeSpec → OpenAPI 3.1                  |
+| 프론트엔드    | TanStack Start + React 19 + Tailwind v4 |
+| UI            | Base UI + shadcn (CVA)                  |
+| 백엔드        | Hono + Drizzle ORM + PostgreSQL + Redis |
+| 이벤트        | SNS → SQS fanout (LocalStack)           |
+| 모니터링      | Prometheus + Grafana                    |
+| 배포          | Docker + Kubernetes (minikube)          |
+| 태스크 러너   | Nx (pure, 플러그인 없음)                |
+| 패키지 매니저 | pnpm (workspaces, catalog)              |
+| 린트/포맷     | oxlint + oxfmt                          |
+| 테스트        | vitest (workspace mode)                 |
 
 ## CONVENTIONS
 
 ### 문서 번호 체계
+
 - `00` 설계/아키텍처 → `01` 기초 → `02` 패키지 → `03` 프론트 → `04` 백엔드 → `05` 연동 → `06` 품질 → `07` 운영
 - `02a` = 커머스 도메인 (특수 삽입)
 - harness/roadmap/execution 동일 번호 = 같은 주제의 다른 관점
 
 ### Git 워크플로
+
 - **Branch**: `type/kebab-case` (max 50자). Types: feat, fix, chore, docs, refactor, test, style
 - **Commit**: `type(scope): description`. 같은 목적 = 같은 커밋 (파일 수 무관)
 - **PR**: 항상 `--draft`. Body: `## Summary` + `## Test` 섹션
 
 ### 스킬 구조
+
 ```
 skill-name/
 ├── SKILL.md          # 필수: frontmatter + instructions
@@ -78,23 +81,24 @@ skill-name/
 ├── scripts/          # 선택: 검증/생성 스크립트
 └── assets/           # 선택: 템플릿
 ```
+
 - 이름: kebab-case, max 64자, 디렉토리명과 일치
 - description: 자연어 산문 1-3문장 (구조화된 라벨 금지)
 - SKILL.md 500줄 초과 시 references/로 분리
 
 ## ANTI-PATTERNS
 
-| 금지 | 이유 |
-|------|------|
-| 파일 단위로 커밋 분리 | 목적 단위로 묶어야 함 |
-| 푸시된 커밋 amend | 히스토리 깨짐 |
-| `--no-verify` 훅 스킵 | 품질 게이트 우회 |
-| .env/credentials 커밋 | 보안 위반 |
-| 스킬 description에 XML 태그 | 인젝션 위험 |
-| 스킬 폴더에 README.md | SKILL.md 또는 references/ 사용 |
-| SKILL.md 500줄 초과 | 컨텍스트 블로트 |
-| `api` → `base-ui` 의존 | 백엔드에 UI 유입 차단 (Sheriff 강제) |
-| `shared`/`api-spec` → 외부 의존 | 순수 유틸/명세 유지 |
+| 금지                            | 이유                                 |
+| ------------------------------- | ------------------------------------ |
+| 파일 단위로 커밋 분리           | 목적 단위로 묶어야 함                |
+| 푸시된 커밋 amend               | 히스토리 깨짐                        |
+| `--no-verify` 훅 스킵           | 품질 게이트 우회                     |
+| .env/credentials 커밋           | 보안 위반                            |
+| 스킬 description에 XML 태그     | 인젝션 위험                          |
+| 스킬 폴더에 README.md           | SKILL.md 또는 references/ 사용       |
+| SKILL.md 500줄 초과             | 컨텍스트 블로트                      |
+| `api` → `base-ui` 의존          | 백엔드에 UI 유입 차단 (Sheriff 강제) |
+| `shared`/`api-spec` → 외부 의존 | 순수 유틸/명세 유지                  |
 
 ## DOCUMENT FLOW
 

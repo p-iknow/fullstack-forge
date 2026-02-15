@@ -39,7 +39,7 @@ description: Create distinctive, production-grade frontend interfaces with high 
 ```yaml
 ---
 name: docx
-description: "Use this skill whenever the user wants to create, read, edit, or manipulate Word documents (.docx files). Triggers include: any mention of \"Word doc\", \"word document\", \".docx\", or requests to produce professional documents. Do NOT use for PDFs, spreadsheets, Google Docs, or general coding tasks unrelated to document generation."
+description: 'Use this skill whenever the user wants to create, read, edit, or manipulate Word documents (.docx files). Triggers include: any mention of "Word doc", "word document", ".docx", or requests to produce professional documents. Do NOT use for PDFs, spreadsheets, Google Docs, or general coding tasks unrelated to document generation.'
 ---
 ```
 
@@ -53,9 +53,11 @@ Official skills do NOT follow a universal template. Each structures its body aro
 
 ```markdown
 ## When to use this skill
+
 [List of communication types]
 
 ## How to use this skill
+
 1. Identify the communication type
 2. Load the appropriate guideline file from examples/
 3. Follow the specific instructions in that file
@@ -65,18 +67,23 @@ Official skills do NOT follow a universal template. Each structures its body aro
 
 ```markdown
 ## Decision Tree: Choosing Your Approach
+
 [ASCII decision tree]
 
 ## Example: Using with_server.py
+
 [Concrete code examples]
 
 ## Common Pitfall
+
 [Single ❌/✅ pair]
 
 ## Best Practices
+
 [Bullet list]
 
 ## Reference Files
+
 [Links to examples/]
 ```
 
@@ -84,18 +91,23 @@ Official skills do NOT follow a universal template. Each structures its body aro
 
 ```markdown
 ## When to Offer This Workflow
+
 [Trigger conditions + initial offer text]
 
 ## Stage 1: Context Gathering
+
 [Goal → Steps → Exit condition → Transition]
 
 ## Stage 2: Refinement & Structure
+
 [Goal → Section ordering → Step 1-6 per section → Quality checking]
 
 ## Stage 3: Reader Testing
+
 [Goal → Sub-agent approach → Manual approach → Exit condition]
 
 ## Tips for Effective Guidance
+
 [Tone, deviations, context management]
 ```
 
@@ -103,28 +115,33 @@ Official skills do NOT follow a universal template. Each structures its body aro
 
 ```markdown
 ## ALGORITHMIC PHILOSOPHY CREATION
+
 [What to create → How to generate → Examples → Essential principles]
 
 ## DEDUCING THE CONCEPTUAL SEED
+
 [Critical step before implementation]
 
 ## P5.JS IMPLEMENTATION
+
 [Step 0: Read template → Technical requirements → Craftsmanship]
 
 ## INTERACTIVE ARTIFACT CREATION
+
 [Fixed vs variable sections → Required features]
 
 ## RESOURCES
+
 [Template files with usage instructions]
 ```
 
 ## Key Observations
 
-| Observation | Detail |
-|-------------|--------|
-| Description length | 1-4 sentences, natural prose |
-| Body size range | 33-405 lines — sized to domain |
-| Common sections | None universal; each skill has unique structure |
+| Observation           | Detail                                                                                            |
+| --------------------- | ------------------------------------------------------------------------------------------------- |
+| Description length    | 1-4 sentences, natural prose                                                                      |
+| Body size range       | 33-405 lines — sized to domain                                                                    |
+| Common sections       | None universal; each skill has unique structure                                                   |
 | "When to use" in body | Some skills repeat triggers in body, but official guide says to keep triggers in description only |
-| Conciseness | Simple skills are genuinely short (33-96 lines), not padded |
-| References | Linked inline where needed, not always in a dedicated section |
+| Conciseness           | Simple skills are genuinely short (33-96 lines), not padded                                       |
+| References            | Linked inline where needed, not always in a dedicated section                                     |

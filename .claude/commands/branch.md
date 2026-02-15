@@ -1,7 +1,7 @@
 ---
 description: Analyze task description and generate appropriate git branch name
 allowed-tools: Bash, Read
-argument-hint: "<description>"
+argument-hint: '<description>'
 ---
 
 # Git Branch Name Generator
@@ -27,27 +27,29 @@ $ARGUMENTS
 ### Step 1: Analyze Input
 
 Parse the description to extract:
+
 - **Action**: What is being done (add, fix, update, remove, etc.)
 - **Target**: What is being affected (login, button, API, etc.)
 - **Context**: Additional qualifiers if any
 
 If description says "현재 작업" or "current work":
+
 1. Read `todoread` for active tasks
 2. Check `git diff --stat` for changed files
 3. Infer branch purpose from context
 
 ### Step 2: Detect Branch Type
 
-| Type | Korean Triggers | English Triggers |
-|------|-----------------|------------------|
-| `feat` | 추가, 구현, 기능, 새로운, 만들기 | add, implement, feature, create, new |
-| `fix` | 수정, 버그, 오류, 에러, 해결, 고치기 | fix, bug, error, resolve, correct |
-| `config` | 설정, 환경, 구성, Claude, AI 스킬 | config, setup, environment, settings |
-| `chore` | 의존성, 빌드, 배포, 잡일 | build, deploy, dependency, maintenance |
-| `docs` | 문서, README, 주석, 설명 | doc, readme, comment, documentation |
-| `refactor` | 리팩토링, 개선, 정리, 구조 | refactor, improve, cleanup, restructure |
-| `test` | 테스트, 검증, 스펙 | test, spec, verify |
-| `style` | 스타일, 포맷, 린트 | style, format, lint, css |
+| Type       | Korean Triggers                      | English Triggers                        |
+| ---------- | ------------------------------------ | --------------------------------------- |
+| `feat`     | 추가, 구현, 기능, 새로운, 만들기     | add, implement, feature, create, new    |
+| `fix`      | 수정, 버그, 오류, 에러, 해결, 고치기 | fix, bug, error, resolve, correct       |
+| `config`   | 설정, 환경, 구성, Claude, AI 스킬    | config, setup, environment, settings    |
+| `chore`    | 의존성, 빌드, 배포, 잡일             | build, deploy, dependency, maintenance  |
+| `docs`     | 문서, README, 주석, 설명             | doc, readme, comment, documentation     |
+| `refactor` | 리팩토링, 개선, 정리, 구조           | refactor, improve, cleanup, restructure |
+| `test`     | 테스트, 검증, 스펙                   | test, spec, verify                      |
+| `style`    | 스타일, 포맷, 린트                   | style, format, lint, css                |
 
 **Default**: `feat` (if type cannot be determined)
 
@@ -70,21 +72,24 @@ Provide the branch name with a ready-to-use git command.
 
 ### Success
 
-```
+````
 **Branch Name:** `{generated-branch-name}`
 
 ```bash
 git checkout -b {generated-branch-name}
-```
+````
 
 **분석:**
+
 - Type: {detected-type}
 - Keywords: {extracted-keywords}
+
 ```
 
 ### Ambiguous Type
 
 ```
+
 **Branch Name:** `feat/{description}`
 
 ```bash
@@ -92,16 +97,20 @@ git checkout -b feat/{description}
 ```
 
 **Note:** 타입을 명확히 판단하기 어려워 `feat`으로 기본 설정했습니다.
+
 ```
 
 ### Failure
 
 ```
+
 Branch name 생성 실패: {reason}
 
 다음과 같이 설명을 추가해주세요:
+
 - /git:branch 사용자 인증 기능 추가
 - /git:branch fix: 로그인 버튼 오류
+
 ```
 
 ## Naming Examples
@@ -132,3 +141,4 @@ Branch name 생성 실패: {reason}
 |---------|---------|
 | `/git:commit` | Create atomic commits |
 | `/git:pr` | Create pull request |
+```

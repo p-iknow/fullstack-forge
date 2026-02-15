@@ -8,26 +8,29 @@ Comprehensive reference of proven prompt engineering techniques.
 
 State exactly what you want using action verbs.
 
-| Weak | Strong |
-|------|--------|
-| "Help with code" | "Review this Python function for bugs" |
+| Weak                       | Strong                                                  |
+| -------------------------- | ------------------------------------------------------- |
+| "Help with code"           | "Review this Python function for bugs"                  |
 | "Write something about AI" | "Write a 500-word blog post explaining AI to beginners" |
 
 **Key principles:**
+
 - Use imperative verbs: "Analyze", "Generate", "Extract", "Compare"
 - Specify scope: length, format, audience
 - State success criteria explicitly
 
 ### 2. Provide Context and Motivation
 
-Explain *why* to help the model understand goals.
+Explain _why_ to help the model understand goals.
 
 ```markdown
 # Without context
+
 Summarize this article.
 
 # With context
-Summarize this article for our weekly executive newsletter. 
+
+Summarize this article for our weekly executive newsletter.
 The audience is C-suite executives with 2 minutes to read.
 Focus on business implications and actionable insights.
 ```
@@ -51,6 +54,7 @@ Action: Escalate to support manager
 ```
 
 **Guidelines:**
+
 - 1 example: Format demonstration
 - 2-3 examples: Pattern establishment
 - Include edge cases for complex tasks
@@ -61,6 +65,7 @@ Add reasoning instructions for complex tasks.
 
 ```markdown
 Think through this step by step:
+
 1. First, identify the key variables
 2. Then, analyze their relationships
 3. Consider potential edge cases
@@ -70,6 +75,7 @@ Show your reasoning before giving the final answer.
 ```
 
 **When to use:**
+
 - Math/logic problems
 - Multi-step analysis
 - Complex classification
@@ -98,6 +104,7 @@ How to structure the response
 ```
 
 **Benefits:**
+
 - Clear separation of sections
 - Easy to reference specific parts
 - Prevents instruction-data confusion
@@ -108,6 +115,7 @@ Define persona and expertise.
 
 ```markdown
 You are a senior backend engineer with 15 years of experience in:
+
 - Distributed systems architecture
 - Database optimization
 - Security best practices
@@ -116,6 +124,7 @@ You communicate technically but explain reasoning clearly.
 ```
 
 **Effective roles include:**
+
 - Expertise level and domain
 - Communication style
 - Key priorities/values
@@ -132,6 +141,7 @@ Assistant: {"analysis":
 This forces JSON output by starting the response.
 
 **Use cases:**
+
 - Force JSON/XML output
 - Start with specific structure
 - Prevent preamble text
@@ -142,15 +152,19 @@ Break large tasks into subtasks.
 
 ```markdown
 # Step 1: Extract
+
 Extract all dates mentioned in the text.
 
-# Step 2: Validate  
+# Step 2: Validate
+
 Check if dates are in valid format.
 
 # Step 3: Transform
+
 Convert all dates to ISO 8601 format.
 
 # Step 4: Output
+
 Return the transformed dates as JSON array.
 ```
 
@@ -162,6 +176,7 @@ Use one LLM as "conductor" to orchestrate experts.
 
 ```markdown
 You are a meta-prompt conductor. For complex tasks:
+
 1. Break the task into subtasks
 2. Assign each subtask to a specialized "expert" perspective
 3. Integrate expert outputs
@@ -169,6 +184,7 @@ You are a meta-prompt conductor. For complex tasks:
 ```
 
 **When to use:**
+
 - Multi-domain problems
 - Tasks requiring diverse expertise
 - Quality-critical outputs
@@ -188,6 +204,7 @@ Interleave reasoning with actions.
 
 ```markdown
 For each step:
+
 1. Thought: Explain what you're thinking
 2. Action: What tool/action to take
 3. Observation: What you learned
@@ -202,31 +219,35 @@ Demand specific output structures.
 Return your response in this exact format:
 
 ## Summary
+
 [1-2 sentences]
 
 ## Key Points
+
 - Point 1
 - Point 2
 - Point 3
 
 ## Recommendation
+
 [Single actionable recommendation]
 
 ## Confidence
+
 [High/Medium/Low] - [Reason]
 ```
 
 ## Technique Selection Guide
 
-| Task Type | Primary Technique | Supporting Techniques |
-|-----------|-------------------|----------------------|
-| **Simple Q&A** | Clear instructions | - |
-| **Analysis** | CoT + Role | XML tags |
-| **Generation** | Examples + Role | Constraints |
-| **Classification** | Examples | Structured output |
-| **Multi-step** | Chaining | XML tags + CoT |
-| **Complex reasoning** | Meta-prompting | Self-consistency |
-| **Format-critical** | Prefill + Examples | XML tags |
+| Task Type             | Primary Technique  | Supporting Techniques |
+| --------------------- | ------------------ | --------------------- |
+| **Simple Q&A**        | Clear instructions | -                     |
+| **Analysis**          | CoT + Role         | XML tags              |
+| **Generation**        | Examples + Role    | Constraints           |
+| **Classification**    | Examples           | Structured output     |
+| **Multi-step**        | Chaining           | XML tags + CoT        |
+| **Complex reasoning** | Meta-prompting     | Self-consistency      |
+| **Format-critical**   | Prefill + Examples | XML tags              |
 
 ## Combining Techniques
 

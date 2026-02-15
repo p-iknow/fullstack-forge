@@ -8,15 +8,16 @@ Guidelines for writing the description field and instruction body. Based on [Ant
 
 Match instruction specificity to the task's fragility and variability.
 
-| Level | When to Use | Implementation |
-|-------|-------------|----------------|
-| **High** | Multiple valid approaches, context-dependent decisions | Text instructions only |
-| **Medium** | Preferred pattern exists, some variation acceptable | Pseudocode or parameterized scripts |
-| **Low** | Fragile operations, consistency critical, specific sequence required | Specific scripts with minimal parameters |
+| Level      | When to Use                                                          | Implementation                           |
+| ---------- | -------------------------------------------------------------------- | ---------------------------------------- |
+| **High**   | Multiple valid approaches, context-dependent decisions               | Text instructions only                   |
+| **Medium** | Preferred pattern exists, some variation acceptable                  | Pseudocode or parameterized scripts      |
+| **Low**    | Fragile operations, consistency critical, specific sequence required | Specific scripts with minimal parameters |
 
 Think of Claude as exploring a path: a **narrow bridge with cliffs** needs specific guardrails (low freedom), while an **open field** allows many routes (high freedom).
 
 **Examples**:
+
 - **High freedom**: "Generate a summary of the analysis results" — many valid formats
 - **Medium freedom**: "Use this template but adapt sections as needed" — preferred structure
 - **Low freedom**: "Run `scripts/validate.py --strict` — must execute exactly" — deterministic
@@ -26,6 +27,7 @@ Think of Claude as exploring a path: a **narrow bridge with cliffs** needs speci
 The description is the first level of progressive disclosure — it determines **when** Claude loads your skill.
 
 **Write natural prose**, not structured labels. Weave trigger phrases into 1-3 sentences:
+
 - ✅ `"Guide for creating effective skills. Use when users want to create a new skill or update an existing skill."`
 - ❌ `"Creates skills.\nUSE WHEN:\n- 'create a skill'\nDO NOT USE WHEN:\n- Creating agents"`
 
@@ -51,12 +53,15 @@ For good/bad examples, see [frontmatter-spec.md](frontmatter-spec.md#description
 [Brief intro — what this skill does]
 
 ## [Domain-Appropriate Section 1]
+
 [Content]
 
 ## [Domain-Appropriate Section 2]
+
 [Content]
 
 ## Reference Files
+
 - [link to reference if applicable]
 ```
 
@@ -65,6 +70,7 @@ For good/bad examples, see [frontmatter-spec.md](frontmatter-spec.md#description
 ### Be Specific and Actionable
 
 **Good:**
+
 ```text
 Run `python scripts/validate.py --input {filename}` to check data format.
 If validation fails, common issues include:
@@ -73,6 +79,7 @@ If validation fails, common issues include:
 ```
 
 **Bad:**
+
 ```text
 Validate the data before proceeding.
 ```
@@ -96,7 +103,9 @@ Keep `SKILL.md` focused on core instructions. Move detailed documentation to `re
 ## Common Issues
 
 ### MCP Connection Failed
+
 If you see "Connection refused":
+
 1. Verify MCP server is running: Check Settings > Extensions
 2. Confirm API key is valid
 3. Try reconnecting: Settings > Extensions > [Your Service] > Reconnect
@@ -105,6 +114,7 @@ If you see "Connection refused":
 ### Put Critical Instructions at the Top
 
 Claude processes instructions sequentially. If something is critical:
+
 - Place it near the beginning of SKILL.md
 - Use `## Important` or `## Critical` headers
 - Repeat key points if needed
@@ -112,6 +122,7 @@ Claude processes instructions sequentially. If something is critical:
 ### Avoid Verbose Instructions
 
 Claude may ignore overly verbose instructions. Keep it concise:
+
 - Use bullet points and numbered lists
 - One idea per paragraph
 - Move detailed reference to `references/`
@@ -122,6 +133,7 @@ For critical validations, bundle a script that performs checks programmatically 
 
 ```markdown
 ## Performance Notes
+
 - Take your time to do this thoroughly
 - Quality is more important than speed
 - Do not skip validation steps

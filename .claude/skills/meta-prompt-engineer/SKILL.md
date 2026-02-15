@@ -13,18 +13,18 @@ Generate structured, effective prompts for AI systems using proven techniques fr
 
 ## Workflow Routing
 
-| Intent | Workflow |
-|--------|----------|
-| Create new prompt from scratch | [workflows/generate-prompt.md](workflows/generate-prompt.md) |
-| Improve/optimize existing prompt | [workflows/improve-prompt.md](workflows/improve-prompt.md) |
+| Intent                           | Workflow                                                     |
+| -------------------------------- | ------------------------------------------------------------ |
+| Create new prompt from scratch   | [workflows/generate-prompt.md](workflows/generate-prompt.md) |
+| Improve/optimize existing prompt | [workflows/improve-prompt.md](workflows/improve-prompt.md)   |
 
 ## Core References
 
-| Reference | Purpose |
-|-----------|---------|
+| Reference                                      | Purpose                           |
+| ---------------------------------------------- | --------------------------------- |
 | [Techniques Catalog](references/techniques.md) | All prompt engineering techniques |
-| [Templates](references/templates.md) | Ready-to-use prompt structures |
-| [Anti-Patterns](references/anti-patterns.md) | Mistakes to avoid |
+| [Templates](references/templates.md)           | Ready-to-use prompt structures    |
+| [Anti-Patterns](references/anti-patterns.md)   | Mistakes to avoid                 |
 
 ## The 80/20 Rule
 
@@ -55,14 +55,14 @@ Three principles that solve 80% of prompt quality issues:
 
 ## Quick Technique Reference
 
-| Technique | When to Use | Example |
-|-----------|-------------|---------|
-| **XML Tags** | Structure complex inputs | `<context>...</context>` |
-| **Few-shot** | Enforce format/style | 1-3 input→output examples |
-| **Chain of Thought** | Complex reasoning | "Think step by step" |
-| **Role/Persona** | Consistent voice | "You are a senior engineer" |
-| **Prefill** | Force output format | Start with `{` for JSON |
-| **Constraints** | Prevent unwanted behavior | "Do NOT include..." |
+| Technique            | When to Use               | Example                     |
+| -------------------- | ------------------------- | --------------------------- |
+| **XML Tags**         | Structure complex inputs  | `<context>...</context>`    |
+| **Few-shot**         | Enforce format/style      | 1-3 input→output examples   |
+| **Chain of Thought** | Complex reasoning         | "Think step by step"        |
+| **Role/Persona**     | Consistent voice          | "You are a senior engineer" |
+| **Prefill**          | Force output format       | Start with `{` for JSON     |
+| **Constraints**      | Prevent unwanted behavior | "Do NOT include..."         |
 
 ## Success Criteria
 
@@ -78,5 +78,6 @@ Generated prompt should have:
 ## Output
 
 This skill outputs:
+
 1. **Structured prompt** ready for use
 2. **Rationale** explaining technique choices (if requested)

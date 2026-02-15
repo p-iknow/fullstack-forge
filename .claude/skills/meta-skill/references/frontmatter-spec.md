@@ -68,7 +68,7 @@ description: Implements the Project entity model with hierarchical relationships
 ### license
 
 ```yaml
-license: MIT              # Common: MIT, Apache-2.0
+license: MIT # Common: MIT, Apache-2.0
 ```
 
 ### compatibility
@@ -85,7 +85,7 @@ compatibility: Requires Node.js 18+ and access to GitHub API
 Restrict tool access for security.
 
 ```yaml
-allowed-tools: "Bash(python:*) Bash(npm:*) WebFetch"
+allowed-tools: 'Bash(python:*) Bash(npm:*) WebFetch'
 ```
 
 ### metadata
@@ -114,7 +114,7 @@ description: |
   or "new project setup". Do NOT use for simple file creation.
 license: MIT
 compatibility: Requires Notion MCP server connection
-allowed-tools: "Bash(python:*) WebFetch"
+allowed-tools: 'Bash(python:*) WebFetch'
 metadata:
   author: ProjectHub
   version: 1.0.0
@@ -126,12 +126,12 @@ metadata:
 
 ## Security Rules
 
-| Rule | Detail |
-|------|--------|
-| No XML brackets | `<` and `>` forbidden in frontmatter (appears in system prompt) |
-| No code execution | YAML uses safe parsing |
-| Reserved names | "claude" and "anthropic" prefixes reserved by Anthropic |
-| Max description | 1024 characters |
+| Rule              | Detail                                                          |
+| ----------------- | --------------------------------------------------------------- |
+| No XML brackets   | `<` and `>` forbidden in frontmatter (appears in system prompt) |
+| No code execution | YAML uses safe parsing                                          |
+| Reserved names    | "claude" and "anthropic" prefixes reserved by Anthropic         |
+| Max description   | 1024 characters                                                 |
 
 **Why these restrictions**: Frontmatter appears in Claude's system prompt. Malicious content could inject instructions.
 

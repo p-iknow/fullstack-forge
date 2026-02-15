@@ -38,6 +38,7 @@ Expected output: [describe what success looks like]
 **User says:** "[trigger phrase]"
 
 **Actions:**
+
 1. [First action]
 2. [Second action]
 
@@ -48,6 +49,7 @@ Expected output: [describe what success looks like]
 **User says:** "[alternative trigger phrase]"
 
 **Actions:**
+
 1. [Action]
 
 **Result:** [Outcome]
