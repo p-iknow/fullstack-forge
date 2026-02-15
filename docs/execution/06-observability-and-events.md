@@ -20,7 +20,7 @@
 - [ ] `curl http://localhost:8080/metrics` 응답 확인
 - [ ] `docker compose -f infra/monitoring/docker-compose.monitoring.yml up -d` 실행 성공
 - [ ] Prometheus `http://localhost:9090` target up 확인
-- [ ] Grafana `http://localhost:3000` 대시보드에서 API 요청 카운터 메트릭 확인 (예: `repo_api_http_requests_total`)
+- [ ] Grafana `http://localhost:3000` 대시보드에서 API 요청 카운터 메트릭 확인 (예: `fullstack_forge_api_http_requests_total`)
 
 ### Event-driven 시나리오 (SNS/SQS + Redis + Nginx)
 
