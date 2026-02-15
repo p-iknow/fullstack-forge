@@ -1,5 +1,18 @@
 # Scaffolding Plan - Template Compliant
 
+## Progress Summary
+
+| Unit | Branch | Status | Notes |
+|------|--------|--------|-------|
+| 1 | `config/workspace-foundation` | 🟡 In Progress | Root configs exist. Exit criteria partially met (see below). |
+| 2 | `config/packages-shared-apispec` | ⬜ Not Started | Blocked by Unit 1 merge. |
+| 3 | `config/packages-base-ui` | ⬜ Not Started | Blocked by Unit 2 merge. |
+| 4 | `config/apps-api` | ⬜ Not Started | Blocked by Unit 3 merge. |
+| 5 | `config/apps-frontend` | ⬜ Not Started | Blocked by Unit 4 merge. |
+| 6 | `config/quality-tooling` | ⬜ Not Started | Blocked by Unit 5 merge. |
+
+**Last updated:** 2026-02-15 · Commit: `42797b2`
+
 ## Gap Analysis
 
 | Item                | Current                                | Target (harness)                                |
@@ -28,7 +41,7 @@ config/workspace-foundation
   -> config/quality-tooling
 ```
 
-## Unit 1: `config/workspace-foundation`
+## Unit 1: `config/workspace-foundation` 🟡
 
 ### Step Objective
 
@@ -37,8 +50,8 @@ config/workspace-foundation
 
 ### Prerequisite
 
-- [ ] Repository baseline review completed.
-- [ ] `docs/execution/00-workspace-baseline.md` Step 0 reviewed.
+- [x] Repository baseline review completed.
+- [x] `docs/execution/00-workspace-baseline.md` Step 0 reviewed.
 
 ### References
 
@@ -47,21 +60,53 @@ config/workspace-foundation
 
 ### Progressive Tasks
 
-1. Add root config files (`tsconfig.base.json`, `tsconfig.json`, `pnpm-workspace.yaml`, `nx.json`, `.npmrc`, `.oxlintrc.json`, `.oxfmtrc.json`, `.gitignore`).
-2. Add root `package.json` scripts for lint/format/build/dev/typecheck/test.
-3. Keep `tsconfig.json` references empty (`[]`) until packages/apps are created.
-4. Add `vitest.workspace.ts` as empty array for staged project onboarding.
+1. [x] Add root config files (`tsconfig.base.json`, `tsconfig.json`, `pnpm-workspace.yaml`, `nx.json`, `.npmrc`, `.oxlintrc.json`, `.oxfmtrc.json`, `.gitignore`).
+2. [x] Add root `package.json` scripts for lint/format/build/dev/typecheck/test.
+3. [x] Keep `tsconfig.json` references empty (`[]`) until packages/apps are created.
+4. [x] Add `vitest.workspace.ts` as empty array for staged project onboarding.
 
 ### Exit Criteria
 
-- [ ] Root config files exist with content aligned to harness foundation.
-- [ ] `pnpm install` succeeds.
-- [ ] `pnpm lint`, `pnpm format:check`, `pnpm build`, `pnpm typecheck`, `pnpm test` succeed for this stage expectation.
+- [x] Root config files exist with content aligned to harness foundation.
+- [ ] `pnpm install` succeeds. ⚠️ Lockfile mismatch after dep bumps (knip, oxfmt, oxlint). Needs `pnpm install` to regenerate lockfile.
+- [x] `pnpm lint` succeeds (0 warnings, 0 errors).
+- [ ] `pnpm format:check` succeeds. ⚠️ 13 files have format issues. Needs `pnpm format` to fix.
+- [ ] `pnpm typecheck`, `pnpm build`, `pnpm test` succeed. ⚠️ Blocked by lockfile fix.
 - [ ] `npx nx show projects` runs without errors.
+
+### Commits (on branch `config/workspace-foundation`)
+
+| Hash | Description |
+|------|-------------|
+| `6839be4` | config(workspace): add root monorepo foundation files |
+| `fc38672` | style: apply oxfmt formatting to pre-existing files |
+| `3b927e0` | config(deps): bump knip, oxfmt, oxlint to latest |
+| `c9c77c7` | config(build): migrate to tsdown and @hono/vite for dev/build |
+| `355b81c` | config(vscode): add cSpell dictionary for project terms |
+| `0b58670` | config(cspell): extract dictionary to standalone cspell.json |
+| `0d5f949` | config(tsconfig): add erasableSyntaxOnly compiler option |
+| `ba72adb` | docs(learn): add TypeScript tsconfig deep-dive documentation |
+| `23f118a` | config(cspell): add project terminology |
+| `6c62935` | feat(skills): add learn-writer skill for docs/learn generation |
+| `ff3c3c5` | refactor(learn): rewrite TypeScript docs in PAR format |
+| `42797b2` | refactor(skills): improve learn-writer from cross-agent review |
+
+### Remaining Work
+
+1. Run `pnpm install` to regenerate lockfile after dependency bumps.
+2. Run `pnpm format` to fix 13 formatting issues.
+3. Verify all exit criteria commands pass.
+4. PR review and merge.
+
+### Side Deliverables (produced during Unit 1, not in original plan)
+
+- `docs/learn/typescript/` — 5 TypeScript tsconfig deep-dive documents (PAR format)
+- `.claude/skills/learn-writer/` — Reusable skill for generating docs/learn documentation
+- `cspell.json` — Standalone spell-check dictionary
 
 ### Evidence
 
-- Command logs: install/lint/format/build/typecheck/test/show-projects output.
+- Command logs: install/lint/format/build/typecheck/test/show-projects output. *(pending final verification)*
 - Artifacts: list of newly added root config files.
 - Notes: deferred items (`sheriff`, `knip`, CI) explicitly tracked for Unit 6.
 
