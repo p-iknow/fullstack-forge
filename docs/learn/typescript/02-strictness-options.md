@@ -15,118 +15,87 @@
 ```jsonc
 {
   "compilerOptions": {
-    "strict": true,                      // 타입 안전 기본 세트
-    "noUnusedLocals": true,              // 미사용 변수 금지
-    "noImplicitReturns": true,           // 모든 경로에 return 강제
-    "noFallthroughCasesInSwitch": true,  // switch fallthrough 금지
-    "noImplicitOverride": true           // override 키워드 강제
+    "strict": true,
+    "noUnusedLocals": true,
+    "noImplicitReturns": true,
+    "noFallthroughCasesInSwitch": true,
+    "noImplicitOverride": true
   }
 }
 ```
 
 ---
 
-## `strict: true` — 타입 안전의 기본 세트
+## `"strict": true` — 타입 안전 기본 세트
 
-`strict`는 단일 옵션이 아니라 **여러 개별 플래그의 번들**이다:
-
-| 포함 플래그 | 효과 |
-|------------|------|
-| `strictNullChecks` | `null`/`undefined` 체크 강제 |
-| `strictFunctionTypes` | 함수 파라미터 반변성(contravariance) 적용 |
-| `strictBindCallApply` | `bind`/`call`/`apply` 타입 체크 |
-| `strictPropertyInitialization` | 클래스 프로퍼티 초기화 강제 |
-| `noImplicitAny` | 암묵적 `any` 금지 |
-| `noImplicitThis` | 암묵적 `this` 금지 |
-| `alwaysStrict` | 모든 파일에 `"use strict"` 적용 |
-| `useUnknownInCatchVariables` | `catch(e)`에서 `e`가 `unknown` (TS 4.4+) |
-
-### 왜 번들인가?
-
-TypeScript 팀은 새로운 엄격 옵션을 추가할 때 `strict`에 포함시킨다.
-`strict: true`로 두면 **TypeScript 업그레이드 시 자동으로 새 체크가 활성화**된다.
-
-### 가장 중요한 개별 플래그
-
-**`strictNullChecks`** — 이것 없으면 `strict`를 켠 의미가 반감된다:
+**Problem** — 개별 플래그를 하나씩 켜면, TS 업그레이드 시 새 체크를 놓친다. `strictNullChecks` 하나만 꺼져도 `null` 참조가 프로덕션까지 간다:
 
 ```typescript
 // strictNullChecks: false
 function getUser(): User | null { return null; }
 const user = getUser();
-console.log(user.name); // ← 런타임 에러지만 컴파일 통과 ❌
-
-// strictNullChecks: true
-console.log(user.name); // ← 컴파일 에러 ✅
-//          ~~~~ Object is possibly 'null'
+console.log(user.name); // 컴파일 통과, 런타임 폭발
 ```
 
-**`useUnknownInCatchVariables`** — TS 4.4에서 추가된 비교적 새로운 플래그:
+**Action** — `strict: true`는 8개 플래그 번들(`strictNullChecks`, `noImplicitAny`, `useUnknownInCatchVariables` 등). 하나로 켜면 TS 업그레이드 시 새 체크도 자동 활성화:
 
 ```typescript
-// useUnknownInCatchVariables: false
-try { ... } catch (e) {
-  console.log(e.message); // e: any → 아무 프로퍼티나 접근 가능 (위험)
-}
+// strict: true
+const user = getUser();
+console.log(user.name);
+//          ~~~~ Object is possibly 'null'
 
-// useUnknownInCatchVariables: true
 try { ... } catch (e) {
-  console.log(e.message); // e: unknown → 타입 좁히기 필요 ✅
-  //          ~~~~~~~ 'e' is of type 'unknown'
-  if (e instanceof Error) {
-    console.log(e.message); // ✅ OK
-  }
+  // e: unknown → 타입 좁히기 필요
+  if (e instanceof Error) console.log(e.message);
 }
 ```
 
-### 2026.02 적절성
+**Result** — 모든 새 프로젝트의 사실상 필수. ✅ 이견 없음.
 
-✅ **필수.** 이견 없음. 모든 새 프로젝트에서 켜야 한다.
+> **Caveat**: TS 업그레이드 시 `strict` 번들에 새 플래그가 추가되면 기존 코드에서 에러가 발생할 수 있다. 이는 의도된 동작이며 릴리즈 노트 확인 권장.
 
 ---
 
-## 추가 플래그 4개 — `strict`에 포함되지 않는 가드레일
+## `"noUnusedLocals": true` — 미사용 변수 금지
 
-### `"noUnusedLocals": true`
-
-사용하지 않는 **지역 변수**에 에러를 발생시킨다.
+**Problem** — 사용하지 않는 변수가 남아있으면 죽은 코드가 누적되고, "지워도 되나?" 혼란이 생긴다:
 
 ```typescript
 function processOrder(order: Order) {
-  const tax = calculateTax(order);   // ❌ 'tax' is declared but its value is never read
-  const total = order.subtotal;
-  return total;
+  const tax = calculateTax(order);   // 쓰지 않는 변수
+  return order.subtotal;
 }
 ```
 
-**왜 `strict`에 포함되지 않는가:**
-- 타입 안전과 무관 (코드 품질 영역)
-- 개발 중 임시 변수를 자주 만들므로 `strict`에 넣으면 DX 저하
-- 일부 팀은 lint(oxlint/ESLint)에서만 잡기도 함
+**Action** — 미사용 지역 변수에 에러를 발생시킨다. 이 프로젝트는 TypeScript + oxlint 이중 체크:
 
-**이 프로젝트의 선택:**
-TypeScript 레벨 + oxlint 양쪽에서 잡는 **벨트-앤-서스펜더** 방식.
-코드가 에디터를 벗어나기 전에 잡힌다.
+```typescript
+const tax = calculateTax(order);
+//    ~~~ 'tax' is declared but its value is never read
+```
 
-### 2026.02 적절성
+**Result** — 코드가 에디터를 벗어나기 전에 죽은 코드를 잡는다. ✅ 권장.
 
-✅ 권장. 단, `noUnusedParameters`는 빠져있다 — 콜백 시그니처에서 사용하지 않는 파라미터가 자주 발생하므로 의도적 누락일 수 있다. 필요하면 추가 가능.
+> **Caveat**: 개발 중 임시 변수에 번거로울 수 있다. `strict`에 포함되지 않는 이유. 일부 팀은 lint에서만 잡고 tsconfig에서는 끈다. `noUnusedParameters`는 현재 빠져있음 — 콜백 시그니처에서 사용하지 않는 파라미터가 자주 발생하므로 의도적 누락.
 
 ---
 
-### `"noImplicitReturns": true`
+## `"noImplicitReturns": true` — 반환 경로 누락 방지
 
-모든 코드 경로에서 **명시적 return**을 강제한다.
+**Problem** — 조건 분기가 많은 함수에서 `return`을 빠뜨리면 `undefined`가 반환되지만, 타입 시스템은 반환 타입을 보장한다고 믿고 있다:
 
 ```typescript
-// ❌ 에러: Not all code paths return a value
 function getDiscount(tier: string): number {
   if (tier === "gold") return 0.2;
   if (tier === "silver") return 0.1;
-  // "bronze"일 때 return이 없음 → undefined 반환
+  // "bronze"일 때 return 없음 → undefined 반환
 }
+```
 
-// ✅ 수정
+**Action** — 모든 코드 경로에서 명시적 `return`을 강제한다:
+
+```typescript
 function getDiscount(tier: string): number {
   if (tier === "gold") return 0.2;
   if (tier === "silver") return 0.1;
@@ -134,137 +103,70 @@ function getDiscount(tier: string): number {
 }
 ```
 
-**왜 중요한가:**
-- 빠뜨린 `return`은 `undefined`를 반환 → 타입 시스템이 `number`라고 보장했지만 실제로는 `undefined`
-- 특히 조건 분기가 많은 비즈니스 로직에서 흔한 실수
-
-### 2026.02 적절성
-
-✅ 권장. 반환 타입이 있는 함수에서 경로 누락을 잡아준다.
+**Result** — 커머스 도메인의 복잡한 조건 분기(주문 상태, 할인 계산 등)에서 누락 방지. ✅ 권장.
 
 ---
 
-### `"noFallthroughCasesInSwitch": true`
+## `"noFallthroughCasesInSwitch": true` — switch fallthrough 금지
 
-`switch`문에서 `break`/`return` 없이 다음 case로 떨어지는 것을 방지한다.
+**Problem** — `break` 없이 다음 case로 떨어지는 fallthrough는 잡기 어려운 버그의 흔한 원인:
 
 ```typescript
-// ❌ 에러: Fallthrough case in switch
-function getStatusLabel(status: OrderStatus): string {
-  switch (status) {
-    case "pending":
-      logPending();     // break 없이 다음으로 떨어짐
-    case "confirmed":
-      return "접수됨";
-    case "delivered":
-      return "배송완료";
-  }
-}
-
-// ✅ 수정
 switch (status) {
   case "pending":
-    logPending();
-    return "대기중";    // 명시적 return
+    logPending();     // break 없이 다음으로 떨어짐
   case "confirmed":
-    return "접수됨";
+    return "접수됨";  // pending일 때도 "접수됨" 반환
 }
 ```
 
-**의도적 fallthrough가 필요하면?**
+**Action** — 비어있지 않은 case에서 `break`/`return` 없이 떨어지면 에러. 의도적 공유는 빈 case로:
 
 ```typescript
 case "pending":
-case "confirmed":  // pending과 confirmed을 같은 로직으로 처리 (빈 case는 허용)
+case "confirmed":  // 빈 case → fallthrough 허용
   return "처리중";
 ```
 
-### 2026.02 적절성
-
-✅ 권장. 의도하지 않은 fallthrough는 잡기 어려운 버그의 흔한 원인.
+**Result** — 주문 상태 머신 등 switch-heavy 코드에서 의도하지 않은 fallthrough 방지. ✅ 권장.
 
 ---
 
-### `"noImplicitOverride": true` (TS 4.3+)
+## `"noImplicitOverride": true` — 상속 리팩터링 안전망
 
-부모 클래스 메서드를 오버라이드할 때 `override` 키워드를 **명시적으로 요구**한다.
+**Problem** — 부모 클래스에서 메서드 이름을 바꾸면, `override` 없는 자식이 조용히 새 메서드를 정의해 부모 호출이 끊어진다:
 
 ```typescript
 class BaseService {
-  initialize() { /* ... */ }
-  cleanup() { /* ... */ }
+  init() { /* initialize에서 이름 변경됨 */ }
 }
-
-// ❌ 에러: This member must have an 'override' modifier
 class OrderService extends BaseService {
-  initialize() { /* 커스텀 초기화 */ }
-}
-
-// ✅ 수정
-class OrderService extends BaseService {
-  override initialize() { /* 커스텀 초기화 */ }
+  initialize() { /* 부모의 init()과 무관한 새 메서드 */ }
 }
 ```
 
-**왜 중요한가:**
-
-리팩터링 안전망 역할을 한다:
+**Action** — `override` 키워드를 강제하여, 부모에 해당 메서드가 없으면 컴파일 에러:
 
 ```typescript
-// 1) 부모 클래스에서 메서드 이름 변경
-class BaseService {
-  init() { /* initialize에서 이름 변경 */ }
-}
-
-// 2) override가 없으면: 자식이 조용히 새 메서드 정의 (부모 호출 안 됨)
 class OrderService extends BaseService {
-  initialize() { /* 부모의 init()과 무관한 새 메서드가 됨 😱 */ }
-}
-
-// 3) override가 있으면: 컴파일 에러로 즉시 감지 ✅
-class OrderService extends BaseService {
-  override initialize() { /* ❌ Base class doesn't have 'initialize' */ }
+  override initialize() { /* Base class doesn't have 'initialize' ❌ */ }
+  override init() { /* 정확한 오버라이드 ✅ */ }
 }
 ```
 
-### 2026.02 적절성
-
-✅ 권장. 특히 상속이 사용되는 코드베이스(Hono middleware 체인 등)에서 유용.
-
----
-
-## 옵션 간 관계도
-
-```
-strict: true ──────────────────────────────────
-│                                              │
-│  strictNullChecks         noImplicitAny      │
-│  strictFunctionTypes      noImplicitThis     │
-│  strictBindCallApply      alwaysStrict       │
-│  strictPropertyInit...    useUnknownInCatch  │
-│                                              │
-────────────────────────────────────────────────
-
-↑ 타입 안전 (strict에 포함)
-↓ 코드 품질 (strict에 미포함 — 별도 설정)
-
-noUnusedLocals ·········· 미사용 변수 감지
-noImplicitReturns ······· 반환 경로 누락 감지
-noFallthroughCasesInSwitch  switch 버그 감지
-noImplicitOverride ······ 상속 리팩터링 안전망
-```
+**Result** — Hono 미들웨어, 서비스 클래스 상속 시 리팩터링 안전망. ✅ 권장.
 
 ---
 
 ## 이 프로젝트에서의 적용
 
-| 옵션 | 이 프로젝트의 맥락 |
-|------|-------------------|
-| `strict` | 전체 모노레포의 타입 안전 기준선 |
-| `noUnusedLocals` | oxlint와 함께 이중 체크 (벨트-앤-서스펜더) |
-| `noImplicitReturns` | 커머스 도메인의 복잡한 조건 분기에서 누락 방지 |
-| `noFallthroughCasesInSwitch` | 주문 상태 머신 등 switch-heavy 코드 보호 |
-| `noImplicitOverride` | Hono 미들웨어, 서비스 클래스 상속 시 안전망 |
+| 옵션 | 해결하는 문제 |
+|------|-------------|
+| `strict` | `null` 참조, 암묵적 `any`, `catch` 변수 등 타입 안전 기본선 |
+| `noUnusedLocals` | 죽은 코드 누적 방지 (oxlint와 이중 체크) |
+| `noImplicitReturns` | 복잡한 조건 분기에서 `return` 누락 방지 |
+| `noFallthroughCasesInSwitch` | switch 상태 머신의 의도치 않은 fallthrough 방지 |
+| `noImplicitOverride` | 부모 클래스 리팩터링 시 자식 클래스 동기화 보장 |
 
 ---
 
