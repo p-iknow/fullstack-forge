@@ -7,6 +7,7 @@ const app = new Hono()
 app.use('*', logger())
 
 app.onError((err, c) => {
+  // eslint-disable-next-line no-console
   console.error(err)
   return c.json({ error: 'Internal Server Error' }, 500)
 })
