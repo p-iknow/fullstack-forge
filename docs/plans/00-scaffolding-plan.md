@@ -2,14 +2,14 @@
 
 ## Progress Summary
 
-| Unit | Branch                           | Status      | Notes                                            |
-| ---- | -------------------------------- | ----------- | ------------------------------------------------ |
-| 1    | `config/workspace-foundation`    | ✅ Complete | Merged to main. All exit criteria pass.          |
-| 2    | `config/packages-shared-apispec` | ✅ Complete | WIP committed. shared deferred (YAGNI).          |
-| 3    | `config/packages-design-system`  | ✅ Complete | shadcn/ui + Base UI + Tailwind v4 + CVA + tsdown.|
-| 4    | `config/apps-api`                | ✅ Complete | Hono + vite-build. Health endpoint verified.     |
-| 5    | `config/apps-frontend`           | ✅ Complete | TanStack Start store (3001) + admin (3002).      |
-| 6    | `config/quality-tooling`         | ✅ Complete | knip, sheriff, CI, route codegen, vitest v4 fix. |
+| Unit | Branch                           | Status      | Notes                                             |
+| ---- | -------------------------------- | ----------- | ------------------------------------------------- |
+| 1    | `config/workspace-foundation`    | ✅ Complete | Merged to main. All exit criteria pass.           |
+| 2    | `config/packages-shared-apispec` | ✅ Complete | WIP committed. shared deferred (YAGNI).           |
+| 3    | `config/packages-design-system`  | ✅ Complete | shadcn/ui + Base UI + Tailwind v4 + CVA + tsdown. |
+| 4    | `config/apps-api`                | ✅ Complete | Hono + vite-build. Health endpoint verified.      |
+| 5    | `config/apps-frontend`           | ✅ Complete | TanStack Start store (3001) + admin (3002).       |
+| 6    | `config/quality-tooling`         | ✅ Complete | knip, sheriff, CI, route codegen, vitest v4 fix.  |
 
 **Last updated:** 2026-02-15
 
