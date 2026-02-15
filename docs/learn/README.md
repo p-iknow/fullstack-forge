@@ -9,7 +9,7 @@
 | 디렉토리                                        | 주제                                | 문서 수 |
 | ----------------------------------------------- | ----------------------------------- | ------- |
 | [typescript/](./typescript/README.md)           | TypeScript 컴파일러 설정 심층 분석  | 5       |
-| [package-manager/](./package-manager/README.md) | pnpm 설정·hoisting·매니저 강제      | 3       |
+| [package-manager/](./package-manager/README.md) | pnpm 설정·hoisting·매니저 강제·sideEffects | 4       |
 | [api-spec/](./api-spec/README.md)               | TypeSpec API 명세·codegen·타입 소비 | 3       |
 
 ## 문서 읽는 순서

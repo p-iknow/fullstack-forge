@@ -146,4 +146,4 @@ CI에서의 설정 (GitHub Actions 예시):
 
 ## 다음 문서
 
-이 토픽의 마지막 문서입니다. [인덱스로 돌아가기](./README.md)
+[04. sideEffects와 CSS tree-shaking](./04-side-effects.md) — `sideEffects` 필드는 무엇이고, 왜 CSS 파일에 반드시 설정해야 하는가?
