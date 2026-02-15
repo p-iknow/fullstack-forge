@@ -7,7 +7,7 @@ export default defineProject({
     conditions: ['@fullstack-forge/source'],
   },
   test: {
-    name: 'base-ui',
+    name: 'design-system',
     environment: 'jsdom',
     include: ['src/**/*.test.{ts,tsx}'],
     setupFiles: ['./vitest.setup.ts'],
