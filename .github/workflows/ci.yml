@@ -1,0 +1,37 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  actions: read
+  contents: read
+
+jobs:
+  main:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          filter: tree:0
+          fetch-depth: 0
+
+      - uses: pnpm/action-setup@v4
+
+      - id: mise
+        run: echo "node-version=$(grep '^node' .mise.toml | sed 's/.*"\([^"]*\)".*/\1/')" >> "$GITHUB_OUTPUT"
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ steps.mise.outputs.node-version }}
+          cache: 'pnpm'
+
+      - run: pnpm install --frozen-lockfile
+
+      - run: pnpm exec nx run-many -t codegen
+      - run: git diff --exit-code packages/api-spec/generated/openapi.yaml
+      - run: pnpm lint
+      - run: pnpm format:check
+      - run: pnpm exec nx run-many -t typecheck build test

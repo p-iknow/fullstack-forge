@@ -1,0 +1,43 @@
+{
+  "$schema": "https://unpkg.com/knip@5/schema.json",
+  "ignoreFiles": [".claude/**", "sheriff.config.ts"],
+  "ignoreDependencies": [
+    "tailwindcss",
+    "@tailwindcss/vite",
+    "@testing-library/react",
+    "@typespec/http",
+    "@typespec/openapi3",
+    "@typespec/openapi",
+    "@fullstack-forge/api-spec",
+    "@fullstack-forge/design-system",
+    "@suspensive/react",
+    "@suspensive/react-query",
+    "@hono/node-server",
+    "ky",
+    "lucide-react"
+  ],
+  "exclude": ["unresolved", "catalog"],
+  "workspaces": {
+    ".": {
+      "ignoreDependencies": ["@vitest/coverage-v8", "vitest"]
+    },
+    "apps/*": {
+      "entry": ["src/router.tsx", "src/routes/**/*.tsx"],
+      "project": ["src/**/*.{ts,tsx}"],
+      "ignore": ["src/routeTree.gen.ts"]
+    },
+    "apps/api": {
+      "entry": ["src/index.ts"],
+      "project": ["src/**/*.ts"]
+    },
+    "packages/api-spec": {
+      "entry": [],
+      "project": ["src/**/*.tsp"],
+      "ignore": ["generated/**"]
+    },
+    "packages/design-system": {
+      "entry": ["src/components/*.tsx", "src/lib/*.ts", "src/hooks/*.ts"],
+      "project": ["src/**/*.{ts,tsx}"]
+    }
+  }
+}

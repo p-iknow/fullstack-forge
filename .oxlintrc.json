@@ -12,6 +12,20 @@
     "react/react-in-jsx-scope": "off"
   },
   "env": { "browser": true, "node": true, "es6": true },
+  "overrides": [
+    {
+      "files": ["**/*.d.ts", "**/vitest.setup.ts"],
+      "rules": {
+        "import/no-unassigned-import": "off"
+      }
+    },
+    {
+      "files": ["scripts/**"],
+      "rules": {
+        "no-console": "off"
+      }
+    }
+  ],
   "ignorePatterns": [
     "node_modules",
     "dist",

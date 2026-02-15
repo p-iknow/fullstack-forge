@@ -5,6 +5,7 @@
   "type": "module",
   "sideEffects": false,
   "scripts": {
+    "codegen": "node ../../scripts/generate-routes.mjs .",
     "dev": "vite dev",
     "build": "vite build",
     "preview": "vite preview",

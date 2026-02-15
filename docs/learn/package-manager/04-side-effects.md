@@ -15,7 +15,7 @@
 ```jsonc
 // packages/design-system/package.json
 {
-  "sideEffects": ["./src/styles/**/*.css"]
+  "sideEffects": ["./src/styles/**/*.css"],
 }
 ```
 
@@ -37,11 +37,11 @@ JavaScript 모듈에서 `sideEffects: false`는 올바른 최적화다. 그러�
 
 **Action** — `sideEffects` 필드는 webpack 4에서 도입되어 현재 Vite(Rolldown), Rollup, esbuild 등 모든 주요 번들러가 인식하는 표준이다. 값의 의미:
 
-| 값 | 의미 |
-|---|---|
-| `false` | 모든 모듈에 부수 효과 없음 — 최대 tree-shaking |
-| `true` (또는 필드 없음) | 모든 모듈에 부수 효과 있을 수 있음 — tree-shaking 제한 |
-| `["*.css", "*.scss"]` | 지정된 패턴의 파일만 부수 효과 있음 — 나머지는 tree-shaking |
+| 값                      | 의미                                                        |
+| ----------------------- | ----------------------------------------------------------- |
+| `false`                 | 모든 모듈에 부수 효과 없음 — 최대 tree-shaking              |
+| `true` (또는 필드 없음) | 모든 모듈에 부수 효과 있을 수 있음 — tree-shaking 제한      |
+| `["*.css", "*.scss"]`   | 지정된 패턴의 파일만 부수 효과 있음 — 나머지는 tree-shaking |
 
 **Result** — 라이브러리 패키지에서 `sideEffects: false`는 번들 크기를 줄이는 핵심 최적화. 그러나 CSS를 포함하는 패키지에서는 CSS 파일을 반드시 예외로 지정해야 한다. ✅ 2026년 기준 모든 주요 번들러의 표준 동작.
 
@@ -68,7 +68,7 @@ JavaScript 모듈에서 `sideEffects: false`는 올바른 최적화다. 그러�
 // packages/design-system/package.json
 {
   // JS 모듈은 tree-shaking 가능, CSS만 보존
-  "sideEffects": ["./src/styles/**/*.css"]
+  "sideEffects": ["./src/styles/**/*.css"],
 }
 ```
 
@@ -90,11 +90,11 @@ JavaScript 모듈에서 `sideEffects: false`는 올바른 최적화다. 그러�
 
 ## 이 프로젝트에서의 적용
 
-| 결정 | 해결하는 문제 |
-|---|---|
+| 결정                                     | 해결하는 문제                                              |
+| ---------------------------------------- | ---------------------------------------------------------- |
 | `sideEffects: ["./src/styles/**/*.css"]` | globals.css의 CSS 변수가 tree-shaking으로 삭제되는 것 방지 |
-| glob 범위 한정 (`./src/styles/**`) | JS 모듈의 tree-shaking은 유지하면서 CSS만 보존 |
-| 소비자 앱의 `@import` 패턴 | store/admin이 `app.css`에서 디자인 토큰을 한 줄로 가져옴 |
+| glob 범위 한정 (`./src/styles/**`)       | JS 모듈의 tree-shaking은 유지하면서 CSS만 보존             |
+| 소비자 앱의 `@import` 패턴               | store/admin이 `app.css`에서 디자인 토큰을 한 줄로 가져옴   |
 
 소비자 앱의 CSS import 구조:
 
