@@ -11,8 +11,7 @@
 | --- | --------------------------------------------------------- | ------------------------------------------------------------------------------------- |
 | 01  | [pnpm 설정 파일 체계](./01-pnpm-config-files.md)          | `.npmrc`, `pnpm-workspace.yaml`, `package.json`의 `pnpm` 필드 — 각각 뭘 담당하는가?   |
 | 02  | [Hoisting 전략](./02-hoisting-strategy.md)                | `shamefully-hoist`, `hoist-pattern`, `public-hoist-pattern` — 왜 기본값으로 충분한가? |
-| 03  | [패키지 실행 명령어](./03-package-execution-commands.md)  | `npx` vs `pnpm exec` vs `pnpm dlx` — 언제 어떤 걸 쓰는가?                             |
-| 04  | [패키지 매니저 강제](./04-package-manager-enforcement.md) | 팀원이 npm이나 yarn을 실수로 쓰는 걸 어떻게 막는가?                                   |
+| 03  | [패키지 매니저 강제](./03-package-manager-enforcement.md) | 팀원이 npm이나 yarn을 실수로 쓰는 걸 어떻게 막는가?                                   |
 
 ## 전제 지식
 

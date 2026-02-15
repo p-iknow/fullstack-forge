@@ -78,25 +78,25 @@ config/workspace-foundation
 
 ### Commits (on branch `config/workspace-foundation`)
 
-| Hash      | Description                                                    |
-| --------- | -------------------------------------------------------------- |
-| `6839be4` | config(workspace): add root monorepo foundation files          |
-| `fc38672` | style: apply oxfmt formatting to pre-existing files            |
-| `3b927e0` | config(deps): bump knip, oxfmt, oxlint to latest               |
-| `c9c77c7` | config(build): migrate to tsdown and @hono/vite for dev/build  |
-| `355b81c` | config(vscode): add cSpell dictionary for project terms        |
-| `0b58670` | config(cspell): extract dictionary to standalone cspell.json   |
-| `0d5f949` | config(tsconfig): add erasableSyntaxOnly compiler option       |
-| `ba72adb` | docs(learn): add TypeScript tsconfig deep-dive documentation   |
-| `23f118a` | config(cspell): add project terminology                        |
-| `6c62935` | feat(skills): add learn-writer skill for docs/learn generation |
-| `ff3c3c5` | refactor(learn): rewrite TypeScript docs in PAR format         |
-| `42797b2` | refactor(skills): improve learn-writer from cross-agent review |
-| `30a4928` | docs(plans): update scaffolding plan with Unit 1 progress      |
-| `981eeac` | config(deps): regenerate lockfile after dependency bumps       |
-| `dd63a94` | style: apply oxfmt formatting to all files                     |
+| Hash      | Description                                                                                      |
+| --------- | ------------------------------------------------------------------------------------------------ |
+| `6839be4` | config(workspace): add root monorepo foundation files                                            |
+| `fc38672` | style: apply oxfmt formatting to pre-existing files                                              |
+| `3b927e0` | config(deps): bump knip, oxfmt, oxlint to latest                                                 |
+| `c9c77c7` | config(build): migrate to tsdown and @hono/vite for dev/build                                    |
+| `355b81c` | config(vscode): add cSpell dictionary for project terms                                          |
+| `0b58670` | config(cspell): extract dictionary to standalone cspell.json                                     |
+| `0d5f949` | config(tsconfig): add erasableSyntaxOnly compiler option                                         |
+| `ba72adb` | docs(learn): add TypeScript tsconfig deep-dive documentation                                     |
+| `23f118a` | config(cspell): add project terminology                                                          |
+| `6c62935` | feat(skills): add learn-writer skill for docs/learn generation                                   |
+| `ff3c3c5` | refactor(learn): rewrite TypeScript docs in PAR format                                           |
+| `42797b2` | refactor(skills): improve learn-writer from cross-agent review                                   |
+| `30a4928` | docs(plans): update scaffolding plan with Unit 1 progress                                        |
+| `981eeac` | config(deps): regenerate lockfile after dependency bumps                                         |
+| `dd63a94` | style: apply oxfmt formatting to all files                                                       |
 | `ab03d60` | config(pnpm): clean up .npmrc defaults, add packageManager field, and replace npx with pnpm exec |
-| `0f78abe` | docs(learn): add package-manager deep-dive documentation       |
+| `0f78abe` | docs(learn): add package-manager deep-dive documentation                                         |
 
 ### Remaining Work
 

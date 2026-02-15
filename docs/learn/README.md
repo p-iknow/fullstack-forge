@@ -6,10 +6,10 @@
 
 ## 구조
 
-| 디렉토리                                        | 주제                                       | 문서 수 |
-| ----------------------------------------------- | ------------------------------------------ | ------- |
-| [typescript/](./typescript/README.md)           | TypeScript 컴파일러 설정 심층 분석         | 5       |
-| [package-manager/](./package-manager/README.md) | pnpm 설정·hoisting·실행 명령어·매니저 강제 | 4       |
+| 디렉토리                                        | 주제                               | 문서 수 |
+| ----------------------------------------------- | ---------------------------------- | ------- |
+| [typescript/](./typescript/README.md)           | TypeScript 컴파일러 설정 심층 분석 | 5       |
+| [package-manager/](./package-manager/README.md) | pnpm 설정·hoisting·매니저 강제     | 3       |
 
 ## 문서 읽는 순서
 

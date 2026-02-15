@@ -93,7 +93,7 @@ catalog:
 
 **Result** — 버전 진실 공급원(Single Source of Truth)이 하나로 통합된다. 의존성 업데이트 시 `pnpm-workspace.yaml`만 수정하면 전체 워크스페이스에 반영. Renovate/Dependabot도 이 파일만 PR 타겟으로 삼으면 된다. ✅ 2026.02 기준 pnpm 모노레포의 표준 패턴.
 
-> **Caveat**: `catalog:`는 pnpm 9.5+에서 도입되었다. 이전 버전에서는 동작하지 않으므로, `packageManager` 필드로 팀 전체 pnpm 버전을 고정하는 것이 전제 조건이다 (04 문서 참조).
+> **Caveat**: `catalog:`는 pnpm 9.5+에서 도입되었다. 이전 버전에서는 동작하지 않으므로, `packageManager` 필드로 팀 전체 pnpm 버전을 고정하는 것이 전제 조건이다 (03 문서 참조).
 
 ---
 

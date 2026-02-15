@@ -116,4 +116,4 @@ node_modules/
 
 ## 다음 문서
 
-[03. 패키지 실행 명령어](./03-package-execution-commands.md) — `npx` vs `pnpm exec` vs `pnpm dlx` — 언제 어떤 걸 쓰는가?
+[03. 패키지 매니저 강제](./03-package-manager-enforcement.md) — 팀원이 npm이나 yarn을 실수로 쓰는 걸 어떻게 막는가?

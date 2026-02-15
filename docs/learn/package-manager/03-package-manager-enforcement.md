@@ -1,4 +1,4 @@
-# 04. 패키지 매니저 강제
+# 03. 패키지 매니저 강제
 
 ## 핵심 질문
 
@@ -108,7 +108,7 @@ CI에서의 설정 (GitHub Actions 예시):
 
 **Result** — Corepack 없이도 동작하는 가벼운 방어막. 다만 이 프로젝트에서는 `packageManager` + Corepack 조합으로 충분하므로 `only-allow`는 사용하지 않는다. 레거시 환경 호환이 필요한 프로젝트에서는 보조 수단으로 유용하다.
 
-> **Caveat**: `preinstall`에서 `npx only-allow pnpm`을 실행하면, 역설적으로 `npx`(npm의 도구)를 사용하게 된다. pnpm 환경에서 `npx` 사용을 금지하는 정책(03 문서 참조)과 충돌할 수 있다.
+> **Caveat**: `preinstall`에서 `npx only-allow pnpm`을 실행하면, 역설적으로 `npx`(npm의 도구)를 사용하게 된다. 이 프로젝트는 `pnpm exec`를 표준 실행 방식으로 사용하므로 `npx` 의존과 충돌할 수 있다.
 
 ---
 
