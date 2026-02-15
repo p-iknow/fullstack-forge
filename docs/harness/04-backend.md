@@ -113,7 +113,7 @@
 ## .env.example
 
 ```bash
-DATABASE_URL=postgresql://postgres:postgres@localhost:5432/repo_dev
+DATABASE_URL=postgresql://postgres:postgres@localhost:5432/fullstack_forge_commerce_dev
 REDIS_URL=redis://localhost:6379
 PROMETHEUS_ENABLED=true
 PORT=8080
@@ -139,9 +139,9 @@ OAUTH_STATE_SECRET=change-me
 cp apps/api/.env.example apps/api/.env
 
 # 2) PostgreSQL
-docker run --name repo-postgres \
+docker run --name fullstack-forge-postgres \
   -e POSTGRES_PASSWORD=postgres \
-  -e POSTGRES_DB=repo_dev \
+-e POSTGRES_DB=fullstack_forge_commerce_dev \
   -p 5432:5432 -d postgres:16
 
 # 3) Redis

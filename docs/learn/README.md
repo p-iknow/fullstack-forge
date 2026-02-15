@@ -6,12 +6,15 @@
 
 ## 구조
 
-| 디렉토리                                        | 주제                                       | 문서 수 |
-| ----------------------------------------------- | ------------------------------------------ | ------- |
-| [typescript/](./typescript/README.md)           | TypeScript 컴파일러 설정 심층 분석         | 5       |
-| [package-manager/](./package-manager/README.md) | pnpm 설정·hoisting·매니저 강제·sideEffects | 4       |
-| [api-spec/](./api-spec/README.md)               | TypeSpec API 명세·codegen·타입 소비        | 3       |
-| [quality-tooling/](./quality-tooling/README.md) | Knip·Sheriff·CI 파이프라인 품질 도구       | 3       |
+| 디렉토리                                                | 주제                                                   | 문서 수 |
+| ------------------------------------------------------- | ------------------------------------------------------ | ------- |
+| [typescript/](./typescript/README.md)                   | TypeScript 컴파일러 설정 심층 분석                     | 5       |
+| [db-migrations/](./db-migrations/README.md)             | PostgreSQL·Drizzle 기반 DB 설계·마이그레이션·복구 루프 | 5       |
+| [db-design-rationale/](./db-design-rationale/README.md) | 요구사항 기반 DB/테이블 설계 의사결정 근거             | 5       |
+| [db-foundations/](./db-foundations/README.md)           | relation·FK·semantic key 입문                          | 4       |
+| [package-manager/](./package-manager/README.md)         | pnpm 설정·hoisting·매니저 강제·sideEffects             | 4       |
+| [api-spec/](./api-spec/README.md)                       | TypeSpec API 명세·codegen·타입 소비                    | 3       |
+| [quality-tooling/](./quality-tooling/README.md)         | Knip·Sheriff·CI 파이프라인 품질 도구                   | 3       |
 
 ## 문서 읽는 순서
 
