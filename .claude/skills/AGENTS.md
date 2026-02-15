@@ -11,6 +11,7 @@
 | [doc-frontmatter](doc-frontmatter/) | "frontmatter", "add frontmatter" | Generate/validate YAML frontmatter for docs |
 | [meta-prompt-engineer](meta-prompt-engineer/) | "write a prompt", "create prompt", "meta-prompt" | Generate high-quality prompts using proven techniques |
 | [meta-skill](meta-skill/) | "create a skill", "validate skill" | Guide for creating and validating AI skills |
+| [phased-delivery-plan](phased-delivery-plan/) | "split work", "phased plan", "branch plan" | Build reusable phased delivery plans with gates and evidence |
 
 ## STRUCTURE PATTERN
 

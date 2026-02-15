@@ -38,23 +38,36 @@ git branch --show-current
 - Uncommitted changes exist → "Commit changes first"
 - On main/master → "Create a feature branch first"
 
-#### Step 2: Gather Summary
+#### Step 2: Analyze Commits
 
-Ask the user:
+```bash
+git log --oneline main..HEAD
+git diff main...HEAD --stat
+```
 
-1. **요구사항/목적**: "이 PR의 목적이나 해결하려는 문제는 무엇인가요?"
-2. **구현/수단**: "구체적으로 어떻게 구현했나요? 주요 변경사항은?"
+Read each commit's full message to understand purpose and scope.
 
 #### Step 3: Compose Body
 
+Generate Summary and Test table **from commit history** — do NOT ask the user.
+
+- **Goal**: 이 PR이 해결하는 문제 또는 달성하려는 목적. 커밋 메시지와 브랜치명에서 추론.
+- **Implementation**: 구체적 구현 내용. 커밋별 변경사항을 bullet point로 정리.
+- **Test table**: Infer Before (problem/gap) and After (solution) from commit context.
+
 ```markdown
 ## Summary
-[filled from user input]
+
+### Goal
+[why — inferred from commits and branch name]
+
+### Implementation
+[what — bullet points from each commit]
 
 ## Test
 | Before / Requirements | After / Implementation |
 | --------------------- | ---------------------- |
-|                       |                        |
+| [inferred gap]        | [what commits deliver] |
 ```
 
 Note: "UI 테스트 이미지는 PR 생성 후 직접 추가하세요."
@@ -83,7 +96,7 @@ gh pr view $PR_NUMBER --json number,title,url
 gh pr view --json number,title,url
 ```
 
-#### Step 2: Gather Summary
+#### Step 2: Analyze Commits
 
 Same as CREATE mode.
 
