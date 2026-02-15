@@ -1,0 +1,34 @@
+{
+  "name": "@fullstack-forge/source",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "lint": "oxlint -c .oxlintrc.json",
+    "lint:fix": "oxlint -c .oxlintrc.json --fix",
+    "format": "oxfmt -c .oxfmtrc.json",
+    "format:check": "oxfmt -c .oxfmtrc.json --check",
+    "build": "nx run-many -t build",
+    "dev": "nx run-many -t dev",
+    "typecheck": "nx run-many -t typecheck",
+    "test": "nx run-many -t test",
+    "sheriff": "sheriff verify",
+    "knip": "knip",
+    "check": "pnpm lint && pnpm format:check && pnpm typecheck && pnpm sheriff && pnpm knip"
+  },
+  "devDependencies": {
+    "@softarc/sheriff-core": "^0.19.6",
+    "@vitest/coverage-v8": "catalog:",
+    "knip": "^5.82.1",
+    "nx": "22.5.1",
+    "oxfmt": "^0.27.0",
+    "oxlint": "^1.42.0",
+    "typescript": "catalog:",
+    "vitest": "catalog:"
+  },
+  "pnpm": {
+    "onlyBuiltDependencies": [
+      "esbuild",
+      "nx"
+    ]
+  }
+}

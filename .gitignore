@@ -1,0 +1,48 @@
+# Dependencies
+node_modules
+
+# Build outputs
+dist
+.output
+tmp
+*.tsbuildinfo
+storybook-static
+
+# TanStack Start
+routeTree.gen.ts
+.tanstack
+.vinxi
+.nitro
+
+# TypeSpec generated (openapi-typescript output — regenerated from spec)
+packages/api-spec/generated/types.ts
+
+# Nx
+.nx/cache
+.nx/workspace-data
+
+# Environment & secrets
+.env
+.env.*
+!.env.example
+
+# Logs
+pnpm-debug.log*
+npm-debug.log*
+*.log
+
+# Coverage & testing
+/coverage
+*.lcov
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDEs
+/.idea
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
