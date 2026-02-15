@@ -20,9 +20,12 @@ jobs:
 
       - uses: pnpm/action-setup@v4
 
+      - id: mise
+        run: echo "node-version=$(grep '^node' .mise.toml | sed 's/.*"\([^"]*\)".*/\1/')" >> "$GITHUB_OUTPUT"
+
       - uses: actions/setup-node@v4
         with:
-          node-version: 24
+          node-version: ${{ steps.mise.outputs.node-version }}
           cache: 'pnpm'
 
       - run: pnpm install --frozen-lockfile
