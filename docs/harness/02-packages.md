@@ -1,6 +1,6 @@
 # 02. Packages — 공유 라이브러리 계층
 
-`packages/` 아래의 공유 라이브러리 3개: `shared`, `api-spec`, `base-ui`.
+`packages/` 아래의 공유 라이브러리 3개: `shared`, `api-spec`, `design-system`.
 
 ## packages/shared
 
@@ -383,15 +383,15 @@ type HealthResponse = components['schemas']['HealthResponse']
 
 ---
 
-## packages/base-ui
+## packages/design-system
 
-Base UI + shadcn 컴포넌트 라이브러리. Tailwind v4 + CVA 패턴.
+shadcn/ui 디자인 시스템. Base UI (`@base-ui/react`) 프리미티브 기반, Tailwind v4 + CVA 패턴.
 
 ### package.json
 
 ```jsonc
 {
-  "name": "@fullstack-forge/base-ui",
+  "name": "@fullstack-forge/design-system",
   "version": "0.0.0",
   "private": true,
   "type": "module",
@@ -568,7 +568,7 @@ export { Button, buttonVariants }
 ### 디렉토리 구조
 
 ```
-packages/base-ui/
+packages/design-system/
 ├── src/
 │   ├── components/          # shadcn 컴포넌트 (50+)
 │   │   ├── button.tsx

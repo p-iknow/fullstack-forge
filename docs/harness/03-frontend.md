@@ -19,7 +19,7 @@
 
 - `store`: 인증, 주문 생성/조회, 리뷰 작성/댓글, 문의 생성/조회, 내 주문 상태
 - `admin`: 주문 상태 전이, 배차/재고/알림, 리뷰 모더레이션, 문의 응답/상태 전이 화면
-- 공통 UI/유틸: `packages/base-ui`, `packages/shared`
+- 공통 UI/유틸: `packages/design-system`, `packages/shared`
 - 공통 계약 타입: `packages/api-spec`
 
 두 앱은 같은 API를 호출하지만 권한/화면/업무 플로우가 다르다.
@@ -45,7 +45,7 @@
   },
   "dependencies": {
     "@fullstack-forge/api-spec": "workspace:*",
-    "@fullstack-forge/base-ui": "workspace:*",
+    "@fullstack-forge/design-system": "workspace:*",
     "@fullstack-forge/shared": "workspace:*",
     "@tanstack/react-router": "catalog:",
     "@tanstack/react-query": "catalog:",
@@ -93,7 +93,7 @@
     "jsx": "react-jsx",
     "lib": ["DOM", "DOM.Iterable", "ES2022"],
   },
-  "references": [{ "path": "../../packages/base-ui" }, { "path": "../../packages/shared" }],
+    "references": [{ "path": "../../packages/design-system" }, { "path": "../../packages/shared" }],
 }
 ```
 
@@ -139,7 +139,7 @@ import tsConfigPaths from 'vite-tsconfig-paths'
 export default defineProject({
   plugins: [tsConfigPaths()],
   resolve: {
-    conditions: ['@fullstack-forge/source'], // ★ base-ui 소스 레벨 해석
+    conditions: ['@fullstack-forge/source'], // ★ design-system 소스 레벨 해석
   },
   test: {
     name: 'store',
@@ -149,6 +149,7 @@ export default defineProject({
     css: true,
   },
 })
+
 ```
 
 ## 디렉토리 구조
@@ -167,7 +168,7 @@ apps/store/
 │   │   └── index.tsx           # 홈 페이지
 │   ├── screens/                # 페이지 컴포넌트
 │   └── styles/
-│       └── app.css             # @import tailwindcss + base-ui globals
+│       └── app.css             # @import tailwindcss + design-system globals
 ├── .storybook/
 │   ├── main.ts
 │   ├── preview.ts
@@ -185,7 +186,7 @@ apps/store/
 
 ```css
 @import 'tailwindcss';
-@import '@fullstack-forge/base-ui/styles/globals.css';
+@import '@fullstack-forge/design-system/styles/globals.css';
 ```
 
 ### src/router.tsx

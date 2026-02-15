@@ -1,0 +1,54 @@
+{
+  "name": "@fullstack-forge/design-system",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    "./components/*": {
+      "types": "./dist/components/*.d.mts",
+      "@fullstack-forge/source": "./src/components/*.tsx",
+      "default": "./dist/components/*.mjs"
+    },
+    "./lib/*": {
+      "types": "./dist/lib/*.d.mts",
+      "@fullstack-forge/source": "./src/lib/*.ts",
+      "default": "./dist/lib/*.mjs"
+    },
+    "./hooks/*": {
+      "types": "./dist/hooks/*.d.mts",
+      "@fullstack-forge/source": "./src/hooks/*.ts",
+      "default": "./dist/hooks/*.mjs"
+    },
+    "./styles/*.css": "./src/styles/*.css"
+  },
+  "scripts": {
+    "build": "tsdown",
+    "typecheck": "tsc -b",
+    "test": "vitest run --passWithNoTests"
+  },
+  "dependencies": {
+    "@base-ui/react": "^1.2.0",
+    "class-variance-authority": "^0.7.1",
+    "clsx": "^2.1.1",
+    "lucide-react": "^0.511.0",
+    "tailwind-merge": "^3.3.0"
+  },
+  "devDependencies": {
+    "@tailwindcss/vite": "catalog:",
+    "@testing-library/jest-dom": "catalog:",
+    "@testing-library/react": "catalog:",
+    "@types/react": "catalog:",
+    "@types/react-dom": "catalog:",
+    "jsdom": "catalog:",
+    "tailwindcss": "catalog:",
+    "tsdown": "catalog:",
+    "tw-animate-css": "catalog:",
+    "typescript": "catalog:",
+    "vite-tsconfig-paths": "catalog:",
+    "vitest": "catalog:"
+  },
+  "peerDependencies": {
+    "react": "^19.2.4",
+    "react-dom": "^19.2.4"
+  }
+}

@@ -1,3 +1,3 @@
 import { defineWorkspace } from 'vitest/config'
 
-export default defineWorkspace([])
+export default defineWorkspace(['packages/design-system'])

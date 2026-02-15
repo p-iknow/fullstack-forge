@@ -19,7 +19,7 @@ auth/API/infra 문서는 분리되어 있지만, 모두 같은 앱을 완성하�
 | --------------- | ------------------------------------------------------------------------------ |
 | **API 명세**    | **TypeSpec → OpenAPI 3.1 생성**                                                |
 | 프론트엔드      | TanStack Start + React 19 + Tailwind v4                                        |
-| UI 라이브러리   | Base UI (`@base-ui/react`) + shadcn 패턴 (CVA)                                 |
+| UI 라이브러리   | shadcn/ui 디자인 시스템 (Base UI 프리미티브 + CVA)                              |
 | 백엔드          | Hono + `@hono/node-server` + Drizzle ORM + PostgreSQL + Redis (Node.js 24 LTS) |
 | 이벤트 메시징   | SNS -> SQS fanout (LocalStack 로컬 에뮬레이션 + AWS 전이)                      |
 | 엣지/게이트웨이 | Nginx reverse proxy (로컬) + Ingress (k8s)                                     |
@@ -97,7 +97,7 @@ auth/API/infra 문서는 분리되어 있지만, 모두 같은 앱을 완성하�
 ├── packages/                       # 공유 라이브러리
 │   ├── shared/                     # 범용 유틸 (런타임 무관)
 │   ├── api-spec/                   # TypeSpec 정의 → OpenAPI + TS 타입 생성
-│   └── base-ui/                    # Base UI + shadcn 컴포넌트
+│   └── design-system/              # shadcn/ui 디자인 시스템 (Base UI 프리미티브)
 │
 └── (root config files)             # → 01-foundation.md 참조
 ```
@@ -120,7 +120,7 @@ apps/
 packages/
   shared/
   api-spec/
-  base-ui/
+  design-system/
 ```
 
 문서와 구현 경로는 `store`, `admin` 기준으로 유지한다.
@@ -142,28 +142,28 @@ packages/
 ## 의존성 그래프
 
 ```
-@fullstack-forge/store  ──→  @fullstack-forge/shared, @fullstack-forge/base-ui, @fullstack-forge/api-spec
-@fullstack-forge/admin  ──→  @fullstack-forge/shared, @fullstack-forge/base-ui, @fullstack-forge/api-spec
+@fullstack-forge/store  ──→  @fullstack-forge/shared, @fullstack-forge/design-system, @fullstack-forge/api-spec
+@fullstack-forge/admin  ──→  @fullstack-forge/shared, @fullstack-forge/design-system, @fullstack-forge/api-spec
 @fullstack-forge/api    ──→  @fullstack-forge/shared, @fullstack-forge/api-spec
 ```
 
 역할 관점으로는 아래와 같이 본다.
 
 ```text
-store           ──→ shared, base-ui, api-spec
-admin           ──→ shared, base-ui, api-spec
+store           ──→ shared, design-system, api-spec
+admin           ──→ shared, design-system, api-spec
 api               ──→ shared, api-spec
 workers(추가 예정) ──→ shared, api-spec
 ```
 
 ### 금지 관계 (Sheriff로 강제)
 
-| from                        | to                          | 사유                          |
-| --------------------------- | --------------------------- | ----------------------------- |
-| `@fullstack-forge/api`      | `@fullstack-forge/base-ui`  | 백엔드에 UI 의존성 유입 차단  |
-| `@fullstack-forge/base-ui`  | `@fullstack-forge/api-spec` | UI 라이브러리에 API 의존 차단 |
-| `@fullstack-forge/shared`   | 어디든                      | 순수 유틸, 외부 의존 없음     |
-| `@fullstack-forge/api-spec` | 어디든                      | 순수 명세, 외부 의존 없음     |
+| from                           | to                          | 사유                          |
+| ------------------------------ | --------------------------- | ----------------------------- |
+| `@fullstack-forge/api`         | `@fullstack-forge/design-system` | 백엔드에 UI 의존성 유입 차단  |
+| `@fullstack-forge/design-system` | `@fullstack-forge/api-spec` | UI 라이브러리에 API 의존 차단 |
+| `@fullstack-forge/shared`      | 어디든                      | 순수 유틸, 외부 의존 없음     |
+| `@fullstack-forge/api-spec`    | 어디든                      | 순수 명세, 외부 의존 없음     |
 
 ## 문서 구조
 
