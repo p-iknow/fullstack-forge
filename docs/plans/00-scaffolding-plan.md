@@ -2,14 +2,14 @@
 
 ## Progress Summary
 
-| Unit | Branch | Status | Notes |
-|------|--------|--------|-------|
-| 1 | `config/workspace-foundation` | 🟡 In Progress | Root configs exist. Exit criteria partially met (see below). |
-| 2 | `config/packages-shared-apispec` | ⬜ Not Started | Blocked by Unit 1 merge. |
-| 3 | `config/packages-base-ui` | ⬜ Not Started | Blocked by Unit 2 merge. |
-| 4 | `config/apps-api` | ⬜ Not Started | Blocked by Unit 3 merge. |
-| 5 | `config/apps-frontend` | ⬜ Not Started | Blocked by Unit 4 merge. |
-| 6 | `config/quality-tooling` | ⬜ Not Started | Blocked by Unit 5 merge. |
+| Unit | Branch                           | Status         | Notes                                                        |
+| ---- | -------------------------------- | -------------- | ------------------------------------------------------------ |
+| 1    | `config/workspace-foundation`    | 🟡 In Progress | Root configs exist. Exit criteria partially met (see below). |
+| 2    | `config/packages-shared-apispec` | ⬜ Not Started | Blocked by Unit 1 merge.                                     |
+| 3    | `config/packages-base-ui`        | ⬜ Not Started | Blocked by Unit 2 merge.                                     |
+| 4    | `config/apps-api`                | ⬜ Not Started | Blocked by Unit 3 merge.                                     |
+| 5    | `config/apps-frontend`           | ⬜ Not Started | Blocked by Unit 4 merge.                                     |
+| 6    | `config/quality-tooling`         | ⬜ Not Started | Blocked by Unit 5 merge.                                     |
 
 **Last updated:** 2026-02-15 · Commit: `42797b2`
 
@@ -76,19 +76,19 @@ config/workspace-foundation
 
 ### Commits (on branch `config/workspace-foundation`)
 
-| Hash | Description |
-|------|-------------|
-| `6839be4` | config(workspace): add root monorepo foundation files |
-| `fc38672` | style: apply oxfmt formatting to pre-existing files |
-| `3b927e0` | config(deps): bump knip, oxfmt, oxlint to latest |
-| `c9c77c7` | config(build): migrate to tsdown and @hono/vite for dev/build |
-| `355b81c` | config(vscode): add cSpell dictionary for project terms |
-| `0b58670` | config(cspell): extract dictionary to standalone cspell.json |
-| `0d5f949` | config(tsconfig): add erasableSyntaxOnly compiler option |
-| `ba72adb` | docs(learn): add TypeScript tsconfig deep-dive documentation |
-| `23f118a` | config(cspell): add project terminology |
+| Hash      | Description                                                    |
+| --------- | -------------------------------------------------------------- |
+| `6839be4` | config(workspace): add root monorepo foundation files          |
+| `fc38672` | style: apply oxfmt formatting to pre-existing files            |
+| `3b927e0` | config(deps): bump knip, oxfmt, oxlint to latest               |
+| `c9c77c7` | config(build): migrate to tsdown and @hono/vite for dev/build  |
+| `355b81c` | config(vscode): add cSpell dictionary for project terms        |
+| `0b58670` | config(cspell): extract dictionary to standalone cspell.json   |
+| `0d5f949` | config(tsconfig): add erasableSyntaxOnly compiler option       |
+| `ba72adb` | docs(learn): add TypeScript tsconfig deep-dive documentation   |
+| `23f118a` | config(cspell): add project terminology                        |
 | `6c62935` | feat(skills): add learn-writer skill for docs/learn generation |
-| `ff3c3c5` | refactor(learn): rewrite TypeScript docs in PAR format |
+| `ff3c3c5` | refactor(learn): rewrite TypeScript docs in PAR format         |
 | `42797b2` | refactor(skills): improve learn-writer from cross-agent review |
 
 ### Remaining Work
@@ -106,7 +106,7 @@ config/workspace-foundation
 
 ### Evidence
 
-- Command logs: install/lint/format/build/typecheck/test/show-projects output. *(pending final verification)*
+- Command logs: install/lint/format/build/typecheck/test/show-projects output. _(pending final verification)_
 - Artifacts: list of newly added root config files.
 - Notes: deferred items (`sheriff`, `knip`, CI) explicitly tracked for Unit 6.
 

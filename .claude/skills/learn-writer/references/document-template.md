@@ -15,6 +15,7 @@
 <!-- Context section: choose ONE based on the document's decision-unit mode. -->
 
 <!-- MODE: Option (config key/flag) -->
+
 ## Current Config
 
 ```{CONFIG_LANG}
@@ -64,8 +65,8 @@
 
 ## Application in This Project
 
-| Decision | Problem Solved |
-|----------|---------------|
+| Decision        | Problem Solved         |
+| --------------- | ---------------------- |
 | `{DECISION_01}` | {PROBLEM_IT_SOLVES_01} |
 | `{DECISION_02}` | {PROBLEM_IT_SOLVES_02} |
 

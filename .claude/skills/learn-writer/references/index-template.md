@@ -11,10 +11,10 @@ Breaks down `{PRIMARY_CONFIG_FILE}` / `{SECONDARY_CONFIG_FILE}` settings option 
 
 <!-- Repeat one row per document. Do NOT hardcode to 5 — match actual doc count. -->
 
-| # | Document | Core Question |
-|---|----------|---------------|
+| #    | Document                          | Core Question  |
+| ---- | --------------------------------- | -------------- |
 | {NN} | [{DOC_TITLE}](./NN-{DOC_SLUG}.md) | {DOC_QUESTION} |
-| ... | ... | ... |
+| ...  | ...                               | ...            |
 
 ## Prerequisites
 

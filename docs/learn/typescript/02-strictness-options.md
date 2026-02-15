@@ -19,8 +19,8 @@
     "noUnusedLocals": true,
     "noImplicitReturns": true,
     "noFallthroughCasesInSwitch": true,
-    "noImplicitOverride": true
-  }
+    "noImplicitOverride": true,
+  },
 }
 ```
 
@@ -32,9 +32,11 @@
 
 ```typescript
 // strictNullChecks: false
-function getUser(): User | null { return null; }
-const user = getUser();
-console.log(user.name); // 컴파일 통과, 런타임 폭발
+function getUser(): User | null {
+  return null
+}
+const user = getUser()
+console.log(user.name) // 컴파일 통과, 런타임 폭발
 ```
 
 **Action** — `strict: true`는 8개 플래그 번들(`strictNullChecks`, `noImplicitAny`, `useUnknownInCatchVariables` 등). 하나로 켜면 TS 업그레이드 시 새 체크도 자동 활성화:
@@ -63,15 +65,15 @@ try { ... } catch (e) {
 
 ```typescript
 function processOrder(order: Order) {
-  const tax = calculateTax(order);   // 쓰지 않는 변수
-  return order.subtotal;
+  const tax = calculateTax(order) // 쓰지 않는 변수
+  return order.subtotal
 }
 ```
 
 **Action** — 미사용 지역 변수에 에러를 발생시킨다. 이 프로젝트는 TypeScript + oxlint 이중 체크:
 
 ```typescript
-const tax = calculateTax(order);
+const tax = calculateTax(order)
 //    ~~~ 'tax' is declared but its value is never read
 ```
 
@@ -87,8 +89,8 @@ const tax = calculateTax(order);
 
 ```typescript
 function getDiscount(tier: string): number {
-  if (tier === "gold") return 0.2;
-  if (tier === "silver") return 0.1;
+  if (tier === 'gold') return 0.2
+  if (tier === 'silver') return 0.1
   // "bronze"일 때 return 없음 → undefined 반환
 }
 ```
@@ -97,9 +99,9 @@ function getDiscount(tier: string): number {
 
 ```typescript
 function getDiscount(tier: string): number {
-  if (tier === "gold") return 0.2;
-  if (tier === "silver") return 0.1;
-  return 0; // 기본값 명시
+  if (tier === 'gold') return 0.2
+  if (tier === 'silver') return 0.1
+  return 0 // 기본값 명시
 }
 ```
 
@@ -113,10 +115,10 @@ function getDiscount(tier: string): number {
 
 ```typescript
 switch (status) {
-  case "pending":
-    logPending();     // break 없이 다음으로 떨어짐
-  case "confirmed":
-    return "접수됨";  // pending일 때도 "접수됨" 반환
+  case 'pending':
+    logPending() // break 없이 다음으로 떨어짐
+  case 'confirmed':
+    return '접수됨' // pending일 때도 "접수됨" 반환
 }
 ```
 
@@ -138,10 +140,14 @@ case "confirmed":  // 빈 case → fallthrough 허용
 
 ```typescript
 class BaseService {
-  init() { /* initialize에서 이름 변경됨 */ }
+  init() {
+    /* initialize에서 이름 변경됨 */
+  }
 }
 class OrderService extends BaseService {
-  initialize() { /* 부모의 init()과 무관한 새 메서드 */ }
+  initialize() {
+    /* 부모의 init()과 무관한 새 메서드 */
+  }
 }
 ```
 
@@ -149,8 +155,12 @@ class OrderService extends BaseService {
 
 ```typescript
 class OrderService extends BaseService {
-  override initialize() { /* Base class doesn't have 'initialize' ❌ */ }
-  override init() { /* 정확한 오버라이드 ✅ */ }
+  override initialize() {
+    /* Base class doesn't have 'initialize' ❌ */
+  }
+  override init() {
+    /* 정확한 오버라이드 ✅ */
+  }
 }
 ```
 
@@ -160,13 +170,13 @@ class OrderService extends BaseService {
 
 ## 이 프로젝트에서의 적용
 
-| 옵션 | 해결하는 문제 |
-|------|-------------|
-| `strict` | `null` 참조, 암묵적 `any`, `catch` 변수 등 타입 안전 기본선 |
-| `noUnusedLocals` | 죽은 코드 누적 방지 (oxlint와 이중 체크) |
-| `noImplicitReturns` | 복잡한 조건 분기에서 `return` 누락 방지 |
-| `noFallthroughCasesInSwitch` | switch 상태 머신의 의도치 않은 fallthrough 방지 |
-| `noImplicitOverride` | 부모 클래스 리팩터링 시 자식 클래스 동기화 보장 |
+| 옵션                         | 해결하는 문제                                               |
+| ---------------------------- | ----------------------------------------------------------- |
+| `strict`                     | `null` 참조, 암묵적 `any`, `catch` 변수 등 타입 안전 기본선 |
+| `noUnusedLocals`             | 죽은 코드 누적 방지 (oxlint와 이중 체크)                    |
+| `noImplicitReturns`          | 복잡한 조건 분기에서 `return` 누락 방지                     |
+| `noFallthroughCasesInSwitch` | switch 상태 머신의 의도치 않은 fallthrough 방지             |
+| `noImplicitOverride`         | 부모 클래스 리팩터링 시 자식 클래스 동기화 보장             |
 
 ---
 

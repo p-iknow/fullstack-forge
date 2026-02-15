@@ -8,10 +8,10 @@ A collection of deep-dive learning documents covering the **why (WHY)** and **ho
 
 ## Structure
 
-| Directory | Topic | Docs |
-|-----------|-------|------|
-| [typescript/](./typescript/README.md) | TypeScript compiler config deep dive | 5 |
-| [{TOPIC_SLUG}/](./{TOPIC_SLUG}/README.md) | {TOPIC_SUMMARY} | {DOC_COUNT} |
+| Directory                                 | Topic                                | Docs        |
+| ----------------------------------------- | ------------------------------------ | ----------- |
+| [typescript/](./typescript/README.md)     | TypeScript compiler config deep dive | 5           |
+| [{TOPIC_SLUG}/](./{TOPIC_SLUG}/README.md) | {TOPIC_SUMMARY}                      | {DOC_COUNT} |
 
 ## Reading Order
 

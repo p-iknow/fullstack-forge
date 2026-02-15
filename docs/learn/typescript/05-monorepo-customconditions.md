@@ -16,8 +16,8 @@ package.json `exports`에 커스텀 조건을 추가하여, TypeScript와 번들
 // tsconfig.base.json
 {
   "compilerOptions": {
-    "customConditions": ["@fullstack-forge/source"]
-  }
+    "customConditions": ["@fullstack-forge/source"],
+  },
 }
 ```
 
@@ -98,10 +98,10 @@ Trigger.dev → @triggerdotdev/source
 
 ## 이 프로젝트에서의 적용
 
-| 옵션 | 해결하는 문제 |
-|------|-------------|
-| `customConditions` | 의존 패키지 빌드 없이 소스 직접 참조 (라이브 타입) |
-| `@fullstack-forge/` 접두사 | 외부 패키지와의 조건 이름 충돌 방지 |
+| 옵션                       | 해결하는 문제                                      |
+| -------------------------- | -------------------------------------------------- |
+| `customConditions`         | 의존 패키지 빌드 없이 소스 직접 참조 (라이브 타입) |
+| `@fullstack-forge/` 접두사 | 외부 패키지와의 조건 이름 충돌 방지                |
 
 현재 상태: `customConditions`만 선언됨. 워크스페이스 패키지 생성 시 `exports`와 `resolve.conditions`가 함께 구성될 예정.
 

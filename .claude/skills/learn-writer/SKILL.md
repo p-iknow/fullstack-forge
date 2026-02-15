@@ -28,22 +28,23 @@ All generated learn documents MUST be written in Korean. Templates in `reference
 
 **Section header mapping** (template English → output Korean):
 
-| Template Header | Korean Output |
-|-----------------|---------------|
-| Core Question | 핵심 질문 |
-| One-Line Answer | 한 줄 답 |
-| Current Config | 현재 설정 |
-| Current Approach | 현재 접근 방식 |
-| Current Flow | 현재 흐름 |
-| Application in This Project | 이 프로젝트에서의 적용 |
-| Source Decision | 근거 문서 |
-| Next Document | 다음 문서 |
-| Document Sequence | 문서 순서 |
-| Prerequisites | 전제 지식 |
-| Project Config Files | 이 프로젝트의 설정 파일 |
-| Related Docs | 연관 문서 |
+| Template Header             | Korean Output           |
+| --------------------------- | ----------------------- |
+| Core Question               | 핵심 질문               |
+| One-Line Answer             | 한 줄 답                |
+| Current Config              | 현재 설정               |
+| Current Approach            | 현재 접근 방식          |
+| Current Flow                | 현재 흐름               |
+| Application in This Project | 이 프로젝트에서의 적용  |
+| Source Decision             | 근거 문서               |
+| Next Document               | 다음 문서               |
+| Document Sequence           | 문서 순서               |
+| Prerequisites               | 전제 지식               |
+| Project Config Files        | 이 프로젝트의 설정 파일 |
+| Related Docs                | 연관 문서               |
 
 Greenfield placeholder (when config does not exist yet):
+
 - English template: `Current Config: N/A (not yet implemented)`
 - Korean output: `현재 설정: 없음(미구현)`
 
@@ -66,6 +67,7 @@ Greenfield placeholder (when config does not exist yet):
 5. Confirm chain order so each document naturally leads to the next.
 
 Deliverable:
+
 - A numbered outline with filename, core question, and source files per document.
 
 ### Phase 2: Research
@@ -79,6 +81,7 @@ Deliverable:
    - **Caveat** (if any): Trade-offs, version constraints, interactions with other options.
 
 Rules:
+
 - Do not document only what an option is; explain why this project should keep, change, or defer it.
 - If a config file or setting does not exist yet (greenfield/planned), use the greenfield placeholder (see Output Language section), describe the planned state with references to the decision source (ADR/harness), and NEVER fabricate snippets.
 
@@ -159,13 +162,13 @@ This is useful when you only want type checking.
 
 ## Troubleshooting
 
-| Symptom | Cause | Fix |
-|---------|-------|-----|
-| Broken "Next Document" link | Filename changed after chain was set | Re-verify Phase 5 step 1; update all "Next Document" links |
-| Numbering gap (01, 02, 04) | Document removed without renumbering | Renumber all docs and update README table |
-| "Current Config" shows fabricated config | Greenfield topic with no config yet | Use greenfield placeholder with ADR/harness reference |
-| Parent index row duplicated | Agent appended instead of checking existing rows | Check `docs/learn/README.md` for existing topic row before inserting |
-| Template mode mismatch | Used "Current Config" for a Pattern/Workflow topic | Re-classify decision-unit mode (Phase 1 step 3) |
+| Symptom                                  | Cause                                              | Fix                                                                  |
+| ---------------------------------------- | -------------------------------------------------- | -------------------------------------------------------------------- |
+| Broken "Next Document" link              | Filename changed after chain was set               | Re-verify Phase 5 step 1; update all "Next Document" links           |
+| Numbering gap (01, 02, 04)               | Document removed without renumbering               | Renumber all docs and update README table                            |
+| "Current Config" shows fabricated config | Greenfield topic with no config yet                | Use greenfield placeholder with ADR/harness reference                |
+| Parent index row duplicated              | Agent appended instead of checking existing rows   | Check `docs/learn/README.md` for existing topic row before inserting |
+| Template mode mismatch                   | Used "Current Config" for a Pattern/Workflow topic | Re-classify decision-unit mode (Phase 1 step 3)                      |
 
 ## Reference Files
 

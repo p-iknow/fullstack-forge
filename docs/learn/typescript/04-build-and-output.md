@@ -19,8 +19,8 @@ tsc는 **타입 경찰 전용**이고, 실제 빌드는 **Vite/tsdown이 담당*
     "forceConsistentCasingInFileNames": true,
     "allowJs": true,
     "noEmit": true,
-    "erasableSyntaxOnly": true
-  }
+    "erasableSyntaxOnly": true,
+  },
 }
 ```
 
@@ -73,14 +73,14 @@ skipLibCheck: true
 
 ```typescript
 // 파일명: UserService.ts
-import { foo } from "./userService"; // macOS: OK, Linux: 파일 못 찾음
+import { foo } from './userService' // macOS: OK, Linux: 파일 못 찾음
 ```
 
 **Action** — 파일 경로의 대소문자를 OS 무관하게 일관되게 강제:
 
 ```typescript
-import { foo } from "./userService"; // ❌ macOS에서도 에러
-import { foo } from "./UserService"; // ✅ 정확한 케이스
+import { foo } from './userService' // ❌ macOS에서도 에러
+import { foo } from './UserService' // ✅ 정확한 케이스
 ```
 
 **Result** — 크로스 플랫폼 프로젝트에서 필수. ✅ 권장.
@@ -109,7 +109,10 @@ import { foo } from "./UserService"; // ✅ 정확한 케이스
 **Problem** — `enum`, `namespace`, 파라미터 프로퍼티 등 TypeScript 전용 구문은 "타입만 지우면 유효한 JS"가 안 되므로, Node.js 네이티브 타입 스트리핑(`--experimental-strip-types`)이나 esbuild/SWC 같은 경량 트랜스파일러에서 정확히 처리할 수 없다:
 
 ```typescript
-enum Direction { Up, Down }
+enum Direction {
+  Up,
+  Down,
+}
 // → 타입만 지우면? Direction은 undefined
 
 class User {
@@ -122,12 +125,14 @@ class User {
 
 ```typescript
 // enum 대신
-const Direction = { Up: 0, Down: 1 } as const;
+const Direction = { Up: 0, Down: 1 } as const
 
 // 파라미터 프로퍼티 대신
 class User {
-  name: string;
-  constructor(name: string) { this.name = name; }
+  name: string
+  constructor(name: string) {
+    this.name = name
+  }
 }
 ```
 
@@ -139,13 +144,13 @@ class User {
 
 ## 이 프로젝트에서의 적용
 
-| 옵션 | 해결하는 문제 |
-|------|-------------|
-| `noEmit` | tsc/번들러 이중 빌드 방지. tsc는 타입 체커 전용 |
-| `skipLibCheck` | `.d.ts` 체크로 인한 빌드 속도 저하 및 유령 에러 방지 |
-| `forceConsistentCasingInFileNames` | macOS→Linux 간 파일명 대소문자 불일치 방지 |
-| `allowJs` | 설정 파일, 스크립트 등 JS 파일 누락 방지 |
-| `erasableSyntaxOnly` | 지울 수 없는 TS 구문 금지. 번들러/Node.js 호환 |
+| 옵션                               | 해결하는 문제                                        |
+| ---------------------------------- | ---------------------------------------------------- |
+| `noEmit`                           | tsc/번들러 이중 빌드 방지. tsc는 타입 체커 전용      |
+| `skipLibCheck`                     | `.d.ts` 체크로 인한 빌드 속도 저하 및 유령 에러 방지 |
+| `forceConsistentCasingInFileNames` | macOS→Linux 간 파일명 대소문자 불일치 방지           |
+| `allowJs`                          | 설정 파일, 스크립트 등 JS 파일 누락 방지             |
+| `erasableSyntaxOnly`               | 지울 수 없는 TS 구문 금지. 번들러/Node.js 호환       |
 
 ---
 

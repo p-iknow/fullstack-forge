@@ -128,7 +128,6 @@ catalog:
   '@testing-library/react': ^16.3.2
   jsdom: ^27.4.0
 
-
   # --- Storybook ---
   storybook: ^10.2.8
   '@storybook/addon-a11y': ^10.2.8
