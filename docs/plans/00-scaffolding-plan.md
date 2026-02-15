@@ -96,7 +96,7 @@ config/workspace-foundation
 | `981eeac` | config(deps): regenerate lockfile after dependency bumps       |
 | `dd63a94` | style: apply oxfmt formatting to all files                     |
 | `ab03d60` | config(pnpm): clean up .npmrc defaults, add packageManager field, and replace npx with pnpm exec |
-| `TBD`     | docs(learn): add package-manager deep-dive documentation       |
+| `0f78abe` | docs(learn): add package-manager deep-dive documentation       |
 
 ### Remaining Work
 
