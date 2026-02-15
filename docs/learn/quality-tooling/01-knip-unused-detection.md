@@ -18,11 +18,19 @@ Knip은 워크스페이스별 **entry/project** 매핑으로 코드 도달성(re
   "$schema": "https://unpkg.com/knip@5/schema.json",
   "ignoreFiles": [".claude/**", "sheriff.config.ts"],
   "ignoreDependencies": [
-    "tailwindcss", "@tailwindcss/vite", "@testing-library/react",
-    "@typespec/http", "@typespec/openapi3", "@typespec/openapi",
-    "@fullstack-forge/api-spec", "@fullstack-forge/design-system",
-    "@suspensive/react", "@suspensive/react-query",
-    "@hono/node-server", "ky", "lucide-react"
+    "tailwindcss",
+    "@tailwindcss/vite",
+    "@testing-library/react",
+    "@typespec/http",
+    "@typespec/openapi3",
+    "@typespec/openapi",
+    "@fullstack-forge/api-spec",
+    "@fullstack-forge/design-system",
+    "@suspensive/react",
+    "@suspensive/react-query",
+    "@hono/node-server",
+    "ky",
+    "lucide-react",
   ],
   "exclude": ["unresolved", "catalog"],
   "workspaces": {
@@ -30,22 +38,22 @@ Knip은 워크스페이스별 **entry/project** 매핑으로 코드 도달성(re
     "apps/*": {
       "entry": ["src/router.tsx", "src/routes/**/*.tsx"],
       "project": ["src/**/*.{ts,tsx}"],
-      "ignore": ["src/routeTree.gen.ts"]
+      "ignore": ["src/routeTree.gen.ts"],
     },
     "apps/api": {
       "entry": ["src/index.ts"],
-      "project": ["src/**/*.ts"]
+      "project": ["src/**/*.ts"],
     },
     "packages/api-spec": {
       "entry": [],
       "project": ["src/**/*.tsp"],
-      "ignore": ["generated/**"]
+      "ignore": ["generated/**"],
     },
     "packages/design-system": {
       "entry": ["src/components/*.tsx", "src/lib/*.ts", "src/hooks/*.ts"],
-      "project": ["src/**/*.{ts,tsx}"]
-    }
-  }
+      "project": ["src/**/*.{ts,tsx}"],
+    },
+  },
 }
 ```
 
@@ -173,12 +181,12 @@ Unresolved: typescript (catalog:)
 
 ## 이 프로젝트에서의 적용
 
-| 결정                            | 해결하는 문제                                   |
-| ------------------------------- | ----------------------------------------------- |
-| 워크스페이스별 `entry`/`project` | 앱·패키지마다 다른 진입점 구조를 정밀 분석      |
-| `ignoreDependencies` 화이트리스트 | 런타임 전용 의존성의 오탐 제거                  |
+| 결정                                 | 해결하는 문제                              |
+| ------------------------------------ | ------------------------------------------ |
+| 워크스페이스별 `entry`/`project`     | 앱·패키지마다 다른 진입점 구조를 정밀 분석 |
+| `ignoreDependencies` 화이트리스트    | 런타임 전용 의존성의 오탐 제거             |
 | `exclude: ["unresolved", "catalog"]` | pnpm catalog 프로토콜 호환성 확보          |
-| `ignore`/`ignoreFiles` 분리     | 생성 코드·비표준 파일의 노이즈 차단             |
+| `ignore`/`ignoreFiles` 분리          | 생성 코드·비표준 파일의 노이즈 차단        |
 
 ---
 

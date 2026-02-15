@@ -3,7 +3,9 @@
   "version": "0.0.0",
   "private": true,
   "type": "module",
-  "sideEffects": ["./src/styles/**/*.css"],
+  "sideEffects": [
+    "./src/styles/**/*.css"
+  ],
   "exports": {
     "./components/*": {
       "types": "./dist/components/*.d.mts",

@@ -82,11 +82,11 @@ modules: {
 
 태그 네이밍 컨벤션은 `{레이어}:{이름}`:
 
-| 접두사  | 의미                        | 예시                              |
-| ------- | --------------------------- | --------------------------------- |
-| `app:`  | 사용자 대면 프론트엔드 앱   | `app:store`, `app:admin`          |
-| `svc:`  | 백엔드 서비스               | `svc:api`                         |
-| `lib:`  | 공유 라이브러리/패키지      | `lib:design-system`, `lib:api-spec` |
+| 접두사 | 의미                      | 예시                                |
+| ------ | ------------------------- | ----------------------------------- |
+| `app:` | 사용자 대면 프론트엔드 앱 | `app:store`, `app:admin`            |
+| `svc:` | 백엔드 서비스             | `svc:api`                           |
+| `lib:` | 공유 라이브러리/패키지    | `lib:design-system`, `lib:api-spec` |
 
 **Result** — 모든 소스 디렉토리가 명확한 레이어에 속하게 된다. 이 태그가 `depRules`의 기반이 된다.
 
@@ -172,8 +172,8 @@ import { Button } from '@fullstack-forge/design-system'
     "./components/*": "./src/components/*.tsx",
     "./lib/*": "./src/lib/*.ts",
     "./hooks/*": "./src/hooks/*.ts",
-    "./styles/*": "./src/styles/*.css"
-  }
+    "./styles/*": "./src/styles/*.css",
+  },
 }
 ```
 
@@ -205,13 +205,13 @@ Sheriff는 이 진입점에서 출발하여 import 체인을 따라가며, 각 i
 
 ## 이 프로젝트에서의 적용
 
-| 결정                           | 해결하는 문제                                       |
-| ------------------------------ | --------------------------------------------------- |
-| 태그 시스템 (`app:`, `svc:`, `lib:`) | 레이어 분류로 의존 방향 규칙의 기반 제공        |
-| `depRules` 화이트리스트        | API 서버가 UI를 import하는 등의 아키텍처 위반 차단  |
-| `enableBarrelLess: true`       | barrel 파일 제거로 tree-shaking 최적화 + 유지보수 감소 |
-| `svc:*`에서 `lib:design-system` 차단 | 백엔드에 프론트엔드 의존성 유입 원천 차단       |
-| `lib:*`에 `noDependencies`     | 공유 라이브러리의 순수성 보장                       |
+| 결정                                 | 해결하는 문제                                          |
+| ------------------------------------ | ------------------------------------------------------ |
+| 태그 시스템 (`app:`, `svc:`, `lib:`) | 레이어 분류로 의존 방향 규칙의 기반 제공               |
+| `depRules` 화이트리스트              | API 서버가 UI를 import하는 등의 아키텍처 위반 차단     |
+| `enableBarrelLess: true`             | barrel 파일 제거로 tree-shaking 최적화 + 유지보수 감소 |
+| `svc:*`에서 `lib:design-system` 차단 | 백엔드에 프론트엔드 의존성 유입 원천 차단              |
+| `lib:*`에 `noDependencies`           | 공유 라이브러리의 순수성 보장                          |
 
 ---
 

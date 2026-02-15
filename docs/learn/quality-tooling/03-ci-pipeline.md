@@ -93,8 +93,8 @@ jobs:
 **Action** — codegen 직후, 빌드 이전에 모든 정적 분석을 실행한다:
 
 ```yaml
-- run: pnpm lint          # oxlint — 코드 품질/스타일
-- run: pnpm format:check  # oxfmt — 포매팅 일관성
+- run: pnpm lint # oxlint — 코드 품질/스타일
+- run: pnpm format:check # oxfmt — 포매팅 일관성
 ```
 
 harness 레시피(06-tooling.md)에는 sheriff와 knip도 이 단계에 포함되어 있다:
@@ -103,18 +103,18 @@ harness 레시피(06-tooling.md)에는 sheriff와 knip도 이 단계에 포함�
 # harness 기준 전체 Phase 2
 - run: pnpm lint
 - run: pnpm format:check
-- run: pnpm sheriff      # 모듈 경계 위반 검사
-- run: pnpm knip         # 미사용 코드/의존성 검사
+- run: pnpm sheriff # 모듈 경계 위반 검사
+- run: pnpm knip # 미사용 코드/의존성 검사
 ```
 
 각 도구의 역할:
 
-| 도구          | 검사 대상           | 실패 의미                         |
-| ------------- | ------------------- | --------------------------------- |
-| `pnpm lint`   | 코드 품질/스타일    | 코딩 규칙 위반                    |
-| `pnpm format:check` | 포매팅 일관성 | 포매터를 안 돌림                  |
-| `pnpm sheriff` | 모듈 간 의존 방향  | 아키텍처 경계 위반 (01 문서 참조) |
-| `pnpm knip`   | 미사용 코드/의존성  | 죽은 코드 존재 (02 문서 참조)     |
+| 도구                | 검사 대상          | 실패 의미                         |
+| ------------------- | ------------------ | --------------------------------- |
+| `pnpm lint`         | 코드 품질/스타일   | 코딩 규칙 위반                    |
+| `pnpm format:check` | 포매팅 일관성      | 포매터를 안 돌림                  |
+| `pnpm sheriff`      | 모듈 간 의존 방향  | 아키텍처 경계 위반 (01 문서 참조) |
+| `pnpm knip`         | 미사용 코드/의존성 | 죽은 코드 존재 (02 문서 참조)     |
 
 **Result** — 빌드나 테스트보다 빠른 정적 분석으로 문제를 조기에 발견한다. 빌드에 3분 걸리는데 lint에서 이미 실패한다면 3분을 아낄 수 있다.
 
@@ -173,23 +173,23 @@ pnpm exec nx run-many -t typecheck build test
 ```yaml
 - uses: actions/checkout@v4
   with:
-    filter: tree:0     # treeless clone: blob/tree를 필요 시에만 fetch
-    fetch-depth: 0     # 전체 히스토리 (Nx affected 분석용)
+    filter: tree:0 # treeless clone: blob/tree를 필요 시에만 fetch
+    fetch-depth: 0 # 전체 히스토리 (Nx affected 분석용)
 
 - uses: actions/setup-node@v4
   with:
     node-version: 24
-    cache: 'pnpm'      # pnpm store 캐싱
+    cache: 'pnpm' # pnpm store 캐싱
 
-- run: pnpm install --frozen-lockfile  # lockfile 기준 결정론적 설치
+- run: pnpm install --frozen-lockfile # lockfile 기준 결정론적 설치
 ```
 
-| 설정                | 효과                                         |
-| ------------------- | -------------------------------------------- |
-| `filter: tree:0`    | 초기 clone 크기 대폭 감소                    |
+| 설정                | 효과                                          |
+| ------------------- | --------------------------------------------- |
+| `filter: tree:0`    | 초기 clone 크기 대폭 감소                     |
 | `fetch-depth: 0`    | 전체 커밋 히스토리 확보 (Nx affected 분석용)  |
-| `cache: 'pnpm'`     | pnpm store를 GitHub Actions 캐시에 저장      |
-| `--frozen-lockfile`  | lockfile과 다른 의존성 설치 시도 시 즉시 실패 |
+| `cache: 'pnpm'`     | pnpm store를 GitHub Actions 캐시에 저장       |
+| `--frozen-lockfile` | lockfile과 다른 의존성 설치 시도 시 즉시 실패 |
 
 **Result** — CI 시작 시간이 단축되고, `--frozen-lockfile`으로 "CI에서만 다른 의존성이 설치되는" 문제를 차단한다.
 
@@ -197,13 +197,13 @@ pnpm exec nx run-many -t typecheck build test
 
 ## 이 프로젝트에서의 적용
 
-| 결정                                | 해결하는 문제                                 |
-| ----------------------------------- | --------------------------------------------- |
-| codegen-first 순서                  | 생성 코드 stale 상태에서 검증하는 오류 차단   |
-| `git diff --exit-code` 게이트       | TypeSpec ↔ 생성물 불일치의 main 유입 차단     |
-| 정적 분석 → 빌드/테스트 순서       | 빠른 실패로 CI 시간 절약                      |
-| `nx run-many` 병렬 실행            | 프로젝트 추가 시 CI 변경 불필요 + 병렬 가속  |
-| treeless clone + pnpm cache         | CI 시작 시간 최적화                           |
+| 결정                          | 해결하는 문제                               |
+| ----------------------------- | ------------------------------------------- |
+| codegen-first 순서            | 생성 코드 stale 상태에서 검증하는 오류 차단 |
+| `git diff --exit-code` 게이트 | TypeSpec ↔ 생성물 불일치의 main 유입 차단   |
+| 정적 분석 → 빌드/테스트 순서  | 빠른 실패로 CI 시간 절약                    |
+| `nx run-many` 병렬 실행       | 프로젝트 추가 시 CI 변경 불필요 + 병렬 가속 |
+| treeless clone + pnpm cache   | CI 시작 시간 최적화                         |
 
 ---
 
