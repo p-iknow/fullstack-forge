@@ -15,12 +15,12 @@
   "dependencies": {
     "@fullstack-forge/api-spec": "workspace:*",
     "@fullstack-forge/design-system": "workspace:*",
-    "@tanstack/react-router": "catalog:",
-    "@tanstack/react-query": "catalog:",
-    "@tanstack/react-router-devtools": "catalog:",
-    "@tanstack/react-start": "catalog:",
     "@suspensive/react": "catalog:",
     "@suspensive/react-query": "catalog:",
+    "@tanstack/react-query": "catalog:",
+    "@tanstack/react-router": "catalog:",
+    "@tanstack/react-router-devtools": "catalog:",
+    "@tanstack/react-start": "catalog:",
     "ky": "catalog:",
     "react": "catalog:",
     "react-dom": "catalog:"
