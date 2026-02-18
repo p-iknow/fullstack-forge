@@ -1,12 +1,17 @@
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { cleanup, fireEvent, render, screen } from '@testing-library/react'
-import { afterEach, beforeEach, describe, expect, it } from 'vitest'
-import { http, HttpResponse } from 'msw'
+import { afterEach, describe, expect, it } from 'vitest'
+import { delay, http, HttpResponse } from 'msw'
+import { authQueryKeys, type MeResponse } from '~/lib/queries/auth'
 import { worker } from '~/test/msw/browser'
 import { HomePage } from './home-page'
 
-function renderPage() {
+function renderPage(initialMeData?: MeResponse | null) {
   const queryClient = new QueryClient()
+  if (initialMeData !== undefined) {
+    queryClient.setQueryData(authQueryKeys.me, initialMeData)
+  }
+
   return render(
     <QueryClientProvider client={queryClient}>
       <HomePage />
@@ -15,34 +20,46 @@ function renderPage() {
 }
 
 describe('home page', () => {
-  beforeEach(() => {
-    document.cookie = 'qc_auth_hint=; Max-Age=0; path=/'
-  })
-
   afterEach(() => {
     cleanup()
   })
 
-  it('shows login CTA when auth hint is not present', async () => {
+  it('shows login CTA when session is unauthenticated', async () => {
     // given
-    renderPage()
+    renderPage(null)
 
     // when
 
     // then
     expect(await screen.findByText('Log in')).toBeInTheDocument()
-    expect(screen.getByText('Sign up')).toBeInTheDocument()
   })
 
-  it('shows current user and allows logout when me query succeeds', async () => {
+  it('shows placeholder while session check is pending', async () => {
     // given
-    const expiresAt = Math.floor(Date.now() / 1000) + 3600
-    document.cookie = `qc_auth_hint=${expiresAt}; path=/`
-    let meCallCount = 0
+    worker.use(
+      http.get('/api/auth/me', async () => {
+        await delay(120)
+        return HttpResponse.json(
+          { code: 'auth_session_expired', error: 'Session expired' },
+          { status: 401 },
+        )
+      }),
+    )
+
+    // when
+    renderPage()
+
+    // then
+    expect(screen.getByLabelText('Checking session')).toBeInTheDocument()
+    expect(await screen.findByText('Log in')).toBeInTheDocument()
+  })
+
+  it('shows logout when authenticated and switches to login after logout', async () => {
+    // given
+    let loggedOut = false
     worker.use(
       http.get('/api/auth/me', () => {
-        meCallCount += 1
-        if (meCallCount === 1) {
+        if (!loggedOut) {
           return HttpResponse.json(
             {
               user: {
@@ -62,12 +79,25 @@ describe('home page', () => {
           { status: 401 },
         )
       }),
+      http.post('/api/auth/logout', () => {
+        loggedOut = true
+        return HttpResponse.json({ ok: true as const }, { status: 200 })
+      }),
     )
-    renderPage()
+    renderPage({
+      user: {
+        id: 'user-1',
+        email: 'customer@example.com',
+        name: 'Customer',
+        role: 'customer',
+        status: 'active',
+      },
+    })
 
     // when
-    expect(await screen.findByText('customer@example.com')).toBeInTheDocument()
-    fireEvent.click(screen.getByRole('button', { name: 'Log out' }))
+    const logoutButton = await screen.findByRole('button', { name: 'Log out' })
+    expect(logoutButton).toBeInTheDocument()
+    fireEvent.click(logoutButton)
 
     // then
     expect(await screen.findByText('Log in')).toBeInTheDocument()

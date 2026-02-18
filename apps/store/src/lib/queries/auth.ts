@@ -28,7 +28,6 @@ export type PasswordResetConfirmResponse = PostAuthPasswordResetConfirmResponse
 export type MeResponse = GetAuthMeResponse
 export type AuthUser = LoginResponse['user']
 
-const AUTH_HINT_COOKIE_NAME = 'qc_auth_hint'
 const generatedMeQueryKey = getAuthMeQueryKey({ client: authClient })
 
 export const authQueryKeys = {
@@ -68,42 +67,6 @@ export const meQueryOptions = (initialData: MeResponse | null | undefined = unde
     retry: false,
     ...(initialData === undefined ? {} : { initialData }),
   })
-
-export function resolveMeInitialDataFromAuthHint(): MeResponse | null | undefined {
-  if (typeof document === 'undefined') {
-    return undefined
-  }
-
-  const cookieValue = readCookie(AUTH_HINT_COOKIE_NAME)
-  if (!cookieValue) {
-    return null
-  }
-
-  const expiresAt = Number.parseInt(cookieValue, 10)
-  if (!Number.isFinite(expiresAt)) {
-    return null
-  }
-
-  const now = Math.floor(Date.now() / 1000)
-  if (expiresAt <= now) {
-    return null
-  }
-
-  return undefined
-}
-
-function readCookie(name: string): string | null {
-  const cookies = document.cookie.split(';')
-  const prefix = `${encodeURIComponent(name)}=`
-  for (const entry of cookies) {
-    const cookie = entry.trim()
-    if (cookie.startsWith(prefix)) {
-      return decodeURIComponent(cookie.slice(prefix.length))
-    }
-  }
-
-  return null
-}
 
 export const loginMutationOptions = () =>
   mutationOptions({
