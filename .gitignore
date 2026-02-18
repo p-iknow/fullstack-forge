@@ -14,7 +14,7 @@ routeTree.gen.ts
 .vinxi
 .nitro
 
-# TypeSpec generated (openapi-typescript output — regenerated from spec)
+# openapi-typescript output (regenerated from Hono routes via codegen)
 packages/api-spec/generated/types.ts
 
 # Nx
@@ -46,3 +46,6 @@ Thumbs.db
 !.vscode/tasks.json
 !.vscode/launch.json
 !.vscode/extensions.json
+
+# Sisyphus (AI orchestration runtime — not for version control)
+.sisyphus/
