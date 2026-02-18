@@ -28,10 +28,8 @@ export type PasswordResetConfirmResponse = PostAuthPasswordResetConfirmResponse
 export type MeResponse = GetAuthMeResponse
 export type AuthUser = LoginResponse['user']
 
-const generatedMeQueryKey = getAuthMeQueryKey({ client: authClient })
-
 export const authQueryKeys = {
-  me: generatedMeQueryKey,
+  me: getAuthMeQueryKey({ client: authClient }),
   login: ['auth', 'login'] as const,
   signup: ['auth', 'signup'] as const,
   logout: ['auth', 'logout'] as const,
