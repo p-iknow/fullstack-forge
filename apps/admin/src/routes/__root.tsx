@@ -25,6 +25,7 @@ export const Route = createRootRoute({
     links: [{ rel: 'stylesheet', href: appCss }],
   }),
   component: RootComponent,
+  notFoundComponent: NotFoundComponent,
 })
 
 function RootComponent() {
@@ -37,15 +38,19 @@ function RootComponent() {
 
 function RootDocument({ children }: Readonly<{ children: ReactNode }>) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <head>
         <HeadContent />
       </head>
-      <body>
+      <body suppressHydrationWarning>
         <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
         <TanStackRouterDevtools position="bottom-right" />
         <Scripts />
       </body>
     </html>
   )
+}
+
+function NotFoundComponent() {
+  return <p className="p-6 text-sm text-slate-600">Page not found.</p>
 }
