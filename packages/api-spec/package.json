@@ -8,18 +8,99 @@
       "types": "./generated/types.ts",
       "default": "./generated/types.ts"
     },
-    "./openapi": "./generated/openapi.yaml"
+    "./openapi": "./generated/openapi.yaml",
+    "./client/*": {
+      "types": "./generated/client/*",
+      "default": "./generated/client/*"
+    },
+    "./auth-types": {
+      "types": "./src/auth-types.ts",
+      "default": "./src/auth-types.ts"
+    },
+    "./auth-schemas": {
+      "types": "./src/auth-schemas.ts",
+      "default": "./src/auth-schemas.ts"
+    },
+    "./oauth-types": {
+      "types": "./src/oauth-types.ts",
+      "default": "./src/oauth-types.ts"
+    },
+    "./oauth-schemas": {
+      "types": "./src/oauth-schemas.ts",
+      "default": "./src/oauth-schemas.ts"
+    },
+    "./routes/auth": {
+      "types": "./src/routes/auth/index.ts",
+      "default": "./src/routes/auth/index.ts"
+    },
+    "./routes/admin": {
+      "types": "./src/routes/admin/index.ts",
+      "default": "./src/routes/admin/index.ts"
+    },
+    "./routes/health": {
+      "types": "./src/routes/health/index.ts",
+      "default": "./src/routes/health/index.ts"
+    },
+    "./client/admin/client.gen": {
+      "types": "./generated/client/admin/client.gen.ts",
+      "default": "./generated/client/admin/client.gen.ts"
+    },
+    "./client/admin/sdk.gen": {
+      "types": "./generated/client/admin/sdk.gen.ts",
+      "default": "./generated/client/admin/sdk.gen.ts"
+    },
+    "./client/admin/types.gen": {
+      "types": "./generated/client/admin/types.gen.ts",
+      "default": "./generated/client/admin/types.gen.ts"
+    },
+    "./client/admin/@tanstack/react-query.gen": {
+      "types": "./generated/client/admin/@tanstack/react-query.gen.ts",
+      "default": "./generated/client/admin/@tanstack/react-query.gen.ts"
+    },
+    "./client/auth/client.gen": {
+      "types": "./generated/client/auth/client.gen.ts",
+      "default": "./generated/client/auth/client.gen.ts"
+    },
+    "./client/auth/sdk.gen": {
+      "types": "./generated/client/auth/sdk.gen.ts",
+      "default": "./generated/client/auth/sdk.gen.ts"
+    },
+    "./client/auth/types.gen": {
+      "types": "./generated/client/auth/types.gen.ts",
+      "default": "./generated/client/auth/types.gen.ts"
+    },
+    "./client/auth/@tanstack/react-query.gen": {
+      "types": "./generated/client/auth/@tanstack/react-query.gen.ts",
+      "default": "./generated/client/auth/@tanstack/react-query.gen.ts"
+    },
+    "./client/health/client.gen": {
+      "types": "./generated/client/health/client.gen.ts",
+      "default": "./generated/client/health/client.gen.ts"
+    },
+    "./client/health/sdk.gen": {
+      "types": "./generated/client/health/sdk.gen.ts",
+      "default": "./generated/client/health/sdk.gen.ts"
+    },
+    "./client/health/types.gen": {
+      "types": "./generated/client/health/types.gen.ts",
+      "default": "./generated/client/health/types.gen.ts"
+    },
+    "./client/health/@tanstack/react-query.gen": {
+      "types": "./generated/client/health/@tanstack/react-query.gen.ts",
+      "default": "./generated/client/health/@tanstack/react-query.gen.ts"
+    }
   },
   "scripts": {
-    "codegen": "tsp compile src/main.tsp --emit @typespec/openapi3 && openapi-typescript generated/openapi.yaml -o generated/types.ts",
-    "codegen:check": "tsp compile src/main.tsp --no-emit",
-    "typecheck": "tsp compile src/main.tsp --no-emit"
+    "sync:exports": "node ../../scripts/update-api-spec-exports.mjs",
+    "codegen": "bun ../../scripts/extract-openapi.ts && openapi-typescript generated/openapi.yaml -o generated/types.ts && node ../../scripts/generate-openapi-clients.mjs && pnpm run sync:exports"
+  },
+  "dependencies": {
+    "@hono/zod-openapi": "catalog:",
+    "@tanstack/react-query": "catalog:",
+    "ky": "catalog:",
+    "zod": "catalog:"
   },
   "devDependencies": {
-    "@typespec/compiler": "catalog:",
-    "@typespec/http": "catalog:",
-    "@typespec/openapi": "catalog:",
-    "@typespec/openapi3": "catalog:",
     "openapi-typescript": "catalog:"
   }
 }
