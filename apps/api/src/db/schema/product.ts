@@ -10,14 +10,14 @@ import {
   uuid,
 } from 'drizzle-orm/pg-core'
 
-const productStatusEnum = pgEnum('product_status', [
+export const productStatusEnum = pgEnum('product_status', [
   'active',
   'low_stock',
   'out_of_stock',
   'discontinued',
 ])
 
-const products = pgTable('products', {
+export const products = pgTable('products', {
   id: uuid('id').defaultRandom().primaryKey(),
   name: text('name').notNull(),
   description: text('description').notNull(),
@@ -29,7 +29,7 @@ const products = pgTable('products', {
   createdAt: timestamp('created_at', { withTimezone: true }).defaultNow().notNull(),
 })
 
-const inventory = pgTable(
+export const inventory = pgTable(
   'inventory',
   {
     productId: uuid('product_id')
@@ -46,5 +46,3 @@ const inventory = pgTable(
     check('inventory_reserved_lte_on_hand_chk', sql`${table.reserved} <= ${table.onHand}`),
   ],
 )
-
-export { inventory, products, productStatusEnum }

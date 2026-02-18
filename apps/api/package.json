@@ -20,15 +20,20 @@
     "db:seed": "tsx src/db/seed.ts",
     "db:pg:start": "bash scripts/postgres-local.sh start",
     "db:pg:ready": "bash scripts/postgres-local.sh ready",
+    "db:redis:start": "bash scripts/redis-local.sh start",
+    "db:redis:ping": "bash scripts/redis-local.sh ping",
     "db:backup": "bash scripts/db-backup-restore.sh dump",
     "db:restore:rehearsal": "bash scripts/db-backup-restore.sh rehearse"
   },
   "dependencies": {
     "@fullstack-forge/api-spec": "workspace:*",
     "@hono/node-server": "catalog:",
+    "@hono/zod-openapi": "catalog:",
     "drizzle-orm": "catalog:",
     "hono": "catalog:",
-    "pg": "catalog:"
+    "pg": "catalog:",
+    "redis": "catalog:",
+    "zod": "catalog:"
   },
   "devDependencies": {
     "@hono/vite-build": "catalog:",

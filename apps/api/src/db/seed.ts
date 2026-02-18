@@ -25,7 +25,8 @@ import {
   userOauthAccounts,
   userSessions,
   users,
-} from '~/db/schema'
+} from '~/db/schema/index'
+import { buildSeedUserCredentialRows } from '~/db/seed-users'
 
 async function seed(): Promise<void> {
   await db.delete(orderPromotions)
@@ -80,12 +81,9 @@ async function seed(): Promise<void> {
     ])
     .returning({ id: users.id, email: users.email })
 
-  await db.insert(userCredentials).values(
-    insertedUsers.map((user) => ({
-      userId: user.id,
-      passwordHash: `seed-hash-${user.email}`,
-    })),
-  )
+  const credentialRows = await buildSeedUserCredentialRows(insertedUsers)
+
+  await db.insert(userCredentials).values(credentialRows)
 
   const seededProducts = Array.from({ length: 48 }, (_, index) => {
     const status: 'active' | 'low_stock' = index % 10 === 0 ? 'low_stock' : 'active'

@@ -1,10 +1,10 @@
 import { boolean, pgEnum, pgTable, text, timestamp, uniqueIndex, uuid } from 'drizzle-orm/pg-core'
 
-const userRoleEnum = pgEnum('user_role', ['customer', 'operator', 'admin'])
-const userStatusEnum = pgEnum('user_status', ['active', 'locked', 'withdrawn'])
-const oauthProviderEnum = pgEnum('oauth_provider', ['google', 'kakao'])
+export const userRoleEnum = pgEnum('user_role', ['customer', 'operator', 'admin'])
+export const userStatusEnum = pgEnum('user_status', ['active', 'locked', 'withdrawn'])
+export const oauthProviderEnum = pgEnum('oauth_provider', ['google', 'kakao'])
 
-const users = pgTable('users', {
+export const users = pgTable('users', {
   id: uuid('id').defaultRandom().primaryKey(),
   email: text('email').notNull().unique(),
   name: text('name').notNull(),
@@ -13,7 +13,7 @@ const users = pgTable('users', {
   createdAt: timestamp('created_at', { withTimezone: true }).defaultNow().notNull(),
 })
 
-const userCredentials = pgTable('user_credentials', {
+export const userCredentials = pgTable('user_credentials', {
   userId: uuid('user_id')
     .primaryKey()
     .references(() => users.id, { onDelete: 'cascade' }),
@@ -21,7 +21,7 @@ const userCredentials = pgTable('user_credentials', {
   updatedAt: timestamp('updated_at', { withTimezone: true }).defaultNow().notNull(),
 })
 
-const userOauthAccounts = pgTable(
+export const userOauthAccounts = pgTable(
   'user_oauth_accounts',
   {
     id: uuid('id').defaultRandom().primaryKey(),
@@ -41,7 +41,7 @@ const userOauthAccounts = pgTable(
   ],
 )
 
-const userSessions = pgTable('user_sessions', {
+export const userSessions = pgTable('user_sessions', {
   id: uuid('id').defaultRandom().primaryKey(),
   userId: uuid('user_id')
     .notNull()
@@ -52,7 +52,7 @@ const userSessions = pgTable('user_sessions', {
   createdAt: timestamp('created_at', { withTimezone: true }).defaultNow().notNull(),
 })
 
-const auditLogs = pgTable('audit_logs', {
+export const auditLogs = pgTable('audit_logs', {
   id: uuid('id').defaultRandom().primaryKey(),
   userId: uuid('user_id').references(() => users.id, { onDelete: 'set null' }),
   event: text('event').notNull(),
@@ -63,14 +63,3 @@ const auditLogs = pgTable('audit_logs', {
   resultCode: text('result_code'),
   createdAt: timestamp('created_at', { withTimezone: true }).defaultNow().notNull(),
 })
-
-export {
-  auditLogs,
-  oauthProviderEnum,
-  userCredentials,
-  userOauthAccounts,
-  userRoleEnum,
-  userSessions,
-  userStatusEnum,
-  users,
-}

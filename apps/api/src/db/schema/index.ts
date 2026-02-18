@@ -7,14 +7,14 @@ export {
   userSessions,
   userStatusEnum,
   users,
-} from './schema/auth'
+} from './auth'
 
 export {
   customerInquiries,
   inquiryCategoryEnum,
   inquiryReplies,
   inquiryStatusEnum,
-} from './schema/inquiry'
+} from './inquiry'
 
 export {
   couponRedemptions,
@@ -25,7 +25,7 @@ export {
   promotionStatusEnum,
   promotionTypeEnum,
   promotions,
-} from './schema/promotion'
+} from './promotion'
 
 export {
   loyaltyAccounts,
@@ -37,7 +37,7 @@ export {
   pointRedemptions,
   pointSourceTypeEnum,
   pointTransactionTypeEnum,
-} from './schema/points'
+} from './points'
 
 export {
   deliveries,
@@ -51,9 +51,9 @@ export {
   payments,
   substitutionStatusEnum,
   substitutions,
-} from './schema/order'
+} from './order'
 
-export { inventory, products, productStatusEnum } from './schema/product'
+export { inventory, products, productStatusEnum } from './product'
 
 export {
   couponRedemptionsRelations,
@@ -76,6 +76,6 @@ export {
   reviewsRelations,
   substitutionsRelations,
   usersRelations,
-} from './schema/relations'
+} from './relations'
 
-export { reviewComments, reviews } from './schema/review'
+export { reviewComments, reviews } from './review'
