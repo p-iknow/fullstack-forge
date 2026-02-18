@@ -246,3 +246,68 @@ export type GetAuthOauthByProviderCallbackErrors = {
 };
 
 export type GetAuthOauthByProviderCallbackError = GetAuthOauthByProviderCallbackErrors[keyof GetAuthOauthByProviderCallbackErrors];
+
+export type PostAuthPasswordResetRequestData = {
+    body?: {
+        email: string;
+    };
+    path?: never;
+    query?: never;
+    url: '/auth/password-reset/request';
+};
+
+export type PostAuthPasswordResetRequestErrors = {
+    /**
+     * Unauthorized
+     */
+    401: {
+        code: string;
+        error: string;
+    };
+};
+
+export type PostAuthPasswordResetRequestError = PostAuthPasswordResetRequestErrors[keyof PostAuthPasswordResetRequestErrors];
+
+export type PostAuthPasswordResetRequestResponses = {
+    /**
+     * Success
+     */
+    200: {
+        ok: true;
+    };
+};
+
+export type PostAuthPasswordResetRequestResponse = PostAuthPasswordResetRequestResponses[keyof PostAuthPasswordResetRequestResponses];
+
+export type PostAuthPasswordResetConfirmData = {
+    body?: {
+        token: string;
+        password: string;
+    };
+    path?: never;
+    query?: never;
+    url: '/auth/password-reset/confirm';
+};
+
+export type PostAuthPasswordResetConfirmErrors = {
+    /**
+     * Unauthorized
+     */
+    401: {
+        code: string;
+        error: string;
+    };
+};
+
+export type PostAuthPasswordResetConfirmError = PostAuthPasswordResetConfirmErrors[keyof PostAuthPasswordResetConfirmErrors];
+
+export type PostAuthPasswordResetConfirmResponses = {
+    /**
+     * Success
+     */
+    200: {
+        ok: true;
+    };
+};
+
+export type PostAuthPasswordResetConfirmResponse = PostAuthPasswordResetConfirmResponses[keyof PostAuthPasswordResetConfirmResponses];
