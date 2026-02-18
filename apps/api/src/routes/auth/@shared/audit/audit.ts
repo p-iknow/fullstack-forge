@@ -7,6 +7,8 @@ export type AuditEvent =
   | 'logout'
   | 'session_revoked'
   | 'signup_success'
+  | 'password_reset_request'
+  | 'password_reset_confirm'
   | 'oauth_start'
   | 'oauth_callback_success'
   | 'oauth_callback_failed'
