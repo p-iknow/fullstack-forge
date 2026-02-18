@@ -5,21 +5,16 @@
     "tailwindcss",
     "@tailwindcss/vite",
     "@testing-library/react",
-    "@typespec/http",
-    "@typespec/openapi3",
-    "@typespec/openapi",
     "@fullstack-forge/api-spec",
     "@fullstack-forge/design-system",
     "@suspensive/react",
     "@suspensive/react-query",
-    "@hono/node-server",
-    "ky",
-    "lucide-react"
+    "@hono/node-server"
   ],
   "exclude": ["unresolved", "catalog"],
   "workspaces": {
     ".": {
-      "ignoreDependencies": ["@vitest/coverage-v8", "vitest"]
+      "ignoreDependencies": ["@vitest/coverage-v8", "@hey-api/openapi-ts", "vitest"]
     },
     "apps/*": {
       "entry": ["src/router.tsx", "src/routes/**/*.tsx"],
@@ -31,8 +26,8 @@
       "project": ["src/**/*.ts"]
     },
     "packages/api-spec": {
-      "entry": [],
-      "project": ["src/**/*.tsp"],
+      "entry": ["src/routes/*/index.ts"],
+      "project": ["src/**/*.ts"],
       "ignore": ["generated/**"]
     },
     "packages/design-system": {

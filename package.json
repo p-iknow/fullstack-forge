@@ -7,6 +7,11 @@
     "lint:fix": "oxlint -c .oxlintrc.json --fix",
     "format": "oxfmt -c .oxfmtrc.json",
     "format:check": "oxfmt -c .oxfmtrc.json --check",
+    "codegen": "nx run-many -t codegen",
+    "codegen:api-spec": "nx run @fullstack-forge/api-spec:codegen",
+    "typecheck:api": "nx run @fullstack-forge/api:typecheck",
+    "typecheck:store": "nx run @fullstack-forge/store:typecheck",
+    "typecheck:admin": "nx run @fullstack-forge/admin:typecheck",
     "build": "nx run-many -t build",
     "dev": "nx run-many -t dev",
     "typecheck": "nx run-many -t typecheck",
@@ -16,6 +21,7 @@
     "check": "pnpm lint && pnpm format:check && pnpm typecheck && pnpm sheriff && pnpm knip"
   },
   "devDependencies": {
+    "@hey-api/openapi-ts": "^0.92.4",
     "@softarc/sheriff-core": "^0.19.6",
     "@vitest/coverage-v8": "catalog:",
     "knip": "^5.83.1",
@@ -23,7 +29,8 @@
     "oxfmt": "^0.32.0",
     "oxlint": "^1.47.0",
     "typescript": "catalog:",
-    "vitest": "catalog:"
+    "vitest": "catalog:",
+    "yaml": "^2.8.1"
   },
   "packageManager": "pnpm@10.5.2",
   "pnpm": {
