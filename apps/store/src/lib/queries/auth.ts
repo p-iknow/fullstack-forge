@@ -4,12 +4,15 @@ import {
   getAuthMe,
   postAuthLogin,
   postAuthLogout,
+  postAuthPasswordResetConfirm,
   postAuthSignup,
 } from '@fullstack-forge/api-spec/client/auth/sdk.gen'
 import type {
   GetAuthMeResponse,
   PostAuthLoginData,
   PostAuthLoginResponse,
+  PostAuthPasswordResetConfirmData,
+  PostAuthPasswordResetConfirmResponse,
   PostAuthSignupData,
   PostAuthSignupResponse,
 } from '@fullstack-forge/api-spec/client/auth/types.gen'
@@ -20,6 +23,8 @@ export type LoginInput = NonNullable<PostAuthLoginData['body']>
 export type SignupInput = NonNullable<PostAuthSignupData['body']>
 export type LoginResponse = PostAuthLoginResponse
 export type SignupResponse = PostAuthSignupResponse
+export type PasswordResetConfirmInput = NonNullable<PostAuthPasswordResetConfirmData['body']>
+export type PasswordResetConfirmResponse = PostAuthPasswordResetConfirmResponse
 export type MeResponse = GetAuthMeResponse
 export type AuthUser = LoginResponse['user']
 
@@ -31,6 +36,7 @@ export const authQueryKeys = {
   login: ['auth', 'login'] as const,
   signup: ['auth', 'signup'] as const,
   logout: ['auth', 'logout'] as const,
+  passwordResetConfirm: ['auth', 'password-reset-confirm'] as const,
 }
 
 export const meQueryOptions = (initialData: MeResponse | null | undefined = undefined) =>
@@ -144,3 +150,45 @@ export const logoutMutationOptions = () =>
       }
     },
   })
+
+export const passwordResetConfirmMutationOptions = () =>
+  mutationOptions({
+    mutationKey: authQueryKeys.passwordResetConfirm,
+    mutationFn: async (input: PasswordResetConfirmInput) => {
+      const { data, error } = await postAuthPasswordResetConfirm({
+        body: input,
+        client: authClient,
+        throwOnError: false,
+      })
+      if (error) {
+        const parsed = parseAuthErrorPayload(error)
+        if (parsed) {
+          throw new ApiClientError(parsed, 'Password update failed')
+        }
+        throw new ApiClientError({ error: 'Password update failed' })
+      }
+      if (!data) {
+        throw new ApiClientError({ error: 'Password update failed' })
+      }
+      return data
+    },
+  })
+
+function parseAuthErrorPayload(error: unknown): { code?: string; error?: string } | null {
+  if (!error || typeof error !== 'object') {
+    return null
+  }
+
+  const payload = error as Record<string, unknown>
+  const code = typeof payload.code === 'string' ? payload.code : undefined
+  const message = typeof payload.error === 'string' ? payload.error : undefined
+
+  if (!code && !message) {
+    return null
+  }
+
+  return {
+    code,
+    error: message,
+  }
+}

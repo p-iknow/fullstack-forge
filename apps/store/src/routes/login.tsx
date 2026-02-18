@@ -118,6 +118,12 @@ function LoginPage() {
         </Link>
       </p>
       <p className="mt-2 text-sm text-slate-600">
+        Have a reset token?{' '}
+        <Link to="/password-update" className="underline">
+          Update password
+        </Link>
+      </p>
+      <p className="mt-2 text-sm text-slate-600">
         Back to{' '}
         <Link to="/" className="underline">
           Home
