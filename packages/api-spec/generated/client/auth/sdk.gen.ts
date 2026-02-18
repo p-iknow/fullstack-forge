@@ -2,7 +2,7 @@
 
 import type { Client, Options as Options2, TDataShape } from './client';
 import { client } from './client.gen';
-import type { GetAuthMeData, GetAuthMeErrors, GetAuthMeResponses, GetAuthOauthByProviderCallbackData, GetAuthOauthByProviderCallbackErrors, GetAuthOauthByProviderStartData, GetAuthOauthByProviderStartErrors, PostAuthLoginData, PostAuthLoginErrors, PostAuthLoginResponses, PostAuthLogoutData, PostAuthLogoutErrors, PostAuthLogoutResponses, PostAuthRefreshData, PostAuthRefreshErrors, PostAuthRefreshResponses, PostAuthSignupData, PostAuthSignupErrors, PostAuthSignupResponses } from './types.gen';
+import type { GetAuthMeData, GetAuthMeErrors, GetAuthMeResponses, GetAuthOauthByProviderCallbackData, GetAuthOauthByProviderCallbackErrors, GetAuthOauthByProviderStartData, GetAuthOauthByProviderStartErrors, PostAuthLoginData, PostAuthLoginErrors, PostAuthLoginResponses, PostAuthLogoutData, PostAuthLogoutErrors, PostAuthLogoutResponses, PostAuthPasswordResetConfirmData, PostAuthPasswordResetConfirmErrors, PostAuthPasswordResetConfirmResponses, PostAuthPasswordResetRequestData, PostAuthPasswordResetRequestErrors, PostAuthPasswordResetRequestResponses, PostAuthRefreshData, PostAuthRefreshErrors, PostAuthRefreshResponses, PostAuthSignupData, PostAuthSignupErrors, PostAuthSignupResponses } from './types.gen';
 
 export type Options<TData extends TDataShape = TDataShape, ThrowOnError extends boolean = boolean> = Options2<TData, ThrowOnError> & {
     /**
@@ -45,3 +45,21 @@ export const getAuthMe = <ThrowOnError extends boolean = false>(options?: Option
 export const getAuthOauthByProviderStart = <ThrowOnError extends boolean = false>(options: Options<GetAuthOauthByProviderStartData, ThrowOnError>) => (options.client ?? client).get<unknown, GetAuthOauthByProviderStartErrors, ThrowOnError>({ url: '/auth/oauth/{provider}/start', ...options });
 
 export const getAuthOauthByProviderCallback = <ThrowOnError extends boolean = false>(options: Options<GetAuthOauthByProviderCallbackData, ThrowOnError>) => (options.client ?? client).get<unknown, GetAuthOauthByProviderCallbackErrors, ThrowOnError>({ url: '/auth/oauth/{provider}/callback', ...options });
+
+export const postAuthPasswordResetRequest = <ThrowOnError extends boolean = false>(options?: Options<PostAuthPasswordResetRequestData, ThrowOnError>) => (options?.client ?? client).post<PostAuthPasswordResetRequestResponses, PostAuthPasswordResetRequestErrors, ThrowOnError>({
+    url: '/auth/password-reset/request',
+    ...options,
+    headers: {
+        'Content-Type': 'application/json',
+        ...options?.headers
+    }
+});
+
+export const postAuthPasswordResetConfirm = <ThrowOnError extends boolean = false>(options?: Options<PostAuthPasswordResetConfirmData, ThrowOnError>) => (options?.client ?? client).post<PostAuthPasswordResetConfirmResponses, PostAuthPasswordResetConfirmErrors, ThrowOnError>({
+    url: '/auth/password-reset/confirm',
+    ...options,
+    headers: {
+        'Content-Type': 'application/json',
+        ...options?.headers
+    }
+});

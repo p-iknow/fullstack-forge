@@ -16,6 +16,7 @@
   "dependencies": {
     "@fullstack-forge/api-spec": "workspace:*",
     "@fullstack-forge/design-system": "workspace:*",
+    "@hookform/resolvers": "^5.2.2",
     "@suspensive/react": "catalog:",
     "@suspensive/react-query": "catalog:",
     "@tanstack/react-query": "catalog:",
@@ -23,7 +24,9 @@
     "@tanstack/react-router-devtools": "catalog:",
     "@tanstack/react-start": "catalog:",
     "react": "catalog:",
-    "react-dom": "catalog:"
+    "react-dom": "catalog:",
+    "react-hook-form": "^7.71.1",
+    "zod": "catalog:"
   },
   "devDependencies": {
     "@tailwindcss/vite": "catalog:",
@@ -32,11 +35,21 @@
     "@types/react": "catalog:",
     "@types/react-dom": "catalog:",
     "@vitejs/plugin-react": "catalog:",
+    "@vitest/browser": "^4.0.18",
+    "@vitest/browser-playwright": "^4.0.18",
+    "@vitest/ui": "4.0.18",
     "jsdom": "catalog:",
+    "msw": "^2.12.10",
+    "playwright": "^1.58.2",
     "tailwindcss": "catalog:",
     "typescript": "catalog:",
     "vite": "catalog:",
     "vite-tsconfig-paths": "catalog:",
     "vitest": "catalog:"
+  },
+  "msw": {
+    "workerDirectory": [
+      "public"
+    ]
   }
 }

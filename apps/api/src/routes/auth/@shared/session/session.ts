@@ -79,7 +79,7 @@ export const revokeSession = async (sessionId: string): Promise<void> => {
   await db.update(userSessions).set({ revoked: true }).where(eq(userSessions.id, sessionId))
 }
 
-const revokeSessionsByUser = async (userId: string): Promise<void> => {
+export const revokeAllUserSessions = async (userId: string): Promise<void> => {
   const sessions = await db
     .select({ id: userSessions.id })
     .from(userSessions)
@@ -124,7 +124,7 @@ export const rotateRefreshToken = async (refreshToken: string): Promise<Rotation
   }
 
   if (session.revoked) {
-    await revokeSessionsByUser(session.userId)
+    await revokeAllUserSessions(session.userId)
     return { kind: 'reuse_detected', userId: session.userId }
   }
 

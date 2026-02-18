@@ -3,8 +3,8 @@
 import { queryOptions, type UseMutationOptions } from '@tanstack/react-query';
 
 import { client } from '../client.gen';
-import { getAuthMe, getAuthOauthByProviderCallback, getAuthOauthByProviderStart, type Options, postAuthLogin, postAuthLogout, postAuthRefresh, postAuthSignup } from '../sdk.gen';
-import type { GetAuthMeData, GetAuthMeError, GetAuthMeResponse, GetAuthOauthByProviderCallbackData, GetAuthOauthByProviderCallbackError, GetAuthOauthByProviderStartData, GetAuthOauthByProviderStartError, PostAuthLoginData, PostAuthLoginError, PostAuthLoginResponse, PostAuthLogoutData, PostAuthLogoutError, PostAuthLogoutResponse, PostAuthRefreshData, PostAuthRefreshError, PostAuthRefreshResponse, PostAuthSignupData, PostAuthSignupError, PostAuthSignupResponse } from '../types.gen';
+import { getAuthMe, getAuthOauthByProviderCallback, getAuthOauthByProviderStart, type Options, postAuthLogin, postAuthLogout, postAuthPasswordResetConfirm, postAuthPasswordResetRequest, postAuthRefresh, postAuthSignup } from '../sdk.gen';
+import type { GetAuthMeData, GetAuthMeError, GetAuthMeResponse, GetAuthOauthByProviderCallbackData, GetAuthOauthByProviderCallbackError, GetAuthOauthByProviderStartData, GetAuthOauthByProviderStartError, PostAuthLoginData, PostAuthLoginError, PostAuthLoginResponse, PostAuthLogoutData, PostAuthLogoutError, PostAuthLogoutResponse, PostAuthPasswordResetConfirmData, PostAuthPasswordResetConfirmError, PostAuthPasswordResetConfirmResponse, PostAuthPasswordResetRequestData, PostAuthPasswordResetRequestError, PostAuthPasswordResetRequestResponse, PostAuthRefreshData, PostAuthRefreshError, PostAuthRefreshResponse, PostAuthSignupData, PostAuthSignupError, PostAuthSignupResponse } from '../types.gen';
 
 export const postAuthSignupMutation = (options?: Partial<Options<PostAuthSignupData>>): UseMutationOptions<PostAuthSignupResponse, PostAuthSignupError, Options<PostAuthSignupData>> => {
     const mutationOptions: UseMutationOptions<PostAuthSignupResponse, PostAuthSignupError, Options<PostAuthSignupData>> = {
@@ -139,3 +139,31 @@ export const getAuthOauthByProviderCallbackOptions = (options: Options<GetAuthOa
     },
     queryKey: getAuthOauthByProviderCallbackQueryKey(options)
 });
+
+export const postAuthPasswordResetRequestMutation = (options?: Partial<Options<PostAuthPasswordResetRequestData>>): UseMutationOptions<PostAuthPasswordResetRequestResponse, PostAuthPasswordResetRequestError, Options<PostAuthPasswordResetRequestData>> => {
+    const mutationOptions: UseMutationOptions<PostAuthPasswordResetRequestResponse, PostAuthPasswordResetRequestError, Options<PostAuthPasswordResetRequestData>> = {
+        mutationFn: async (fnOptions) => {
+            const { data } = await postAuthPasswordResetRequest({
+                ...options,
+                ...fnOptions,
+                throwOnError: true
+            });
+            return data;
+        }
+    };
+    return mutationOptions;
+};
+
+export const postAuthPasswordResetConfirmMutation = (options?: Partial<Options<PostAuthPasswordResetConfirmData>>): UseMutationOptions<PostAuthPasswordResetConfirmResponse, PostAuthPasswordResetConfirmError, Options<PostAuthPasswordResetConfirmData>> => {
+    const mutationOptions: UseMutationOptions<PostAuthPasswordResetConfirmResponse, PostAuthPasswordResetConfirmError, Options<PostAuthPasswordResetConfirmData>> = {
+        mutationFn: async (fnOptions) => {
+            const { data } = await postAuthPasswordResetConfirm({
+                ...options,
+                ...fnOptions,
+                throwOnError: true
+            });
+            return data;
+        }
+    };
+    return mutationOptions;
+};

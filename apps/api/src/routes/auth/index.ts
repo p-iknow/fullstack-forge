@@ -5,6 +5,8 @@ import {
   meRoute,
   oauthCallbackRoute,
   oauthStartRoute,
+  passwordResetConfirmRoute,
+  passwordResetRequestRoute,
   refreshRoute,
   signupRoute,
 } from '@fullstack-forge/api-spec/routes/auth'
@@ -15,6 +17,8 @@ import { refreshHandler } from './refresh/handler'
 import { signupHandler } from './signup/handler'
 import { oauthCallbackHandler } from './oauth/callback/handler'
 import { oauthStartHandler } from './oauth/start/handler'
+import { passwordResetRequestHandler } from './password-reset/request/handler'
+import { passwordResetConfirmHandler } from './password-reset/confirm/handler'
 
 export const authIndex = createRouter()
 
@@ -25,3 +29,5 @@ authIndex.openapi(logoutRoute, logoutHandler)
 authIndex.openapi(meRoute, meHandler)
 authIndex.openapi(oauthStartRoute, oauthStartHandler)
 authIndex.openapi(oauthCallbackRoute, oauthCallbackHandler)
+authIndex.openapi(passwordResetRequestRoute, passwordResetRequestHandler)
+authIndex.openapi(passwordResetConfirmRoute, passwordResetConfirmHandler)

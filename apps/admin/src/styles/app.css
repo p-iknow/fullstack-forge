@@ -1,2 +1,9 @@
 @import 'tailwindcss';
 @import '@fullstack-forge/design-system/styles/globals.css';
+
+/*
+ Tailwind v4 scans app sources automatically, but shared workspace packages
+ can be missed by source detection. Register design-system component sources
+ explicitly so shadcn utility classes are generated in this app build.
+*/
+@source '../../../../packages/design-system/src/**/*.{ts,tsx}';
