@@ -72,6 +72,41 @@ describe('signup handler', () => {
 
     // then
     expect(res.status).toBe(201)
+    await expect(res.json()).resolves.toMatchObject({
+      user: {
+        id: 'user-1',
+        role: 'customer',
+        status: 'active',
+      },
+    })
     expect(res.headers.get('set-cookie') ?? '').toContain('qc_access=')
+    expect(logAuditEventMock).toHaveBeenCalledWith(
+      expect.objectContaining({
+        event: 'signup_success',
+        userId: 'user-1',
+        resultCode: 'ok',
+      }),
+    )
+  })
+
+  it('returns 409 when email already exists', async () => {
+    // given
+    const app = new Hono()
+    app.route('/auth', authIndex)
+    dbState.selectQueue.push([{ id: 'existing-user' }])
+
+    // when
+    const res = await app.request('http://localhost/auth/signup', {
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify({ email: 'demo@example.com', password: 'Passw0rd!', name: 'Demo' }),
+    })
+
+    // then
+    expect(res.status).toBe(409)
+    await expect(res.json()).resolves.toMatchObject({
+      code: 'auth_email_conflict',
+    })
+    expect(logAuditEventMock).not.toHaveBeenCalled()
   })
 })
