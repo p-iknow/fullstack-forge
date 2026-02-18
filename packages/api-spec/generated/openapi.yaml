@@ -1,49 +1,500 @@
-openapi: 3.0.0
+openapi: 3.1.0
 info:
-  title: Repo API
-  version: 0.0.0
-tags: []
+  title: Fullstack Forge API
+  version: 1.0.0
+components:
+  schemas: {}
+  parameters: {}
 paths:
   /health:
     get:
-      operationId: Health_check
-      parameters: []
       responses:
-        '200':
-          description: The request has succeeded.
+        "200":
+          description: API is healthy
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/HealthResponse'
-components:
-  schemas:
-    ErrorResponse:
-      type: object
-      required:
-        - error
-      properties:
-        error:
-          type: string
-    HealthResponse:
-      type: object
-      required:
-        - status
-      properties:
-        status:
-          type: string
-          enum:
-            - ok
-            - error
-    User:
-      type: object
-      required:
-        - id
-        - email
-        - name
-      properties:
-        id:
-          type: string
-        email:
-          type: string
-        name:
-          type: string
+                type: object
+                properties:
+                  status:
+                    type: string
+                    enum:
+                      - ok
+                      - error
+                required:
+                  - status
+  /auth/signup:
+    post:
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  format: email
+                password:
+                  type: string
+                  minLength: 8
+                name:
+                  type: string
+                  minLength: 1
+              required:
+                - email
+                - password
+                - name
+      responses:
+        "201":
+          description: Created
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  user:
+                    type: object
+                    properties:
+                      id:
+                        type: string
+                      email:
+                        type: string
+                        format: email
+                      name:
+                        type: string
+                      role:
+                        type: string
+                        enum:
+                          - customer
+                          - operator
+                          - admin
+                      status:
+                        type: string
+                        enum:
+                          - active
+                          - locked
+                          - withdrawn
+                    required:
+                      - id
+                      - email
+                      - name
+                      - role
+                      - status
+                required:
+                  - user
+        "409":
+          description: Conflict
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: string
+                  error:
+                    type: string
+                required:
+                  - code
+                  - error
+  /auth/login:
+    post:
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  format: email
+                password:
+                  type: string
+                  minLength: 1
+              required:
+                - email
+                - password
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  user:
+                    type: object
+                    properties:
+                      id:
+                        type: string
+                      email:
+                        type: string
+                        format: email
+                      name:
+                        type: string
+                      role:
+                        type: string
+                        enum:
+                          - customer
+                          - operator
+                          - admin
+                      status:
+                        type: string
+                        enum:
+                          - active
+                          - locked
+                          - withdrawn
+                    required:
+                      - id
+                      - email
+                      - name
+                      - role
+                      - status
+                required:
+                  - user
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: string
+                  error:
+                    type: string
+                required:
+                  - code
+                  - error
+        "403":
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: string
+                  error:
+                    type: string
+                required:
+                  - code
+                  - error
+        "429":
+          description: Too Many Requests
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: string
+                  error:
+                    type: string
+                required:
+                  - code
+                  - error
+  /auth/refresh:
+    post:
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  ok:
+                    type: boolean
+                    enum:
+                      - true
+                required:
+                  - ok
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: string
+                  error:
+                    type: string
+                required:
+                  - code
+                  - error
+  /auth/logout:
+    post:
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  ok:
+                    type: boolean
+                    enum:
+                      - true
+                required:
+                  - ok
+        "429":
+          description: Too Many Requests
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: string
+                  error:
+                    type: string
+                required:
+                  - code
+                  - error
+  /auth/me:
+    get:
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  user:
+                    type: object
+                    properties:
+                      id:
+                        type: string
+                      email:
+                        type: string
+                        format: email
+                      name:
+                        type: string
+                      role:
+                        type: string
+                        enum:
+                          - customer
+                          - operator
+                          - admin
+                      status:
+                        type: string
+                        enum:
+                          - active
+                          - locked
+                          - withdrawn
+                    required:
+                      - id
+                      - email
+                      - name
+                      - role
+                      - status
+                required:
+                  - user
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: string
+                  error:
+                    type: string
+                required:
+                  - code
+                  - error
+  /auth/oauth/{provider}/start:
+    get:
+      parameters:
+        - schema:
+            type: string
+            enum:
+              - google
+              - kakao
+          required: true
+          name: provider
+          in: path
+        - schema:
+            type: string
+          required: false
+          name: redirect
+          in: query
+      responses:
+        "302":
+          description: Redirect to oauth provider
+        "429":
+          description: Too Many Requests
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: string
+                  error:
+                    type: string
+                required:
+                  - code
+                  - error
+  /auth/oauth/{provider}/callback:
+    get:
+      parameters:
+        - schema:
+            type: string
+            enum:
+              - google
+              - kakao
+          required: true
+          name: provider
+          in: path
+        - schema:
+            type: string
+          required: true
+          name: code
+          in: query
+        - schema:
+            type: string
+          required: true
+          name: state
+          in: query
+      responses:
+        "302":
+          description: Redirect to callback success page
+        "400":
+          description: Invalid oauth state
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: string
+                  error:
+                    type: string
+                required:
+                  - code
+                  - error
+        "401":
+          description: OAuth exchange failed
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: string
+                  error:
+                    type: string
+                required:
+                  - code
+                  - error
+  /admin/dashboard:
+    get:
+      responses:
+        "200":
+          description: Admin dashboard access status
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  ok:
+                    type: boolean
+                    enum:
+                      - true
+                  role:
+                    type: string
+                    nullable: true
+                    enum:
+                      - customer
+                      - operator
+                      - admin
+                      - null
+                required:
+                  - ok
+                  - role
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: string
+                  error:
+                    type: string
+                required:
+                  - code
+                  - error
+        "403":
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: string
+                  error:
+                    type: string
+                required:
+                  - code
+                  - error
+  /admin/redrive:
+    post:
+      responses:
+        "200":
+          description: Redrive requested
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  ok:
+                    type: boolean
+                    enum:
+                      - true
+                  action:
+                    type: string
+                    enum:
+                      - redrive_started
+                  requestedBy:
+                    type: string
+                    nullable: true
+                required:
+                  - ok
+                  - action
+                  - requestedBy
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: string
+                  error:
+                    type: string
+                required:
+                  - code
+                  - error
+        "403":
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: string
+                  error:
+                    type: string
+                required:
+                  - code
+                  - error
