@@ -2,11 +2,11 @@ import { integer, pgEnum, pgTable, text, timestamp, uniqueIndex, uuid } from 'dr
 import { users } from './auth'
 import { orders } from './order'
 
-const promotionTypeEnum = pgEnum('promotion_type', ['coupon', 'category_discount'])
-const discountTypeEnum = pgEnum('discount_type', ['fixed_amount', 'percentage'])
-const promotionStatusEnum = pgEnum('promotion_status', ['active', 'inactive', 'expired'])
+export const promotionTypeEnum = pgEnum('promotion_type', ['coupon', 'category_discount'])
+export const discountTypeEnum = pgEnum('discount_type', ['fixed_amount', 'percentage'])
+export const promotionStatusEnum = pgEnum('promotion_status', ['active', 'inactive', 'expired'])
 
-const promotions = pgTable('promotions', {
+export const promotions = pgTable('promotions', {
   id: uuid('id').defaultRandom().primaryKey(),
   name: text('name').notNull(),
   type: promotionTypeEnum('type').notNull(),
@@ -19,7 +19,7 @@ const promotions = pgTable('promotions', {
   createdAt: timestamp('created_at', { withTimezone: true }).defaultNow().notNull(),
 })
 
-const promotionCategories = pgTable(
+export const promotionCategories = pgTable(
   'promotion_categories',
   {
     id: uuid('id').defaultRandom().primaryKey(),
@@ -36,7 +36,7 @@ const promotionCategories = pgTable(
   ],
 )
 
-const coupons = pgTable('coupons', {
+export const coupons = pgTable('coupons', {
   id: uuid('id').defaultRandom().primaryKey(),
   promotionId: uuid('promotion_id')
     .notNull()
@@ -49,7 +49,7 @@ const coupons = pgTable('coupons', {
   createdAt: timestamp('created_at', { withTimezone: true }).defaultNow().notNull(),
 })
 
-const couponRedemptions = pgTable(
+export const couponRedemptions = pgTable(
   'coupon_redemptions',
   {
     id: uuid('id').defaultRandom().primaryKey(),
@@ -74,7 +74,7 @@ const couponRedemptions = pgTable(
   ],
 )
 
-const orderPromotions = pgTable(
+export const orderPromotions = pgTable(
   'order_promotions',
   {
     id: uuid('id').defaultRandom().primaryKey(),
@@ -95,14 +95,3 @@ const orderPromotions = pgTable(
     uniqueIndex('order_promotions_order_id_promotion_id_idx').on(table.orderId, table.promotionId),
   ],
 )
-
-export {
-  couponRedemptions,
-  coupons,
-  discountTypeEnum,
-  orderPromotions,
-  promotionCategories,
-  promotionStatusEnum,
-  promotionTypeEnum,
-  promotions,
-}

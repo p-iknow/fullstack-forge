@@ -2,7 +2,7 @@ import { integer, pgEnum, pgTable, timestamp, uuid } from 'drizzle-orm/pg-core'
 import { users } from './auth'
 import { products } from './product'
 
-const orderStatusEnum = pgEnum('order_status', [
+export const orderStatusEnum = pgEnum('order_status', [
   'created',
   'paid',
   'picking',
@@ -13,7 +13,7 @@ const orderStatusEnum = pgEnum('order_status', [
   'failed',
 ])
 
-const paymentStatusEnum = pgEnum('payment_status', [
+export const paymentStatusEnum = pgEnum('payment_status', [
   'initiated',
   'authorized',
   'captured',
@@ -21,9 +21,9 @@ const paymentStatusEnum = pgEnum('payment_status', [
   'cancelled',
 ])
 
-const paymentMethodEnum = pgEnum('payment_method', ['card', 'wallet', 'bank_transfer'])
+export const paymentMethodEnum = pgEnum('payment_method', ['card', 'wallet', 'bank_transfer'])
 
-const deliveryStatusEnum = pgEnum('delivery_status', [
+export const deliveryStatusEnum = pgEnum('delivery_status', [
   'scheduled',
   'out_for_delivery',
   'delivered',
@@ -31,9 +31,9 @@ const deliveryStatusEnum = pgEnum('delivery_status', [
   'cancelled',
 ])
 
-const deliveryModeEnum = pgEnum('delivery_mode', ['instant', 'scheduled'])
+export const deliveryModeEnum = pgEnum('delivery_mode', ['instant', 'scheduled'])
 
-const substitutionStatusEnum = pgEnum('substitution_status', [
+export const substitutionStatusEnum = pgEnum('substitution_status', [
   'proposed',
   'approved',
   'rejected',
@@ -41,7 +41,7 @@ const substitutionStatusEnum = pgEnum('substitution_status', [
   'cancelled',
 ])
 
-const orders = pgTable('orders', {
+export const orders = pgTable('orders', {
   id: uuid('id').defaultRandom().primaryKey(),
   userId: uuid('user_id')
     .notNull()
@@ -52,7 +52,7 @@ const orders = pgTable('orders', {
   updatedAt: timestamp('updated_at', { withTimezone: true }).defaultNow().notNull(),
 })
 
-const orderItems = pgTable('order_items', {
+export const orderItems = pgTable('order_items', {
   id: uuid('id').defaultRandom().primaryKey(),
   orderId: uuid('order_id')
     .notNull()
@@ -65,7 +65,7 @@ const orderItems = pgTable('order_items', {
   substitutionId: uuid('substitution_id'),
 })
 
-const payments = pgTable('payments', {
+export const payments = pgTable('payments', {
   id: uuid('id').defaultRandom().primaryKey(),
   orderId: uuid('order_id')
     .notNull()
@@ -76,7 +76,7 @@ const payments = pgTable('payments', {
   paidAt: timestamp('paid_at', { withTimezone: true }),
 })
 
-const deliveries = pgTable('deliveries', {
+export const deliveries = pgTable('deliveries', {
   id: uuid('id').defaultRandom().primaryKey(),
   orderId: uuid('order_id')
     .notNull()
@@ -87,7 +87,7 @@ const deliveries = pgTable('deliveries', {
   deliveredAt: timestamp('delivered_at', { withTimezone: true }),
 })
 
-const substitutions = pgTable('substitutions', {
+export const substitutions = pgTable('substitutions', {
   id: uuid('id').defaultRandom().primaryKey(),
   originalProductId: uuid('original_product_id')
     .notNull()
@@ -100,17 +100,3 @@ const substitutions = pgTable('substitutions', {
     .references(() => orders.id, { onDelete: 'cascade' }),
   status: substitutionStatusEnum('status').notNull().default('proposed'),
 })
-
-export {
-  deliveries,
-  deliveryModeEnum,
-  deliveryStatusEnum,
-  orderItems,
-  orderStatusEnum,
-  orders,
-  paymentMethodEnum,
-  paymentStatusEnum,
-  payments,
-  substitutionStatusEnum,
-  substitutions,
-}

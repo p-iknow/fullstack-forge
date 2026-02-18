@@ -13,7 +13,7 @@ import {
 } from './promotion'
 import { reviewComments, reviews } from './review'
 
-const usersRelations = relations(users, ({ one, many }) => ({
+export const usersRelations = relations(users, ({ one, many }) => ({
   credentials: one(userCredentials, {
     fields: [users.id],
     references: [userCredentials.userId],
@@ -35,7 +35,7 @@ const usersRelations = relations(users, ({ one, many }) => ({
   couponRedemptions: many(couponRedemptions),
 }))
 
-const productsRelations = relations(products, ({ one, many }) => ({
+export const productsRelations = relations(products, ({ one, many }) => ({
   inventory: one(inventory, {
     fields: [products.id],
     references: [inventory.productId],
@@ -47,7 +47,7 @@ const productsRelations = relations(products, ({ one, many }) => ({
   }),
 }))
 
-const ordersRelations = relations(orders, ({ one, many }) => ({
+export const ordersRelations = relations(orders, ({ one, many }) => ({
   user: one(users, {
     fields: [orders.userId],
     references: [users.id],
@@ -64,7 +64,7 @@ const ordersRelations = relations(orders, ({ one, many }) => ({
   }),
 }))
 
-const orderItemsRelations = relations(orderItems, ({ one, many }) => ({
+export const orderItemsRelations = relations(orderItems, ({ one, many }) => ({
   order: one(orders, {
     fields: [orderItems.orderId],
     references: [orders.id],
@@ -76,21 +76,21 @@ const orderItemsRelations = relations(orderItems, ({ one, many }) => ({
   reviews: many(reviews),
 }))
 
-const paymentsRelations = relations(payments, ({ one }) => ({
+export const paymentsRelations = relations(payments, ({ one }) => ({
   order: one(orders, {
     fields: [payments.orderId],
     references: [orders.id],
   }),
 }))
 
-const deliveriesRelations = relations(deliveries, ({ one }) => ({
+export const deliveriesRelations = relations(deliveries, ({ one }) => ({
   order: one(orders, {
     fields: [deliveries.orderId],
     references: [orders.id],
   }),
 }))
 
-const substitutionsRelations = relations(substitutions, ({ one }) => ({
+export const substitutionsRelations = relations(substitutions, ({ one }) => ({
   order: one(orders, {
     fields: [substitutions.orderId],
     references: [orders.id],
@@ -107,7 +107,7 @@ const substitutionsRelations = relations(substitutions, ({ one }) => ({
   }),
 }))
 
-const reviewsRelations = relations(reviews, ({ one, many }) => ({
+export const reviewsRelations = relations(reviews, ({ one, many }) => ({
   user: one(users, {
     fields: [reviews.userId],
     references: [users.id],
@@ -119,7 +119,7 @@ const reviewsRelations = relations(reviews, ({ one, many }) => ({
   comments: many(reviewComments),
 }))
 
-const reviewCommentsRelations = relations(reviewComments, ({ one }) => ({
+export const reviewCommentsRelations = relations(reviewComments, ({ one }) => ({
   review: one(reviews, {
     fields: [reviewComments.reviewId],
     references: [reviews.id],
@@ -130,7 +130,7 @@ const reviewCommentsRelations = relations(reviewComments, ({ one }) => ({
   }),
 }))
 
-const customerInquiriesRelations = relations(customerInquiries, ({ one, many }) => ({
+export const customerInquiriesRelations = relations(customerInquiries, ({ one, many }) => ({
   user: one(users, {
     fields: [customerInquiries.userId],
     references: [users.id],
@@ -138,7 +138,7 @@ const customerInquiriesRelations = relations(customerInquiries, ({ one, many }) 
   replies: many(inquiryReplies),
 }))
 
-const inquiryRepliesRelations = relations(inquiryReplies, ({ one }) => ({
+export const inquiryRepliesRelations = relations(inquiryReplies, ({ one }) => ({
   inquiry: one(customerInquiries, {
     fields: [inquiryReplies.inquiryId],
     references: [customerInquiries.id],
@@ -149,18 +149,18 @@ const inquiryRepliesRelations = relations(inquiryReplies, ({ one }) => ({
   }),
 }))
 
-const loyaltyAccountsRelations = relations(loyaltyAccounts, ({ one }) => ({
+export const loyaltyAccountsRelations = relations(loyaltyAccounts, ({ one }) => ({
   user: one(users, {
     fields: [loyaltyAccounts.userId],
     references: [users.id],
   }),
 }))
 
-const pointPoliciesRelations = relations(pointPolicies, ({ many }) => ({
+export const pointPoliciesRelations = relations(pointPolicies, ({ many }) => ({
   ledgers: many(pointLedgers),
 }))
 
-const pointLedgersRelations = relations(pointLedgers, ({ one }) => ({
+export const pointLedgersRelations = relations(pointLedgers, ({ one }) => ({
   user: one(users, {
     fields: [pointLedgers.userId],
     references: [users.id],
@@ -175,7 +175,7 @@ const pointLedgersRelations = relations(pointLedgers, ({ one }) => ({
   }),
 }))
 
-const pointRedemptionsRelations = relations(pointRedemptions, ({ one }) => ({
+export const pointRedemptionsRelations = relations(pointRedemptions, ({ one }) => ({
   user: one(users, {
     fields: [pointRedemptions.userId],
     references: [users.id],
@@ -186,20 +186,20 @@ const pointRedemptionsRelations = relations(pointRedemptions, ({ one }) => ({
   }),
 }))
 
-const promotionsRelations = relations(promotions, ({ many }) => ({
+export const promotionsRelations = relations(promotions, ({ many }) => ({
   categories: many(promotionCategories),
   coupons: many(coupons),
   orderPromotions: many(orderPromotions),
 }))
 
-const promotionCategoriesRelations = relations(promotionCategories, ({ one }) => ({
+export const promotionCategoriesRelations = relations(promotionCategories, ({ one }) => ({
   promotion: one(promotions, {
     fields: [promotionCategories.promotionId],
     references: [promotions.id],
   }),
 }))
 
-const couponsRelations = relations(coupons, ({ one, many }) => ({
+export const couponsRelations = relations(coupons, ({ one, many }) => ({
   promotion: one(promotions, {
     fields: [coupons.promotionId],
     references: [promotions.id],
@@ -207,7 +207,7 @@ const couponsRelations = relations(coupons, ({ one, many }) => ({
   redemptions: many(couponRedemptions),
 }))
 
-const couponRedemptionsRelations = relations(couponRedemptions, ({ one, many }) => ({
+export const couponRedemptionsRelations = relations(couponRedemptions, ({ one, many }) => ({
   coupon: one(coupons, {
     fields: [couponRedemptions.couponId],
     references: [coupons.id],
@@ -223,7 +223,7 @@ const couponRedemptionsRelations = relations(couponRedemptions, ({ one, many }) 
   orderPromotions: many(orderPromotions),
 }))
 
-const orderPromotionsRelations = relations(orderPromotions, ({ one }) => ({
+export const orderPromotionsRelations = relations(orderPromotions, ({ one }) => ({
   order: one(orders, {
     fields: [orderPromotions.orderId],
     references: [orders.id],
@@ -237,26 +237,3 @@ const orderPromotionsRelations = relations(orderPromotions, ({ one }) => ({
     references: [couponRedemptions.id],
   }),
 }))
-
-export {
-  customerInquiriesRelations,
-  deliveriesRelations,
-  inquiryRepliesRelations,
-  loyaltyAccountsRelations,
-  orderItemsRelations,
-  pointLedgersRelations,
-  pointPoliciesRelations,
-  pointRedemptionsRelations,
-  ordersRelations,
-  paymentsRelations,
-  promotionCategoriesRelations,
-  promotionsRelations,
-  productsRelations,
-  couponRedemptionsRelations,
-  couponsRelations,
-  orderPromotionsRelations,
-  reviewCommentsRelations,
-  reviewsRelations,
-  substitutionsRelations,
-  usersRelations,
-}

@@ -1,17 +1,19 @@
-import { Hono } from 'hono'
 import { logger } from 'hono/logger'
-import { healthRoute } from '~/routes/health'
+import { handleAppError } from '~/lib/errors'
+import { registerOpenApiDocument } from '~/lib/openapi'
+import { createApp } from '~/lib/create-app'
+import { adminIndex } from '~/routes/admin/admin.index'
+import { authIndex } from '~/routes/auth/index'
+import { healthIndex } from '~/routes/health/health.index'
 
-const app = new Hono()
+export const app = createApp()
 
 app.use('*', logger())
 
-app.onError((err, c) => {
-  // eslint-disable-next-line no-console
-  console.error(err)
-  return c.json({ error: 'Internal Server Error' }, 500)
-})
+app.onError(handleAppError)
 
-app.route('/health', healthRoute)
+app.route('/health', healthIndex)
+app.route('/auth', authIndex)
+app.route('/admin', adminIndex)
 
-export { app }
+registerOpenApiDocument(app)

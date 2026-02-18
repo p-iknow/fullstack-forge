@@ -12,25 +12,29 @@ import {
 import { users } from './auth'
 import { orders } from './order'
 
-const pointAccrualTypeEnum = pgEnum('point_accrual_type', ['percentage', 'fixed_per_order'])
-const pointPolicyStatusEnum = pgEnum('point_policy_status', ['active', 'inactive'])
-const pointTransactionTypeEnum = pgEnum('point_transaction_type', [
+export const pointAccrualTypeEnum = pgEnum('point_accrual_type', ['percentage', 'fixed_per_order'])
+export const pointPolicyStatusEnum = pgEnum('point_policy_status', ['active', 'inactive'])
+export const pointTransactionTypeEnum = pgEnum('point_transaction_type', [
   'earn',
   'redeem',
   'expire',
   'adjust',
   'rollback',
 ])
-const pointSourceTypeEnum = pgEnum('point_source_type', [
+export const pointSourceTypeEnum = pgEnum('point_source_type', [
   'order_payment',
   'order_cancel',
   'review_reward',
   'event_reward',
   'admin_adjust',
 ])
-const pointLedgerStatusEnum = pgEnum('point_ledger_status', ['pending', 'confirmed', 'cancelled'])
+export const pointLedgerStatusEnum = pgEnum('point_ledger_status', [
+  'pending',
+  'confirmed',
+  'cancelled',
+])
 
-const pointPolicies = pgTable('point_policies', {
+export const pointPolicies = pgTable('point_policies', {
   id: uuid('id').defaultRandom().primaryKey(),
   name: text('name').notNull(),
   accrualType: pointAccrualTypeEnum('accrual_type').notNull(),
@@ -45,7 +49,7 @@ const pointPolicies = pgTable('point_policies', {
   createdAt: timestamp('created_at', { withTimezone: true }).defaultNow().notNull(),
 })
 
-const loyaltyAccounts = pgTable(
+export const loyaltyAccounts = pgTable(
   'loyalty_accounts',
   {
     userId: uuid('user_id')
@@ -68,7 +72,7 @@ const loyaltyAccounts = pgTable(
   ],
 )
 
-const pointLedgers = pgTable(
+export const pointLedgers = pgTable(
   'point_ledgers',
   {
     id: uuid('id').defaultRandom().primaryKey(),
@@ -89,7 +93,7 @@ const pointLedgers = pgTable(
   (table) => [check('point_ledgers_points_positive_chk', sql`${table.points} > 0`)],
 )
 
-const pointRedemptions = pgTable(
+export const pointRedemptions = pgTable(
   'point_redemptions',
   {
     id: uuid('id').defaultRandom().primaryKey(),
@@ -109,15 +113,3 @@ const pointRedemptions = pgTable(
     check('point_redemptions_discount_amount_non_negative_chk', sql`${table.discountAmount} >= 0`),
   ],
 )
-
-export {
-  loyaltyAccounts,
-  pointAccrualTypeEnum,
-  pointLedgerStatusEnum,
-  pointLedgers,
-  pointPolicies,
-  pointPolicyStatusEnum,
-  pointRedemptions,
-  pointSourceTypeEnum,
-  pointTransactionTypeEnum,
-}

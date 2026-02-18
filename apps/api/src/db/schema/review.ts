@@ -2,7 +2,7 @@ import { boolean, integer, pgTable, text, timestamp, uuid } from 'drizzle-orm/pg
 import { users } from './auth'
 import { orderItems } from './order'
 
-const reviews = pgTable('reviews', {
+export const reviews = pgTable('reviews', {
   id: uuid('id').defaultRandom().primaryKey(),
   userId: uuid('user_id')
     .notNull()
@@ -18,7 +18,7 @@ const reviews = pgTable('reviews', {
   updatedAt: timestamp('updated_at', { withTimezone: true }).defaultNow().notNull(),
 })
 
-const reviewComments = pgTable('review_comments', {
+export const reviewComments = pgTable('review_comments', {
   id: uuid('id').defaultRandom().primaryKey(),
   reviewId: uuid('review_id')
     .notNull()
@@ -30,5 +30,3 @@ const reviewComments = pgTable('review_comments', {
   hidden: boolean('hidden').notNull().default(false),
   createdAt: timestamp('created_at', { withTimezone: true }).defaultNow().notNull(),
 })
-
-export { reviewComments, reviews }
