@@ -1,10 +1,6 @@
 ---
 name: meta-skill
-description: Guide for creating and validating AI agent skills based on
-  Anthropic's official skill specification. Use when users want to create a new
-  skill, update an existing skill, validate skills, run a skill audit, or need
-  guidance on skill architecture and best practices. Do NOT use for creating
-  agents (use meta-agent) or commands (use meta-command).
+description: Guide for creating and validating AI agent skills based on Anthropic's official skill specification. Use when users want to create a new skill, update an existing skill, validate skills, run a skill audit, or need guidance on skill architecture and best practices. Do NOT use for creating agents (use meta-agent) or commands (use meta-command).
 ---
 
 # Meta-Skill Creator
@@ -146,15 +142,22 @@ skill-name/
 ```yaml
 ---
 name: skill-name                    # Required: kebab-case, max 64 chars, match dir name
-description: [What it does] in natural prose. Use when [specific triggers/contexts].
-  Supports [key capabilities]. Include trigger phrases naturally in the sentence
-  flow — do NOT use structured labels like "USE WHEN:" or bullet lists.
+description: [What it does] in natural prose. Use when [specific triggers/contexts]. Supports [key capabilities]. Include trigger phrases naturally in the sentence flow — do NOT use structured labels like "USE WHEN:" or bullet lists.
 # --- Optional fields ---
 # license: MIT
 # compatibility: Requires Node.js 18+
-# allowed-tools: "Bash(python:*) WebFetch"   # Restrict tool access for security
+# metadata: { owner: "team-name", version: "1.0.0" }
+# user-invokable: true
+# argument-hint: "<required-arg> [optional-arg]"
+# disable-model-invocation: false
 ---
 ```
+
+**Frontmatter key compatibility (strict)**:
+
+- Allowed keys only: `name`, `description`, `license`, `compatibility`, `metadata`, `user-invokable`, `argument-hint`, `disable-model-invocation`
+- Do not add any other key (for example `allowed-tools`) unless the runtime explicitly adds support for it
+- Keep `description` as a **single-line scalar** in YAML frontmatter (no folded/multiline continuation indentation)
 
 **Description field rules** (see [references/frontmatter-spec.md](references/frontmatter-spec.md)):
 
@@ -170,7 +173,7 @@ description: [What it does] in natural prose. Use when [specific triggers/contex
 - No XML angle brackets in frontmatter (appears in system prompt — injection risk)
 - No "claude" or "anthropic" in skill name (reserved by Anthropic)
 - YAML uses safe parsing (no code execution)
-- Use `allowed-tools` to restrict tool access when the skill should only use specific tools
+- Use only runtime-supported frontmatter keys to avoid parser failures
 
 See [references/frontmatter-spec.md](references/frontmatter-spec.md) for complete spec.
 
@@ -238,19 +241,21 @@ bun scripts/validate-skill.ts <skill-folder>
 
 **Validation Checklist**:
 
-| Category    | Check                      | Requirement                                        |
-| ----------- | -------------------------- | -------------------------------------------------- |
-| Frontmatter | `name` field               | kebab-case, max 64 chars, matches directory        |
-| Frontmatter | `description` field        | [What] + [When], under 1024 chars, no XML brackets |
-| Frontmatter | No reserved names          | No "claude" or "anthropic" in name                 |
-| Structure   | SKILL.md exists            | Exact case: `SKILL.md`                             |
-| Structure   | No README.md               | Must not exist in skill folder                     |
-| Structure   | Line count                 | Under 500 lines (split to references if exceeded)  |
-| Content     | No unresolved placeholders | All TODO markers resolved                          |
-| Content     | Examples section           | Recommended if skill has user-facing triggers      |
-| Content     | Error handling             | Recommended if skill involves MCP/scripts          |
-| Scripts     | Execution test             | All scripts run without errors                     |
-| References  | Explicit links             | All refs linked from SKILL.md                      |
+| Category    | Check                      | Requirement                                         |
+| ----------- | -------------------------- | --------------------------------------------------- |
+| Frontmatter | `name` field               | kebab-case, max 64 chars, matches directory         |
+| Frontmatter | `description` field        | [What] + [When], under 1024 chars, no XML brackets  |
+| Frontmatter | `description` scalar style | Single-line scalar only (no multiline continuation) |
+| Frontmatter | Supported keys only        | No unsupported attributes in frontmatter            |
+| Frontmatter | No reserved names          | No "claude" or "anthropic" in name                  |
+| Structure   | SKILL.md exists            | Exact case: `SKILL.md`                              |
+| Structure   | No README.md               | Must not exist in skill folder                      |
+| Structure   | Line count                 | Under 500 lines (split to references if exceeded)   |
+| Content     | No unresolved placeholders | All TODO markers resolved                           |
+| Content     | Examples section           | Recommended if skill has user-facing triggers       |
+| Content     | Error handling             | Recommended if skill involves MCP/scripts           |
+| Scripts     | Execution test             | All scripts run without errors                      |
+| References  | Explicit links             | All refs linked from SKILL.md                       |
 
 See [workflows/validate-skill.md](workflows/validate-skill.md) for full validation workflow.
 

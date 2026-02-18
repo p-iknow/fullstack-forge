@@ -56,7 +56,7 @@ Greenfield placeholder (when config does not exist yet):
 2. Map relevant project files:
    - Config files (`*.json`, `*.yaml`, `*.ts`, `*.js`)
    - Build/test/runtime integration points
-   - Related `docs/harness/*` and `docs/execution/*`
+   - Related `docs/architecture/*` implementation docs
 3. Classify each document's **decision-unit mode**:
    - **Option** — a single config key or flag (e.g., `strict`, `noEmit`). Use "Current Config" code block + code examples in PAR.
    - **Pattern** — a design pattern or composition (e.g., route grouping, middleware chain). Replace "Current Config" with "Current Approach" showing code pointers.
@@ -80,6 +80,12 @@ Deliverable:
    - **Result**: Concrete outcome. Current-year appropriateness.
    - **Caveat** (if any): Trade-offs, version constraints, interactions with other options.
 
+PAR Applicability Rule:
+
+- Use PAR **only** for true decision/comparison points (e.g., "왜 A 대신 B", "이 설정을 유지/변경/보류할 이유").
+- For descriptive sections (terminology, protocol field definitions, sequence walkthroughs, runbooks, audit field catalogs), use explanatory prose + tables/diagrams.
+- Do **not** force Problem/Action/Result labels onto every subsection.
+
 Rules:
 
 - Do not document only what an option is; explain why this project should keep, change, or defer it.
@@ -97,14 +103,48 @@ Rules:
    - **Result**: Concrete outcome + current-year appropriateness assessment.
    - **Caveat** (optional): Only when a real trade-off, gotcha, or interaction with other decisions exists. Omit entirely if there is nothing noteworthy.
 4. Each PAR block must be independently readable — a reader should understand one decision without reading the whole document.
-5. Generate topic index from `references/index-template.md`.
-6. Update parent index using `references/parent-index-template.md`.
+5. Mix formats intentionally within one document when needed:
+   - Decision-heavy subsection → PAR
+   - Explanation-heavy subsection → narrative/table/diagram (non-PAR)
+6. Do not rewrite purely factual definitions into artificial PAR if no real trade-off exists.
+7. For explanation-heavy sections, include concrete examples (code snippets, request/response samples, mini-scenarios) whenever it improves comprehension.
+8. When drawing flows, sequences, or process diagrams, use Mermaid fenced blocks (` ```mermaid `) consistently.
+9. For auth/payment/order workflows with branching, pair diagrams in this order:
+   - **SequenceDiagram**: interaction order and ownership (who calls whom)
+   - **Flowchart**: detailed conditional branches and error code outcomes
+10. In SequenceDiagram, when a branch depends on DB/cache/provider lookup, always show the return message before `alt`:
+
+- Example pattern: `API->>DB: ...` then `DB-->>API: exists=true/false` then `alt ...`
+
+11. Do not rely on implicit branches. Prefer explicit guards and `else` labels so readers can map conditions to outcomes quickly.
+12. Use parser-safe Mermaid node labels in flowcharts:
+
+- Avoid parentheses-heavy labels inside nodes (e.g., prefer `createSession userId` over `createSession(userId)`)
+- Keep labels short and ASCII-friendly where possible to reduce renderer variance
+
+13. Keep SequenceDiagram and Flowchart synchronized:
+
+- Same endpoint/action names
+- Same branch conditions
+- Same success/error result codes
+
+14. Generate topic index from `references/index-template.md`.
+15. Update parent index using `references/parent-index-template.md`.
+
+### Mermaid Branching Standard (Required)
+
+Use this standard whenever documenting branching workflows:
+
+1. Start with a concise SequenceDiagram (happy path + key external calls).
+2. Add a `상세 분기(Flowchart):` block immediately below it.
+3. In SequenceDiagram, every data-dependent `alt` must have a preceding response arrow from the dependency.
+4. In Flowchart, express each decision as `condition?` and include explicit fail/success outputs with status or result code.
+5. If an error can happen at multiple layers (validation, DB, cache, provider), model each layer as a separate decision node.
 
 ### Phase 4: Cross-Reference
 
 1. Add "Related Docs" section to the **topic README only** (not in numbered docs) linking to:
-   - `docs/harness/*` recipe docs
-   - `docs/execution/*` verification docs when applicable
+   - `docs/architecture/*/` implementation docs when applicable
 2. In numbered docs, add "Source Decision" ADR traceability line (see template) when an ADR covers the topic. Omit if no ADR exists.
 3. Ensure each numbered document has a valid "Next Document" chain.
 4. Keep topic README links synchronized with actual filenames.
@@ -134,6 +174,9 @@ Run final checks before finishing:
 - Use project paths and config snippets as evidence
 - Prefer one concept per major section
 - Keep `SKILL.md` concise; put fixed structures in `references/`
+- PAR is a tool, not a blanket requirement: apply selectively by subsection purpose
+- Prefer explanation with examples over abstract prose when onboarding value is high
+- Use Mermaid for all flow/sequence/state diagrams (avoid ad-hoc ASCII flowcharts)
 
 ## Examples
 
@@ -162,13 +205,15 @@ This is useful when you only want type checking.
 
 ## Troubleshooting
 
-| Symptom                                  | Cause                                              | Fix                                                                  |
-| ---------------------------------------- | -------------------------------------------------- | -------------------------------------------------------------------- |
-| Broken "Next Document" link              | Filename changed after chain was set               | Re-verify Phase 5 step 1; update all "Next Document" links           |
-| Numbering gap (01, 02, 04)               | Document removed without renumbering               | Renumber all docs and update README table                            |
-| "Current Config" shows fabricated config | Greenfield topic with no config yet                | Use greenfield placeholder with ADR/harness reference                |
-| Parent index row duplicated              | Agent appended instead of checking existing rows   | Check `docs/learn/README.md` for existing topic row before inserting |
-| Template mode mismatch                   | Used "Current Config" for a Pattern/Workflow topic | Re-classify decision-unit mode (Phase 1 step 3)                      |
+| Symptom                                   | Cause                                              | Fix                                                                  |
+| ----------------------------------------- | -------------------------------------------------- | -------------------------------------------------------------------- |
+| Broken "Next Document" link               | Filename changed after chain was set               | Re-verify Phase 5 step 1; update all "Next Document" links           |
+| Numbering gap (01, 02, 04)                | Document removed without renumbering               | Renumber all docs and update README table                            |
+| "Current Config" shows fabricated config  | Greenfield topic with no config yet                | Use greenfield placeholder with ADR/harness reference                |
+| Parent index row duplicated               | Agent appended instead of checking existing rows   | Check `docs/learn/README.md` for existing topic row before inserting |
+| Template mode mismatch                    | Used "Current Config" for a Pattern/Workflow topic | Re-classify decision-unit mode (Phase 1 step 3)                      |
+| Mermaid parse error near branch node      | Node label used parser-sensitive symbols           | Simplify node label text (remove `()`, complex inline literals)      |
+| Branch intent unclear in sequence diagram | Missing dependency return before `alt`             | Add `DB/Redis/Provider -->> API: result` immediately before `alt`    |
 
 ## Reference Files
 
