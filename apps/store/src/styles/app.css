@@ -1,2 +1,4 @@
 @import 'tailwindcss';
 @import '@fullstack-forge/design-system/styles/globals.css';
+
+@source '../../../../packages/design-system/src/**/*.{ts,tsx}';

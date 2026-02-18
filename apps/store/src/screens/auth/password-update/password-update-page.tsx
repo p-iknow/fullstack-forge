@@ -113,7 +113,7 @@ export function PasswordUpdatePageContent({
         <p className="mt-4 rounded bg-emerald-100 p-3 text-sm text-emerald-900">{successMessage}</p>
       ) : null}
 
-      <form className="mt-6 flex flex-col gap-3" onSubmit={form.handleSubmit(onSubmit)}>
+      <form className="mt-6 flex flex-col gap-3" onSubmit={form.handleSubmit(onSubmit)} noValidate>
         <Label className="text-sm font-medium" htmlFor="reset-token">
           Reset token
         </Label>

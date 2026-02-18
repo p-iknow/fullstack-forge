@@ -114,7 +114,14 @@ export const loginMutationOptions = () =>
         client: authClient,
         throwOnError: false,
       })
-      if (!data || error) {
+      if (error) {
+        const parsed = parseAuthErrorPayload(error)
+        if (parsed) {
+          throw new ApiClientError(parsed, 'Login failed')
+        }
+        throw new ApiClientError({ error: 'Login failed' })
+      }
+      if (!data) {
         throw new ApiClientError({ error: 'Login failed' })
       }
       return data
@@ -130,7 +137,14 @@ export const signupMutationOptions = () =>
         client: authClient,
         throwOnError: false,
       })
-      if (!data || error) {
+      if (error) {
+        const parsed = parseAuthErrorPayload(error)
+        if (parsed) {
+          throw new ApiClientError(parsed, 'Sign up failed')
+        }
+        throw new ApiClientError({ error: 'Sign up failed' })
+      }
+      if (!data) {
         throw new ApiClientError({ error: 'Sign up failed' })
       }
       return data
