@@ -1,10 +1,6 @@
 ---
 name: meta-prompt-engineer
-description: Generate high-quality prompts using proven prompt engineering
-  techniques. Use when users want to write a prompt, create or improve prompts,
-  work on meta-prompts, or need to craft effective instructions for AI tasks.
-  Do NOT use for simply asking questions, executing existing prompts, or
-  non-prompt-related tasks.
+description: Generate high-quality prompts using proven prompt engineering techniques. Use when users want to write a prompt, create or improve prompts, work on meta-prompts, or need to craft effective instructions for AI tasks. Do NOT use for simply asking questions, executing existing prompts, or non-prompt-related tasks.
 ---
 
 # Meta Prompt Engineer

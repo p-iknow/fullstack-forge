@@ -1,8 +1,6 @@
 ---
 name: doc-frontmatter
-description: Generate and validate YAML frontmatter for docs folder documents.
-  Use when users want to add frontmatter, update frontmatter, generate frontmatter
-  metadata, or validate existing frontmatter against the schema.
+description: Generate and validate YAML frontmatter for docs folder documents. Use when users want to add frontmatter, update frontmatter, generate frontmatter metadata, or validate existing frontmatter against the schema.
 ---
 
 # Doc Frontmatter

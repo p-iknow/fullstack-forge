@@ -1,8 +1,6 @@
 ---
 name: phased-delivery-plan
-description: Build reusable phased implementation plans for this repository.
-  Use when users want to split work into branch-sized units with explicit gates,
-  evidence, and handoff outputs for the next phase.
+description: Build reusable phased implementation plans for this repository. Use when users want to split work into branch-sized units with explicit gates, evidence, and handoff outputs for the next phase.
 ---
 
 # Phased Delivery Plan
@@ -73,10 +71,10 @@ Add only when useful:
 
 ## Repository Alignment
 
-- Requirements: `docs/prd/05-phased-delivery-plan.md`
-- Execution gates: `docs/execution/README.md`
+- Requirements: `docs/prd/README.md`
+- Execution gates: `docs/architecture/base/01-overview.impl.md`
 - Step format: `docs/roadmap/README.md`
-- Architecture constraints: `docs/harness/00-overview.md`
+- Architecture constraints: `docs/architecture/base/01-overview.md`
 
 ## Output Contract
 
