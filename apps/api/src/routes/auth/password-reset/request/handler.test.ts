@@ -4,9 +4,10 @@ import { authIndex } from '~/routes/auth/index'
 
 type DbState = { selectQueue: unknown[] }
 
-const { dbState, createPasswordResetTokenMock, logAuditEventMock } = vi.hoisted(() => ({
+const { dbState, createPasswordResetTokenMock, sendPasswordResetEmailMock, logAuditEventMock } = vi.hoisted(() => ({
   dbState: { selectQueue: [] } as DbState,
   createPasswordResetTokenMock: vi.fn(async () => 'reset-token'),
+  sendPasswordResetEmailMock: vi.fn(async () => {}),
   logAuditEventMock: vi.fn(async () => {}),
 }))
 
@@ -27,6 +28,10 @@ vi.mock('~/routes/auth/password-reset/@shared/token-store', () => ({
   createPasswordResetToken: createPasswordResetTokenMock,
 }))
 
+vi.mock('~/routes/auth/password-reset/@shared/email', () => ({
+  sendPasswordResetEmail: sendPasswordResetEmailMock,
+}))
+
 vi.mock('~/routes/auth/@shared/audit/audit', () => ({
   logAuditEvent: logAuditEventMock,
 }))
@@ -35,6 +40,7 @@ describe('password reset request handler', () => {
   beforeEach(() => {
     dbState.selectQueue = []
     createPasswordResetTokenMock.mockClear()
+    sendPasswordResetEmailMock.mockClear()
     logAuditEventMock.mockClear()
   })
 
@@ -42,7 +48,7 @@ describe('password reset request handler', () => {
     // given
     const app = new Hono()
     app.route('/auth', authIndex)
-    dbState.selectQueue.push([{ id: 'user-1' }])
+    dbState.selectQueue.push([{ id: 'user-1', email: 'demo@example.com' }])
 
     // when
     const res = await app.request('http://localhost/auth/password-reset/request', {
@@ -55,6 +61,10 @@ describe('password reset request handler', () => {
     expect(res.status).toBe(200)
     await expect(res.json()).resolves.toMatchObject({ ok: true })
     expect(createPasswordResetTokenMock).toHaveBeenCalledWith('user-1')
+    expect(sendPasswordResetEmailMock).toHaveBeenCalledWith({
+      toEmail: 'demo@example.com',
+      token: 'reset-token',
+    })
     expect(logAuditEventMock).toHaveBeenCalledWith(
       expect.objectContaining({
         event: 'password_reset_request',
@@ -81,6 +91,7 @@ describe('password reset request handler', () => {
     expect(res.status).toBe(200)
     await expect(res.json()).resolves.toMatchObject({ ok: true })
     expect(createPasswordResetTokenMock).not.toHaveBeenCalled()
+    expect(sendPasswordResetEmailMock).not.toHaveBeenCalled()
     expect(logAuditEventMock).toHaveBeenCalledWith(
       expect.objectContaining({
         event: 'password_reset_request',
@@ -88,5 +99,26 @@ describe('password reset request handler', () => {
         resultCode: 'ok',
       }),
     )
+  })
+
+  it('returns 200 even when mail provider fails', async () => {
+    // given
+    const app = new Hono()
+    app.route('/auth', authIndex)
+    dbState.selectQueue.push([{ id: 'user-1', email: 'demo@example.com' }])
+    sendPasswordResetEmailMock.mockRejectedValueOnce(new Error('mail provider unavailable'))
+
+    // when
+    const res = await app.request('http://localhost/auth/password-reset/request', {
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify({ email: 'demo@example.com' }),
+    })
+
+    // then
+    expect(res.status).toBe(200)
+    await expect(res.json()).resolves.toMatchObject({ ok: true })
+    expect(createPasswordResetTokenMock).toHaveBeenCalledWith('user-1')
+    expect(sendPasswordResetEmailMock).toHaveBeenCalledTimes(1)
   })
 })

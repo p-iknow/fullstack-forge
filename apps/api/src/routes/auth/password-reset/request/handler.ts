@@ -5,6 +5,7 @@ import { db } from '~/db/client'
 import { users } from '~/db/schema/index'
 import { logAuditEvent } from '~/routes/auth/@shared/audit/audit'
 import { getRequestMeta } from '~/routes/auth/@shared/http/service'
+import { sendPasswordResetEmail } from '~/routes/auth/password-reset/@shared/email'
 import { createPasswordResetToken } from '~/routes/auth/password-reset/@shared/token-store'
 
 export const passwordResetRequestHandler: RouteHandler<typeof passwordResetRequestRoute> = async (c) => {
@@ -12,13 +13,24 @@ export const passwordResetRequestHandler: RouteHandler<typeof passwordResetReque
   const requestMeta = getRequestMeta(c)
 
   const [foundUser] = await db
-    .select({ id: users.id })
+    .select({ id: users.id, email: users.email })
     .from(users)
     .where(eq(users.email, body.email))
     .limit(1)
 
   if (foundUser) {
-    await createPasswordResetToken(foundUser.id)
+    const resetToken = await createPasswordResetToken(foundUser.id)
+    try {
+      await sendPasswordResetEmail({
+        toEmail: foundUser.email,
+        token: resetToken,
+      })
+    } catch (error) {
+      console.error('[auth] password reset mail send failed', {
+        userId: foundUser.id,
+        error,
+      })
+    }
   }
 
   await logAuditEvent({
