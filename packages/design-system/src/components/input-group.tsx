@@ -8,7 +8,7 @@ import { Button } from '@/components/button'
 import { Input } from '@/components/input'
 import { Textarea } from '@/components/textarea'
 
-function InputGroup({ className, ...props }: React.ComponentProps<'div'>) {
+export function InputGroup({ className, ...props }: React.ComponentProps<'div'>) {
   return (
     <div
       data-slot="input-group"
@@ -22,7 +22,7 @@ function InputGroup({ className, ...props }: React.ComponentProps<'div'>) {
   )
 }
 
-const inputGroupAddonVariants = cva(
+export const inputGroupAddonVariants = cva(
   "text-muted-foreground h-auto gap-2 py-1.5 text-sm font-medium group-data-[disabled=true]/input-group:opacity-50 [&>kbd]:rounded-[calc(var(--radius)-5px)] [&>svg:not([class*='size-'])]:size-4 flex cursor-text items-center justify-center select-none",
   {
     variants: {
@@ -41,7 +41,7 @@ const inputGroupAddonVariants = cva(
   },
 )
 
-function InputGroupAddon({
+export function InputGroupAddon({
   className,
   align = 'inline-start',
   ...props
@@ -63,7 +63,7 @@ function InputGroupAddon({
   )
 }
 
-const inputGroupButtonVariants = cva('gap-2 text-sm shadow-none flex items-center', {
+export const inputGroupButtonVariants = cva('gap-2 text-sm shadow-none flex items-center', {
   variants: {
     size: {
       xs: "h-6 gap-1 rounded-[calc(var(--radius)-5px)] px-1.5 [&>svg:not([class*='size-'])]:size-3.5",
@@ -77,7 +77,7 @@ const inputGroupButtonVariants = cva('gap-2 text-sm shadow-none flex items-cente
   },
 })
 
-function InputGroupButton({
+export function InputGroupButton({
   className,
   type = 'button',
   variant = 'ghost',
@@ -98,7 +98,7 @@ function InputGroupButton({
   )
 }
 
-function InputGroupText({ className, ...props }: React.ComponentProps<'span'>) {
+export function InputGroupText({ className, ...props }: React.ComponentProps<'span'>) {
   return (
     <span
       className={cn(
@@ -110,7 +110,7 @@ function InputGroupText({ className, ...props }: React.ComponentProps<'span'>) {
   )
 }
 
-function InputGroupInput({ className, ...props }: React.ComponentProps<'input'>) {
+export function InputGroupInput({ className, ...props }: React.ComponentProps<'input'>) {
   return (
     <Input
       data-slot="input-group-control"
@@ -123,7 +123,7 @@ function InputGroupInput({ className, ...props }: React.ComponentProps<'input'>)
   )
 }
 
-function InputGroupTextarea({ className, ...props }: React.ComponentProps<'textarea'>) {
+export function InputGroupTextarea({ className, ...props }: React.ComponentProps<'textarea'>) {
   return (
     <Textarea
       data-slot="input-group-control"
@@ -134,13 +134,4 @@ function InputGroupTextarea({ className, ...props }: React.ComponentProps<'texta
       {...props}
     />
   )
-}
-
-export {
-  InputGroup,
-  InputGroupAddon,
-  InputGroupButton,
-  InputGroupText,
-  InputGroupInput,
-  InputGroupTextarea,
 }

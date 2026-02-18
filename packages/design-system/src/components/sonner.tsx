@@ -7,7 +7,7 @@ import {
   Loader2Icon,
 } from 'lucide-react'
 
-const Toaster = ({ theme = 'system', ...props }: ToasterProps) => {
+export const Toaster = ({ theme = 'system', ...props }: ToasterProps) => {
   return (
     <Sonner
       theme={theme}
@@ -36,5 +36,3 @@ const Toaster = ({ theme = 'system', ...props }: ToasterProps) => {
     />
   )
 }
-
-export { Toaster }
