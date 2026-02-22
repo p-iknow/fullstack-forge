@@ -27,8 +27,7 @@
     "db:restore:rehearsal": "bash scripts/db-backup-restore.sh rehearse",
     "db:minio:start": "bash scripts/minio-local.sh start",
     "db:minio:health": "bash scripts/minio-local.sh health",
-    "db:seed:images": "tsx src/db/seed-product-images.ts",
-    "db:gallery:images": "tsx scripts/generate-product-image-gallery.ts"
+    "db:seed:images": "tsx src/db/seed-product-images.ts"
   },
   "dependencies": {
     "@fullstack-forge/api-spec": "workspace:*",
