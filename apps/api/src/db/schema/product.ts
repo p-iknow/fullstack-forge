@@ -24,7 +24,8 @@ export const products = pgTable('products', {
   price: integer('price').notNull(),
   status: productStatusEnum('status').notNull().default('active'),
   categoryId: text('category_id'),
-  imageUrl: text('image_url'),
+  thumbUrl: text('thumb_url'),
+  detailUrl: text('detail_url'),
   isSubstitutable: boolean('is_substitutable').notNull().default(true),
   createdAt: timestamp('created_at', { withTimezone: true }).defaultNow().notNull(),
 })

@@ -1,4 +1,5 @@
 import { db } from '~/db/client'
+import { publicUrl } from '~/lib/s3-client'
 import {
   auditLogs,
   couponRedemptions,
@@ -26,6 +27,7 @@ import {
   userSessions,
   users,
 } from '~/db/schema/index'
+import { PRODUCT_CATALOG } from '~/db/seed-product-catalog'
 import { buildSeedUserCredentialRows } from '~/db/seed-users'
 
 async function seed(): Promise<void> {
@@ -85,18 +87,16 @@ async function seed(): Promise<void> {
 
   await db.insert(userCredentials).values(credentialRows)
 
-  const seededProducts = Array.from({ length: 48 }, (_, index) => {
-    const status: 'active' | 'low_stock' = index % 10 === 0 ? 'low_stock' : 'active'
-    return {
-      name: `Seed Product ${index + 1}`,
-      description: `Seeded product description ${index + 1}`,
-      price: 1200 + index * 90,
-      status,
-      categoryId: `cat-${(index % 6) + 1}`,
-      imageUrl: `https://example.com/products/${index + 1}.png`,
-      isSubstitutable: index % 4 !== 0,
-    }
-  })
+  const seededProducts = PRODUCT_CATALOG.map((product) => ({
+    name: product.name,
+    description: product.description,
+    price: product.price,
+    status: product.status,
+    categoryId: product.categoryId,
+    thumbUrl: publicUrl(product.thumbKey),
+    detailUrl: publicUrl(product.detailKey),
+    isSubstitutable: product.isSubstitutable,
+  }))
 
   const insertedProducts = await db
     .insert(products)
@@ -105,13 +105,35 @@ async function seed(): Promise<void> {
 
   await db.insert(inventory).values(
     insertedProducts.map((product, index) => {
+      if (product.status === 'out_of_stock' || product.status === 'discontinued') {
+        return {
+          productId: product.id,
+          onHand: 0,
+          reserved: 0,
+          safetyThreshold: 0,
+          version: 1,
+        }
+      }
+
+      if (product.status === 'low_stock') {
+        const onHand = 4 + (index % 3)
+        const reserved = Math.max(0, onHand - 1)
+        return {
+          productId: product.id,
+          onHand,
+          reserved,
+          safetyThreshold: onHand,
+          version: 1,
+        }
+      }
+
       const onHand = 20 + (index % 12)
       const reserved = index % 5
       return {
         productId: product.id,
         onHand,
         reserved,
-        safetyThreshold: product.status === 'low_stock' ? onHand : 8,
+        safetyThreshold: 8,
         version: 1,
       }
     }),
