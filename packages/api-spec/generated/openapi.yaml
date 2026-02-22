@@ -584,3 +584,447 @@ paths:
                 required:
                   - code
                   - error
+  /products:
+    get:
+      parameters:
+        - schema:
+            type: string
+          required: false
+          name: q
+          in: query
+        - schema:
+            type: string
+          required: false
+          name: category
+          in: query
+        - schema:
+            type: string
+            enum:
+              - active
+              - low_stock
+              - out_of_stock
+              - discontinued
+          required: false
+          name: status
+          in: query
+        - schema:
+            type: string
+          required: false
+          name: brand
+          in: query
+        - schema:
+            type: string
+            enum:
+              - latest
+              - price
+              - name
+          required: false
+          name: sort
+          in: query
+        - schema:
+            type: string
+            enum:
+              - asc
+              - desc
+          required: false
+          name: order
+          in: query
+        - schema:
+            type: integer
+            minimum: 0
+            exclusiveMinimum: true
+          required: false
+          name: page
+          in: query
+        - schema:
+            type: integer
+            minimum: 0
+            exclusiveMinimum: true
+            maximum: 100
+          required: false
+          name: page_size
+          in: query
+      responses:
+        "200":
+          description: Catalog product list
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  items:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: string
+                          format: uuid
+                        sku:
+                          type: string
+                        name:
+                          type: string
+                        brand:
+                          type: string
+                        categoryId:
+                          type: string
+                        categoryName:
+                          type: string
+                        price:
+                          type: integer
+                          minimum: 0
+                        weight:
+                          type: integer
+                          minimum: 0
+                        status:
+                          type: string
+                          enum:
+                            - active
+                            - low_stock
+                            - out_of_stock
+                            - discontinued
+                        isSubstitutable:
+                          type: boolean
+                        thumbUrl:
+                          type: string
+                          format: uri
+                        detailUrl:
+                          type: string
+                          format: uri
+                        availableStock:
+                          type: integer
+                          minimum: 0
+                        canPurchase:
+                          type: boolean
+                      required:
+                        - id
+                        - sku
+                        - name
+                        - brand
+                        - categoryId
+                        - categoryName
+                        - price
+                        - weight
+                        - status
+                        - isSubstitutable
+                        - thumbUrl
+                        - detailUrl
+                        - availableStock
+                        - canPurchase
+                  page:
+                    type: integer
+                    minimum: 0
+                    exclusiveMinimum: true
+                  pageSize:
+                    type: integer
+                    minimum: 0
+                    exclusiveMinimum: true
+                  total:
+                    type: integer
+                    minimum: 0
+                  totalPages:
+                    type: integer
+                    minimum: 0
+                    exclusiveMinimum: true
+                  hasPreviousPage:
+                    type: boolean
+                  hasNextPage:
+                    type: boolean
+                required:
+                  - items
+                  - page
+                  - pageSize
+                  - total
+                  - totalPages
+                  - hasPreviousPage
+                  - hasNextPage
+  /products/search:
+    get:
+      parameters:
+        - schema:
+            type: string
+          required: false
+          name: q
+          in: query
+        - schema:
+            type: string
+          required: false
+          name: category
+          in: query
+        - schema:
+            type: string
+            enum:
+              - active
+              - low_stock
+              - out_of_stock
+              - discontinued
+          required: false
+          name: status
+          in: query
+        - schema:
+            type: string
+          required: false
+          name: brand
+          in: query
+        - schema:
+            type: string
+            enum:
+              - latest
+              - price
+              - name
+          required: false
+          name: sort
+          in: query
+        - schema:
+            type: string
+            enum:
+              - asc
+              - desc
+          required: false
+          name: order
+          in: query
+        - schema:
+            type: integer
+            minimum: 0
+            exclusiveMinimum: true
+          required: false
+          name: page
+          in: query
+        - schema:
+            type: integer
+            minimum: 0
+            exclusiveMinimum: true
+            maximum: 100
+          required: false
+          name: page_size
+          in: query
+      responses:
+        "200":
+          description: Catalog product search results
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  items:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: string
+                          format: uuid
+                        sku:
+                          type: string
+                        name:
+                          type: string
+                        brand:
+                          type: string
+                        categoryId:
+                          type: string
+                        categoryName:
+                          type: string
+                        price:
+                          type: integer
+                          minimum: 0
+                        weight:
+                          type: integer
+                          minimum: 0
+                        status:
+                          type: string
+                          enum:
+                            - active
+                            - low_stock
+                            - out_of_stock
+                            - discontinued
+                        isSubstitutable:
+                          type: boolean
+                        thumbUrl:
+                          type: string
+                          format: uri
+                        detailUrl:
+                          type: string
+                          format: uri
+                        availableStock:
+                          type: integer
+                          minimum: 0
+                        canPurchase:
+                          type: boolean
+                      required:
+                        - id
+                        - sku
+                        - name
+                        - brand
+                        - categoryId
+                        - categoryName
+                        - price
+                        - weight
+                        - status
+                        - isSubstitutable
+                        - thumbUrl
+                        - detailUrl
+                        - availableStock
+                        - canPurchase
+                  page:
+                    type: integer
+                    minimum: 0
+                    exclusiveMinimum: true
+                  pageSize:
+                    type: integer
+                    minimum: 0
+                    exclusiveMinimum: true
+                  total:
+                    type: integer
+                    minimum: 0
+                  totalPages:
+                    type: integer
+                    minimum: 0
+                    exclusiveMinimum: true
+                  hasPreviousPage:
+                    type: boolean
+                  hasNextPage:
+                    type: boolean
+                required:
+                  - items
+                  - page
+                  - pageSize
+                  - total
+                  - totalPages
+                  - hasPreviousPage
+                  - hasNextPage
+        "400":
+          description: Invalid search query
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: string
+                  error:
+                    type: string
+                required:
+                  - code
+                  - error
+  /products/{id}:
+    get:
+      parameters:
+        - schema:
+            type: string
+            format: uuid
+          required: true
+          name: id
+          in: path
+      responses:
+        "200":
+          description: Catalog product detail
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    format: uuid
+                  sku:
+                    type: string
+                  name:
+                    type: string
+                  brand:
+                    type: string
+                  categoryId:
+                    type: string
+                  categoryName:
+                    type: string
+                  price:
+                    type: integer
+                    minimum: 0
+                  weight:
+                    type: integer
+                    minimum: 0
+                  status:
+                    type: string
+                    enum:
+                      - active
+                      - low_stock
+                      - out_of_stock
+                      - discontinued
+                  isSubstitutable:
+                    type: boolean
+                  thumbUrl:
+                    type: string
+                    format: uri
+                  detailUrl:
+                    type: string
+                    format: uri
+                  availableStock:
+                    type: integer
+                    minimum: 0
+                  canPurchase:
+                    type: boolean
+                  description:
+                    type: string
+                required:
+                  - id
+                  - sku
+                  - name
+                  - brand
+                  - categoryId
+                  - categoryName
+                  - price
+                  - weight
+                  - status
+                  - isSubstitutable
+                  - thumbUrl
+                  - detailUrl
+                  - availableStock
+                  - canPurchase
+                  - description
+        "404":
+          description: Product not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: string
+                  error:
+                    type: string
+                required:
+                  - code
+                  - error
+  /categories:
+    get:
+      responses:
+        "200":
+          description: Catalog category list
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  items:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: string
+                        name:
+                          type: string
+                        slug:
+                          type: string
+                        displayOrder:
+                          type: integer
+                          minimum: 0
+                        isActive:
+                          type: boolean
+                      required:
+                        - id
+                        - name
+                        - slug
+                        - displayOrder
+                        - isActive
+                required:
+                  - items
