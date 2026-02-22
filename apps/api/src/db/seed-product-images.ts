@@ -6,6 +6,10 @@ import {
 } from '@aws-sdk/client-s3'
 import sharp from 'sharp'
 
+import {
+  PRODUCT_IMAGE_FALLBACK_DETAIL_KEY,
+  PRODUCT_IMAGE_FALLBACK_THUMB_KEY,
+} from '~/lib/product-image'
 import { MINIO_BUCKET, MINIO_ENDPOINT, s3 } from '~/lib/s3-client'
 
 import { type SeedProduct, PRODUCT_CATALOG } from './seed-product-catalog'
@@ -726,6 +730,17 @@ export async function seedProductImages(): Promise<void> {
 
     const detailBuf = await generate(product, i, 'detail')
     await uploadImage(product.detailKey, detailBuf)
+
+    uploaded += 2
+  }
+
+  const fallbackSourceProduct = PRODUCT_CATALOG[0]
+  if (fallbackSourceProduct) {
+    const fallbackThumb = await generate(fallbackSourceProduct, 0, 'thumb')
+    await uploadImage(PRODUCT_IMAGE_FALLBACK_THUMB_KEY, fallbackThumb)
+
+    const fallbackDetail = await generate(fallbackSourceProduct, 0, 'detail')
+    await uploadImage(PRODUCT_IMAGE_FALLBACK_DETAIL_KEY, fallbackDetail)
 
     uploaded += 2
   }

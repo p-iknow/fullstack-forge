@@ -1,5 +1,5 @@
 import type { CatalogCategory } from './categories'
-import { publicUrl } from '~/lib/s3-client'
+import { getFallbackProductImageUrls } from '~/lib/product-image'
 
 type ProductStatus = 'active' | 'low_stock' | 'out_of_stock' | 'discontinued'
 
@@ -42,11 +42,8 @@ export const getProductWeight = (price: number) => {
 }
 
 export const getProductImageUrls = (productId: string) => {
-  const suffix = productId.replaceAll('-', '').slice(0, 10).toLowerCase()
-  return {
-    thumbUrl: publicUrl(`catalog/sku-${suffix}-thumb.webp`),
-    detailUrl: publicUrl(`catalog/sku-${suffix}-detail.webp`),
-  }
+  void productId
+  return getFallbackProductImageUrls()
 }
 
 export const getAvailableStock = (onHand: number | null, reserved: number | null) => {
