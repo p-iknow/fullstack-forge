@@ -24,7 +24,9 @@ describe('home page', () => {
     // given
     worker.use(
       http.get('/api/categories', () => {
-        return HttpResponse.json({ items: [{ id: 'cat-2', name: '음료', slug: 'beverage', displayOrder: 2, isActive: true }] })
+        return HttpResponse.json({
+          items: [{ id: 'cat-2', name: '음료', slug: 'beverage', displayOrder: 2, isActive: true }],
+        })
       }),
       http.get('/api/products', () => {
         return HttpResponse.json({

@@ -35,7 +35,9 @@ describe('password update page', () => {
     // when
     fireEvent.change(screen.getByLabelText('Reset token'), { target: { value: 'token-1' } })
     fireEvent.change(screen.getByLabelText('New password'), { target: { value: 'NewPassw0rd!' } })
-    fireEvent.change(screen.getByLabelText('Confirm password'), { target: { value: 'Mismatch123!' } })
+    fireEvent.change(screen.getByLabelText('Confirm password'), {
+      target: { value: 'Mismatch123!' },
+    })
     fireEvent.click(screen.getByRole('button', { name: 'Update password' }))
 
     // then
@@ -56,7 +58,9 @@ describe('password update page', () => {
     fireEvent.click(screen.getByRole('button', { name: 'Update password' }))
 
     // then
-    expect(await screen.findByText('Password updated. Please sign in with your new password.')).toBeInTheDocument()
+    expect(
+      await screen.findByText('Password updated. Please sign in with your new password.'),
+    ).toBeInTheDocument()
     expect(onSuccessNavigate).toHaveBeenCalledTimes(1)
   })
 

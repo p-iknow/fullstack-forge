@@ -2,11 +2,7 @@ import { useEffect, useRef, useState } from 'react'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { Button, buttonVariants } from '@fullstack-forge/design-system/components/button'
 import { readApiError } from '~/lib/api'
-import {
-  authQueryKeys,
-  logoutMutationOptions,
-  meQueryOptions,
-} from '~/lib/queries/auth'
+import { authQueryKeys, logoutMutationOptions, meQueryOptions } from '~/lib/queries/auth'
 
 const MIN_PLACEHOLDER_VISIBLE_MS = 600
 
@@ -89,12 +85,19 @@ export function CatalogTopNav() {
   return (
     <>
       <nav className="flex items-center justify-between gap-3 rounded-xl border border-slate-200 bg-white px-4 py-3">
-        <a href="/" className="whitespace-nowrap text-sm font-semibold tracking-tight text-slate-900">
+        <a
+          href="/"
+          className="whitespace-nowrap text-sm font-semibold tracking-tight text-slate-900"
+        >
           fullstack-forge store
         </a>
         <div className="flex min-h-8 shrink-0 items-center justify-end gap-2">
           {showPlaceholder ? (
-            <div className="flex items-center justify-end animate-pulse" role="status" aria-label="Checking session">
+            <div
+              className="flex items-center justify-end animate-pulse"
+              role="status"
+              aria-label="Checking session"
+            >
               <div
                 className={`${buttonVariants({ size: 'sm' })} pointer-events-none !bg-slate-200 !text-slate-200 hover:!bg-slate-200`}
                 aria-hidden
@@ -125,7 +128,9 @@ export function CatalogTopNav() {
         </div>
       </nav>
 
-      {errorMessage ? <p className="rounded bg-rose-100 p-3 text-sm text-rose-900">{errorMessage}</p> : null}
+      {errorMessage ? (
+        <p className="rounded bg-rose-100 p-3 text-sm text-rose-900">{errorMessage}</p>
+      ) : null}
     </>
   )
 }

@@ -1,4 +1,4 @@
-import { buttonVariants } from "@fullstack-forge/design-system/components/button";
+import { buttonVariants } from '@fullstack-forge/design-system/components/button'
 
 export function AuthCallbackSuccessPage() {
   return (
@@ -11,5 +11,5 @@ export function AuthCallbackSuccessPage() {
         Go to Home
       </a>
     </main>
-  );
+  )
 }

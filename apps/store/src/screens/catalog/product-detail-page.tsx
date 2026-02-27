@@ -1,30 +1,21 @@
-import { useQuery } from "@tanstack/react-query";
-import { catalogDetailQueryOptions } from "~/lib/queries/catalog";
-import { CatalogTopNav } from "~/screens/catalog/catalog-top-nav";
+import { useQuery } from '@tanstack/react-query'
+import { catalogDetailQueryOptions } from '~/lib/queries/catalog'
+import { CatalogTopNav } from '~/screens/catalog/catalog-top-nav'
 
-const formatPrice = (price: number) =>
-  `${new Intl.NumberFormat("ko-KR").format(price)}원`;
+const formatPrice = (price: number) => `${new Intl.NumberFormat('ko-KR').format(price)}원`
 
-export function ProductDetailPage({
-  productId,
-}: Readonly<{ productId: string }>) {
-  const productQuery = useQuery(catalogDetailQueryOptions(productId));
+export function ProductDetailPage({ productId }: Readonly<{ productId: string }>) {
+  const productQuery = useQuery(catalogDetailQueryOptions(productId))
 
   if (productQuery.isPending) {
-    return (
-      <p className="p-6 text-sm text-slate-500">상품 상세를 불러오는 중...</p>
-    );
+    return <p className="p-6 text-sm text-slate-500">상품 상세를 불러오는 중...</p>
   }
 
   if (productQuery.isError || !productQuery.data) {
-    return (
-      <p className="p-6 text-sm text-rose-700">
-        상품 정보를 불러오지 못했습니다.
-      </p>
-    );
+    return <p className="p-6 text-sm text-rose-700">상품 정보를 불러오지 못했습니다.</p>
   }
 
-  const product = productQuery.data;
+  const product = productQuery.data
 
   return (
     <main className="mx-auto min-h-screen w-full max-w-5xl px-6 py-10">
@@ -51,16 +42,14 @@ export function ProductDetailPage({
           <p className="text-lg font-semibold">{formatPrice(product.price)}</p>
           <p className="text-sm text-slate-600">중량: {product.weight}g</p>
           <p className="text-sm text-slate-600">상태: {product.status}</p>
-          <p className="text-sm text-slate-600">
-            가용 재고: {product.availableStock}개
-          </p>
+          <p className="text-sm text-slate-600">가용 재고: {product.availableStock}개</p>
           <p className="text-sm text-slate-700">{product.description}</p>
 
           {!product.canPurchase ? (
             <p className="rounded bg-rose-100 p-3 text-sm text-rose-700">
-              {product.status === "discontinued"
-                ? "단종 상품으로 신규 구매가 불가합니다."
-                : "품절 상태로 구매가 불가합니다."}
+              {product.status === 'discontinued'
+                ? '단종 상품으로 신규 구매가 불가합니다.'
+                : '품절 상태로 구매가 불가합니다.'}
             </p>
           ) : (
             <p className="rounded bg-emerald-100 p-3 text-sm text-emerald-700">
@@ -70,5 +59,5 @@ export function ProductDetailPage({
         </div>
       </section>
     </main>
-  );
+  )
 }

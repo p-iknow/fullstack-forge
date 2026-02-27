@@ -162,11 +162,7 @@ export function PasswordUpdatePageContent({
           </p>
         ) : null}
 
-        <Button
-          type="submit"
-          disabled={confirmMutation.isPending}
-          className="mt-2"
-        >
+        <Button type="submit" disabled={confirmMutation.isPending} className="mt-2">
           {confirmMutation.isPending ? 'Updating password...' : 'Update password'}
         </Button>
       </form>

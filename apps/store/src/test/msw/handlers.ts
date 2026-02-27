@@ -46,7 +46,10 @@ export const handlers = [
     )
   }),
   http.get('/api/auth/me', () => {
-    return HttpResponse.json({ code: 'auth_session_expired', error: 'Session expired' }, { status: 401 })
+    return HttpResponse.json(
+      { code: 'auth_session_expired', error: 'Session expired' },
+      { status: 401 },
+    )
   }),
   http.post('/api/auth/logout', () => {
     return HttpResponse.json({ ok: true as const }, { status: 200 })

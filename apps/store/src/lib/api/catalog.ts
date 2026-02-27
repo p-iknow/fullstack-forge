@@ -73,9 +73,10 @@ const requestJson = async <T>(url: string): Promise<T> => {
     credentials: 'include',
   })
 
-  const payload = (await response.json().catch(() => null)) as
-    | { code?: string; error?: string }
-    | null
+  const payload = (await response.json().catch(() => null)) as {
+    code?: string
+    error?: string
+  } | null
 
   if (!response.ok) {
     throw new ApiClientError(
@@ -94,7 +95,9 @@ const requestJson = async <T>(url: string): Promise<T> => {
   return payload as T
 }
 
-export const getCatalogProducts = async (params: CatalogListParams): Promise<CatalogListResponse> => {
+export const getCatalogProducts = async (
+  params: CatalogListParams,
+): Promise<CatalogListResponse> => {
   const qs = toQueryString(params)
   const url = qs ? `/api/products?${qs}` : '/api/products'
   return requestJson<CatalogListResponse>(url)

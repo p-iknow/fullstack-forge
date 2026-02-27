@@ -1,67 +1,66 @@
-import { useEffect, useMemo, useRef, useState } from "react";
-import { keepPreviousData, useQuery } from "@tanstack/react-query";
-import { Button } from "@fullstack-forge/design-system/components/button";
-import { Input } from "@fullstack-forge/design-system/components/input";
-import { Skeleton } from "@fullstack-forge/design-system/components/skeleton";
-import { CatalogTopNav } from "~/screens/catalog/catalog-top-nav";
+import { useEffect, useMemo, useRef, useState } from 'react'
+import { keepPreviousData, useQuery } from '@tanstack/react-query'
+import { Button } from '@fullstack-forge/design-system/components/button'
+import { Input } from '@fullstack-forge/design-system/components/input'
+import { Skeleton } from '@fullstack-forge/design-system/components/skeleton'
+import { CatalogTopNav } from '~/screens/catalog/catalog-top-nav'
 import {
   catalogCategoriesQueryOptions,
   catalogListQueryOptions,
   catalogSearchQueryOptions,
-} from "~/lib/queries/catalog";
+} from '~/lib/queries/catalog'
 
-type CatalogStatus = "all" | "active" | "low_stock";
+type CatalogStatus = 'all' | 'active' | 'low_stock'
 
 const statusOptions: Array<{ value: CatalogStatus; label: string }> = [
-  { value: "all", label: "전체 상태" },
-  { value: "active", label: "판매중" },
-  { value: "low_stock", label: "재고임박" },
-];
+  { value: 'all', label: '전체 상태' },
+  { value: 'active', label: '판매중' },
+  { value: 'low_stock', label: '재고임박' },
+]
 
-const formatPrice = (price: number) =>
-  `${new Intl.NumberFormat("ko-KR").format(price)}원`;
-const pageSize = 20;
-const maxPageButtons = 5;
-const placeholderCardCount = pageSize;
-const LOADER_DELAY_MS = 0;
-const MIN_LOADER_VISIBLE_MS = 500;
+const formatPrice = (price: number) => `${new Intl.NumberFormat('ko-KR').format(price)}원`
+const pageSize = 20
+const maxPageButtons = 5
+const placeholderCardCount = pageSize
+const LOADER_DELAY_MS = 0
+const MIN_LOADER_VISIBLE_MS = 500
 
 export function HomePage() {
-  const [keyword, setKeyword] = useState("");
-  const [submittedKeyword, setSubmittedKeyword] = useState("");
-  const [category, setCategory] = useState("");
-  const [status, setStatus] = useState<CatalogStatus>("all");
-  const [brand, setBrand] = useState("");
-  const [page, setPage] = useState(1);
-  const [showProductsLoader, setShowProductsLoader] = useState(false);
-  const loaderShownAtRef = useRef<number | null>(null);
-  const showLoaderTimerRef = useRef<number | null>(null);
-  const hideLoaderTimerRef = useRef<number | null>(null);
+  const [keyword, setKeyword] = useState('')
+  const [submittedKeyword, setSubmittedKeyword] = useState('')
+  const [category, setCategory] = useState('')
+  const [status, setStatus] = useState<CatalogStatus>('all')
+  const [brand, setBrand] = useState('')
+  const [page, setPage] = useState(1)
+  const [showProductsLoader, setShowProductsLoader] = useState(false)
+  const loaderShownAtRef = useRef<number | null>(null)
+  const showLoaderTimerRef = useRef<number | null>(null)
+  const hideLoaderTimerRef = useRef<number | null>(null)
 
-  const categoriesQuery = useQuery(catalogCategoriesQueryOptions());
+  const categoriesQuery = useQuery(catalogCategoriesQueryOptions())
 
   const listParams = useMemo(
     () => ({
       category: category || undefined,
-      status: status === "all" ? undefined : status,
+      status: status === 'all' ? undefined : status,
       brand: brand || undefined,
       page,
       pageSize,
-      sort: "latest" as const,
-      order: "desc" as const,
+      sort: 'latest' as const,
+      order: 'desc' as const,
     }),
     [brand, category, page, status],
-  );
+  )
 
   useEffect(() => {
-    setPage(1);
-  }, [category, status, brand, submittedKeyword]);
+    setPage(1)
+  }, [category, status, brand, submittedKeyword])
 
   const listQuery = useQuery({
     ...catalogListQueryOptions(listParams),
     enabled: !submittedKeyword,
     placeholderData: keepPreviousData,
-  });
+  })
 
   const searchQuery = useQuery({
     ...catalogSearchQueryOptions({
@@ -70,97 +69,90 @@ export function HomePage() {
     }),
     enabled: Boolean(submittedKeyword),
     placeholderData: keepPreviousData,
-  });
+  })
 
-  const productsQuery = submittedKeyword ? searchQuery : listQuery;
-  const isProductsLoading = productsQuery.isPending || productsQuery.isFetching;
-  const showProductsSkeleton = isProductsLoading || showProductsLoader;
-  const totalItems = productsQuery.data?.total ?? 0;
-  const totalPages = Math.max(1, Math.ceil(totalItems / pageSize));
-  const visibleItems = productsQuery.data?.items ?? [];
-  const hasActiveFilters = Boolean(
-    submittedKeyword || category || brand || status !== "all",
-  );
+  const productsQuery = submittedKeyword ? searchQuery : listQuery
+  const isProductsLoading = productsQuery.isPending || productsQuery.isFetching
+  const showProductsSkeleton = isProductsLoading || showProductsLoader
+  const totalItems = productsQuery.data?.total ?? 0
+  const totalPages = Math.max(1, Math.ceil(totalItems / pageSize))
+  const visibleItems = productsQuery.data?.items ?? []
+  const hasActiveFilters = Boolean(submittedKeyword || category || brand || status !== 'all')
   const showEmptyFallback =
-    !showProductsSkeleton &&
-    !productsQuery.isError &&
-    visibleItems.length === 0;
+    !showProductsSkeleton && !productsQuery.isError && visibleItems.length === 0
   const pageNumbers = useMemo(() => {
-    const windowSize = Math.min(maxPageButtons, totalPages);
-    const half = Math.floor(windowSize / 2);
-    const start = Math.max(
-      1,
-      Math.min(page - half, totalPages - windowSize + 1),
-    );
-    return Array.from({ length: windowSize }, (_, index) => start + index);
-  }, [page, totalPages]);
+    const windowSize = Math.min(maxPageButtons, totalPages)
+    const half = Math.floor(windowSize / 2)
+    const start = Math.max(1, Math.min(page - half, totalPages - windowSize + 1))
+    return Array.from({ length: windowSize }, (_, index) => start + index)
+  }, [page, totalPages])
 
   useEffect(() => {
     if (productsQuery.data && page > totalPages) {
-      setPage(totalPages);
+      setPage(totalPages)
     }
-  }, [page, productsQuery.data, totalPages]);
+  }, [page, productsQuery.data, totalPages])
 
   useEffect(() => {
     const clearShowLoaderTimer = () => {
       if (showLoaderTimerRef.current !== null) {
-        window.clearTimeout(showLoaderTimerRef.current);
-        showLoaderTimerRef.current = null;
+        window.clearTimeout(showLoaderTimerRef.current)
+        showLoaderTimerRef.current = null
       }
-    };
+    }
 
     const clearHideLoaderTimer = () => {
       if (hideLoaderTimerRef.current !== null) {
-        window.clearTimeout(hideLoaderTimerRef.current);
-        hideLoaderTimerRef.current = null;
+        window.clearTimeout(hideLoaderTimerRef.current)
+        hideLoaderTimerRef.current = null
       }
-    };
+    }
 
     if (isProductsLoading) {
-      clearHideLoaderTimer();
+      clearHideLoaderTimer()
       if (!showProductsLoader && showLoaderTimerRef.current === null) {
         showLoaderTimerRef.current = window.setTimeout(() => {
-          setShowProductsLoader(true);
-          loaderShownAtRef.current = Date.now();
-          showLoaderTimerRef.current = null;
-        }, LOADER_DELAY_MS);
+          setShowProductsLoader(true)
+          loaderShownAtRef.current = Date.now()
+          showLoaderTimerRef.current = null
+        }, LOADER_DELAY_MS)
       }
       return () => {
-        clearShowLoaderTimer();
-      };
+        clearShowLoaderTimer()
+      }
     }
 
-    clearShowLoaderTimer();
+    clearShowLoaderTimer()
     if (!showProductsLoader) {
-      loaderShownAtRef.current = null;
-      return;
+      loaderShownAtRef.current = null
+      return
     }
 
-    const shownAt = loaderShownAtRef.current ?? Date.now();
-    const elapsed = Date.now() - shownAt;
-    const remaining = Math.max(0, MIN_LOADER_VISIBLE_MS - elapsed);
+    const shownAt = loaderShownAtRef.current ?? Date.now()
+    const elapsed = Date.now() - shownAt
+    const remaining = Math.max(0, MIN_LOADER_VISIBLE_MS - elapsed)
 
     hideLoaderTimerRef.current = window.setTimeout(() => {
-      setShowProductsLoader(false);
-      loaderShownAtRef.current = null;
-      hideLoaderTimerRef.current = null;
-    }, remaining);
+      setShowProductsLoader(false)
+      loaderShownAtRef.current = null
+      hideLoaderTimerRef.current = null
+    }, remaining)
 
     return () => {
-      clearHideLoaderTimer();
-    };
-  }, [isProductsLoading, showProductsLoader]);
+      clearHideLoaderTimer()
+    }
+  }, [isProductsLoading, showProductsLoader])
 
   useEffect(() => {
     return () => {
       if (showLoaderTimerRef.current !== null) {
-        window.clearTimeout(showLoaderTimerRef.current);
+        window.clearTimeout(showLoaderTimerRef.current)
       }
       if (hideLoaderTimerRef.current !== null) {
-        window.clearTimeout(hideLoaderTimerRef.current);
+        window.clearTimeout(hideLoaderTimerRef.current)
       }
-    };
-  }, []);
+    }
+  }, [])
 
   return (
     <main className="min-h-screen bg-slate-50 text-slate-900">
@@ -171,9 +163,7 @@ export function HomePage() {
           <p className="inline-flex rounded-full bg-slate-900 px-3 py-1 text-xs font-medium text-white">
             catalog stage 2
           </p>
-          <h1 className="text-3xl font-semibold tracking-tight">
-            상품 카탈로그
-          </h1>
+          <h1 className="text-3xl font-semibold tracking-tight">상품 카탈로그</h1>
           <p className="text-sm text-slate-600">
             카테고리, 브랜드, 상태 기준으로 상품을 탐색하세요.
           </p>
@@ -182,8 +172,8 @@ export function HomePage() {
         <form
           className="grid gap-3 rounded-xl border border-slate-200 bg-white p-4 md:grid-cols-5"
           onSubmit={(event) => {
-            event.preventDefault();
-            setSubmittedKeyword(keyword.trim());
+            event.preventDefault()
+            setSubmittedKeyword(keyword.trim())
           }}
         >
           <Input
@@ -226,13 +216,9 @@ export function HomePage() {
           </div>
         </form>
 
-        {showProductsSkeleton ? (
-          <p className="sr-only">상품 목록을 불러오는 중...</p>
-        ) : null}
+        {showProductsSkeleton ? <p className="sr-only">상품 목록을 불러오는 중...</p> : null}
         {productsQuery.isError ? (
-          <p className="rounded bg-rose-100 p-3 text-sm text-rose-800">
-            상품 조회에 실패했습니다.
-          </p>
+          <p className="rounded bg-rose-100 p-3 text-sm text-rose-800">상품 조회에 실패했습니다.</p>
         ) : null}
 
         {showProductsSkeleton ? (
@@ -277,12 +263,12 @@ export function HomePage() {
                   type="button"
                   variant="outline"
                   onClick={() => {
-                    setKeyword("");
-                    setSubmittedKeyword("");
-                    setCategory("");
-                    setStatus("all");
-                    setBrand("");
-                    setPage(1);
+                    setKeyword('')
+                    setSubmittedKeyword('')
+                    setCategory('')
+                    setStatus('all')
+                    setBrand('')
+                    setPage(1)
                   }}
                 >
                   검색/필터 초기화
@@ -309,35 +295,28 @@ export function HomePage() {
                     />
                     <div className="space-y-2 p-4">
                       <div className="flex items-center justify-between gap-2">
-                        <p className="truncate text-sm font-semibold">
-                          {item.name}
-                        </p>
+                        <p className="truncate text-sm font-semibold">{item.name}</p>
                         <span
                           className={`rounded px-2 py-0.5 text-[11px] font-medium ${
-                            item.status === "out_of_stock" ||
-                            item.status === "discontinued"
-                              ? "bg-rose-100 text-rose-700"
-                              : item.status === "low_stock"
-                                ? "bg-amber-100 text-amber-700"
-                                : "bg-emerald-100 text-emerald-700"
+                            item.status === 'out_of_stock' || item.status === 'discontinued'
+                              ? 'bg-rose-100 text-rose-700'
+                              : item.status === 'low_stock'
+                                ? 'bg-amber-100 text-amber-700'
+                                : 'bg-emerald-100 text-emerald-700'
                           }`}
                         >
-                          {item.status === "out_of_stock"
-                            ? "품절"
-                            : item.status === "discontinued"
-                              ? "단종"
-                              : item.status === "low_stock"
-                                ? "재고임박"
-                                : "판매중"}
+                          {item.status === 'out_of_stock'
+                            ? '품절'
+                            : item.status === 'discontinued'
+                              ? '단종'
+                              : item.status === 'low_stock'
+                                ? '재고임박'
+                                : '판매중'}
                         </span>
                       </div>
                       <p className="text-xs text-slate-500">{item.brand}</p>
-                      <p className="text-sm font-semibold">
-                        {formatPrice(item.price)}
-                      </p>
-                      <p className="text-xs text-slate-500">
-                        가용 재고 {item.availableStock}개
-                      </p>
+                      <p className="text-sm font-semibold">{formatPrice(item.price)}</p>
+                      <p className="text-xs text-slate-500">가용 재고 {item.availableStock}개</p>
                     </div>
                   </a>
                 </article>
@@ -369,9 +348,9 @@ export function HomePage() {
                   <Button
                     key={pageNumber}
                     type="button"
-                    variant={pageNumber === page ? "default" : "outline"}
+                    variant={pageNumber === page ? 'default' : 'outline'}
                     onClick={() => setPage(pageNumber)}
-                    aria-current={pageNumber === page ? "page" : undefined}
+                    aria-current={pageNumber === page ? 'page' : undefined}
                   >
                     {pageNumber}
                   </Button>
@@ -398,5 +377,5 @@ export function HomePage() {
         )}
       </section>
     </main>
-  );
+  )
 }
