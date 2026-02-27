@@ -1,6 +1,7 @@
 # Auth PRD Implementation Gap Check
 
 PRD source of truth:
+
 - `docs/01-prd/01-auth/01-overview.md`
 - `docs/01-prd/01-auth/02-api.md`
 - `docs/01-prd/01-auth/04-ui.md`
@@ -8,17 +9,17 @@ PRD source of truth:
 
 ## Requirement Coverage Matrix
 
-| Requirement | Implemented | Tested | Evidence |
-| --- | --- | --- | --- |
-| Email login/logout | yes | yes | `apps/api/src/routes/auth/login/handler.ts`, `apps/api/src/routes/auth/login/handler.test.ts`, `apps/api/src/routes/auth/logout/handler.ts`, `apps/api/src/routes/auth/logout/handler.test.ts` |
-| OAuth start/callback (google, kakao) | yes | yes | `apps/api/src/routes/auth/oauth/start/handler.ts`, `apps/api/src/routes/auth/oauth/start/handler.test.ts`, `apps/api/src/routes/auth/oauth/callback/handler.ts`, `apps/api/src/routes/auth/oauth/callback/handler.test.ts` |
-| Refresh rotation/reuse detection | yes | yes | `apps/api/src/routes/auth/@shared/session/session.ts`, `apps/api/src/routes/auth/@shared/session/session.test.ts`, `apps/api/src/routes/auth/refresh/handler.ts`, `apps/api/src/routes/auth/refresh/handler.test.ts` |
-| Login lockout and rate limit | yes | yes | `apps/api/src/routes/auth/login/account-lockout.ts`, `apps/api/src/routes/auth/login/handler.ts`, `apps/api/src/routes/auth/login/handler.test.ts` |
-| Admin role guard (`operator|admin`) | yes | yes | `apps/api/src/routes/auth/@shared/http/middleware.ts`, `apps/api/src/routes/admin.test.ts` |
-| Auth audit events (`login_*`, `oauth_*`, `logout`, `session_revoked`) | yes | partial | `apps/api/src/routes/auth/@shared/audit/audit.ts`, handler tests |
-| Password reset request/confirm | no | no | no route in `apps/api/src/routes/auth`, no endpoint in `packages/api-spec/src/routes/auth/index.ts` |
-| Store UI login entry points (email/google/kakao) | yes | no | `apps/store/src/routes/login.tsx` |
-| Session-expired auto redirect + toast | no | no | no dedicated redirect/toast behavior found in `apps/store/src/routes/index.tsx` |
+| Requirement                                                           | Implemented | Tested  | Evidence                                                                                                                                                                                                                   |
+| --------------------------------------------------------------------- | ----------- | ------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------ |
+| Email login/logout                                                    | yes         | yes     | `apps/api/src/routes/auth/login/handler.ts`, `apps/api/src/routes/auth/login/handler.test.ts`, `apps/api/src/routes/auth/logout/handler.ts`, `apps/api/src/routes/auth/logout/handler.test.ts`                             |
+| OAuth start/callback (google, kakao)                                  | yes         | yes     | `apps/api/src/routes/auth/oauth/start/handler.ts`, `apps/api/src/routes/auth/oauth/start/handler.test.ts`, `apps/api/src/routes/auth/oauth/callback/handler.ts`, `apps/api/src/routes/auth/oauth/callback/handler.test.ts` |
+| Refresh rotation/reuse detection                                      | yes         | yes     | `apps/api/src/routes/auth/@shared/session/session.ts`, `apps/api/src/routes/auth/@shared/session/session.test.ts`, `apps/api/src/routes/auth/refresh/handler.ts`, `apps/api/src/routes/auth/refresh/handler.test.ts`       |
+| Login lockout and rate limit                                          | yes         | yes     | `apps/api/src/routes/auth/login/account-lockout.ts`, `apps/api/src/routes/auth/login/handler.ts`, `apps/api/src/routes/auth/login/handler.test.ts`                                                                         |
+| Admin role guard (`operator                                           | admin`)     | yes     | yes                                                                                                                                                                                                                        | `apps/api/src/routes/auth/@shared/http/middleware.ts`, `apps/api/src/routes/admin.test.ts` |
+| Auth audit events (`login_*`, `oauth_*`, `logout`, `session_revoked`) | yes         | partial | `apps/api/src/routes/auth/@shared/audit/audit.ts`, handler tests                                                                                                                                                           |
+| Password reset request/confirm                                        | no          | no      | no route in `apps/api/src/routes/auth`, no endpoint in `packages/api-spec/src/routes/auth/index.ts`                                                                                                                        |
+| Store UI login entry points (email/google/kakao)                      | yes         | no      | `apps/store/src/routes/login.tsx`                                                                                                                                                                                          |
+| Session-expired auto redirect + toast                                 | no          | no      | no dedicated redirect/toast behavior found in `apps/store/src/routes/index.tsx`                                                                                                                                            |
 
 ## Current Gaps
 
