@@ -6,7 +6,9 @@ type SendPasswordResetEmailInput = {
 const DEFAULT_STORE_ORIGIN = 'http://localhost:3000'
 
 function resolveStoreOrigin(): string {
-  return process.env.STORE_ORIGIN?.trim() || process.env.FRONTEND_ORIGIN?.trim() || DEFAULT_STORE_ORIGIN
+  return (
+    process.env.STORE_ORIGIN?.trim() || process.env.FRONTEND_ORIGIN?.trim() || DEFAULT_STORE_ORIGIN
+  )
 }
 
 function resolvePasswordResetLink(token: string): string {

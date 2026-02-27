@@ -4,36 +4,30 @@ import {
   createPasswordResetToken,
 } from '~/routes/auth/password-reset/@shared/token-store'
 
-const {
-  redisState,
-  createOpaqueTokenMock,
-  hashTokenMock,
-  setExMock,
-  getMock,
-  delMock,
-} = vi.hoisted(() => {
-  const state = {
-    store: new Map<string, string>(),
-  }
+const { redisState, createOpaqueTokenMock, hashTokenMock, setExMock, getMock, delMock } =
+  vi.hoisted(() => {
+    const state = {
+      store: new Map<string, string>(),
+    }
 
-  const setEx = vi.fn(async (key: string, _ttl: number, value: string) => {
-    state.store.set(key, value)
+    const setEx = vi.fn(async (key: string, _ttl: number, value: string) => {
+      state.store.set(key, value)
+    })
+
+    const get = vi.fn(async (key: string) => state.store.get(key) ?? null)
+    const del = vi.fn(async (key: string) => {
+      state.store.delete(key)
+    })
+
+    return {
+      redisState: state,
+      createOpaqueTokenMock: vi.fn(() => 'opaque-reset-token'),
+      hashTokenMock: vi.fn((value: string) => `hash:${value}`),
+      setExMock: setEx,
+      getMock: get,
+      delMock: del,
+    }
   })
-
-  const get = vi.fn(async (key: string) => state.store.get(key) ?? null)
-  const del = vi.fn(async (key: string) => {
-    state.store.delete(key)
-  })
-
-  return {
-    redisState: state,
-    createOpaqueTokenMock: vi.fn(() => 'opaque-reset-token'),
-    hashTokenMock: vi.fn((value: string) => `hash:${value}`),
-    setExMock: setEx,
-    getMock: get,
-    delMock: del,
-  }
-})
 
 vi.mock('~/cache/client', () => ({
   getRedisClient: vi.fn(async () => ({

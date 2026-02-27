@@ -4,12 +4,14 @@ import { authIndex } from '~/routes/auth/index'
 
 const { rateLimitState, createOAuthStateMock, logAuditEventMock } = vi.hoisted(() => ({
   rateLimitState: { limited: false },
-  createOAuthStateMock: vi.fn(async ({ provider, nonce, redirectPath }: Record<string, string>) => ({
-    state: 'oauth-state',
-    provider,
-    nonce,
-    redirectPath,
-  })),
+  createOAuthStateMock: vi.fn(
+    async ({ provider, nonce, redirectPath }: Record<string, string>) => ({
+      state: 'oauth-state',
+      provider,
+      nonce,
+      redirectPath,
+    }),
+  ),
   logAuditEventMock: vi.fn(async () => {}),
 }))
 
