@@ -584,6 +584,927 @@ paths:
                 required:
                   - code
                   - error
+  /admin/categories:
+    get:
+      responses:
+        "200":
+          description: Admin category list
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  items:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: string
+                          format: uuid
+                        name:
+                          type: string
+                        slug:
+                          type: string
+                        displayOrder:
+                          type: integer
+                          minimum: 0
+                        isActive:
+                          type: boolean
+                        createdAt:
+                          type: string
+                      required:
+                        - id
+                        - name
+                        - slug
+                        - displayOrder
+                        - isActive
+                        - createdAt
+                required:
+                  - items
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: string
+                  error:
+                    type: string
+                required:
+                  - code
+                  - error
+        "403":
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: string
+                  error:
+                    type: string
+                required:
+                  - code
+                  - error
+    post:
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  minLength: 1
+                slug:
+                  type: string
+                  minLength: 1
+                  pattern: ^[a-z0-9]+(?:-[a-z0-9]+)*$
+                displayOrder:
+                  type: integer
+                  minimum: 0
+                isActive:
+                  type: boolean
+                  default: true
+              required:
+                - name
+                - slug
+                - displayOrder
+      responses:
+        "201":
+          description: Category created
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    format: uuid
+                  name:
+                    type: string
+                  slug:
+                    type: string
+                  displayOrder:
+                    type: integer
+                    minimum: 0
+                  isActive:
+                    type: boolean
+                  createdAt:
+                    type: string
+                required:
+                  - id
+                  - name
+                  - slug
+                  - displayOrder
+                  - isActive
+                  - createdAt
+        "400":
+          description: Invalid input
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: string
+                  error:
+                    type: string
+                required:
+                  - code
+                  - error
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: string
+                  error:
+                    type: string
+                required:
+                  - code
+                  - error
+        "403":
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: string
+                  error:
+                    type: string
+                required:
+                  - code
+                  - error
+        "409":
+          description: Slug already exists
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: string
+                  error:
+                    type: string
+                required:
+                  - code
+                  - error
+  /admin/categories/{id}:
+    put:
+      parameters:
+        - schema:
+            type: string
+            format: uuid
+          required: true
+          name: id
+          in: path
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  minLength: 1
+                slug:
+                  type: string
+                  minLength: 1
+                  pattern: ^[a-z0-9]+(?:-[a-z0-9]+)*$
+                displayOrder:
+                  type: integer
+                  minimum: 0
+                isActive:
+                  type: boolean
+      responses:
+        "200":
+          description: Category updated
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    format: uuid
+                  name:
+                    type: string
+                  slug:
+                    type: string
+                  displayOrder:
+                    type: integer
+                    minimum: 0
+                  isActive:
+                    type: boolean
+                  createdAt:
+                    type: string
+                required:
+                  - id
+                  - name
+                  - slug
+                  - displayOrder
+                  - isActive
+                  - createdAt
+        "400":
+          description: Invalid input
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: string
+                  error:
+                    type: string
+                required:
+                  - code
+                  - error
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: string
+                  error:
+                    type: string
+                required:
+                  - code
+                  - error
+        "403":
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: string
+                  error:
+                    type: string
+                required:
+                  - code
+                  - error
+        "404":
+          description: Category not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: string
+                  error:
+                    type: string
+                required:
+                  - code
+                  - error
+        "409":
+          description: Slug already exists
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: string
+                  error:
+                    type: string
+                required:
+                  - code
+                  - error
+    delete:
+      parameters:
+        - schema:
+            type: string
+            format: uuid
+          required: true
+          name: id
+          in: path
+      responses:
+        "204":
+          description: Category deleted
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: string
+                  error:
+                    type: string
+                required:
+                  - code
+                  - error
+        "403":
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: string
+                  error:
+                    type: string
+                required:
+                  - code
+                  - error
+        "404":
+          description: Category not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: string
+                  error:
+                    type: string
+                required:
+                  - code
+                  - error
+        "409":
+          description: Category has products
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: string
+                  error:
+                    type: string
+                required:
+                  - code
+                  - error
+  /admin/products:
+    post:
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  minLength: 1
+                description:
+                  type: string
+                  minLength: 1
+                price:
+                  type: integer
+                  minimum: 0
+                  exclusiveMinimum: true
+                categoryId:
+                  type: string
+                  format: uuid
+                isSubstitutable:
+                  type: boolean
+                  default: true
+              required:
+                - name
+                - description
+                - price
+                - categoryId
+      responses:
+        "201":
+          description: Product created
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    format: uuid
+                  name:
+                    type: string
+                  description:
+                    type: string
+                  price:
+                    type: integer
+                    minimum: 0
+                  status:
+                    type: string
+                    enum:
+                      - active
+                      - low_stock
+                      - out_of_stock
+                      - discontinued
+                  categoryId:
+                    type: string
+                    nullable: true
+                  thumbUrl:
+                    type: string
+                    nullable: true
+                  detailUrl:
+                    type: string
+                    nullable: true
+                  isSubstitutable:
+                    type: boolean
+                  createdAt:
+                    type: string
+                required:
+                  - id
+                  - name
+                  - description
+                  - price
+                  - status
+                  - categoryId
+                  - thumbUrl
+                  - detailUrl
+                  - isSubstitutable
+                  - createdAt
+        "400":
+          description: Invalid input
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: string
+                  error:
+                    type: string
+                required:
+                  - code
+                  - error
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: string
+                  error:
+                    type: string
+                required:
+                  - code
+                  - error
+        "403":
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: string
+                  error:
+                    type: string
+                required:
+                  - code
+                  - error
+        "409":
+          description: Product name conflict
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: string
+                  error:
+                    type: string
+                required:
+                  - code
+                  - error
+  /admin/products/{id}:
+    put:
+      parameters:
+        - schema:
+            type: string
+            format: uuid
+          required: true
+          name: id
+          in: path
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  minLength: 1
+                description:
+                  type: string
+                  minLength: 1
+                price:
+                  type: integer
+                  minimum: 0
+                  exclusiveMinimum: true
+                categoryId:
+                  type: string
+                  format: uuid
+                isSubstitutable:
+                  type: boolean
+      responses:
+        "200":
+          description: Product updated
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    format: uuid
+                  name:
+                    type: string
+                  description:
+                    type: string
+                  price:
+                    type: integer
+                    minimum: 0
+                  status:
+                    type: string
+                    enum:
+                      - active
+                      - low_stock
+                      - out_of_stock
+                      - discontinued
+                  categoryId:
+                    type: string
+                    nullable: true
+                  thumbUrl:
+                    type: string
+                    nullable: true
+                  detailUrl:
+                    type: string
+                    nullable: true
+                  isSubstitutable:
+                    type: boolean
+                  createdAt:
+                    type: string
+                required:
+                  - id
+                  - name
+                  - description
+                  - price
+                  - status
+                  - categoryId
+                  - thumbUrl
+                  - detailUrl
+                  - isSubstitutable
+                  - createdAt
+        "400":
+          description: Invalid input
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: string
+                  error:
+                    type: string
+                required:
+                  - code
+                  - error
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: string
+                  error:
+                    type: string
+                required:
+                  - code
+                  - error
+        "403":
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: string
+                  error:
+                    type: string
+                required:
+                  - code
+                  - error
+        "404":
+          description: Product not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: string
+                  error:
+                    type: string
+                required:
+                  - code
+                  - error
+    delete:
+      parameters:
+        - schema:
+            type: string
+            format: uuid
+          required: true
+          name: id
+          in: path
+      responses:
+        "204":
+          description: Product deleted
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: string
+                  error:
+                    type: string
+                required:
+                  - code
+                  - error
+        "403":
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: string
+                  error:
+                    type: string
+                required:
+                  - code
+                  - error
+        "404":
+          description: Product not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: string
+                  error:
+                    type: string
+                required:
+                  - code
+                  - error
+        "409":
+          description: Product has orders
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: string
+                  error:
+                    type: string
+                required:
+                  - code
+                  - error
+  /admin/products/{id}/status:
+    patch:
+      parameters:
+        - schema:
+            type: string
+            format: uuid
+          required: true
+          name: id
+          in: path
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                status:
+                  type: string
+                  enum:
+                    - active
+                    - low_stock
+                    - out_of_stock
+                    - discontinued
+              required:
+                - status
+      responses:
+        "200":
+          description: Product status updated
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    format: uuid
+                  name:
+                    type: string
+                  description:
+                    type: string
+                  price:
+                    type: integer
+                    minimum: 0
+                  status:
+                    type: string
+                    enum:
+                      - active
+                      - low_stock
+                      - out_of_stock
+                      - discontinued
+                  categoryId:
+                    type: string
+                    nullable: true
+                  thumbUrl:
+                    type: string
+                    nullable: true
+                  detailUrl:
+                    type: string
+                    nullable: true
+                  isSubstitutable:
+                    type: boolean
+                  createdAt:
+                    type: string
+                required:
+                  - id
+                  - name
+                  - description
+                  - price
+                  - status
+                  - categoryId
+                  - thumbUrl
+                  - detailUrl
+                  - isSubstitutable
+                  - createdAt
+        "400":
+          description: Invalid status
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: string
+                  error:
+                    type: string
+                required:
+                  - code
+                  - error
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: string
+                  error:
+                    type: string
+                required:
+                  - code
+                  - error
+        "403":
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: string
+                  error:
+                    type: string
+                required:
+                  - code
+                  - error
+        "404":
+          description: Product not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: string
+                  error:
+                    type: string
+                required:
+                  - code
+                  - error
+  /admin/products/{id}/images:
+    post:
+      parameters:
+        - schema:
+            type: string
+            format: uuid
+          required: true
+          name: id
+          in: path
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                file:
+                  nullable: true
+      responses:
+        "200":
+          description: Images uploaded
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  thumbUrl:
+                    type: string
+                  detailUrl:
+                    type: string
+                required:
+                  - thumbUrl
+                  - detailUrl
+        "400":
+          description: Invalid file
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: string
+                  error:
+                    type: string
+                required:
+                  - code
+                  - error
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: string
+                  error:
+                    type: string
+                required:
+                  - code
+                  - error
+        "403":
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: string
+                  error:
+                    type: string
+                required:
+                  - code
+                  - error
+        "404":
+          description: Product not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: string
+                  error:
+                    type: string
+                required:
+                  - code
+                  - error
   /products:
     get:
       parameters:
