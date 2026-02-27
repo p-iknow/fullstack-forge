@@ -15,8 +15,20 @@ type CatalogDbRow = {
   reserved: number
 }
 
+type CatalogCategoryRow = {
+  id: string
+  name: string
+  slug: string
+  displayOrder: number
+  isActive: boolean
+}
+
 const { dbRowsState } = vi.hoisted(() => ({
-  dbRowsState: { rows: [] as CatalogDbRow[] },
+  dbRowsState: {
+    productRows: [] as CatalogDbRow[],
+    categoryRows: [] as CatalogCategoryRow[],
+    selectQueue: [] as unknown[],
+  },
 }))
 
 vi.mock('~/db/client', () => ({
@@ -25,7 +37,9 @@ vi.mock('~/db/client', () => ({
       const builder = {
         from: vi.fn(() => builder),
         leftJoin: vi.fn(() => builder),
-        orderBy: vi.fn(async () => dbRowsState.rows),
+        where: vi.fn(() => builder),
+        limit: vi.fn(async () => (dbRowsState.selectQueue.shift() ?? []) as unknown[]),
+        orderBy: vi.fn(async () => (dbRowsState.selectQueue.shift() ?? []) as unknown[]),
       }
       return builder
     }),
@@ -34,14 +48,31 @@ vi.mock('~/db/client', () => ({
 
 describe('catalog routes', () => {
   beforeEach(() => {
-    dbRowsState.rows = [
+    dbRowsState.categoryRows = [
+      {
+        id: 'aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa',
+        name: '음료',
+        slug: 'beverage',
+        displayOrder: 2,
+        isActive: true,
+      },
+      {
+        id: 'bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbbbb',
+        name: '세탁/청소',
+        slug: 'laundry-cleaning',
+        displayOrder: 4,
+        isActive: true,
+      },
+    ]
+
+    dbRowsState.productRows = [
       {
         id: '11111111-1111-1111-1111-111111111111',
         name: 'Apple Juice',
         description: 'Fresh juice',
         price: 2900,
         status: 'active',
-        categoryId: 'cat-2',
+        categoryId: 'aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa',
         isSubstitutable: true,
         createdAt: new Date('2026-01-01T00:00:00.000Z'),
         onHand: 8,
@@ -53,19 +84,22 @@ describe('catalog routes', () => {
         description: 'House cleaning wipe',
         price: 4900,
         status: 'out_of_stock',
-        categoryId: 'cat-4',
+        categoryId: 'bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbbbb',
         isSubstitutable: false,
         createdAt: new Date('2026-01-02T00:00:00.000Z'),
         onHand: 0,
         reserved: 0,
       },
     ]
+
+    dbRowsState.selectQueue = []
   })
 
   it('returns product list with default pagination', async () => {
     // given
     const app = new Hono()
     app.route('/', catalogIndex)
+    dbRowsState.selectQueue.push(dbRowsState.categoryRows, dbRowsState.productRows)
 
     // when
     const res = await app.request('http://localhost/products')
@@ -94,6 +128,7 @@ describe('catalog routes', () => {
     // given
     const app = new Hono()
     app.route('/', catalogIndex)
+    dbRowsState.selectQueue.push(dbRowsState.categoryRows, dbRowsState.productRows)
 
     // when
     const res = await app.request('http://localhost/products/search?q=apple')
@@ -118,6 +153,7 @@ describe('catalog routes', () => {
     // given
     const app = new Hono()
     app.route('/', catalogIndex)
+    dbRowsState.selectQueue.push(dbRowsState.categoryRows, dbRowsState.productRows)
 
     // when
     const res = await app.request('http://localhost/products/33333333-3333-4333-8333-333333333333')
@@ -133,6 +169,7 @@ describe('catalog routes', () => {
     // given
     const app = new Hono()
     app.route('/', catalogIndex)
+    dbRowsState.selectQueue.push(dbRowsState.categoryRows)
 
     // when
     const res = await app.request('http://localhost/categories')
@@ -142,6 +179,6 @@ describe('catalog routes', () => {
     const json = (await res.json()) as {
       items: unknown[]
     }
-    expect(json.items).toHaveLength(6)
+    expect(json.items).toHaveLength(2)
   })
 })

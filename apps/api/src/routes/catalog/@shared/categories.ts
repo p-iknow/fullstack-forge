@@ -1,3 +1,7 @@
+import { asc, eq } from 'drizzle-orm'
+import { db } from '~/db/client'
+import { categories } from '~/db/schema/index'
+
 export type CatalogCategory = {
   id: string
   name: string
@@ -6,61 +10,72 @@ export type CatalogCategory = {
   isActive: boolean
 }
 
-export const catalogCategories: CatalogCategory[] = [
-  {
-    id: 'cat-1',
-    name: '상온 간편식',
-    slug: 'convenience-food',
-    displayOrder: 1,
-    isActive: true,
-  },
-  {
-    id: 'cat-2',
-    name: '음료',
-    slug: 'beverage',
-    displayOrder: 2,
-    isActive: true,
-  },
-  {
-    id: 'cat-3',
-    name: '위생용품',
-    slug: 'hygiene',
-    displayOrder: 3,
-    isActive: true,
-  },
-  {
-    id: 'cat-4',
-    name: '세탁/청소',
-    slug: 'laundry-cleaning',
-    displayOrder: 4,
-    isActive: true,
-  },
-  {
-    id: 'cat-5',
-    name: '반려소모품',
-    slug: 'pet-supplies',
-    displayOrder: 5,
-    isActive: true,
-  },
-  {
-    id: 'cat-6',
-    name: '셀프케어',
-    slug: 'self-care',
-    displayOrder: 6,
-    isActive: true,
-  },
-]
+const mapCatalogCategory = (category: {
+  id: string
+  name: string
+  slug: string
+  displayOrder: number
+  isActive: boolean
+}): CatalogCategory => ({
+  id: category.id,
+  name: category.name,
+  slug: category.slug,
+  displayOrder: category.displayOrder,
+  isActive: category.isActive,
+})
 
-const categoryById = new Map(catalogCategories.map((category) => [category.id, category]))
+export const getDbCategories = async (): Promise<CatalogCategory[]> => {
+  const rows = await db
+    .select({
+      id: categories.id,
+      name: categories.name,
+      slug: categories.slug,
+      displayOrder: categories.displayOrder,
+      isActive: categories.isActive,
+    })
+    .from(categories)
+    .orderBy(asc(categories.displayOrder))
 
-export const getCatalogCategoryById = (categoryId: string | null | undefined): CatalogCategory | null => {
+  return rows.map(mapCatalogCategory)
+}
+
+export const getDbCategoryById = async (
+  categoryId: string | null | undefined,
+): Promise<CatalogCategory | null> => {
   if (!categoryId) {
     return null
   }
-  return categoryById.get(categoryId) ?? null
+
+  const [row] = await db
+    .select({
+      id: categories.id,
+      name: categories.name,
+      slug: categories.slug,
+      displayOrder: categories.displayOrder,
+      isActive: categories.isActive,
+    })
+    .from(categories)
+    .where(eq(categories.id, categoryId))
+    .limit(1)
+
+  return row ? mapCatalogCategory(row) : null
 }
 
-export const findCatalogCategory = (value: string | null | undefined): CatalogCategory | null => {
+export const getCatalogCategoryById = (
+  categoryList: CatalogCategory[],
+  categoryId: string | null | undefined,
+): CatalogCategory | null => {
+  if (!categoryId) {
+    return null
+  }
+
+  return categoryList.find((category) => category.id === categoryId) ?? null
+}
+
+export const findCatalogCategory = (
+  value: string | null | undefined,
+  categoryList: CatalogCategory[],
+): CatalogCategory | null => {
   if (!value) {
     return null
   }
@@ -71,7 +86,7 @@ export const findCatalogCategory = (value: string | null | undefined): CatalogCa
   }
 
   return (
-    catalogCategories.find((category) => {
+    categoryList.find((category) => {
       return (
         category.id.toLowerCase() === normalized ||
         category.slug.toLowerCase() === normalized ||

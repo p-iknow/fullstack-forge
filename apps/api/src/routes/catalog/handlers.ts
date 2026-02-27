@@ -8,7 +8,8 @@ import {
 import { desc, eq } from 'drizzle-orm'
 import { db } from '~/db/client'
 import { inventory, products } from '~/db/schema/index'
-import { catalogCategories, findCatalogCategory, getCatalogCategoryById } from './@shared/categories'
+import { findCatalogCategory, getCatalogCategoryById, getDbCategories } from './@shared/categories'
+import type { CatalogCategory } from './@shared/categories'
 import {
   getAvailableStock,
   getCanPurchase,
@@ -99,11 +100,11 @@ const selectCatalogProductRowsWithImageColumns = async (): Promise<CatalogProduc
     .orderBy(desc(products.createdAt))
 }
 
-const loadCatalogProducts = async (): Promise<CatalogProduct[]> => {
+const loadCatalogProducts = async (categoryList: CatalogCategory[]): Promise<CatalogProduct[]> => {
   const rows = await selectCatalogProductRowsWithImageColumns()
 
   return rows.map((row) => {
-    const category = getCatalogCategoryById(row.categoryId)
+    const category = getCatalogCategoryById(categoryList, row.categoryId)
     const availableStock = getAvailableStock(row.onHand, row.reserved)
     const status = row.status as CatalogStatus
     const brand = getProductBrand(category, row.name)
@@ -134,6 +135,7 @@ const loadCatalogProducts = async (): Promise<CatalogProduct[]> => {
 
 const filterCatalogProducts = (
   productsList: CatalogProduct[],
+  categoryList: CatalogCategory[],
   filters: {
     q: string
     category: string
@@ -142,7 +144,7 @@ const filterCatalogProducts = (
   },
 ) => {
   const { q, category, status, brand } = filters
-  const categoryMatch = findCatalogCategory(category)
+  const categoryMatch = findCatalogCategory(category, categoryList)
 
   return productsList.filter((item) => {
     if (q) {
@@ -237,8 +239,9 @@ const toPaginationMeta = ({
 
 export const getProductsHandler: RouteHandler<typeof getProductsRoute> = async (c) => {
   const query = parseListQuery(c.req.valid('query'))
-  const loaded = await loadCatalogProducts()
-  const filtered = filterCatalogProducts(loaded, query)
+  const categoryList = await getDbCategories()
+  const loaded = await loadCatalogProducts(categoryList)
+  const filtered = filterCatalogProducts(loaded, categoryList, query)
   const sorted = sortCatalogProducts(filtered, query.sort, query.order)
 
   const start = (query.page - 1) * query.pageSize
@@ -263,8 +266,9 @@ export const searchProductsHandler: RouteHandler<typeof searchProductsRoute> = a
     return c.json({ code: 'catalog_invalid_query', error: 'Search query is required' }, 400)
   }
 
-  const loaded = await loadCatalogProducts()
-  const filtered = filterCatalogProducts(loaded, query)
+  const categoryList = await getDbCategories()
+  const loaded = await loadCatalogProducts(categoryList)
+  const filtered = filterCatalogProducts(loaded, categoryList, query)
   const sorted = sortCatalogProducts(filtered, query.sort, query.order)
 
   const start = (query.page - 1) * query.pageSize
@@ -285,7 +289,8 @@ export const searchProductsHandler: RouteHandler<typeof searchProductsRoute> = a
 
 export const getProductByIdHandler: RouteHandler<typeof getProductByIdRoute> = async (c) => {
   const { id } = c.req.valid('param')
-  const loaded = await loadCatalogProducts()
+  const categoryList = await getDbCategories()
+  const loaded = await loadCatalogProducts(categoryList)
   const found = loaded.find((item) => item.id === id)
 
   if (!found) {
@@ -302,9 +307,11 @@ export const getProductByIdHandler: RouteHandler<typeof getProductByIdRoute> = a
 }
 
 export const getCategoriesHandler: RouteHandler<typeof getCategoriesRoute> = async (c) => {
+  const categoryList = await getDbCategories()
+
   return c.json(
     {
-      items: catalogCategories,
+      items: categoryList,
     },
     200,
   )
