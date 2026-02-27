@@ -2,6 +2,7 @@ import { db } from '~/db/client'
 import { publicUrl } from '~/lib/s3-client'
 import {
   auditLogs,
+  categories,
   couponRedemptions,
   coupons,
   customerInquiries,
@@ -53,6 +54,7 @@ async function seed(): Promise<void> {
   await db.delete(orders)
   await db.delete(inventory)
   await db.delete(products)
+  await db.delete(categories)
   await db.delete(auditLogs)
   await db.delete(userOauthAccounts)
   await db.delete(userSessions)
@@ -87,12 +89,58 @@ async function seed(): Promise<void> {
 
   await db.insert(userCredentials).values(credentialRows)
 
+  const insertedCategories = await db
+    .insert(categories)
+    .values([
+      {
+        name: '상온 간편식',
+        slug: 'convenience-food',
+        displayOrder: 1,
+        isActive: true,
+      },
+      {
+        name: '음료',
+        slug: 'beverage',
+        displayOrder: 2,
+        isActive: true,
+      },
+      {
+        name: '위생용품',
+        slug: 'hygiene',
+        displayOrder: 3,
+        isActive: true,
+      },
+      {
+        name: '세탁/청소',
+        slug: 'laundry-cleaning',
+        displayOrder: 4,
+        isActive: true,
+      },
+      {
+        name: '반려소모품',
+        slug: 'pet-supplies',
+        displayOrder: 5,
+        isActive: true,
+      },
+      {
+        name: '셀프케어',
+        slug: 'self-care',
+        displayOrder: 6,
+        isActive: true,
+      },
+    ])
+    .returning({ id: categories.id, slug: categories.slug })
+
+  const legacyCategoryIdToUuid = new Map<string, string>(
+    insertedCategories.map((category, index) => [`cat-${index + 1}`, category.id]),
+  )
+
   const seededProducts = PRODUCT_CATALOG.map((product) => ({
+    categoryId: legacyCategoryIdToUuid.get(product.categoryId),
     name: product.name,
     description: product.description,
     price: product.price,
     status: product.status,
-    categoryId: product.categoryId,
     thumbUrl: publicUrl(product.thumbKey),
     detailUrl: publicUrl(product.detailKey),
     isSubstitutable: product.isSubstitutable,
@@ -212,9 +260,14 @@ async function seed(): Promise<void> {
     })
     .returning({ id: promotions.id })
 
+  const convenienceFoodCategoryId = legacyCategoryIdToUuid.get('cat-1')
+  if (!convenienceFoodCategoryId) {
+    throw new Error('seed category mapping for cat-1 not found')
+  }
+
   await db.insert(promotionCategories).values({
     promotionId: seedCategoryPromotion.id,
-    categoryId: 'cat-1',
+    categoryId: convenienceFoodCategoryId,
   })
 
   const [welcomeCoupon] = await db
