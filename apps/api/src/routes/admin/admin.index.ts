@@ -1,6 +1,31 @@
 import { createRouter } from '~/lib/create-app'
-import { adminDashboardRoute, adminRedriveRoute } from '@fullstack-forge/api-spec/routes/admin'
+import {
+  adminDashboardRoute,
+  adminRedriveRoute,
+  createAdminCategoryRoute,
+  createAdminProductRoute,
+  deleteAdminCategoryRoute,
+  deleteAdminProductRoute,
+  getAdminCategoriesRoute,
+  updateAdminCategoryRoute,
+  updateAdminProductRoute,
+  updateAdminProductStatusRoute,
+  uploadAdminProductImagesRoute,
+} from '@fullstack-forge/api-spec/routes/admin'
 import { getAuthUser, requireAuth } from '~/routes/auth/@shared/http/middleware'
+import {
+  createAdminCategoryHandler,
+  deleteAdminCategoryHandler,
+  getAdminCategoriesHandler,
+  updateAdminCategoryHandler,
+} from './categories/handlers'
+import {
+  createAdminProductHandler,
+  deleteAdminProductHandler,
+  updateAdminProductHandler,
+  updateAdminProductStatusHandler,
+  uploadAdminProductImagesHandler,
+} from './products/handlers'
 
 export const adminIndex = createRouter()
 
@@ -49,3 +74,12 @@ const redriveHandler = async (
 
 adminIndex.openapi(adminDashboardRoute, dashboardHandler)
 adminIndex.openapi(adminRedriveRoute, redriveHandler)
+adminIndex.openapi(getAdminCategoriesRoute, getAdminCategoriesHandler)
+adminIndex.openapi(createAdminCategoryRoute, createAdminCategoryHandler)
+adminIndex.openapi(updateAdminCategoryRoute, updateAdminCategoryHandler)
+adminIndex.openapi(deleteAdminCategoryRoute, deleteAdminCategoryHandler)
+adminIndex.openapi(createAdminProductRoute, createAdminProductHandler)
+adminIndex.openapi(updateAdminProductRoute, updateAdminProductHandler)
+adminIndex.openapi(updateAdminProductStatusRoute, updateAdminProductStatusHandler)
+adminIndex.openapi(deleteAdminProductRoute, deleteAdminProductHandler)
+adminIndex.openapi(uploadAdminProductImagesRoute, uploadAdminProductImagesHandler)
