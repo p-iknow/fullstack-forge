@@ -29,6 +29,10 @@
       "types": "./src/oauth-schemas.ts",
       "default": "./src/oauth-schemas.ts"
     },
+    "./admin-catalog-schemas": {
+      "types": "./src/admin-catalog-schemas.ts",
+      "default": "./src/admin-catalog-schemas.ts"
+    },
     "./routes/auth": {
       "types": "./src/routes/auth/index.ts",
       "default": "./src/routes/auth/index.ts"
