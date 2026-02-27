@@ -29,6 +29,13 @@
       "when": 1739878000000,
       "tag": "0003_add_product_image_urls",
       "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1772227442768,
+      "tag": "0004_silly_junta",
+      "breakpoints": true
     }
   ]
 }

@@ -9,6 +9,7 @@ import {
   timestamp,
   uuid,
 } from 'drizzle-orm/pg-core'
+import { categories } from './category'
 
 export const productStatusEnum = pgEnum('product_status', [
   'active',
@@ -23,7 +24,7 @@ export const products = pgTable('products', {
   description: text('description').notNull(),
   price: integer('price').notNull(),
   status: productStatusEnum('status').notNull().default('active'),
-  categoryId: text('category_id'),
+  categoryId: uuid('category_id').references(() => categories.id),
   thumbUrl: text('thumb_url'),
   detailUrl: text('detail_url'),
   isSubstitutable: boolean('is_substitutable').notNull().default(true),
