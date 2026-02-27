@@ -1,0 +1,284 @@
+import type { RouteHandler } from '@hono/zod-openapi'
+import {
+  createAdminProductRoute,
+  deleteAdminProductRoute,
+  updateAdminProductRoute,
+  updateAdminProductStatusRoute,
+  uploadAdminProductImagesRoute,
+} from '@fullstack-forge/api-spec/routes/admin'
+import { PutObjectCommand } from '@aws-sdk/client-s3'
+import { eq } from 'drizzle-orm'
+import sharp from 'sharp'
+import { db } from '~/db/client'
+import { categories, inventory, orderItems, products } from '~/db/schema/index'
+import { getFallbackProductImageUrls } from '~/lib/product-image'
+import { MINIO_BUCKET, publicUrl, s3 } from '~/lib/s3-client'
+
+const ALLOWED_IMAGE_TYPES = new Set(['image/jpeg', 'image/png', 'image/webp'])
+const MAX_FILE_SIZE_BYTES = 5 * 1024 * 1024
+
+const toAdminProduct = (product: {
+  id: string
+  name: string
+  description: string
+  price: number
+  status: 'active' | 'low_stock' | 'out_of_stock' | 'discontinued'
+  categoryId: string | null
+  thumbUrl: string | null
+  detailUrl: string | null
+  isSubstitutable: boolean
+  createdAt: Date
+}) => ({
+  id: product.id,
+  name: product.name,
+  description: product.description,
+  price: product.price,
+  status: product.status,
+  categoryId: product.categoryId,
+  thumbUrl: product.thumbUrl,
+  detailUrl: product.detailUrl,
+  isSubstitutable: product.isSubstitutable,
+  createdAt: product.createdAt.toISOString(),
+})
+
+const selectProductColumns = {
+  id: products.id,
+  name: products.name,
+  description: products.description,
+  price: products.price,
+  status: products.status,
+  categoryId: products.categoryId,
+  thumbUrl: products.thumbUrl,
+  detailUrl: products.detailUrl,
+  isSubstitutable: products.isSubstitutable,
+  createdAt: products.createdAt,
+}
+
+const getFirstFileFromBody = (
+  fileEntry: string | File | (string | File)[] | undefined,
+): File | null => {
+  if (!fileEntry) {
+    return null
+  }
+
+  const candidate = Array.isArray(fileEntry) ? fileEntry[0] : fileEntry
+  if (typeof File === 'undefined') {
+    return null
+  }
+
+  return candidate instanceof File ? candidate : null
+}
+
+export const createAdminProductHandler: RouteHandler<typeof createAdminProductRoute> = async (
+  c,
+) => {
+  const body = c.req.valid('json')
+
+  const [category] = await db
+    .select({ id: categories.id })
+    .from(categories)
+    .where(eq(categories.id, body.categoryId))
+    .limit(1)
+
+  if (!category) {
+    return c.json({ code: 'admin_category_not_found', error: 'Category not found' }, 400)
+  }
+
+  const fallbackImages = getFallbackProductImageUrls()
+  const [created] = await db
+    .insert(products)
+    .values({
+      name: body.name,
+      description: body.description,
+      price: body.price,
+      status: 'active',
+      categoryId: body.categoryId,
+      thumbUrl: fallbackImages.thumbUrl,
+      detailUrl: fallbackImages.detailUrl,
+      isSubstitutable: body.isSubstitutable,
+    })
+    .returning(selectProductColumns)
+
+  await db.insert(inventory).values({
+    productId: created.id,
+    onHand: 0,
+    reserved: 0,
+    safetyThreshold: 0,
+    version: 1,
+  })
+
+  return c.json(toAdminProduct(created), 201)
+}
+
+export const updateAdminProductHandler: RouteHandler<typeof updateAdminProductRoute> = async (
+  c,
+) => {
+  const { id } = c.req.valid('param')
+  const body = c.req.valid('json')
+
+  const [found] = await db
+    .select({ id: products.id })
+    .from(products)
+    .where(eq(products.id, id))
+    .limit(1)
+
+  if (!found) {
+    return c.json({ code: 'admin_product_not_found', error: 'Product not found' }, 404)
+  }
+
+  if (body.categoryId) {
+    const [category] = await db
+      .select({ id: categories.id })
+      .from(categories)
+      .where(eq(categories.id, body.categoryId))
+      .limit(1)
+
+    if (!category) {
+      return c.json({ code: 'admin_category_not_found', error: 'Category not found' }, 400)
+    }
+  }
+
+  const [updated] = await db
+    .update(products)
+    .set(body)
+    .where(eq(products.id, id))
+    .returning(selectProductColumns)
+
+  return c.json(toAdminProduct(updated), 200)
+}
+
+export const updateAdminProductStatusHandler: RouteHandler<
+  typeof updateAdminProductStatusRoute
+> = async (c) => {
+  const { id } = c.req.valid('param')
+  const body = c.req.valid('json')
+
+  const [found] = await db
+    .select({ id: products.id })
+    .from(products)
+    .where(eq(products.id, id))
+    .limit(1)
+
+  if (!found) {
+    return c.json({ code: 'admin_product_not_found', error: 'Product not found' }, 404)
+  }
+
+  const [updated] = await db
+    .update(products)
+    .set({ status: body.status })
+    .where(eq(products.id, id))
+    .returning(selectProductColumns)
+
+  return c.json(toAdminProduct(updated), 200)
+}
+
+export const deleteAdminProductHandler: RouteHandler<typeof deleteAdminProductRoute> = async (
+  c,
+) => {
+  const { id } = c.req.valid('param')
+
+  const [found] = await db
+    .select({ id: products.id })
+    .from(products)
+    .where(eq(products.id, id))
+    .limit(1)
+
+  if (!found) {
+    return c.json({ code: 'admin_product_not_found', error: 'Product not found' }, 404)
+  }
+
+  const [orderItem] = await db
+    .select({ id: orderItems.id })
+    .from(orderItems)
+    .where(eq(orderItems.productId, id))
+    .limit(1)
+
+  if (orderItem) {
+    return c.json({ code: 'admin_product_has_orders', error: 'Product has order history' }, 409)
+  }
+
+  await db.delete(products).where(eq(products.id, id))
+
+  return c.body(null, 204)
+}
+
+export const uploadAdminProductImagesHandler: RouteHandler<
+  typeof uploadAdminProductImagesRoute
+> = async (c) => {
+  const { id } = c.req.valid('param')
+
+  const [found] = await db
+    .select({ id: products.id })
+    .from(products)
+    .where(eq(products.id, id))
+    .limit(1)
+
+  if (!found) {
+    return c.json({ code: 'admin_product_not_found', error: 'Product not found' }, 404)
+  }
+
+  const body = await c.req.parseBody()
+  const file = getFirstFileFromBody(body.file)
+
+  if (!file) {
+    return c.json(
+      { code: 'admin_product_image_invalid_file', error: 'Image file is required' },
+      400,
+    )
+  }
+
+  if (!ALLOWED_IMAGE_TYPES.has(file.type)) {
+    return c.json(
+      { code: 'admin_product_image_invalid_type', error: 'Unsupported image type' },
+      400,
+    )
+  }
+
+  if (file.size > MAX_FILE_SIZE_BYTES) {
+    return c.json({ code: 'admin_product_image_too_large', error: 'Image exceeds 5MB limit' }, 400)
+  }
+
+  const sourceBuffer = Buffer.from(await file.arrayBuffer())
+  const thumbBuffer = await sharp(sourceBuffer)
+    .resize(400, 400, { fit: 'cover' })
+    .webp({ quality: 85 })
+    .toBuffer()
+  const detailBuffer = await sharp(sourceBuffer)
+    .resize(800, 600, { fit: 'cover' })
+    .webp({ quality: 85 })
+    .toBuffer()
+
+  const thumbKey = `sku-${id}-thumb.webp`
+  const detailKey = `sku-${id}-detail.webp`
+
+  await s3.send(
+    new PutObjectCommand({
+      Bucket: MINIO_BUCKET,
+      Key: thumbKey,
+      Body: thumbBuffer,
+      ContentType: 'image/webp',
+    }),
+  )
+  await s3.send(
+    new PutObjectCommand({
+      Bucket: MINIO_BUCKET,
+      Key: detailKey,
+      Body: detailBuffer,
+      ContentType: 'image/webp',
+    }),
+  )
+
+  const thumbUrl = publicUrl(thumbKey)
+  const detailUrl = publicUrl(detailKey)
+
+  await db
+    .update(products)
+    .set({
+      thumbUrl,
+      detailUrl,
+    })
+    .where(eq(products.id, id))
+    .returning({ id: products.id })
+
+  return c.json({ thumbUrl, detailUrl }, 200)
+}
