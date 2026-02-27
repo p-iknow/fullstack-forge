@@ -14,5 +14,4 @@ export const s3 = new S3Client({
   forcePathStyle: true,
 })
 
-export const publicUrl = (key: string): string =>
-  `${MINIO_ENDPOINT}/${MINIO_BUCKET}/${key}`
+export const publicUrl = (key: string): string => `${MINIO_ENDPOINT}/${MINIO_BUCKET}/${key}`

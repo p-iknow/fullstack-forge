@@ -25,7 +25,15 @@ type ImageGenerator = (
 
 const createImageGenerator = (): ImageGenerator => async (product, productIndex, variant) => {
   const { width, height } = variant === 'thumb' ? THUMB_SIZE : DETAIL_SIZE
-  const svg = buildSvg(width, height, product.name, product.brand, product.categorySlug, variant, productIndex)
+  const svg = buildSvg(
+    width,
+    height,
+    product.name,
+    product.brand,
+    product.categorySlug,
+    variant,
+    productIndex,
+  )
   return generateWebp(svg, width, height)
 }
 
@@ -114,7 +122,13 @@ const hexToRgb = (hex: string): [number, number, number] => {
 }
 
 const rgbToHex = (r: number, g: number, b: number): string =>
-  `#${[r, g, b].map((c) => Math.max(0, Math.min(255, Math.round(c))).toString(16).padStart(2, '0')).join('')}`
+  `#${[r, g, b]
+    .map((c) =>
+      Math.max(0, Math.min(255, Math.round(c)))
+        .toString(16)
+        .padStart(2, '0'),
+    )
+    .join('')}`
 
 const lighten = (hex: string, amount: number): string => {
   const [r, g, b] = hexToRgb(hex)
@@ -656,12 +670,25 @@ const buildSvg = (
   variant: 'thumb' | 'detail',
   productIndex: number,
 ): string => {
-  const visual = PRODUCT_VISUALS[productIndex] ?? { shape: 'box' as PackagingShape, color: '#607D8B' }
+  const visual = PRODUCT_VISUALS[productIndex] ?? {
+    shape: 'box' as PackagingShape,
+    color: '#607D8B',
+  }
   const id = 'p'
   const cx = width / 2
   const cy = height / 2
 
-  const ctx: ShapeCtx = { w: width, h: height, cx, cy, name, brand, color: visual.color, id, variant }
+  const ctx: ShapeCtx = {
+    w: width,
+    h: height,
+    cx,
+    cy,
+    name,
+    brand,
+    color: visual.color,
+    id,
+    variant,
+  }
   const renderer = SHAPE_RENDERERS[visual.shape]
   const shapeContent = renderer(ctx)
 
