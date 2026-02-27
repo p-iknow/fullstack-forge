@@ -3,6 +3,7 @@
 ## §1 범위
 
 - 이 문서는 catalog 도메인의 요구사항을 기존 PRD 원문 기준으로 묶어 관리한다.
+- 조회(store/admin 상품 탐색) 및 admin 쓰기(상품/카테고리 CRUD, 이미지 업로드)를 포함한다.
 - 재고 수량 계산/예약/가용 재고 규칙은 inventory 도메인에서 정의한다.
 
 ## §2 카테고리/SKU 정책
@@ -35,6 +36,10 @@
   - `sku-{id}-detail.webp`
 - 초기 구현:
   - 카테고리 공통 placeholder + 텍스트 배지 허용
+- admin 업로드:
+  - JPEG/PNG/WebP 허용, 최대 5MB
+  - sharp로 리사이즈 (thumb 400×400, detail 800×600) 후 WebP 변환
+  - MinIO(S3 호환) 버킷에 저장
 
 ## §4 상품 상태/판매조건
 
@@ -61,15 +66,24 @@ flowchart TD
     D -->|아니오| F
 ```
 
-## §5 Stage 2 게이트 (카탈로그 부분)
+## §5 Stage 게이트 (카탈로그 부분)
 
-### Exit Criteria
+### Stage 2 Exit Criteria (조회 기능)
 
 - SKU 데이터 seed 완료
 - store에서 상품 탐색/장바구니 동작
 - out_of_stock 노출 정책 적용
 
+### Admin CRUD Exit Criteria (쓰기 기능)
+
+- admin에서 상품 생성/수정/삭제 가능
+- admin에서 상품 이미지 업로드 가능 (thumb + detail)
+- admin에서 상품 상태 변경 가능
+- admin에서 카테고리 CRUD 가능
+- 기존 store 카탈로그 조회 기능에 영향 없음
+
 ### Evidence
 
 - SKU 정책표
 - 이미지 naming 규칙 적용 스냅샷
+- admin CRUD 기능 동작 검증

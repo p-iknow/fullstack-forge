@@ -15,11 +15,14 @@
 
 ## 2) Category 엔터티
 
-- `id`
-- `name`
-- `slug`
-- `display_order`
-- `is_active`
+- `id` — UUID, PK
+- `name` — 표시명
+- `slug` — URL-safe 식별자 (unique)
+- `display_order` — 표시 순서 (integer)
+- `is_active` — 활성 여부 (boolean, default true)
+- `created_at` — 생성 시각
+
+Category는 독립 테이블로 관리하며, `product.category_id`는 `category.id`를 FK로 참조한다.
 
 ## 3) Product 상태 enum
 
@@ -33,6 +36,7 @@
 
 ## 5) 비범위
 
-- 컬럼 타입 정의
+- 컨럼 타입 정의
 - 인덱스 정의
 - 검색 랭킹/추천 모델 정의
+- 상품 bulk import/export 스키마
