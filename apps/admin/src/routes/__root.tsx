@@ -1,6 +1,6 @@
 import type { ReactNode } from 'react'
 import { QueryClientProvider } from '@tanstack/react-query'
-import { Outlet, createRootRoute, HeadContent, Scripts } from '@tanstack/react-router'
+import { Outlet, createRootRoute, HeadContent, Scripts, Link } from '@tanstack/react-router'
 import { TanStackRouterDevtools } from '@tanstack/react-router-devtools'
 import { QueryClient } from '@tanstack/react-query'
 import appCss from '~/styles/app.css?url'
@@ -31,6 +31,23 @@ export const Route = createRootRoute({
 function RootComponent() {
   return (
     <RootDocument>
+      <nav className="flex flex-row items-center gap-4 border-b border-slate-200 bg-white px-6 py-3">
+        <Link
+          to="/"
+          className="text-sm font-medium text-slate-600 hover:text-slate-900"
+          activeProps={{ className: 'text-slate-900 font-semibold' }}
+          activeOptions={{ exact: true }}
+        >
+          상품 관리
+        </Link>
+        <Link
+          to="/categories"
+          className="text-sm font-medium text-slate-600 hover:text-slate-900"
+          activeProps={{ className: 'text-slate-900 font-semibold' }}
+        >
+          카테고리 관리
+        </Link>
+      </nav>
       <Outlet />
     </RootDocument>
   )
