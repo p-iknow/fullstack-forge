@@ -1,4 +1,4 @@
-import { ApiClientError } from '~/lib/api/core'
+import { ApiClientError, fetchWithRefresh } from '~/lib/api/core'
 
 export type CatalogProductStatus = 'active' | 'low_stock' | 'out_of_stock' | 'discontinued'
 
@@ -24,6 +24,7 @@ export type CatalogListParams = {
 export type CatalogListResponse = {
   items: CatalogProduct[]
   total: number
+  categoryDistribution?: Record<string, number>
 }
 
 export type CategoryItem = {
@@ -49,7 +50,7 @@ const toQueryString = (params: CatalogListParams) => {
 }
 
 const requestJson = async <T>(url: string): Promise<T> => {
-  const response = await fetch(url, {
+  const response = await fetchWithRefresh(url, {
     method: 'GET',
     credentials: 'include',
   })
@@ -164,6 +165,9 @@ export type AdminProduct = {
   id: string
   name: string
   description: string
+  sku: string | null
+  brand: string | null
+  weight: number | null
   price: number
   status: CatalogProductStatus
   categoryId: string | null
@@ -178,6 +182,8 @@ export type CreateProductInput = {
   description: string
   price: number
   categoryId: string
+  brand?: string
+  weight?: number
   isSubstitutable?: boolean
 }
 
@@ -197,7 +203,7 @@ export type CreateCategoryInput = {
 export type UpdateCategoryInput = Partial<CreateCategoryInput>
 
 const requestMutate = async <T>(url: string, method: string, body?: unknown): Promise<T> => {
-  const response = await fetch(url, {
+  const response = await fetchWithRefresh(url, {
     method,
     headers: body instanceof FormData ? undefined : { 'Content-Type': 'application/json' },
     body: body instanceof FormData ? body : body ? JSON.stringify(body) : undefined,

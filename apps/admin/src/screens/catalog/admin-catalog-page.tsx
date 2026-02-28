@@ -22,6 +22,7 @@ import {
   deleteProductMutationOptions,
   updateProductStatusMutationOptions,
 } from '~/lib/queries/catalog'
+import { alertAction, confirmAction } from '~/lib/overlay/confirm'
 
 type ProductFilterStatus = Extract<CatalogProductStatus, 'active' | 'low_stock'>
 
@@ -50,7 +51,7 @@ export function AdminCatalogPage() {
     ...deleteProductMutationOptions(queryClient),
     onError: async (error) => {
       const apiError = await readApiError(error)
-      alert(apiError.error || '상품 삭제에 실패했습니다')
+      await alertAction({ title: '삭제 실패', description: apiError.error || '상품 삭제에 실패했습니다' })
     },
   })
   const updateStatusMutation = useMutation(updateProductStatusMutationOptions(queryClient))
@@ -96,11 +97,8 @@ export function AdminCatalogPage() {
   }, [page, productsQuery.data, totalPages])
 
   const distribution = useMemo(() => {
-    const byCategory = new Map<string, number>()
-    for (const item of productsQuery.data?.items ?? []) {
-      byCategory.set(item.categoryName, (byCategory.get(item.categoryName) ?? 0) + 1)
-    }
-    return [...byCategory.entries()].sort((a, b) => a[0].localeCompare(b[0], 'ko-KR'))
+    const raw = productsQuery.data?.categoryDistribution ?? {}
+    return Object.entries(raw).sort((a, b) => a[0].localeCompare(b[0], 'ko-KR'))
   }, [productsQuery.data])
 
   return (
@@ -212,10 +210,20 @@ export function AdminCatalogPage() {
                   <div className="flex items-center justify-end gap-2">
                     <select
                       value={item.status}
-                      onChange={(e) => {
+                      onChange={async (e) => {
+                        const newStatus = e.target.value as CatalogProductStatus
+                        if (newStatus === item.status) return
+                        const confirmed = await confirmAction({
+                          title: '상태 변경',
+                          description: `상태를 '${statusLabel[newStatus]}'(으)로 변경하시겠습니까?`,
+                        })
+                        if (!confirmed) {
+                          e.target.value = item.status
+                          return
+                        }
                         updateStatusMutation.mutate({
                           id: item.id,
-                          data: { status: e.target.value as CatalogProductStatus },
+                          data: { status: newStatus },
                         })
                       }}
                       className="h-8 rounded-md border border-slate-300 bg-white px-2 text-xs"
@@ -242,8 +250,14 @@ export function AdminCatalogPage() {
                       size="sm"
                       className="h-8 px-2 text-xs"
                       disabled={deleteMutation.isPending}
-                      onClick={() => {
-                        if (window.confirm('정말 삭제하시겠습니까?')) {
+                      onClick={async () => {
+                        const confirmed = await confirmAction({
+                          title: '상품 삭제',
+                          description: '정말 삭제하시겠습니까? 이 작업은 되돌릴 수 없습니다.',
+                          confirmLabel: '삭제',
+                          variant: 'destructive',
+                        })
+                        if (confirmed) {
                           deleteMutation.mutate(item.id)
                         }
                       }}

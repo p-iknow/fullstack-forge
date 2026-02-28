@@ -11,6 +11,7 @@ import {
 } from '@tanstack/react-router'
 import { TanStackRouterDevtools } from '@tanstack/react-router-devtools'
 import { QueryClient } from '@tanstack/react-query'
+import { OverlayProvider } from 'overlay-kit'
 import appCss from '~/styles/app.css?url'
 import { meQueryOptions, logoutMutationOptions, authQueryKeys } from '~/lib/queries/auth'
 
@@ -122,7 +123,9 @@ function RootDocument({ children }: Readonly<{ children: ReactNode }>) {
         <HeadContent />
       </head>
       <body suppressHydrationWarning>
-        <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
+        <OverlayProvider>
+          <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
+        </OverlayProvider>
         <TanStackRouterDevtools position="bottom-right" />
         <Scripts />
       </body>

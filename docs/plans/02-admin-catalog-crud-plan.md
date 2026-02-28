@@ -38,7 +38,7 @@
 4. `packages/api-spec/src/admin-catalog-schemas.ts` 생성 — 카테고리 CRUD request/response Zod 스키마 정의.
 5. `packages/api-spec/src/routes/admin/categories/` 에 route contract 추가.
    - `POST /admin/categories` — 카테고리 생성.
-   - `PUT /admin/categories/:id` — 카테고리 수정.
+   - `PATCH /admin/categories/:id` — 카테고리 수정.
    - `DELETE /admin/categories/:id` — 카테고리 삭제.
 6. `apps/api/src/routes/admin/categories/` 에 handler 구현.
 7. 기존 `GET /categories` handler를 새 `categories` 테이블에서 조회하도록 전환.
@@ -49,7 +49,7 @@
 
 - [ ] `categories` 테이블 존재, 6개 seed 카테고리 포함.
 - [ ] `products.categoryId` 가 `categories.id` FK를 참조.
-- [ ] `POST/PUT/DELETE /admin/categories` 정상 응답.
+- [ ] `POST/PATCH/DELETE /admin/categories` 정상 응답.
 - [ ] 기존 `GET /categories` 가 새 테이블 기반으로 동작.
 - [ ] typecheck/build/test 통과.
 
@@ -92,7 +92,7 @@
    - 에러 응답: `{ code, error }` 패턴.
 2. `packages/api-spec/src/routes/admin/products/` 에 route contract 추가.
    - `POST /admin/products` — 상품 생성 (201, 400, 409).
-   - `PUT /admin/products/:id` — 상품 수정 (200, 400, 404).
+   - `PATCH /admin/products/:id` — 상품 수정 (200, 400, 404).
    - `PATCH /admin/products/:id/status` — 상태 변경 (200, 400, 404).
    - `DELETE /admin/products/:id` — 상품 삭제 (204, 404, 409).
 3. `apps/api/src/routes/admin/products/` 에 handler 구현.
@@ -111,7 +111,7 @@
 
 ### Exit Criteria
 
-- [ ] `POST/PUT/PATCH/DELETE /admin/products` 정상 응답.
+- [ ] `POST/PATCH/DELETE /admin/products` 정상 응답.
 - [ ] 상품 생성 시 inventory 레코드 자동 생성 (onHand=0, reserved=0).
 - [ ] 이미지 업로드 시 MinIO에 파일 생성, DB URL 갱신.
 - [ ] 주문 이력이 있는 상품은 삭제 불가 (409).

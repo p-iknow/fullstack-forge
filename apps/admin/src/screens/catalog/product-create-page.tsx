@@ -14,13 +14,15 @@ import {
   uploadProductImagesMutationOptions,
 } from '~/lib/queries/catalog'
 import { readApiError } from '~/lib/api/core'
-import { useRef, useState } from 'react'
+import { type DragEvent, useRef, useState } from 'react'
 
 const productSchema = z.object({
   name: z.string().min(1, '상품명을 입력해주세요'),
   description: z.string().min(1, '상품 설명을 입력해주세요'),
   price: z.coerce.number().int().positive('가격은 0보다 커야 합니다'),
   categoryId: z.string().uuid('카테고리를 선택해주세요'),
+  brand: z.string().optional(),
+  weight: z.union([z.coerce.number().int().positive('무게는 0보다 커야 합니다'), z.nan(), z.literal('')]).optional().transform((v) => (typeof v === 'number' && !Number.isNaN(v) ? v : undefined)),
   isSubstitutable: z.boolean().default(false),
 })
 
@@ -46,14 +48,32 @@ export function ProductCreatePage() {
       description: '',
       price: 0,
       categoryId: '',
+      brand: '',
+      weight: undefined,
       isSubstitutable: false,
     },
   })
 
+  const handleDrop = (
+    ref: React.RefObject<HTMLInputElement | null>,
+    setPreview: (url: string | null) => void,
+  ) => (e: DragEvent<HTMLDivElement>) => {
+    e.preventDefault()
+    const file = e.dataTransfer.files[0]
+    if (!file?.type.startsWith('image/')) return
+    const dt = new DataTransfer()
+    dt.items.add(file)
+    if (ref.current) ref.current.files = dt.files
+    setPreview(URL.createObjectURL(file))
+  }
+
+
   const onSubmit = async (data: ProductFormValues) => {
     setErrorMsg(null)
     try {
-      const created = await createMutation.mutateAsync(data as z.infer<typeof productSchema>)
+      const { brand, weight, ...rest } = data as z.infer<typeof productSchema>
+      const payload = { ...rest, brand: brand || undefined, weight: weight || undefined }
+      const created = await createMutation.mutateAsync(payload)
       const thumbFile = thumbRef.current?.files?.[0]
       const detailFile = detailRef.current?.files?.[0]
       if (thumbFile && detailFile) {
@@ -133,6 +153,20 @@ export function ProductCreatePage() {
               )}
             </div>
 
+            <div className="grid grid-cols-2 gap-4">
+              <div className="space-y-2">
+                <Label htmlFor="brand">브랜드</Label>
+                <Input id="brand" {...form.register('brand')} placeholder="브랜드명" />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="weight">무게 (g)</Label>
+                <Input id="weight" type="number" {...form.register('weight')} placeholder="무게" />
+                {form.formState.errors.weight && (
+                  <p className="text-sm text-rose-500">{form.formState.errors.weight.message}</p>
+                )}
+              </div>
+            </div>
+
             <div className="flex items-center space-x-2">
               <input
                 type="checkbox"
@@ -146,13 +180,17 @@ export function ProductCreatePage() {
             <div className="space-y-4 border-t pt-4">
               <Label>상품 이미지</Label>
               <div className="grid grid-cols-2 gap-4">
-                <div className="space-y-2">
+                <div
+                  className="space-y-2"
+                  onDragOver={(e) => e.preventDefault()}
+                  onDrop={handleDrop(thumbRef, setThumbPreview)}
+                >
                   <p className="text-sm font-medium text-slate-700">썸네일 (400×400)</p>
                   <div className="flex items-center gap-3">
                     {thumbPreview ? (
                       <img src={thumbPreview} alt="Thumb preview" className="h-24 w-24 rounded-md border object-cover" />
                     ) : (
-                      <div className="flex h-24 w-24 items-center justify-center rounded-md border bg-slate-50 text-xs text-slate-400">미리보기</div>
+                      <div className="flex h-24 w-24 items-center justify-center rounded-md border border-dashed bg-slate-50 text-xs text-slate-400">드래그 또는 선택</div>
                     )}
                     <Input
                       ref={thumbRef}
@@ -165,13 +203,17 @@ export function ProductCreatePage() {
                     />
                   </div>
                 </div>
-                <div className="space-y-2">
+                <div
+                  className="space-y-2"
+                  onDragOver={(e) => e.preventDefault()}
+                  onDrop={handleDrop(detailRef, setDetailPreview)}
+                >
                   <p className="text-sm font-medium text-slate-700">상세 이미지 (800×600)</p>
                   <div className="flex items-center gap-3">
                     {detailPreview ? (
                       <img src={detailPreview} alt="Detail preview" className="h-24 w-24 rounded-md border object-cover" />
                     ) : (
-                      <div className="flex h-24 w-24 items-center justify-center rounded-md border bg-slate-50 text-xs text-slate-400">미리보기</div>
+                      <div className="flex h-24 w-24 items-center justify-center rounded-md border border-dashed bg-slate-50 text-xs text-slate-400">드래그 또는 선택</div>
                     )}
                     <Input
                       ref={detailRef}
