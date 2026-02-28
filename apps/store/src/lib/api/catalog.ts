@@ -1,4 +1,4 @@
-import { ApiClientError } from '~/lib/api/core'
+import { ApiClientError, fetchWithRefresh } from '~/lib/api/core'
 
 export type CatalogProductStatus = 'active' | 'low_stock' | 'out_of_stock' | 'discontinued'
 
@@ -68,7 +68,7 @@ const toQueryString = (params: CatalogListParams) => {
 }
 
 const requestJson = async <T>(url: string): Promise<T> => {
-  const response = await fetch(url, {
+  const response = await fetchWithRefresh(url, {
     method: 'GET',
     credentials: 'include',
   })
