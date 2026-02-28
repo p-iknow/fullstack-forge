@@ -760,7 +760,7 @@ paths:
                   - code
                   - error
   /admin/categories/{id}:
-    put:
+    patch:
       parameters:
         - schema:
             type: string
@@ -1087,7 +1087,7 @@ paths:
                   - code
                   - error
   /admin/products/{id}:
-    put:
+    patch:
       parameters:
         - schema:
             type: string

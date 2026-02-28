@@ -168,7 +168,7 @@ describe('admin product handlers', () => {
     const res = await app.request(
       'http://localhost/admin/products/22222222-2222-4222-8222-222222222222',
       {
-        method: 'PUT',
+        method: 'PATCH',
         headers: { 'content-type': 'application/json' },
         body: JSON.stringify({ name: '수정 상품' }),
       },

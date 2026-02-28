@@ -237,7 +237,7 @@ export type DeleteAdminCategoriesByIdResponses = {
 
 export type DeleteAdminCategoriesByIdResponse = DeleteAdminCategoriesByIdResponses[keyof DeleteAdminCategoriesByIdResponses];
 
-export type PutAdminCategoriesByIdData = {
+export type PatchAdminCategoriesByIdData = {
     body?: {
         name?: string;
         slug?: string;
@@ -251,7 +251,7 @@ export type PutAdminCategoriesByIdData = {
     url: '/admin/categories/{id}';
 };
 
-export type PutAdminCategoriesByIdErrors = {
+export type PatchAdminCategoriesByIdErrors = {
     /**
      * Invalid input
      */
@@ -289,9 +289,9 @@ export type PutAdminCategoriesByIdErrors = {
     };
 };
 
-export type PutAdminCategoriesByIdError = PutAdminCategoriesByIdErrors[keyof PutAdminCategoriesByIdErrors];
+export type PatchAdminCategoriesByIdError = PatchAdminCategoriesByIdErrors[keyof PatchAdminCategoriesByIdErrors];
 
-export type PutAdminCategoriesByIdResponses = {
+export type PatchAdminCategoriesByIdResponses = {
     /**
      * Category updated
      */
@@ -305,7 +305,7 @@ export type PutAdminCategoriesByIdResponses = {
     };
 };
 
-export type PutAdminCategoriesByIdResponse = PutAdminCategoriesByIdResponses[keyof PutAdminCategoriesByIdResponses];
+export type PatchAdminCategoriesByIdResponse = PatchAdminCategoriesByIdResponses[keyof PatchAdminCategoriesByIdResponses];
 
 export type PostAdminProductsData = {
     body?: {
@@ -424,7 +424,7 @@ export type DeleteAdminProductsByIdResponses = {
 
 export type DeleteAdminProductsByIdResponse = DeleteAdminProductsByIdResponses[keyof DeleteAdminProductsByIdResponses];
 
-export type PutAdminProductsByIdData = {
+export type PatchAdminProductsByIdData = {
     body?: {
         name?: string;
         description?: string;
@@ -439,7 +439,7 @@ export type PutAdminProductsByIdData = {
     url: '/admin/products/{id}';
 };
 
-export type PutAdminProductsByIdErrors = {
+export type PatchAdminProductsByIdErrors = {
     /**
      * Invalid input
      */
@@ -470,9 +470,9 @@ export type PutAdminProductsByIdErrors = {
     };
 };
 
-export type PutAdminProductsByIdError = PutAdminProductsByIdErrors[keyof PutAdminProductsByIdErrors];
+export type PatchAdminProductsByIdError = PatchAdminProductsByIdErrors[keyof PatchAdminProductsByIdErrors];
 
-export type PutAdminProductsByIdResponses = {
+export type PatchAdminProductsByIdResponses = {
     /**
      * Product updated
      */
@@ -490,7 +490,7 @@ export type PutAdminProductsByIdResponses = {
     };
 };
 
-export type PutAdminProductsByIdResponse = PutAdminProductsByIdResponses[keyof PutAdminProductsByIdResponses];
+export type PatchAdminProductsByIdResponse = PatchAdminProductsByIdResponses[keyof PatchAdminProductsByIdResponses];
 
 export type PatchAdminProductsByIdStatusData = {
     body?: {

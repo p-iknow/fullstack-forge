@@ -2,7 +2,7 @@
 
 import { type Client, formDataBodySerializer, type Options as Options2, type TDataShape } from './client';
 import { client } from './client.gen';
-import type { DeleteAdminCategoriesByIdData, DeleteAdminCategoriesByIdErrors, DeleteAdminCategoriesByIdResponses, DeleteAdminProductsByIdData, DeleteAdminProductsByIdErrors, DeleteAdminProductsByIdResponses, GetAdminCategoriesData, GetAdminCategoriesErrors, GetAdminCategoriesResponses, GetAdminDashboardData, GetAdminDashboardErrors, GetAdminDashboardResponses, PatchAdminProductsByIdStatusData, PatchAdminProductsByIdStatusErrors, PatchAdminProductsByIdStatusResponses, PostAdminCategoriesData, PostAdminCategoriesErrors, PostAdminCategoriesResponses, PostAdminProductsByIdImagesData, PostAdminProductsByIdImagesErrors, PostAdminProductsByIdImagesResponses, PostAdminProductsData, PostAdminProductsErrors, PostAdminProductsResponses, PostAdminRedriveData, PostAdminRedriveErrors, PostAdminRedriveResponses, PutAdminCategoriesByIdData, PutAdminCategoriesByIdErrors, PutAdminCategoriesByIdResponses, PutAdminProductsByIdData, PutAdminProductsByIdErrors, PutAdminProductsByIdResponses } from './types.gen';
+import type { DeleteAdminCategoriesByIdData, DeleteAdminCategoriesByIdErrors, DeleteAdminCategoriesByIdResponses, DeleteAdminProductsByIdData, DeleteAdminProductsByIdErrors, DeleteAdminProductsByIdResponses, GetAdminCategoriesData, GetAdminCategoriesErrors, GetAdminCategoriesResponses, GetAdminDashboardData, GetAdminDashboardErrors, GetAdminDashboardResponses, PatchAdminCategoriesByIdData, PatchAdminCategoriesByIdErrors, PatchAdminCategoriesByIdResponses, PatchAdminProductsByIdData, PatchAdminProductsByIdErrors, PatchAdminProductsByIdResponses, PatchAdminProductsByIdStatusData, PatchAdminProductsByIdStatusErrors, PatchAdminProductsByIdStatusResponses, PostAdminCategoriesData, PostAdminCategoriesErrors, PostAdminCategoriesResponses, PostAdminProductsByIdImagesData, PostAdminProductsByIdImagesErrors, PostAdminProductsByIdImagesResponses, PostAdminProductsData, PostAdminProductsErrors, PostAdminProductsResponses, PostAdminRedriveData, PostAdminRedriveErrors, PostAdminRedriveResponses } from './types.gen';
 
 export type Options<TData extends TDataShape = TDataShape, ThrowOnError extends boolean = boolean> = Options2<TData, ThrowOnError> & {
     /**
@@ -35,7 +35,7 @@ export const postAdminCategories = <ThrowOnError extends boolean = false>(option
 
 export const deleteAdminCategoriesById = <ThrowOnError extends boolean = false>(options: Options<DeleteAdminCategoriesByIdData, ThrowOnError>) => (options.client ?? client).delete<DeleteAdminCategoriesByIdResponses, DeleteAdminCategoriesByIdErrors, ThrowOnError>({ url: '/admin/categories/{id}', ...options });
 
-export const putAdminCategoriesById = <ThrowOnError extends boolean = false>(options: Options<PutAdminCategoriesByIdData, ThrowOnError>) => (options.client ?? client).put<PutAdminCategoriesByIdResponses, PutAdminCategoriesByIdErrors, ThrowOnError>({
+export const patchAdminCategoriesById = <ThrowOnError extends boolean = false>(options: Options<PatchAdminCategoriesByIdData, ThrowOnError>) => (options.client ?? client).patch<PatchAdminCategoriesByIdResponses, PatchAdminCategoriesByIdErrors, ThrowOnError>({
     url: '/admin/categories/{id}',
     ...options,
     headers: {
@@ -55,7 +55,7 @@ export const postAdminProducts = <ThrowOnError extends boolean = false>(options?
 
 export const deleteAdminProductsById = <ThrowOnError extends boolean = false>(options: Options<DeleteAdminProductsByIdData, ThrowOnError>) => (options.client ?? client).delete<DeleteAdminProductsByIdResponses, DeleteAdminProductsByIdErrors, ThrowOnError>({ url: '/admin/products/{id}', ...options });
 
-export const putAdminProductsById = <ThrowOnError extends boolean = false>(options: Options<PutAdminProductsByIdData, ThrowOnError>) => (options.client ?? client).put<PutAdminProductsByIdResponses, PutAdminProductsByIdErrors, ThrowOnError>({
+export const patchAdminProductsById = <ThrowOnError extends boolean = false>(options: Options<PatchAdminProductsByIdData, ThrowOnError>) => (options.client ?? client).patch<PatchAdminProductsByIdResponses, PatchAdminProductsByIdErrors, ThrowOnError>({
     url: '/admin/products/{id}',
     ...options,
     headers: {

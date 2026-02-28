@@ -178,7 +178,7 @@ describe('admin category handlers', () => {
     const res = await app.request(
       'http://localhost/admin/categories/33333333-3333-4333-8333-333333333333',
       {
-        method: 'PUT',
+        method: 'PATCH',
         headers: { 'content-type': 'application/json' },
         body: JSON.stringify({ name: '수정' }),
       },

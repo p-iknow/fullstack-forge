@@ -73,7 +73,7 @@ export const createAdminCategoryRoute = createRoute({
 })
 
 export const updateAdminCategoryRoute = createRoute({
-  method: 'put',
+  method: 'patch',
   path: '/categories/{id}',
   request: {
     params: adminCategoryIdParamsSchema,

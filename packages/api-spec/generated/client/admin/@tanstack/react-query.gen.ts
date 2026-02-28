@@ -3,8 +3,8 @@
 import { queryOptions, type UseMutationOptions } from '@tanstack/react-query';
 
 import { client } from '../client.gen';
-import { deleteAdminCategoriesById, deleteAdminProductsById, getAdminCategories, getAdminDashboard, type Options, patchAdminProductsByIdStatus, postAdminCategories, postAdminProducts, postAdminProductsByIdImages, postAdminRedrive, putAdminCategoriesById, putAdminProductsById } from '../sdk.gen';
-import type { DeleteAdminCategoriesByIdData, DeleteAdminCategoriesByIdError, DeleteAdminCategoriesByIdResponse, DeleteAdminProductsByIdData, DeleteAdminProductsByIdError, DeleteAdminProductsByIdResponse, GetAdminCategoriesData, GetAdminCategoriesError, GetAdminCategoriesResponse, GetAdminDashboardData, GetAdminDashboardError, GetAdminDashboardResponse, PatchAdminProductsByIdStatusData, PatchAdminProductsByIdStatusError, PatchAdminProductsByIdStatusResponse, PostAdminCategoriesData, PostAdminCategoriesError, PostAdminCategoriesResponse, PostAdminProductsByIdImagesData, PostAdminProductsByIdImagesError, PostAdminProductsByIdImagesResponse, PostAdminProductsData, PostAdminProductsError, PostAdminProductsResponse, PostAdminRedriveData, PostAdminRedriveError, PostAdminRedriveResponse, PutAdminCategoriesByIdData, PutAdminCategoriesByIdError, PutAdminCategoriesByIdResponse, PutAdminProductsByIdData, PutAdminProductsByIdError, PutAdminProductsByIdResponse } from '../types.gen';
+import { deleteAdminCategoriesById, deleteAdminProductsById, getAdminCategories, getAdminDashboard, type Options, patchAdminCategoriesById, patchAdminProductsById, patchAdminProductsByIdStatus, postAdminCategories, postAdminProducts, postAdminProductsByIdImages, postAdminRedrive } from '../sdk.gen';
+import type { DeleteAdminCategoriesByIdData, DeleteAdminCategoriesByIdError, DeleteAdminCategoriesByIdResponse, DeleteAdminProductsByIdData, DeleteAdminProductsByIdError, DeleteAdminProductsByIdResponse, GetAdminCategoriesData, GetAdminCategoriesError, GetAdminCategoriesResponse, GetAdminDashboardData, GetAdminDashboardError, GetAdminDashboardResponse, PatchAdminCategoriesByIdData, PatchAdminCategoriesByIdError, PatchAdminCategoriesByIdResponse, PatchAdminProductsByIdData, PatchAdminProductsByIdError, PatchAdminProductsByIdResponse, PatchAdminProductsByIdStatusData, PatchAdminProductsByIdStatusError, PatchAdminProductsByIdStatusResponse, PostAdminCategoriesData, PostAdminCategoriesError, PostAdminCategoriesResponse, PostAdminProductsByIdImagesData, PostAdminProductsByIdImagesError, PostAdminProductsByIdImagesResponse, PostAdminProductsData, PostAdminProductsError, PostAdminProductsResponse, PostAdminRedriveData, PostAdminRedriveError, PostAdminRedriveResponse } from '../types.gen';
 
 export type QueryKey<TOptions extends Options> = [
     Pick<TOptions, 'baseUrl' | 'body' | 'headers' | 'path' | 'query'> & {
@@ -111,10 +111,10 @@ export const deleteAdminCategoriesByIdMutation = (options?: Partial<Options<Dele
     return mutationOptions;
 };
 
-export const putAdminCategoriesByIdMutation = (options?: Partial<Options<PutAdminCategoriesByIdData>>): UseMutationOptions<PutAdminCategoriesByIdResponse, PutAdminCategoriesByIdError, Options<PutAdminCategoriesByIdData>> => {
-    const mutationOptions: UseMutationOptions<PutAdminCategoriesByIdResponse, PutAdminCategoriesByIdError, Options<PutAdminCategoriesByIdData>> = {
+export const patchAdminCategoriesByIdMutation = (options?: Partial<Options<PatchAdminCategoriesByIdData>>): UseMutationOptions<PatchAdminCategoriesByIdResponse, PatchAdminCategoriesByIdError, Options<PatchAdminCategoriesByIdData>> => {
+    const mutationOptions: UseMutationOptions<PatchAdminCategoriesByIdResponse, PatchAdminCategoriesByIdError, Options<PatchAdminCategoriesByIdData>> = {
         mutationFn: async (fnOptions) => {
-            const { data } = await putAdminCategoriesById({
+            const { data } = await patchAdminCategoriesById({
                 ...options,
                 ...fnOptions,
                 throwOnError: true
@@ -153,10 +153,10 @@ export const deleteAdminProductsByIdMutation = (options?: Partial<Options<Delete
     return mutationOptions;
 };
 
-export const putAdminProductsByIdMutation = (options?: Partial<Options<PutAdminProductsByIdData>>): UseMutationOptions<PutAdminProductsByIdResponse, PutAdminProductsByIdError, Options<PutAdminProductsByIdData>> => {
-    const mutationOptions: UseMutationOptions<PutAdminProductsByIdResponse, PutAdminProductsByIdError, Options<PutAdminProductsByIdData>> = {
+export const patchAdminProductsByIdMutation = (options?: Partial<Options<PatchAdminProductsByIdData>>): UseMutationOptions<PatchAdminProductsByIdResponse, PatchAdminProductsByIdError, Options<PatchAdminProductsByIdData>> => {
+    const mutationOptions: UseMutationOptions<PatchAdminProductsByIdResponse, PatchAdminProductsByIdError, Options<PatchAdminProductsByIdData>> = {
         mutationFn: async (fnOptions) => {
-            const { data } = await putAdminProductsById({
+            const { data } = await patchAdminProductsById({
                 ...options,
                 ...fnOptions,
                 throwOnError: true

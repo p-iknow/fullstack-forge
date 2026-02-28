@@ -51,7 +51,7 @@ export const createAdminProductRoute = createRoute({
 })
 
 export const updateAdminProductRoute = createRoute({
-  method: 'put',
+  method: 'patch',
   path: '/products/{id}',
   request: {
     params: adminProductIdParamsSchema,
@@ -162,8 +162,8 @@ export const uploadAdminProductImagesRoute = createRoute({
       content: {
         'multipart/form-data': {
           schema: z.object({
-            thumb: z.string().openapi({ format: 'binary' }),
-            detail: z.string().openapi({ format: 'binary' }),
+            thumb: z.instanceof(File).openapi({ type: 'string', format: 'binary' }),
+            detail: z.instanceof(File).openapi({ type: 'string', format: 'binary' }),
           }),
         },
       },
