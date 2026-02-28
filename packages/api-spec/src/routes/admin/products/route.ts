@@ -162,7 +162,8 @@ export const uploadAdminProductImagesRoute = createRoute({
       content: {
         'multipart/form-data': {
           schema: z.object({
-            file: z.any(),
+            thumb: z.string().openapi({ format: 'binary' }),
+            detail: z.string().openapi({ format: 'binary' }),
           }),
         },
       },

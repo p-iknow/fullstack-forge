@@ -1432,8 +1432,15 @@ paths:
             schema:
               type: object
               properties:
-                file:
-                  nullable: true
+                thumb:
+                  type: string
+                  format: binary
+                detail:
+                  type: string
+                  format: binary
+              required:
+                - thumb
+                - detail
       responses:
         "200":
           description: Images uploaded

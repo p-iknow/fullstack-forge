@@ -210,7 +210,8 @@ describe('admin product handlers', () => {
     app.route('/admin', adminIndex)
     dbState.selectQueue.push([{ id: 'product-id' }])
     const formData = new FormData()
-    formData.append('file', new File(['text'], 'bad.txt', { type: 'text/plain' }))
+    formData.append('thumb', new File(['text'], 'bad.txt', { type: 'text/plain' }))
+    formData.append('detail', new File(['text'], 'bad2.txt', { type: 'text/plain' }))
 
     // when
     const res = await app.request(
@@ -236,8 +237,12 @@ describe('admin product handlers', () => {
     dbState.updateQueue.push([{ id: 'product-id' }])
     const formData = new FormData()
     formData.append(
-      'file',
-      new File([new Uint8Array([1, 2, 3, 4])], 'photo.png', { type: 'image/png' }),
+      'thumb',
+      new File([new Uint8Array([1, 2, 3, 4])], 'thumb.png', { type: 'image/png' }),
+    )
+    formData.append(
+      'detail',
+      new File([new Uint8Array([5, 6, 7, 8])], 'detail.png', { type: 'image/png' }),
     )
 
     // when

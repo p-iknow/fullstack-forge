@@ -90,7 +90,8 @@ export const deleteProductMutationOptions = (queryClient: QueryClient) =>
 
 export const uploadProductImagesMutationOptions = (queryClient: QueryClient) =>
   mutationOptions({
-    mutationFn: ({ id, file }: { id: string; file: File }) => uploadProductImages(id, file),
+    mutationFn: ({ id, thumbFile, detailFile }: { id: string; thumbFile: File; detailFile: File }) =>
+      uploadProductImages(id, thumbFile, detailFile),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['admin', 'catalog', 'list'] })
     },

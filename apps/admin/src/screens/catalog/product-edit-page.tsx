@@ -15,7 +15,7 @@ import {
   uploadProductImagesMutationOptions,
 } from '~/lib/queries/catalog'
 import { readApiError } from '~/lib/api/core'
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 
 const productSchema = z.object({
   name: z.string().min(1, '상품명을 입력해주세요'),
@@ -72,12 +72,19 @@ export function ProductEditPage() {
     }
   }
 
-  const handleImageUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0]
-    if (!file) return
+  const thumbRef = useRef<HTMLInputElement>(null)
+  const detailRef = useRef<HTMLInputElement>(null)
+
+  const handleImageUpload = async () => {
+    const thumbFile = thumbRef.current?.files?.[0]
+    const detailFile = detailRef.current?.files?.[0]
+    if (!thumbFile || !detailFile) {
+      setErrorMsg('썸네일과 상세 이미지 모두 선택해주세요')
+      return
+    }
 
     try {
-      await uploadMutation.mutateAsync({ id, file })
+      await uploadMutation.mutateAsync({ id, thumbFile, detailFile })
       queryClient.invalidateQueries({ queryKey: ['admin', 'catalog', 'detail', id] })
     } catch (error) {
       const apiError = await readApiError(error)
@@ -170,32 +177,41 @@ export function ProductEditPage() {
               <Label htmlFor="isSubstitutable">대체 가능 상품</Label>
             </div>
 
-            <div className="space-y-2 border-t pt-4">
+            <div className="space-y-4 border-t pt-4">
               <Label>상품 이미지</Label>
-              <div className="flex items-center gap-4">
-                {productQuery.data?.thumbUrl ? (
-                  <img
-                    src={productQuery.data.thumbUrl}
-                    alt="Thumbnail"
-                    className="h-24 w-24 rounded-md object-cover border"
-                  />
-                ) : (
-                  <div className="flex h-24 w-24 items-center justify-center rounded-md border bg-slate-50 text-xs text-slate-400">
-                    이미지 없음
+              <div className="grid grid-cols-2 gap-4">
+                <div className="space-y-2">
+                  <p className="text-sm font-medium text-slate-700">썸네일 (400×400)</p>
+                  <div className="flex items-center gap-3">
+                    {productQuery.data?.thumbUrl ? (
+                      <img src={productQuery.data.thumbUrl} alt="Thumbnail" className="h-24 w-24 rounded-md border object-cover" />
+                    ) : (
+                      <div className="flex h-24 w-24 items-center justify-center rounded-md border bg-slate-50 text-xs text-slate-400">이미지 없음</div>
+                    )}
+                    <Input ref={thumbRef} type="file" accept="image/*" disabled={uploadMutation.isPending} />
                   </div>
-                )}
-                <div>
-                  <Input
-                    type="file"
-                    accept="image/*"
-                    onChange={handleImageUpload}
-                    disabled={uploadMutation.isPending}
-                  />
-                  {uploadMutation.isPending && (
-                    <p className="mt-1 text-xs text-slate-500">업로드 중...</p>
-                  )}
+                </div>
+                <div className="space-y-2">
+                  <p className="text-sm font-medium text-slate-700">상세 이미지 (800×600)</p>
+                  <div className="flex items-center gap-3">
+                    {productQuery.data?.detailUrl ? (
+                      <img src={productQuery.data.detailUrl} alt="Detail" className="h-24 w-24 rounded-md border object-cover" />
+                    ) : (
+                      <div className="flex h-24 w-24 items-center justify-center rounded-md border bg-slate-50 text-xs text-slate-400">이미지 없음</div>
+                    )}
+                    <Input ref={detailRef} type="file" accept="image/*" disabled={uploadMutation.isPending} />
+                  </div>
                 </div>
               </div>
+              <Button
+                type="button"
+                variant="outline"
+                size="sm"
+                onClick={handleImageUpload}
+                disabled={uploadMutation.isPending}
+              >
+                {uploadMutation.isPending ? '업로드 중...' : '이미지 업로드'}
+              </Button>
             </div>
 
             <div className="flex justify-end gap-3 pt-4">

@@ -8,9 +8,13 @@ import { Card, CardContent } from '@fullstack-forge/design-system/components/car
 import { Input } from '@fullstack-forge/design-system/components/input'
 import { Label } from '@fullstack-forge/design-system/components/label'
 import { Textarea } from '@fullstack-forge/design-system/components/textarea'
-import { adminCategoriesQueryOptions, createProductMutationOptions } from '~/lib/queries/catalog'
+import {
+  adminCategoriesQueryOptions,
+  createProductMutationOptions,
+  uploadProductImagesMutationOptions,
+} from '~/lib/queries/catalog'
 import { readApiError } from '~/lib/api/core'
-import { useState } from 'react'
+import { useRef, useState } from 'react'
 
 const productSchema = z.object({
   name: z.string().min(1, '상품명을 입력해주세요'),
@@ -29,6 +33,11 @@ export function ProductCreatePage() {
 
   const categoriesQuery = useQuery(adminCategoriesQueryOptions())
   const createMutation = useMutation(createProductMutationOptions(queryClient))
+  const uploadMutation = useMutation(uploadProductImagesMutationOptions(queryClient))
+  const thumbRef = useRef<HTMLInputElement>(null)
+  const detailRef = useRef<HTMLInputElement>(null)
+  const [thumbPreview, setThumbPreview] = useState<string | null>(null)
+  const [detailPreview, setDetailPreview] = useState<string | null>(null)
 
   const form = useForm<ProductFormValues>({
     resolver: zodResolver(productSchema),
@@ -44,7 +53,12 @@ export function ProductCreatePage() {
   const onSubmit = async (data: ProductFormValues) => {
     setErrorMsg(null)
     try {
-      await createMutation.mutateAsync(data as z.infer<typeof productSchema>)
+      const created = await createMutation.mutateAsync(data as z.infer<typeof productSchema>)
+      const thumbFile = thumbRef.current?.files?.[0]
+      const detailFile = detailRef.current?.files?.[0]
+      if (thumbFile && detailFile) {
+        await uploadMutation.mutateAsync({ id: created.id, thumbFile, detailFile })
+      }
       navigate({ to: '/' })
     } catch (error) {
       const apiError = await readApiError(error)
@@ -127,6 +141,50 @@ export function ProductCreatePage() {
                 className="h-4 w-4 rounded border-slate-300 text-slate-900 focus:ring-slate-950"
               />
               <Label htmlFor="isSubstitutable">대체 가능 상품</Label>
+            </div>
+
+            <div className="space-y-4 border-t pt-4">
+              <Label>상품 이미지</Label>
+              <div className="grid grid-cols-2 gap-4">
+                <div className="space-y-2">
+                  <p className="text-sm font-medium text-slate-700">썸네일 (400×400)</p>
+                  <div className="flex items-center gap-3">
+                    {thumbPreview ? (
+                      <img src={thumbPreview} alt="Thumb preview" className="h-24 w-24 rounded-md border object-cover" />
+                    ) : (
+                      <div className="flex h-24 w-24 items-center justify-center rounded-md border bg-slate-50 text-xs text-slate-400">미리보기</div>
+                    )}
+                    <Input
+                      ref={thumbRef}
+                      type="file"
+                      accept="image/*"
+                      onChange={(e) => {
+                        const file = e.target.files?.[0]
+                        setThumbPreview(file ? URL.createObjectURL(file) : null)
+                      }}
+                    />
+                  </div>
+                </div>
+                <div className="space-y-2">
+                  <p className="text-sm font-medium text-slate-700">상세 이미지 (800×600)</p>
+                  <div className="flex items-center gap-3">
+                    {detailPreview ? (
+                      <img src={detailPreview} alt="Detail preview" className="h-24 w-24 rounded-md border object-cover" />
+                    ) : (
+                      <div className="flex h-24 w-24 items-center justify-center rounded-md border bg-slate-50 text-xs text-slate-400">미리보기</div>
+                    )}
+                    <Input
+                      ref={detailRef}
+                      type="file"
+                      accept="image/*"
+                      onChange={(e) => {
+                        const file = e.target.files?.[0]
+                        setDetailPreview(file ? URL.createObjectURL(file) : null)
+                      }}
+                    />
+                  </div>
+                </div>
+              </div>
             </div>
 
             <div className="flex justify-end gap-3 pt-4">

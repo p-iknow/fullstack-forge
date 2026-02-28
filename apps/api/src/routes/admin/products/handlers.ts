@@ -218,32 +218,36 @@ export const uploadAdminProductImagesHandler: RouteHandler<
   }
 
   const body = await c.req.parseBody()
-  const file = getFirstFileFromBody(body.file)
+  const thumbFile = getFirstFileFromBody(body.thumb)
+  const detailFile = getFirstFileFromBody(body.detail)
 
-  if (!file) {
+  if (!thumbFile || !detailFile) {
     return c.json(
-      { code: 'admin_product_image_invalid_file', error: 'Image file is required' },
+      { code: 'admin_product_image_invalid_file', error: 'Both thumb and detail images are required' },
       400,
     )
   }
 
-  if (!ALLOWED_IMAGE_TYPES.has(file.type)) {
-    return c.json(
-      { code: 'admin_product_image_invalid_type', error: 'Unsupported image type' },
-      400,
-    )
+  for (const file of [thumbFile, detailFile]) {
+    if (!ALLOWED_IMAGE_TYPES.has(file.type)) {
+      return c.json(
+        { code: 'admin_product_image_invalid_type', error: 'Unsupported image type' },
+        400,
+      )
+    }
+    if (file.size > MAX_FILE_SIZE_BYTES) {
+      return c.json({ code: 'admin_product_image_too_large', error: 'Image exceeds 5MB limit' }, 400)
+    }
   }
 
-  if (file.size > MAX_FILE_SIZE_BYTES) {
-    return c.json({ code: 'admin_product_image_too_large', error: 'Image exceeds 5MB limit' }, 400)
-  }
+  const thumbSource = Buffer.from(await thumbFile.arrayBuffer())
+  const detailSource = Buffer.from(await detailFile.arrayBuffer())
 
-  const sourceBuffer = Buffer.from(await file.arrayBuffer())
-  const thumbBuffer = await sharp(sourceBuffer)
+  const thumbBuffer = await sharp(thumbSource)
     .resize(400, 400, { fit: 'cover' })
     .webp({ quality: 85 })
     .toBuffer()
-  const detailBuffer = await sharp(sourceBuffer)
+  const detailBuffer = await sharp(detailSource)
     .resize(800, 600, { fit: 'cover' })
     .webp({ quality: 85 })
     .toBuffer()

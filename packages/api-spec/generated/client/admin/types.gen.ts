@@ -558,7 +558,8 @@ export type PatchAdminProductsByIdStatusResponse = PatchAdminProductsByIdStatusR
 
 export type PostAdminProductsByIdImagesData = {
     body?: {
-        file?: unknown;
+        thumb: Blob | File;
+        detail: Blob | File;
     };
     path: {
         id: string;

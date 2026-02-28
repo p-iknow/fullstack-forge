@@ -115,10 +115,12 @@ export const deleteAdminProduct = async (id: string): Promise<void> => {
 
 export const uploadProductImages = async (
   id: string,
-  file: File,
+  thumbFile: File,
+  detailFile: File,
 ): Promise<{ thumbUrl: string; detailUrl: string }> => {
   const formData = new FormData()
-  formData.append('image', file)
+  formData.append('thumb', thumbFile)
+  formData.append('detail', detailFile)
   return requestMutate<{ thumbUrl: string; detailUrl: string }>(
     `/api/admin/products/${id}/images`,
     'POST',
