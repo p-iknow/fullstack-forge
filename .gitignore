@@ -34,6 +34,8 @@ npm-debug.log*
 # Coverage & testing
 /coverage
 *.lcov
+.vitest-attachments
+test-results
 
 # OS
 .DS_Store
