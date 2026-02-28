@@ -3,7 +3,7 @@ import { keepPreviousData, useQuery } from '@tanstack/react-query'
 import { Button } from '@fullstack-forge/design-system/components/button'
 import { Input } from '@fullstack-forge/design-system/components/input'
 import { Skeleton } from '@fullstack-forge/design-system/components/skeleton'
-import { CatalogTopNav } from '~/screens/catalog/catalog-top-nav'
+import { Link } from '@tanstack/react-router'
 import {
   catalogCategoriesQueryOptions,
   catalogListQueryOptions,
@@ -155,9 +155,8 @@ export function HomePage() {
   }, [])
 
   return (
-    <main className="min-h-screen bg-slate-50 text-slate-900">
+    <main>
       <section className="mx-auto flex w-full max-w-6xl flex-col gap-8 px-6 py-10">
-        <CatalogTopNav />
 
         <header className="space-y-3">
           <p className="inline-flex rounded-full bg-slate-900 px-3 py-1 text-xs font-medium text-white">
@@ -284,8 +283,9 @@ export function HomePage() {
                   key={item.id}
                   className="overflow-hidden rounded-xl border border-slate-200 bg-white"
                 >
-                  <a
-                    href={`/products/${item.id}`}
+                  <Link
+                    to="/products/$productId"
+                    params={{ productId: item.id }}
                     className="block transition-colors hover:bg-slate-50 focus-visible:outline-none"
                   >
                     <img
@@ -318,7 +318,7 @@ export function HomePage() {
                       <p className="text-sm font-semibold">{formatPrice(item.price)}</p>
                       <p className="text-xs text-slate-500">가용 재고 {item.availableStock}개</p>
                     </div>
-                  </a>
+                  </Link>
                 </article>
               ))}
             </section>
