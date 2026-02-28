@@ -15,6 +15,7 @@ import {
   TableRow,
 } from '@fullstack-forge/design-system/components/table'
 import { type CatalogProductStatus } from '~/lib/api/catalog'
+import { readApiError } from '~/lib/api/core'
 import {
   adminCategoriesQueryOptions,
   adminProductListQueryOptions,
@@ -45,7 +46,13 @@ const MAX_PAGE_BUTTONS = 5
 
 export function AdminCatalogPage() {
   const queryClient = useQueryClient()
-  const deleteMutation = useMutation(deleteProductMutationOptions(queryClient))
+  const deleteMutation = useMutation({
+    ...deleteProductMutationOptions(queryClient),
+    onError: async (error) => {
+      const apiError = await readApiError(error)
+      alert(apiError.error || '상품 삭제에 실패했습니다')
+    },
+  })
   const updateStatusMutation = useMutation(updateProductStatusMutationOptions(queryClient))
 
   const [q, setQ] = useState('')
