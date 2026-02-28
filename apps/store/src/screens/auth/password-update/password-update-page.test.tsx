@@ -2,6 +2,7 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { cleanup, fireEvent, render, screen } from '@testing-library/react'
 import type { ReactNode } from 'react'
 import { afterEach, describe, expect, it, vi } from 'vitest'
+import { page } from 'vitest/browser'
 import { http, HttpResponse } from 'msw'
 import { worker } from '~/test/msw/browser'
 import { PasswordUpdatePageContent } from './password-update-page'
@@ -32,6 +33,9 @@ describe('password update page', () => {
     // given
     renderPage()
 
+    // visual regression — initial form
+    await expect(page.getByRole('main')).toMatchScreenshot('password-update-form')
+
     // when
     fireEvent.change(screen.getByLabelText('Reset token'), { target: { value: 'token-1' } })
     fireEvent.change(screen.getByLabelText('New password'), { target: { value: 'NewPassw0rd!' } })
@@ -42,8 +46,11 @@ describe('password update page', () => {
 
     // then
     expect(await screen.findByText('Password confirmation does not match.')).toBeInTheDocument()
-  })
 
+    // visual regression — validation error
+    await expect(page.getByRole('main')).toMatchScreenshot('password-update-validation-error')
+
+  })
   it('submits token and new password then runs success navigation', async () => {
     // given
     const onSuccessNavigate = vi.fn()
@@ -89,5 +96,8 @@ describe('password update page', () => {
 
     // then
     expect(await screen.findByText('Session expired (auth_session_expired)')).toBeInTheDocument()
+
+    // visual regression — API error
+    await expect(page.getByRole('main')).toMatchScreenshot('password-update-api-error')
   })
 })

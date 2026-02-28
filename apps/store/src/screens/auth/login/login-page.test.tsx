@@ -2,6 +2,7 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { cleanup, fireEvent, render, screen, waitFor } from '@testing-library/react'
 import type { ReactNode } from 'react'
 import { afterEach, describe, expect, it, vi } from 'vitest'
+import { page } from 'vitest/browser'
 import { http, HttpResponse } from 'msw'
 import { worker } from '~/test/msw/browser'
 import { LoginPage } from './login-page'
@@ -38,14 +39,20 @@ describe('login page', () => {
     // given
     renderPage()
 
+    // visual regression — initial form
+    await expect(page.getByRole('main')).toMatchScreenshot('login-form')
+
     // when
     fireEvent.change(screen.getByLabelText('Email'), { target: { value: 'not-an-email' } })
     fireEvent.click(screen.getByRole('button', { name: 'Sign in with Email' }))
 
     // then
     expect(await screen.findByText('Invalid email address.')).toBeInTheDocument()
-  })
 
+    // visual regression — validation error
+    await expect(page.getByRole('main')).toMatchScreenshot('login-validation-error')
+
+  })
   it('logs in successfully and navigates to home', async () => {
     // given
     renderPage()
@@ -82,6 +89,28 @@ describe('login page', () => {
     // then
     expect(await screen.findByRole('alert')).toHaveTextContent(
       'Invalid credentials (auth_invalid_credentials)',
+    )
+
+    // visual regression — server error
+    await expect(page.getByRole('main')).toMatchScreenshot('login-server-error')
+  })
+
+  it('renders OAuth links with correct start URLs', () => {
+    // given
+    renderPage()
+
+    // when
+    const googleLink = screen.getByRole('link', { name: 'Continue with Google' })
+    const kakaoLink = screen.getByRole('link', { name: 'Continue with Kakao' })
+
+    // then
+    expect(googleLink).toHaveAttribute(
+      'href',
+      '/api/auth/oauth/google/start?redirect=/auth/callback/success',
+    )
+    expect(kakaoLink).toHaveAttribute(
+      'href',
+      '/api/auth/oauth/kakao/start?redirect=/auth/callback/success',
     )
   })
 })

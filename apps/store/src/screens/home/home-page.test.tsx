@@ -1,6 +1,7 @@
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { cleanup, fireEvent, render, screen, waitFor } from '@testing-library/react'
 import { afterEach, describe, expect, it } from 'vitest'
+import { page } from 'vitest/browser'
 import { http, HttpResponse } from 'msw'
 import { worker } from '~/test/msw/browser'
 import { HomePage } from './home-page'
@@ -66,6 +67,9 @@ describe('home page', () => {
       '/products/11111111-1111-1111-1111-111111111111',
     )
     expect(screen.queryByText('상세 보기')).not.toBeInTheDocument()
+
+    // visual regression
+    await expect(page.getByRole('main')).toMatchScreenshot('catalog-products')
   })
 
   it('shows skeleton view while products are loading', async () => {
