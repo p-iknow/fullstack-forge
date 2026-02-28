@@ -1,43 +1,23 @@
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
-import { cleanup, fireEvent, render, screen, waitFor } from '@testing-library/react'
-import type { ReactNode } from 'react'
-import { afterEach, describe, expect, it, vi } from 'vitest'
+import { cleanup, fireEvent, screen, waitFor } from '@testing-library/react'
+import { afterEach, describe, expect, it } from 'vitest'
 import { page } from 'vitest/browser'
 import { http, HttpResponse } from 'msw'
 import { worker } from '~/test/msw/browser'
+import { renderWithRouter } from '~/test/router-utils'
 import { SignupPage } from './signup-page'
 
-const { navigateMock } = vi.hoisted(() => ({
-  navigateMock: vi.fn(),
-}))
-
-vi.mock('@tanstack/react-router', async () => {
-  const actual = await vi.importActual<object>('@tanstack/react-router')
-  return {
-    ...actual,
-    Link: ({ children }: { children: ReactNode }) => <a>{children}</a>,
-    useNavigate: () => navigateMock,
-  }
-})
-
 function renderPage() {
-  const queryClient = new QueryClient()
-  return render(
-    <QueryClientProvider client={queryClient}>
-      <SignupPage />
-    </QueryClientProvider>,
-  )
+  return renderWithRouter(<SignupPage />, { initialLocation: '/signup' })
 }
 
 describe('signup page', () => {
   afterEach(() => {
     cleanup()
-    navigateMock.mockReset()
   })
 
   it('shows zod validation error for short password', async () => {
     // given
-    renderPage()
+    await renderPage()
 
     // visual regression — initial form
     await expect(page.getByRole('main')).toMatchScreenshot('signup-form')
@@ -55,7 +35,7 @@ describe('signup page', () => {
   })
   it('signs up successfully and navigates to home', async () => {
     // given
-    renderPage()
+    const { router } = await renderPage()
 
     // when
     fireEvent.change(screen.getByLabelText('Name'), { target: { value: 'Alice' } })
@@ -65,7 +45,7 @@ describe('signup page', () => {
 
     // then
     await waitFor(() => {
-      expect(navigateMock).toHaveBeenCalledWith({ to: '/' })
+      expect(router.state.location.pathname).toBe('/')
     })
   })
 
@@ -79,7 +59,7 @@ describe('signup page', () => {
         )
       }),
     )
-    renderPage()
+    await renderPage()
 
     // when
     fireEvent.change(screen.getByLabelText('Email'), { target: { value: 'taken@example.com' } })

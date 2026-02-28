@@ -1,19 +1,14 @@
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
-import { cleanup, fireEvent, render, screen, waitFor } from '@testing-library/react'
+import { cleanup, fireEvent, screen, waitFor } from '@testing-library/react'
 import { afterEach, describe, expect, it } from 'vitest'
 import { page } from 'vitest/browser'
 import { http, HttpResponse } from 'msw'
 import { worker } from '~/test/msw/browser'
+import { renderWithRouter } from '~/test/router-utils'
+
 import { HomePage } from './home-page'
 
 function renderPage() {
-  const queryClient = new QueryClient()
-
-  return render(
-    <QueryClientProvider client={queryClient}>
-      <HomePage />
-    </QueryClientProvider>,
-  )
+  return renderWithRouter(<HomePage />)
 }
 
 describe('home page', () => {
@@ -57,7 +52,7 @@ describe('home page', () => {
     )
 
     // when
-    renderPage()
+    await renderPage()
 
     // then
     expect(await screen.findByText('Apple Juice')).toBeInTheDocument()
@@ -107,7 +102,7 @@ describe('home page', () => {
     )
 
     // when
-    renderPage()
+    await renderPage()
 
     // then
     expect(await screen.findByTestId('catalog-skeleton-grid')).toBeInTheDocument()
@@ -150,7 +145,7 @@ describe('home page', () => {
     )
 
     // when
-    renderPage()
+    await renderPage()
 
     // then
     expect(await screen.findByText('Apple Juice')).toBeInTheDocument()
@@ -201,7 +196,7 @@ describe('home page', () => {
     )
 
     // when
-    renderPage()
+    await renderPage()
     fireEvent.change(screen.getByPlaceholderText('검색어 (상품명, 브랜드, SKU)'), {
       target: { value: 'apple' },
     })
@@ -248,7 +243,7 @@ describe('home page', () => {
     )
 
     // when
-    renderPage()
+    await renderPage()
     fireEvent.change(screen.getByPlaceholderText('검색어 (상품명, 브랜드, SKU)'), {
       target: { value: 'not-found' },
     })
@@ -323,7 +318,7 @@ describe('home page', () => {
     )
 
     // when
-    renderPage()
+    await renderPage()
     expect(await screen.findByText('Apple Juice')).toBeInTheDocument()
     fireEvent.click(screen.getByRole('button', { name: '2' }))
 
@@ -395,7 +390,7 @@ describe('home page', () => {
     )
 
     // when
-    renderPage()
+    await renderPage()
     expect(await screen.findByText('Apple Juice')).toBeInTheDocument()
     fireEvent.click(screen.getByRole('button', { name: '마지막' }))
 

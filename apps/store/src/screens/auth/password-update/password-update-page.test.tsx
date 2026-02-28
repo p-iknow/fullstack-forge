@@ -1,27 +1,15 @@
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
-import { cleanup, fireEvent, render, screen } from '@testing-library/react'
-import type { ReactNode } from 'react'
+import { cleanup, fireEvent, screen } from '@testing-library/react'
 import { afterEach, describe, expect, it, vi } from 'vitest'
 import { page } from 'vitest/browser'
 import { http, HttpResponse } from 'msw'
 import { worker } from '~/test/msw/browser'
+import { renderWithRouter } from '~/test/router-utils'
 import { PasswordUpdatePageContent } from './password-update-page'
 
-vi.mock('@tanstack/react-router', async () => {
-  const actual = await vi.importActual<object>('@tanstack/react-router')
-  return {
-    ...actual,
-    Link: ({ children }: { children: ReactNode }) => <a>{children}</a>,
-  }
-})
-
 function renderPage(onSuccessNavigate?: () => void) {
-  const queryClient = new QueryClient()
-  return render(
-    <QueryClientProvider client={queryClient}>
-      <PasswordUpdatePageContent onSuccessNavigate={onSuccessNavigate} />
-    </QueryClientProvider>,
-  )
+  return renderWithRouter(<PasswordUpdatePageContent onSuccessNavigate={onSuccessNavigate} />, {
+    initialLocation: '/password-update',
+  })
 }
 
 describe('password update page', () => {
@@ -31,7 +19,7 @@ describe('password update page', () => {
 
   it('shows validation error when password confirmation does not match', async () => {
     // given
-    renderPage()
+    await renderPage()
 
     // visual regression — initial form
     await expect(page.getByRole('main')).toMatchScreenshot('password-update-form')
@@ -54,7 +42,7 @@ describe('password update page', () => {
   it('submits token and new password then runs success navigation', async () => {
     // given
     const onSuccessNavigate = vi.fn()
-    renderPage(onSuccessNavigate)
+    await renderPage(onSuccessNavigate)
 
     // when
     fireEvent.change(screen.getByLabelText('Reset token'), { target: { value: 'token-1' } })
@@ -84,7 +72,7 @@ describe('password update page', () => {
         )
       }),
     )
-    renderPage()
+    await renderPage()
 
     // when
     fireEvent.change(screen.getByLabelText('Reset token'), { target: { value: 'expired-token' } })
