@@ -966,7 +966,14 @@ paths:
                 description:
                   type: string
                   minLength: 1
+                brand:
+                  type: string
+                  minLength: 1
                 price:
+                  type: integer
+                  minimum: 0
+                  exclusiveMinimum: true
+                weight:
                   type: integer
                   minimum: 0
                   exclusiveMinimum: true
@@ -996,9 +1003,18 @@ paths:
                     type: string
                   description:
                     type: string
+                  sku:
+                    type: string
+                    nullable: true
+                  brand:
+                    type: string
+                    nullable: true
                   price:
                     type: integer
                     minimum: 0
+                  weight:
+                    type: integer
+                    nullable: true
                   status:
                     type: string
                     enum:
@@ -1023,7 +1039,10 @@ paths:
                   - id
                   - name
                   - description
+                  - sku
+                  - brand
                   - price
+                  - weight
                   - status
                   - categoryId
                   - thumbUrl
@@ -1107,7 +1126,14 @@ paths:
                 description:
                   type: string
                   minLength: 1
+                brand:
+                  type: string
+                  minLength: 1
                 price:
+                  type: integer
+                  minimum: 0
+                  exclusiveMinimum: true
+                weight:
                   type: integer
                   minimum: 0
                   exclusiveMinimum: true
@@ -1131,9 +1157,18 @@ paths:
                     type: string
                   description:
                     type: string
+                  sku:
+                    type: string
+                    nullable: true
+                  brand:
+                    type: string
+                    nullable: true
                   price:
                     type: integer
                     minimum: 0
+                  weight:
+                    type: integer
+                    nullable: true
                   status:
                     type: string
                     enum:
@@ -1158,7 +1193,10 @@ paths:
                   - id
                   - name
                   - description
+                  - sku
+                  - brand
                   - price
+                  - weight
                   - status
                   - categoryId
                   - thumbUrl
@@ -1327,9 +1365,18 @@ paths:
                     type: string
                   description:
                     type: string
+                  sku:
+                    type: string
+                    nullable: true
+                  brand:
+                    type: string
+                    nullable: true
                   price:
                     type: integer
                     minimum: 0
+                  weight:
+                    type: integer
+                    nullable: true
                   status:
                     type: string
                     enum:
@@ -1354,7 +1401,10 @@ paths:
                   - id
                   - name
                   - description
+                  - sku
+                  - brand
                   - price
+                  - weight
                   - status
                   - categoryId
                   - thumbUrl

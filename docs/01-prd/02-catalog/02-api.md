@@ -33,7 +33,7 @@
 - 사용 화면: admin 상품 등록 폼
 - 생성 시 inventory 레코드 자동 생성 (onHand=0, reserved=0)
 
-### PUT /admin/products/:id
+### PATCH /admin/products/:id
 
 - 목적: 상품 정보 수정 (이름, 설명, 가격, 카테고리, 대체 가능 여부)
 - 사용 화면: admin 상품 수정 폼
@@ -62,7 +62,7 @@
 - 목적: 카테고리 생성
 - 사용 화면: admin 카테고리 관리
 
-### PUT /admin/categories/:id
+### PATCH /admin/categories/:id
 
 - 목적: 카테고리 수정 (이름, slug, 표시 순서, 활성 여부)
 - 사용 화면: admin 카테고리 관리

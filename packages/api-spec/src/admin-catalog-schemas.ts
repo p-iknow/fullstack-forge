@@ -42,7 +42,9 @@ export const adminCategoryListResponseSchema = z.object({
 export const createProductRequestSchema = z.object({
   name: z.string().min(1),
   description: z.string().min(1),
+  brand: z.string().min(1).optional(),
   price: z.number().int().positive(),
+  weight: z.number().int().positive().optional(),
   categoryId: z.string().uuid(),
   isSubstitutable: z.boolean().optional().default(true),
 })
@@ -50,7 +52,9 @@ export const createProductRequestSchema = z.object({
 export const updateProductRequestSchema = z.object({
   name: z.string().min(1).optional(),
   description: z.string().min(1).optional(),
+  brand: z.string().min(1).optional(),
   price: z.number().int().positive().optional(),
+  weight: z.number().int().positive().optional(),
   categoryId: z.string().uuid().optional(),
   isSubstitutable: z.boolean().optional(),
 })
@@ -63,7 +67,10 @@ export const adminProductResponseSchema = z.object({
   id: z.string().uuid(),
   name: z.string(),
   description: z.string(),
+  sku: z.string().nullable(),
+  brand: z.string().nullable(),
   price: z.number().int().nonnegative(),
+  weight: z.number().int().nullable(),
   status: catalogProductStatusSchema,
   categoryId: z.string().nullable(),
   thumbUrl: z.string().nullable(),

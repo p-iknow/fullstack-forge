@@ -13,6 +13,7 @@ import { db } from '~/db/client'
 import { categories, inventory, orderItems, products } from '~/db/schema/index'
 import { getFallbackProductImageUrls } from '~/lib/product-image'
 import { MINIO_BUCKET, publicUrl, s3 } from '~/lib/s3-client'
+import { getProductSku } from '~/routes/catalog/@shared/view-model'
 
 const ALLOWED_IMAGE_TYPES = new Set(['image/jpeg', 'image/png', 'image/webp'])
 const MAX_FILE_SIZE_BYTES = 5 * 1024 * 1024
@@ -21,7 +22,10 @@ const toAdminProduct = (product: {
   id: string
   name: string
   description: string
+  sku: string | null
+  brand: string | null
   price: number
+  weight: number | null
   status: 'active' | 'low_stock' | 'out_of_stock' | 'discontinued'
   categoryId: string | null
   thumbUrl: string | null
@@ -32,7 +36,10 @@ const toAdminProduct = (product: {
   id: product.id,
   name: product.name,
   description: product.description,
+  sku: product.sku,
+  brand: product.brand,
   price: product.price,
+  weight: product.weight,
   status: product.status,
   categoryId: product.categoryId,
   thumbUrl: product.thumbUrl,
@@ -45,7 +52,10 @@ const selectProductColumns = {
   id: products.id,
   name: products.name,
   description: products.description,
+  sku: products.sku,
+  brand: products.brand,
   price: products.price,
+  weight: products.weight,
   status: products.status,
   categoryId: products.categoryId,
   thumbUrl: products.thumbUrl,
@@ -85,12 +95,18 @@ export const createAdminProductHandler: RouteHandler<typeof createAdminProductRo
   }
 
   const fallbackImages = getFallbackProductImageUrls()
+  const productId = crypto.randomUUID()
+
   const [created] = await db
     .insert(products)
     .values({
+      id: productId,
       name: body.name,
       description: body.description,
+      sku: getProductSku(productId),
+      brand: body.brand,
       price: body.price,
+      weight: body.weight,
       status: 'active',
       categoryId: body.categoryId,
       thumbUrl: fallbackImages.thumbUrl,

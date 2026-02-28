@@ -36,6 +36,13 @@
       "when": 1772227442768,
       "tag": "0004_silly_junta",
       "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1772258371451,
+      "tag": "0005_nasty_war_machine",
+      "breakpoints": true
     }
   ]
 }

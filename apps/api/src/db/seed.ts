@@ -137,9 +137,12 @@ async function seed(): Promise<void> {
 
   const seededProducts = PRODUCT_CATALOG.map((product) => ({
     categoryId: legacyCategoryIdToUuid.get(product.categoryId),
+    sku: product.sku,
     name: product.name,
+    brand: product.brand,
     description: product.description,
     price: product.price,
+    weight: product.weight,
     status: product.status,
     thumbUrl: publicUrl(product.thumbKey),
     detailUrl: publicUrl(product.detailKey),

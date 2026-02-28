@@ -42,9 +42,12 @@ type CatalogProduct = {
 
 type CatalogProductRow = {
   id: string
+  sku?: string | null
   name: string
   description: string
+  brand?: string | null
   price: number
+  weight?: number | null
   status: string
   categoryId?: string | null
   thumbUrl?: string | null
@@ -83,9 +86,12 @@ const selectCatalogProductRowsWithImageColumns = async (): Promise<CatalogProduc
   return db
     .select({
       id: products.id,
+      sku: products.sku,
       name: products.name,
       description: products.description,
+      brand: products.brand,
       price: products.price,
+      weight: products.weight,
       status: products.status,
       categoryId: products.categoryId,
       thumbUrl: products.thumbUrl,
@@ -107,21 +113,21 @@ const loadCatalogProducts = async (categoryList: CatalogCategory[]): Promise<Cat
     const category = getCatalogCategoryById(categoryList, row.categoryId)
     const availableStock = getAvailableStock(row.onHand, row.reserved)
     const status = row.status as CatalogStatus
-    const brand = getProductBrand(category, row.name)
+    const brand = row.brand ?? getProductBrand(category, row.name)
     const generatedImageUrls = getProductImageUrls(row.id)
     const thumbUrl = row.thumbUrl ?? generatedImageUrls.thumbUrl
     const detailUrl = row.detailUrl ?? generatedImageUrls.detailUrl
 
     return {
       id: row.id,
-      sku: getProductSku(row.id),
+      sku: row.sku ?? getProductSku(row.id),
       name: row.name,
       description: row.description,
       brand,
       categoryId: category?.id ?? 'cat-unknown',
       categoryName: category?.name ?? '미분류',
       price: row.price,
-      weight: getProductWeight(row.price),
+      weight: row.weight ?? getProductWeight(row.price),
       status,
       isSubstitutable: row.isSubstitutable ?? true,
       thumbUrl,
@@ -244,12 +250,18 @@ export const getProductsHandler: RouteHandler<typeof getProductsRoute> = async (
   const filtered = filterCatalogProducts(loaded, categoryList, query)
   const sorted = sortCatalogProducts(filtered, query.sort, query.order)
 
+  const categoryDistribution: Record<string, number> = {}
+  for (const item of sorted) {
+    categoryDistribution[item.categoryName] = (categoryDistribution[item.categoryName] ?? 0) + 1
+  }
+
   const start = (query.page - 1) * query.pageSize
   const end = start + query.pageSize
 
   return c.json(
     {
       items: sorted.slice(start, end).map(toProductSummary),
+      categoryDistribution,
       ...toPaginationMeta({
         page: query.page,
         pageSize: query.pageSize,

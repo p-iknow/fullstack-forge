@@ -311,7 +311,9 @@ export type PostAdminProductsData = {
     body?: {
         name: string;
         description: string;
+        brand?: string;
         price: number;
+        weight?: number;
         categoryId: string;
         isSubstitutable?: boolean;
     };
@@ -361,7 +363,10 @@ export type PostAdminProductsResponses = {
         id: string;
         name: string;
         description: string;
+        sku: string;
+        brand: string;
         price: number;
+        weight: number;
         status: 'active' | 'low_stock' | 'out_of_stock' | 'discontinued';
         categoryId: string;
         thumbUrl: string;
@@ -428,7 +433,9 @@ export type PatchAdminProductsByIdData = {
     body?: {
         name?: string;
         description?: string;
+        brand?: string;
         price?: number;
+        weight?: number;
         categoryId?: string;
         isSubstitutable?: boolean;
     };
@@ -480,7 +487,10 @@ export type PatchAdminProductsByIdResponses = {
         id: string;
         name: string;
         description: string;
+        sku: string;
+        brand: string;
         price: number;
+        weight: number;
         status: 'active' | 'low_stock' | 'out_of_stock' | 'discontinued';
         categoryId: string;
         thumbUrl: string;
@@ -544,7 +554,10 @@ export type PatchAdminProductsByIdStatusResponses = {
         id: string;
         name: string;
         description: string;
+        sku: string;
+        brand: string;
         price: number;
+        weight: number;
         status: 'active' | 'low_stock' | 'out_of_stock' | 'discontinued';
         categoryId: string;
         thumbUrl: string;
