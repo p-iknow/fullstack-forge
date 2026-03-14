@@ -79,7 +79,7 @@ stateDiagram-v2
 ## 이벤트 아키텍처 연결
 
 - PRD 정책 기준: `../13-event/01-overview.md`
-- 아키텍처 기준: `../../02-architecture/backend/04-eventing.adr.md`
+- 아키텍처 기준: `../../02-architecture/backend/02-eventing.adr.md`
 - fanout 구조에서 notifications 큐는 독립 소비자로 동작하며 멱등 소비를 전제로 한다.
 
 ## 동시성/충돌 해소 정책

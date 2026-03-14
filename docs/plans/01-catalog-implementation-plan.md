@@ -25,7 +25,6 @@
 - `docs/01-prd/02-catalog/01-overview.md`
 - `docs/01-prd/02-catalog/02-api.md`
 - `docs/01-prd/02-catalog/03-data.md`
-- `docs/02-architecture/backend/07-catalog-policy.adr.md`
 
 ### Progressive Tasks
 

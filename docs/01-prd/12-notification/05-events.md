@@ -9,7 +9,7 @@
 
 - 소스: SNS fanout으로 전달된 `notifications` 큐
 - 역할: order/delivery/payment/review/inventory/cart/loyalty/promotion/inquiry 이벤트를 사용자 알림으로 변환
-- 기준 아키텍처: `../../02-architecture/backend/04-eventing.adr.md`
+- 기준 아키텍처: `../../02-architecture/backend/02-eventing.adr.md`
 
 ## 소비 이벤트 요약 테이블
 

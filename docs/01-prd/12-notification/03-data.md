@@ -105,4 +105,4 @@
 
 - fanout 구조에서 notifications 큐 소비 결과로 Notification이 생성된다.
 - 운영 신뢰성 기준은 `../13-event/01-overview.md`,
-  구조적 근거는 `../../02-architecture/backend/04-eventing.adr.md`를 따른다.
+  구조적 근거는 `../../02-architecture/backend/02-eventing.adr.md`를 따른다.
