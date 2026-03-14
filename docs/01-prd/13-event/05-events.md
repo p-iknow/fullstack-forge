@@ -38,6 +38,10 @@
   - payload 필드: `orderId`, `paymentId`, `capturedAmount`, `transactionId`, `capturedAt`
 - `PaymentFailed`
   - payload 필드: `orderId`, `paymentId`, `failureCode`, `failureReason`, `failedAt`
+- `PaymentCancelled`
+  - payload 필드: `orderId`, `paymentId`, `reason`, `cancelledAt`
+- `PaymentRefunded`
+  - payload 필드: `orderId`, `paymentId`, `refundAmount`, `refundType`, `reason`, `refundedAt`
 
 ### 재고
 
@@ -56,7 +60,7 @@
 ### 리뷰/댓글
 
 - `ReviewCreated`
-  - payload 필드: `reviewId`, `orderId`, `productId`, `authorId`, `rating`, `createdAt`
+  - payload 필드: `reviewId`, `orderId`, `productId`, `authorId`, `rating`, `imageCount`, `createdAt`
 - `ReviewCommentCreated`
   - payload 필드: `commentId`, `reviewId`, `authorId`, `content`, `createdAt`
 - `ReviewHiddenByOperator`

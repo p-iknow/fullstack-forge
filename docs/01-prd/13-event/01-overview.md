@@ -6,7 +6,7 @@
 
 - Producer: `api`
 - Broker: `SNS`
-- Queues: `SQS` fanout (`notifications`, `inventory`, `dispatch`)
+- Queues: `SQS` fanout (`notifications`, `inventory`, `dispatch`, `order`)
 - Consumers: worker(또는 초기 api 내부 worker)
 - 보조 저장소: Redis(idempotency, rate limit, cache)
 - API는 SNS로 이벤트를 발행하고, 각 도메인 소비자는 SQS 큐를 독립 소비한다.
@@ -20,9 +20,11 @@ flowchart LR
   T --> QN[SQS notifications]
   T --> QI[SQS inventory]
   T --> QD[SQS dispatch]
+  T --> QO[SQS order]
   QN --> CN[Notifications Worker]
   QI --> CI[Inventory Worker]
   QD --> CD[Dispatch Worker]
+  QO --> CO[Order Worker]
 ```
 
 ## §2 이벤트 계약 정책
@@ -109,7 +111,7 @@ flowchart LR
 #### 구현 목표
 
 - `OrderCreated` 발행
-- SQS fanout consumer 3개 처리
+- SQS fanout consumer 4개 처리
 
 #### 학습 목표
 
@@ -118,7 +120,7 @@ flowchart LR
 
 #### Exit Criteria
 
-- 주문 1건 -> queue 3개 도착
+- 주문 1건 -> queue 4개 도착
 - consumer 독립 처리 확인
 
 #### Evidence
