@@ -11,7 +11,7 @@ export {
   adminProductIdParamsSchema,
   createAdminProductRoute,
   deleteAdminProductRoute,
+  updateAdminProductActiveRoute,
   updateAdminProductRoute,
-  updateAdminProductStatusRoute,
   uploadAdminProductImagesRoute,
 } from './products/route'

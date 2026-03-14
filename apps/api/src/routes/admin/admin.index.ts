@@ -7,9 +7,9 @@ import {
   deleteAdminCategoryRoute,
   deleteAdminProductRoute,
   getAdminCategoriesRoute,
+  updateAdminProductActiveRoute,
   updateAdminCategoryRoute,
   updateAdminProductRoute,
-  updateAdminProductStatusRoute,
   uploadAdminProductImagesRoute,
 } from '@fullstack-forge/api-spec/routes/admin'
 import { getAuthUser, requireAuth } from '~/routes/auth/@shared/http/middleware'
@@ -22,8 +22,8 @@ import {
 import {
   createAdminProductHandler,
   deleteAdminProductHandler,
+  updateAdminProductActiveHandler,
   updateAdminProductHandler,
-  updateAdminProductStatusHandler,
   uploadAdminProductImagesHandler,
 } from './products/handlers'
 
@@ -80,6 +80,6 @@ adminIndex.openapi(updateAdminCategoryRoute, updateAdminCategoryHandler)
 adminIndex.openapi(deleteAdminCategoryRoute, deleteAdminCategoryHandler)
 adminIndex.openapi(createAdminProductRoute, createAdminProductHandler)
 adminIndex.openapi(updateAdminProductRoute, updateAdminProductHandler)
-adminIndex.openapi(updateAdminProductStatusRoute, updateAdminProductStatusHandler)
+adminIndex.openapi(updateAdminProductActiveRoute, updateAdminProductActiveHandler)
 adminIndex.openapi(deleteAdminProductRoute, deleteAdminProductHandler)
 adminIndex.openapi(uploadAdminProductImagesRoute, uploadAdminProductImagesHandler)

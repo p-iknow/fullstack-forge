@@ -9,7 +9,7 @@ export type SeedProduct = {
   categoryIndex: number
   categoryId: string
   isSubstitutable: boolean
-  status: 'active' | 'low_stock' | 'out_of_stock' | 'discontinued'
+  isActive: boolean
   thumbKey: string
   detailKey: string
 }
@@ -27,14 +27,6 @@ const buildProduct = (
   categoryIndex: number,
 ): SeedProduct => {
   const id = skuId(index)
-  const status: SeedProduct['status'] =
-    index % 17 === 0
-      ? 'discontinued'
-      : index % 9 === 0
-        ? 'out_of_stock'
-        : index % 6 === 0
-          ? 'low_stock'
-          : 'active'
 
   return {
     sku: `SKU-${id}`,
@@ -47,7 +39,7 @@ const buildProduct = (
     categoryIndex,
     categoryId: `cat-${categoryIndex}`,
     isSubstitutable: index % 4 !== 0,
-    status,
+    isActive: index % 17 !== 0,
     thumbKey: `sku-${id}-thumb.webp`,
     detailKey: `sku-${id}-detail.webp`,
   }

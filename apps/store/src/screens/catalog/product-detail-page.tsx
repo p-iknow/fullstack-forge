@@ -34,7 +34,8 @@ type ProductData = {
   brand: string
   price: number
   weight: number
-  status: string
+  isActive: boolean
+  stockDisplay: 'in_stock' | 'low_stock' | 'out_of_stock'
   availableStock: number
   description: string
   canPurchase: boolean
@@ -58,13 +59,22 @@ function ProductDetailContent({ product }: Readonly<{ product: ProductData }>) {
         <p className="text-sm text-slate-600">브랜드: {product.brand}</p>
         <p className="text-lg font-semibold">{formatPrice(product.price)}</p>
         <p className="text-sm text-slate-600">중량: {product.weight}g</p>
-        <p className="text-sm text-slate-600">상태: {product.status}</p>
+        <p className="text-sm text-slate-600">
+          상태:{' '}
+          {!product.isActive
+            ? '비활성'
+            : product.stockDisplay === 'out_of_stock'
+              ? '품절'
+              : product.stockDisplay === 'low_stock'
+                ? '재고임박'
+                : '판매중'}
+        </p>
         <p className="text-sm text-slate-600">가용 재고: {product.availableStock}개</p>
         <p className="text-sm text-slate-700">{product.description}</p>
 
         {!product.canPurchase ? (
           <p className="rounded bg-rose-100 p-3 text-sm text-rose-700">
-            {product.status === 'discontinued'
+            {!product.isActive
               ? '단종 상품으로 신규 구매가 불가합니다.'
               : '품절 상태로 구매가 불가합니다.'}
           </p>

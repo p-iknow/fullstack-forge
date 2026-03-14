@@ -1,5 +1,5 @@
 import { z } from 'zod'
-import { catalogProductStatusSchema } from './catalog-schemas'
+import { stockDisplaySchema } from './catalog-schemas'
 
 // ── Category schemas ──
 
@@ -59,8 +59,8 @@ export const updateProductRequestSchema = z.object({
   isSubstitutable: z.boolean().optional(),
 })
 
-export const updateProductStatusRequestSchema = z.object({
-  status: catalogProductStatusSchema,
+export const updateProductActiveRequestSchema = z.object({
+  isActive: z.boolean(),
 })
 
 export const adminProductResponseSchema = z.object({
@@ -71,7 +71,8 @@ export const adminProductResponseSchema = z.object({
   brand: z.string().nullable(),
   price: z.number().int().nonnegative(),
   weight: z.number().int().nullable(),
-  status: catalogProductStatusSchema,
+  isActive: z.boolean(),
+  stockDisplay: stockDisplaySchema,
   categoryId: z.string().nullable(),
   thumbUrl: z.string().nullable(),
   detailUrl: z.string().nullable(),

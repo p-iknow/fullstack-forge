@@ -103,7 +103,7 @@ describe('admin product handlers', () => {
         name: '새 상품',
         description: '상품 설명',
         price: 4900,
-        status: 'active',
+        isActive: true,
         categoryId: 'category-id',
         thumbUrl: 'http://127.0.0.1:9002/product-images/fallback/product-thumb.webp',
         detailUrl: 'http://127.0.0.1:9002/product-images/fallback/product-detail.webp',
@@ -129,7 +129,7 @@ describe('admin product handlers', () => {
     expect(res.status).toBe(201)
     await expect(res.json()).resolves.toMatchObject({
       id: '11111111-1111-4111-8111-111111111111',
-      status: 'active',
+      isActive: true,
     })
   })
 

@@ -367,7 +367,8 @@ export type PostAdminProductsResponses = {
         brand: string;
         price: number;
         weight: number;
-        status: 'active' | 'low_stock' | 'out_of_stock' | 'discontinued';
+        isActive: boolean;
+        stockDisplay: 'in_stock' | 'low_stock' | 'out_of_stock';
         categoryId: string;
         thumbUrl: string;
         detailUrl: string;
@@ -491,7 +492,8 @@ export type PatchAdminProductsByIdResponses = {
         brand: string;
         price: number;
         weight: number;
-        status: 'active' | 'low_stock' | 'out_of_stock' | 'discontinued';
+        isActive: boolean;
+        stockDisplay: 'in_stock' | 'low_stock' | 'out_of_stock';
         categoryId: string;
         thumbUrl: string;
         detailUrl: string;
@@ -502,20 +504,20 @@ export type PatchAdminProductsByIdResponses = {
 
 export type PatchAdminProductsByIdResponse = PatchAdminProductsByIdResponses[keyof PatchAdminProductsByIdResponses];
 
-export type PatchAdminProductsByIdStatusData = {
+export type PatchAdminProductsByIdActiveData = {
     body?: {
-        status: 'active' | 'low_stock' | 'out_of_stock' | 'discontinued';
+        isActive: boolean;
     };
     path: {
         id: string;
     };
     query?: never;
-    url: '/admin/products/{id}/status';
+    url: '/admin/products/{id}/active';
 };
 
-export type PatchAdminProductsByIdStatusErrors = {
+export type PatchAdminProductsByIdActiveErrors = {
     /**
-     * Invalid status
+     * Invalid active state
      */
     400: {
         code: string;
@@ -544,11 +546,11 @@ export type PatchAdminProductsByIdStatusErrors = {
     };
 };
 
-export type PatchAdminProductsByIdStatusError = PatchAdminProductsByIdStatusErrors[keyof PatchAdminProductsByIdStatusErrors];
+export type PatchAdminProductsByIdActiveError = PatchAdminProductsByIdActiveErrors[keyof PatchAdminProductsByIdActiveErrors];
 
-export type PatchAdminProductsByIdStatusResponses = {
+export type PatchAdminProductsByIdActiveResponses = {
     /**
-     * Product status updated
+     * Product active state updated
      */
     200: {
         id: string;
@@ -558,7 +560,8 @@ export type PatchAdminProductsByIdStatusResponses = {
         brand: string;
         price: number;
         weight: number;
-        status: 'active' | 'low_stock' | 'out_of_stock' | 'discontinued';
+        isActive: boolean;
+        stockDisplay: 'in_stock' | 'low_stock' | 'out_of_stock';
         categoryId: string;
         thumbUrl: string;
         detailUrl: string;
@@ -567,7 +570,7 @@ export type PatchAdminProductsByIdStatusResponses = {
     };
 };
 
-export type PatchAdminProductsByIdStatusResponse = PatchAdminProductsByIdStatusResponses[keyof PatchAdminProductsByIdStatusResponses];
+export type PatchAdminProductsByIdActiveResponse = PatchAdminProductsByIdActiveResponses[keyof PatchAdminProductsByIdActiveResponses];
 
 export type PostAdminProductsByIdImagesData = {
     body?: {

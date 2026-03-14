@@ -1015,13 +1015,14 @@ paths:
                   weight:
                     type: integer
                     nullable: true
-                  status:
+                  isActive:
+                    type: boolean
+                  stockDisplay:
                     type: string
                     enum:
-                      - active
+                      - in_stock
                       - low_stock
                       - out_of_stock
-                      - discontinued
                   categoryId:
                     type: string
                     nullable: true
@@ -1043,7 +1044,8 @@ paths:
                   - brand
                   - price
                   - weight
-                  - status
+                  - isActive
+                  - stockDisplay
                   - categoryId
                   - thumbUrl
                   - detailUrl
@@ -1169,13 +1171,14 @@ paths:
                   weight:
                     type: integer
                     nullable: true
-                  status:
+                  isActive:
+                    type: boolean
+                  stockDisplay:
                     type: string
                     enum:
-                      - active
+                      - in_stock
                       - low_stock
                       - out_of_stock
-                      - discontinued
                   categoryId:
                     type: string
                     nullable: true
@@ -1197,7 +1200,8 @@ paths:
                   - brand
                   - price
                   - weight
-                  - status
+                  - isActive
+                  - stockDisplay
                   - categoryId
                   - thumbUrl
                   - detailUrl
@@ -1326,7 +1330,7 @@ paths:
                 required:
                   - code
                   - error
-  /admin/products/{id}/status:
+  /admin/products/{id}/active:
     patch:
       parameters:
         - schema:
@@ -1341,18 +1345,13 @@ paths:
             schema:
               type: object
               properties:
-                status:
-                  type: string
-                  enum:
-                    - active
-                    - low_stock
-                    - out_of_stock
-                    - discontinued
+                isActive:
+                  type: boolean
               required:
-                - status
+                - isActive
       responses:
         "200":
-          description: Product status updated
+          description: Product active state updated
           content:
             application/json:
               schema:
@@ -1377,13 +1376,14 @@ paths:
                   weight:
                     type: integer
                     nullable: true
-                  status:
+                  isActive:
+                    type: boolean
+                  stockDisplay:
                     type: string
                     enum:
-                      - active
+                      - in_stock
                       - low_stock
                       - out_of_stock
-                      - discontinued
                   categoryId:
                     type: string
                     nullable: true
@@ -1405,14 +1405,15 @@ paths:
                   - brand
                   - price
                   - weight
-                  - status
+                  - isActive
+                  - stockDisplay
                   - categoryId
                   - thumbUrl
                   - detailUrl
                   - isSubstitutable
                   - createdAt
         "400":
-          description: Invalid status
+          description: Invalid active state
           content:
             application/json:
               schema:
@@ -1576,14 +1577,18 @@ paths:
           name: category
           in: query
         - schema:
+            type: boolean
+          required: false
+          name: isActive
+          in: query
+        - schema:
             type: string
             enum:
-              - active
+              - in_stock
               - low_stock
               - out_of_stock
-              - discontinued
           required: false
-          name: status
+          name: stockDisplay
           in: query
         - schema:
             type: string
@@ -1654,13 +1659,14 @@ paths:
                         weight:
                           type: integer
                           minimum: 0
-                        status:
+                        isActive:
+                          type: boolean
+                        stockDisplay:
                           type: string
                           enum:
-                            - active
+                            - in_stock
                             - low_stock
                             - out_of_stock
-                            - discontinued
                         isSubstitutable:
                           type: boolean
                         thumbUrl:
@@ -1683,7 +1689,8 @@ paths:
                         - categoryName
                         - price
                         - weight
-                        - status
+                        - isActive
+                        - stockDisplay
                         - isSubstitutable
                         - thumbUrl
                         - detailUrl
@@ -1730,14 +1737,18 @@ paths:
           name: category
           in: query
         - schema:
+            type: boolean
+          required: false
+          name: isActive
+          in: query
+        - schema:
             type: string
             enum:
-              - active
+              - in_stock
               - low_stock
               - out_of_stock
-              - discontinued
           required: false
-          name: status
+          name: stockDisplay
           in: query
         - schema:
             type: string
@@ -1808,13 +1819,14 @@ paths:
                         weight:
                           type: integer
                           minimum: 0
-                        status:
+                        isActive:
+                          type: boolean
+                        stockDisplay:
                           type: string
                           enum:
-                            - active
+                            - in_stock
                             - low_stock
                             - out_of_stock
-                            - discontinued
                         isSubstitutable:
                           type: boolean
                         thumbUrl:
@@ -1837,7 +1849,8 @@ paths:
                         - categoryName
                         - price
                         - weight
-                        - status
+                        - isActive
+                        - stockDisplay
                         - isSubstitutable
                         - thumbUrl
                         - detailUrl
@@ -1920,13 +1933,14 @@ paths:
                   weight:
                     type: integer
                     minimum: 0
-                  status:
+                  isActive:
+                    type: boolean
+                  stockDisplay:
                     type: string
                     enum:
-                      - active
+                      - in_stock
                       - low_stock
                       - out_of_stock
-                      - discontinued
                   isSubstitutable:
                     type: boolean
                   thumbUrl:
@@ -1951,7 +1965,8 @@ paths:
                   - categoryName
                   - price
                   - weight
-                  - status
+                  - isActive
+                  - stockDisplay
                   - isSubstitutable
                   - thumbUrl
                   - detailUrl

@@ -29,7 +29,8 @@ describe('ProductDetailPage', () => {
           categoryName: '음료',
           price: 2900,
           weight: 330,
-          status: 'active',
+          isActive: true,
+          stockDisplay: 'in_stock',
           isSubstitutable: true,
           thumbUrl: 'https://example.com/thumb.webp',
           detailUrl: 'https://example.com/detail.webp',
@@ -54,7 +55,7 @@ describe('ProductDetailPage', () => {
     expect(screen.getByText('구매 가능한 상품입니다.')).toBeInTheDocument()
   })
 
-  test('shows out-of-stock message for out_of_stock products', async () => {
+  test('shows out-of-stock message for out_of_stock stock display', async () => {
     // given
     const productId = '22222222-2222-2222-2222-222222222222'
     worker.use(
@@ -68,7 +69,8 @@ describe('ProductDetailPage', () => {
           categoryName: '음료',
           price: 3500,
           weight: 500,
-          status: 'out_of_stock',
+          isActive: true,
+          stockDisplay: 'out_of_stock',
           isSubstitutable: false,
           thumbUrl: 'https://example.com/thumb-2.webp',
           detailUrl: 'https://example.com/detail-2.webp',
@@ -87,7 +89,7 @@ describe('ProductDetailPage', () => {
     expect(screen.getByText('품절 상태로 구매가 불가합니다.')).toBeInTheDocument()
   })
 
-  test('shows discontinued message for discontinued products', async () => {
+  test('shows inactive message for inactive products', async () => {
     // given
     const productId = '33333333-3333-3333-3333-333333333333'
     worker.use(
@@ -101,7 +103,8 @@ describe('ProductDetailPage', () => {
           categoryName: '음료',
           price: 4200,
           weight: 600,
-          status: 'discontinued',
+          isActive: false,
+          stockDisplay: 'out_of_stock',
           isSubstitutable: true,
           thumbUrl: 'https://example.com/thumb-3.webp',
           detailUrl: 'https://example.com/detail-3.webp',
@@ -135,7 +138,8 @@ describe('ProductDetailPage', () => {
           categoryName: '음료',
           price: 3800,
           weight: 400,
-          status: 'active',
+          isActive: true,
+          stockDisplay: 'in_stock',
           isSubstitutable: true,
           thumbUrl: 'https://example.com/thumb-4.webp',
           detailUrl: 'https://example.com/detail-4.webp',

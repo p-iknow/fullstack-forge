@@ -43,6 +43,13 @@
       "when": 1772258371451,
       "tag": "0005_nasty_war_machine",
       "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "7",
+      "when": 1773475970594,
+      "tag": "0006_familiar_chat",
+      "breakpoints": true
     }
   ]
 }

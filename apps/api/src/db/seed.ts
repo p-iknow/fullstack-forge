@@ -143,7 +143,7 @@ async function seed(): Promise<void> {
     description: product.description,
     price: product.price,
     weight: product.weight,
-    status: product.status,
+    isActive: product.isActive,
     thumbUrl: publicUrl(product.thumbKey),
     detailUrl: publicUrl(product.detailKey),
     isSubstitutable: product.isSubstitutable,
@@ -152,28 +152,31 @@ async function seed(): Promise<void> {
   const insertedProducts = await db
     .insert(products)
     .values(seededProducts)
-    .returning({ id: products.id, status: products.status })
+    .returning({ id: products.id })
 
   await db.insert(inventory).values(
     insertedProducts.map((product, index) => {
-      if (product.status === 'out_of_stock' || product.status === 'discontinued') {
+      const seededProduct = PRODUCT_CATALOG[index]
+      if (!seededProduct) {
+        throw new Error('seed product catalog index mismatch')
+      }
+
+      if (!seededProduct.isActive || index % 9 === 0) {
         return {
           productId: product.id,
           onHand: 0,
           reserved: 0,
-          safetyThreshold: 0,
+          safetyThreshold: 5,
           version: 1,
         }
       }
 
-      if (product.status === 'low_stock') {
-        const onHand = 4 + (index % 3)
-        const reserved = Math.max(0, onHand - 1)
+      if (index % 6 === 0) {
         return {
           productId: product.id,
-          onHand,
-          reserved,
-          safetyThreshold: onHand,
+          onHand: 3,
+          reserved: 0,
+          safetyThreshold: 5,
           version: 1,
         }
       }
@@ -184,7 +187,7 @@ async function seed(): Promise<void> {
         productId: product.id,
         onHand,
         reserved,
-        safetyThreshold: 8,
+        safetyThreshold: 5,
         version: 1,
       }
     }),

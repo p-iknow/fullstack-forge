@@ -10,12 +10,13 @@ import {
   catalogSearchQueryOptions,
 } from '~/lib/queries/catalog'
 
-type CatalogStatus = 'all' | 'active' | 'low_stock'
+type CatalogStockFilter = 'all' | 'in_stock' | 'low_stock' | 'out_of_stock'
 
-const statusOptions: Array<{ value: CatalogStatus; label: string }> = [
+const stockDisplayOptions: Array<{ value: CatalogStockFilter; label: string }> = [
   { value: 'all', label: '전체 상태' },
-  { value: 'active', label: '판매중' },
+  { value: 'in_stock', label: '재고충분' },
   { value: 'low_stock', label: '재고임박' },
+  { value: 'out_of_stock', label: '품절' },
 ]
 
 const formatPrice = (price: number) => `${new Intl.NumberFormat('ko-KR').format(price)}원`
@@ -29,7 +30,7 @@ export function HomePage() {
   const [keyword, setKeyword] = useState('')
   const [submittedKeyword, setSubmittedKeyword] = useState('')
   const [category, setCategory] = useState('')
-  const [status, setStatus] = useState<CatalogStatus>('all')
+  const [stockDisplay, setStockDisplay] = useState<CatalogStockFilter>('all')
   const [brand, setBrand] = useState('')
   const [page, setPage] = useState(1)
   const [showProductsLoader, setShowProductsLoader] = useState(false)
@@ -42,19 +43,19 @@ export function HomePage() {
   const listParams = useMemo(
     () => ({
       category: category || undefined,
-      status: status === 'all' ? undefined : status,
+      stockDisplay: stockDisplay === 'all' ? undefined : stockDisplay,
       brand: brand || undefined,
       page,
       pageSize,
       sort: 'latest' as const,
       order: 'desc' as const,
     }),
-    [brand, category, page, status],
+    [brand, category, page, stockDisplay],
   )
 
   useEffect(() => {
     setPage(1)
-  }, [category, status, brand, submittedKeyword])
+  }, [category, stockDisplay, brand, submittedKeyword])
 
   const listQuery = useQuery({
     ...catalogListQueryOptions(listParams),
@@ -77,7 +78,7 @@ export function HomePage() {
   const totalItems = productsQuery.data?.total ?? 0
   const totalPages = Math.max(1, Math.ceil(totalItems / pageSize))
   const visibleItems = productsQuery.data?.items ?? []
-  const hasActiveFilters = Boolean(submittedKeyword || category || brand || status !== 'all')
+  const hasActiveFilters = Boolean(submittedKeyword || category || brand || stockDisplay !== 'all')
   const showEmptyFallback =
     !showProductsSkeleton && !productsQuery.isError && visibleItems.length === 0
   const pageNumbers = useMemo(() => {
@@ -194,11 +195,11 @@ export function HomePage() {
             ))}
           </select>
           <select
-            value={status}
-            onChange={(event) => setStatus(event.target.value as CatalogStatus)}
+            value={stockDisplay}
+            onChange={(event) => setStockDisplay(event.target.value as CatalogStockFilter)}
             className="h-10 rounded-md border border-slate-300 bg-white px-3 text-sm"
           >
-            {statusOptions.map((item) => (
+            {stockDisplayOptions.map((item) => (
               <option key={item.value} value={item.value}>
                 {item.label}
               </option>
@@ -265,7 +266,7 @@ export function HomePage() {
                     setKeyword('')
                     setSubmittedKeyword('')
                     setCategory('')
-                    setStatus('all')
+                    setStockDisplay('all')
                     setBrand('')
                     setPage(1)
                   }}
@@ -298,18 +299,18 @@ export function HomePage() {
                         <p className="truncate text-sm font-semibold">{item.name}</p>
                         <span
                           className={`rounded px-2 py-0.5 text-[11px] font-medium ${
-                            item.status === 'out_of_stock' || item.status === 'discontinued'
+                            !item.isActive || item.stockDisplay === 'out_of_stock'
                               ? 'bg-rose-100 text-rose-700'
-                              : item.status === 'low_stock'
+                              : item.stockDisplay === 'low_stock'
                                 ? 'bg-amber-100 text-amber-700'
                                 : 'bg-emerald-100 text-emerald-700'
                           }`}
                         >
-                          {item.status === 'out_of_stock'
+                          {!item.isActive
+                            ? '비활성'
+                            : item.stockDisplay === 'out_of_stock'
                             ? '품절'
-                            : item.status === 'discontinued'
-                              ? '단종'
-                              : item.status === 'low_stock'
+                            : item.stockDisplay === 'low_stock'
                                 ? '재고임박'
                                 : '판매중'}
                         </span>

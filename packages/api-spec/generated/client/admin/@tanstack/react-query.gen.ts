@@ -3,8 +3,8 @@
 import { queryOptions, type UseMutationOptions } from '@tanstack/react-query';
 
 import { client } from '../client.gen';
-import { deleteAdminCategoriesById, deleteAdminProductsById, getAdminCategories, getAdminDashboard, type Options, patchAdminCategoriesById, patchAdminProductsById, patchAdminProductsByIdStatus, postAdminCategories, postAdminProducts, postAdminProductsByIdImages, postAdminRedrive } from '../sdk.gen';
-import type { DeleteAdminCategoriesByIdData, DeleteAdminCategoriesByIdError, DeleteAdminCategoriesByIdResponse, DeleteAdminProductsByIdData, DeleteAdminProductsByIdError, DeleteAdminProductsByIdResponse, GetAdminCategoriesData, GetAdminCategoriesError, GetAdminCategoriesResponse, GetAdminDashboardData, GetAdminDashboardError, GetAdminDashboardResponse, PatchAdminCategoriesByIdData, PatchAdminCategoriesByIdError, PatchAdminCategoriesByIdResponse, PatchAdminProductsByIdData, PatchAdminProductsByIdError, PatchAdminProductsByIdResponse, PatchAdminProductsByIdStatusData, PatchAdminProductsByIdStatusError, PatchAdminProductsByIdStatusResponse, PostAdminCategoriesData, PostAdminCategoriesError, PostAdminCategoriesResponse, PostAdminProductsByIdImagesData, PostAdminProductsByIdImagesError, PostAdminProductsByIdImagesResponse, PostAdminProductsData, PostAdminProductsError, PostAdminProductsResponse, PostAdminRedriveData, PostAdminRedriveError, PostAdminRedriveResponse } from '../types.gen';
+import { deleteAdminCategoriesById, deleteAdminProductsById, getAdminCategories, getAdminDashboard, type Options, patchAdminCategoriesById, patchAdminProductsById, patchAdminProductsByIdActive, postAdminCategories, postAdminProducts, postAdminProductsByIdImages, postAdminRedrive } from '../sdk.gen';
+import type { DeleteAdminCategoriesByIdData, DeleteAdminCategoriesByIdError, DeleteAdminCategoriesByIdResponse, DeleteAdminProductsByIdData, DeleteAdminProductsByIdError, DeleteAdminProductsByIdResponse, GetAdminCategoriesData, GetAdminCategoriesError, GetAdminCategoriesResponse, GetAdminDashboardData, GetAdminDashboardError, GetAdminDashboardResponse, PatchAdminCategoriesByIdData, PatchAdminCategoriesByIdError, PatchAdminCategoriesByIdResponse, PatchAdminProductsByIdActiveData, PatchAdminProductsByIdActiveError, PatchAdminProductsByIdActiveResponse, PatchAdminProductsByIdData, PatchAdminProductsByIdError, PatchAdminProductsByIdResponse, PostAdminCategoriesData, PostAdminCategoriesError, PostAdminCategoriesResponse, PostAdminProductsByIdImagesData, PostAdminProductsByIdImagesError, PostAdminProductsByIdImagesResponse, PostAdminProductsData, PostAdminProductsError, PostAdminProductsResponse, PostAdminRedriveData, PostAdminRedriveError, PostAdminRedriveResponse } from '../types.gen';
 
 export type QueryKey<TOptions extends Options> = [
     Pick<TOptions, 'baseUrl' | 'body' | 'headers' | 'path' | 'query'> & {
@@ -167,10 +167,10 @@ export const patchAdminProductsByIdMutation = (options?: Partial<Options<PatchAd
     return mutationOptions;
 };
 
-export const patchAdminProductsByIdStatusMutation = (options?: Partial<Options<PatchAdminProductsByIdStatusData>>): UseMutationOptions<PatchAdminProductsByIdStatusResponse, PatchAdminProductsByIdStatusError, Options<PatchAdminProductsByIdStatusData>> => {
-    const mutationOptions: UseMutationOptions<PatchAdminProductsByIdStatusResponse, PatchAdminProductsByIdStatusError, Options<PatchAdminProductsByIdStatusData>> = {
+export const patchAdminProductsByIdActiveMutation = (options?: Partial<Options<PatchAdminProductsByIdActiveData>>): UseMutationOptions<PatchAdminProductsByIdActiveResponse, PatchAdminProductsByIdActiveError, Options<PatchAdminProductsByIdActiveData>> => {
+    const mutationOptions: UseMutationOptions<PatchAdminProductsByIdActiveResponse, PatchAdminProductsByIdActiveError, Options<PatchAdminProductsByIdActiveData>> = {
         mutationFn: async (fnOptions) => {
-            const { data } = await patchAdminProductsByIdStatus({
+            const { data } = await patchAdminProductsByIdActive({
                 ...options,
                 ...fnOptions,
                 throwOnError: true

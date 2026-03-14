@@ -7,12 +7,13 @@ type CatalogDbRow = {
   name: string
   description: string
   price: number
-  status: 'active' | 'low_stock' | 'out_of_stock' | 'discontinued'
+  isActive: boolean
   categoryId: string | null
   isSubstitutable: boolean
   createdAt: Date
   onHand: number
   reserved: number
+  safetyThreshold: number
 }
 
 type CatalogCategoryRow = {
@@ -71,24 +72,26 @@ describe('catalog routes', () => {
         name: 'Apple Juice',
         description: 'Fresh juice',
         price: 2900,
-        status: 'active',
+        isActive: true,
         categoryId: 'aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa',
         isSubstitutable: true,
         createdAt: new Date('2026-01-01T00:00:00.000Z'),
         onHand: 8,
         reserved: 2,
+        safetyThreshold: 5,
       },
       {
         id: '22222222-2222-2222-2222-222222222222',
         name: 'Laundry Wipe',
         description: 'House cleaning wipe',
         price: 4900,
-        status: 'out_of_stock',
+        isActive: true,
         categoryId: 'bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbbbb',
         isSubstitutable: false,
         createdAt: new Date('2026-01-02T00:00:00.000Z'),
         onHand: 0,
         reserved: 0,
+        safetyThreshold: 5,
       },
     ]
 
@@ -111,7 +114,7 @@ describe('catalog routes', () => {
       totalPages: number
       hasPreviousPage: boolean
       hasNextPage: boolean
-      items: Array<{ id: string; status: string; canPurchase: boolean }>
+      items: Array<{ id: string; stockDisplay: string; canPurchase: boolean; isActive: boolean }>
     }
     expect(json.total).toBe(2)
     expect(json.totalPages).toBe(1)
@@ -119,7 +122,8 @@ describe('catalog routes', () => {
     expect(json.hasNextPage).toBe(false)
     expect(json.items[0]).toMatchObject({
       id: '22222222-2222-2222-2222-222222222222',
-      status: 'out_of_stock',
+      stockDisplay: 'out_of_stock',
+      isActive: true,
       canPurchase: false,
     })
   })

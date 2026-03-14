@@ -1,11 +1,6 @@
 import { z } from 'zod'
 
-export const catalogProductStatusSchema = z.enum([
-  'active',
-  'low_stock',
-  'out_of_stock',
-  'discontinued',
-])
+export const stockDisplaySchema = z.enum(['in_stock', 'low_stock', 'out_of_stock'])
 
 export const catalogCategorySchema = z.object({
   id: z.string(),
@@ -24,7 +19,8 @@ export const catalogProductSummarySchema = z.object({
   categoryName: z.string(),
   price: z.number().int().nonnegative(),
   weight: z.number().int().nonnegative(),
-  status: catalogProductStatusSchema,
+  isActive: z.boolean(),
+  stockDisplay: stockDisplaySchema,
   isSubstitutable: z.boolean(),
   thumbUrl: z.string().url(),
   detailUrl: z.string().url(),

@@ -1,13 +1,14 @@
 import { ApiClientError, fetchWithRefresh } from '~/lib/api/core'
 
-export type CatalogProductStatus = 'active' | 'low_stock' | 'out_of_stock' | 'discontinued'
+export type StockDisplay = 'in_stock' | 'low_stock' | 'out_of_stock'
 
 export type CatalogProduct = {
   id: string
   name: string
   categoryName: string
   brand: string
-  status: CatalogProductStatus
+  isActive: boolean
+  stockDisplay: StockDisplay
   price: number
   availableStock: number
 }
@@ -15,7 +16,8 @@ export type CatalogProduct = {
 export type CatalogListParams = {
   q?: string
   category?: string
-  status?: CatalogProductStatus
+  isActive?: boolean
+  stockDisplay?: StockDisplay
   brand?: string
   page?: number
   pageSize?: number
@@ -41,7 +43,8 @@ const toQueryString = (params: CatalogListParams) => {
 
   if (params.q) query.set('q', params.q)
   if (params.category) query.set('category', params.category)
-  if (params.status) query.set('status', params.status)
+  if (params.isActive !== undefined) query.set('isActive', String(params.isActive))
+  if (params.stockDisplay) query.set('stockDisplay', params.stockDisplay)
   if (params.brand) query.set('brand', params.brand)
   if (params.page) query.set('page', String(params.page))
   if (params.pageSize) query.set('page_size', String(params.pageSize))
@@ -103,11 +106,11 @@ export const updateAdminProduct = async (
   return requestMutate<AdminProduct>(`/api/admin/products/${id}`, 'PATCH', data)
 }
 
-export const updateAdminProductStatus = async (
+export const updateAdminProductActive = async (
   id: string,
-  data: UpdateProductStatusInput,
+  data: UpdateProductActiveInput,
 ): Promise<AdminProduct> => {
-  return requestMutate<AdminProduct>(`/api/admin/products/${id}/status`, 'PATCH', data)
+  return requestMutate<AdminProduct>(`/api/admin/products/${id}/active`, 'PATCH', data)
 }
 
 export const deleteAdminProduct = async (id: string): Promise<void> => {
@@ -169,7 +172,8 @@ export type AdminProduct = {
   brand: string | null
   weight: number | null
   price: number
-  status: CatalogProductStatus
+  isActive: boolean
+  stockDisplay: StockDisplay
   categoryId: string | null
   thumbUrl: string | null
   detailUrl: string | null
@@ -189,8 +193,8 @@ export type CreateProductInput = {
 
 export type UpdateProductInput = Partial<CreateProductInput>
 
-export type UpdateProductStatusInput = {
-  status: CatalogProductStatus
+export type UpdateProductActiveInput = {
+  isActive: boolean
 }
 
 export type CreateCategoryInput = {

@@ -1,7 +1,7 @@
 import type { CatalogCategory } from './categories'
 import { getFallbackProductImageUrls } from '~/lib/product-image'
 
-type ProductStatus = 'active' | 'low_stock' | 'out_of_stock' | 'discontinued'
+export type StockDisplay = 'in_stock' | 'low_stock' | 'out_of_stock'
 
 const fallbackBrandByCategorySlug: Record<string, string> = {
   'convenience-food': 'Quick Pantry',
@@ -52,13 +52,23 @@ export const getAvailableStock = (onHand: number | null, reserved: number | null
   return Math.max(0, safeOnHand - safeReserved)
 }
 
+export const getStockDisplay = (available: number, safetyThreshold: number): StockDisplay => {
+  if (available === 0) {
+    return 'out_of_stock'
+  }
+
+  if (available <= safetyThreshold) {
+    return 'low_stock'
+  }
+
+  return 'in_stock'
+}
+
 export const getCanPurchase = (args: {
-  status: ProductStatus
+  isActive: boolean
   availableStock: number
   category: CatalogCategory | null
 }) => {
-  const { status, availableStock, category } = args
-  const statusSellable = status === 'active' || status === 'low_stock'
-  const categorySellable = category?.isActive ?? false
-  return statusSellable && categorySellable && availableStock > 0
+  const { isActive, availableStock, category } = args
+  return isActive && (category?.isActive ?? false) && availableStock > 0
 }

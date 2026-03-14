@@ -4,14 +4,15 @@ import {
   catalogErrorSchema,
   catalogProductDetailSchema,
   catalogProductListResponseSchema,
-  catalogProductStatusSchema,
   catalogSearchResponseSchema,
+  stockDisplaySchema,
 } from '../../../catalog-schemas'
 
 export const catalogCommonQuerySchema = z.object({
   q: z.string().optional(),
   category: z.string().optional(),
-  status: catalogProductStatusSchema.optional(),
+  isActive: z.boolean().optional(),
+  stockDisplay: stockDisplaySchema.optional(),
   brand: z.string().optional(),
 })
 

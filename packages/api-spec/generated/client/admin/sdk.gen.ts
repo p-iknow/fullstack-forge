@@ -2,7 +2,7 @@
 
 import { type Client, formDataBodySerializer, type Options as Options2, type TDataShape } from './client';
 import { client } from './client.gen';
-import type { DeleteAdminCategoriesByIdData, DeleteAdminCategoriesByIdErrors, DeleteAdminCategoriesByIdResponses, DeleteAdminProductsByIdData, DeleteAdminProductsByIdErrors, DeleteAdminProductsByIdResponses, GetAdminCategoriesData, GetAdminCategoriesErrors, GetAdminCategoriesResponses, GetAdminDashboardData, GetAdminDashboardErrors, GetAdminDashboardResponses, PatchAdminCategoriesByIdData, PatchAdminCategoriesByIdErrors, PatchAdminCategoriesByIdResponses, PatchAdminProductsByIdData, PatchAdminProductsByIdErrors, PatchAdminProductsByIdResponses, PatchAdminProductsByIdStatusData, PatchAdminProductsByIdStatusErrors, PatchAdminProductsByIdStatusResponses, PostAdminCategoriesData, PostAdminCategoriesErrors, PostAdminCategoriesResponses, PostAdminProductsByIdImagesData, PostAdminProductsByIdImagesErrors, PostAdminProductsByIdImagesResponses, PostAdminProductsData, PostAdminProductsErrors, PostAdminProductsResponses, PostAdminRedriveData, PostAdminRedriveErrors, PostAdminRedriveResponses } from './types.gen';
+import type { DeleteAdminCategoriesByIdData, DeleteAdminCategoriesByIdErrors, DeleteAdminCategoriesByIdResponses, DeleteAdminProductsByIdData, DeleteAdminProductsByIdErrors, DeleteAdminProductsByIdResponses, GetAdminCategoriesData, GetAdminCategoriesErrors, GetAdminCategoriesResponses, GetAdminDashboardData, GetAdminDashboardErrors, GetAdminDashboardResponses, PatchAdminCategoriesByIdData, PatchAdminCategoriesByIdErrors, PatchAdminCategoriesByIdResponses, PatchAdminProductsByIdActiveData, PatchAdminProductsByIdActiveErrors, PatchAdminProductsByIdActiveResponses, PatchAdminProductsByIdData, PatchAdminProductsByIdErrors, PatchAdminProductsByIdResponses, PostAdminCategoriesData, PostAdminCategoriesErrors, PostAdminCategoriesResponses, PostAdminProductsByIdImagesData, PostAdminProductsByIdImagesErrors, PostAdminProductsByIdImagesResponses, PostAdminProductsData, PostAdminProductsErrors, PostAdminProductsResponses, PostAdminRedriveData, PostAdminRedriveErrors, PostAdminRedriveResponses } from './types.gen';
 
 export type Options<TData extends TDataShape = TDataShape, ThrowOnError extends boolean = boolean> = Options2<TData, ThrowOnError> & {
     /**
@@ -64,8 +64,8 @@ export const patchAdminProductsById = <ThrowOnError extends boolean = false>(opt
     }
 });
 
-export const patchAdminProductsByIdStatus = <ThrowOnError extends boolean = false>(options: Options<PatchAdminProductsByIdStatusData, ThrowOnError>) => (options.client ?? client).patch<PatchAdminProductsByIdStatusResponses, PatchAdminProductsByIdStatusErrors, ThrowOnError>({
-    url: '/admin/products/{id}/status',
+export const patchAdminProductsByIdActive = <ThrowOnError extends boolean = false>(options: Options<PatchAdminProductsByIdActiveData, ThrowOnError>) => (options.client ?? client).patch<PatchAdminProductsByIdActiveResponses, PatchAdminProductsByIdActiveErrors, ThrowOnError>({
+    url: '/admin/products/{id}/active',
     ...options,
     headers: {
         'Content-Type': 'application/json',

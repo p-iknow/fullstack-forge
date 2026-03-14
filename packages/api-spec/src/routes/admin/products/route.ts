@@ -5,8 +5,8 @@ import {
   adminProductImageResponseSchema,
   adminProductResponseSchema,
   createProductRequestSchema,
+  updateProductActiveRequestSchema,
   updateProductRequestSchema,
-  updateProductStatusRequestSchema,
 } from '../../../admin-catalog-schemas'
 import { authErrorSchema } from '../../../auth-schemas'
 
@@ -87,26 +87,26 @@ export const updateAdminProductRoute = createRoute({
   },
 })
 
-export const updateAdminProductStatusRoute = createRoute({
+export const updateAdminProductActiveRoute = createRoute({
   method: 'patch',
-  path: '/products/{id}/status',
+  path: '/products/{id}/active',
   request: {
     params: adminProductIdParamsSchema,
     body: {
       content: {
         'application/json': {
-          schema: updateProductStatusRequestSchema,
+          schema: updateProductActiveRequestSchema,
         },
       },
     },
   },
   responses: {
     200: {
-      description: 'Product status updated',
+      description: 'Product active state updated',
       content: { 'application/json': { schema: adminProductResponseSchema } },
     },
     400: {
-      description: 'Invalid status',
+      description: 'Invalid active state',
       content: { 'application/json': { schema: adminCatalogErrorSchema } },
     },
     401: {

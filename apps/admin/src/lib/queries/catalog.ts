@@ -6,7 +6,7 @@ import {
   getAdminCategoriesFull,
   createAdminProduct,
   updateAdminProduct,
-  updateAdminProductStatus,
+  updateAdminProductActive,
   deleteAdminProduct,
   uploadProductImages,
   createAdminCategory,
@@ -15,7 +15,7 @@ import {
   type CatalogListParams,
   type CreateProductInput,
   type UpdateProductInput,
-  type UpdateProductStatusInput,
+  type UpdateProductActiveInput,
   type CreateCategoryInput,
   type UpdateCategoryInput,
 } from '~/lib/api/catalog'
@@ -71,10 +71,10 @@ export const updateProductMutationOptions = (queryClient: QueryClient) =>
     },
   })
 
-export const updateProductStatusMutationOptions = (queryClient: QueryClient) =>
+export const updateProductActiveMutationOptions = (queryClient: QueryClient) =>
   mutationOptions({
-    mutationFn: ({ id, data }: { id: string; data: UpdateProductStatusInput }) =>
-      updateAdminProductStatus(id, data),
+    mutationFn: ({ id, data }: { id: string; data: UpdateProductActiveInput }) =>
+      updateAdminProductActive(id, data),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['admin', 'catalog', 'list'] })
     },

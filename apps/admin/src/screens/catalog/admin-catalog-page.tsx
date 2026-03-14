@@ -14,32 +14,31 @@ import {
   TableHeader,
   TableRow,
 } from '@fullstack-forge/design-system/components/table'
-import { type CatalogProductStatus } from '~/lib/api/catalog'
+import { type StockDisplay } from '~/lib/api/catalog'
 import { readApiError } from '~/lib/api/core'
 import {
   adminCategoriesQueryOptions,
   adminProductListQueryOptions,
   deleteProductMutationOptions,
-  updateProductStatusMutationOptions,
+  updateProductActiveMutationOptions,
 } from '~/lib/queries/catalog'
 import { alertAction, confirmAction } from '~/lib/overlay/confirm'
 
-type ProductFilterStatus = Extract<CatalogProductStatus, 'active' | 'low_stock'>
+type ProductActiveFilter = 'all' | 'active' | 'inactive'
+type ProductStockFilter = 'all' | StockDisplay
 
 const formatPrice = (price: number) => `${new Intl.NumberFormat('ko-KR').format(price)}원`
 
-const statusLabel: Record<CatalogProductStatus, string> = {
-  active: '판매중',
+const stockDisplayLabel: Record<StockDisplay, string> = {
+  in_stock: '판매중',
   low_stock: '재고임박',
   out_of_stock: '품절',
-  discontinued: '단종',
 }
 
-const statusBadgeVariant: Record<CatalogProductStatus, 'secondary' | 'outline' | 'destructive'> = {
-  active: 'secondary',
+const stockBadgeVariant: Record<StockDisplay, 'secondary' | 'outline' | 'destructive'> = {
+  in_stock: 'secondary',
   low_stock: 'outline',
   out_of_stock: 'destructive',
-  discontinued: 'destructive',
 }
 
 const PAGE_SIZE = 20
@@ -54,11 +53,12 @@ export function AdminCatalogPage() {
       await alertAction({ title: '삭제 실패', description: apiError.error || '상품 삭제에 실패했습니다' })
     },
   })
-  const updateStatusMutation = useMutation(updateProductStatusMutationOptions(queryClient))
+  const updateActiveMutation = useMutation(updateProductActiveMutationOptions(queryClient))
 
   const [q, setQ] = useState('')
   const [submittedQ, setSubmittedQ] = useState('')
-  const [status, setStatus] = useState<'all' | ProductFilterStatus>('all')
+  const [isActive, setIsActive] = useState<ProductActiveFilter>('all')
+  const [stockDisplay, setStockDisplay] = useState<ProductStockFilter>('all')
   const [category, setCategory] = useState('')
   const [brand, setBrand] = useState('')
   const [page, setPage] = useState(1)
@@ -67,7 +67,8 @@ export function AdminCatalogPage() {
   const productsQuery = useQuery({
     ...adminProductListQueryOptions({
       q: submittedQ || undefined,
-      status: status === 'all' ? undefined : status,
+      isActive: isActive === 'all' ? undefined : isActive === 'active',
+      stockDisplay: stockDisplay === 'all' ? undefined : stockDisplay,
       category: category || undefined,
       brand: brand.trim() || undefined,
       page,
@@ -78,7 +79,7 @@ export function AdminCatalogPage() {
 
   useEffect(() => {
     setPage(1)
-  }, [submittedQ, status, category, brand])
+  }, [submittedQ, isActive, stockDisplay, category, brand])
 
   const totalItems = productsQuery.data?.total ?? 0
   const totalPages = Math.max(1, Math.ceil(totalItems / PAGE_SIZE))
@@ -117,7 +118,7 @@ export function AdminCatalogPage() {
       </header>
 
       <form
-        className="mt-6 grid gap-3 rounded-xl border border-slate-200 bg-white p-4 md:grid-cols-5"
+        className="mt-6 grid gap-3 rounded-xl border border-slate-200 bg-white p-4 md:grid-cols-6"
         onSubmit={(event) => {
           event.preventDefault()
           setSubmittedQ(q.trim())
@@ -141,13 +142,23 @@ export function AdminCatalogPage() {
           ))}
         </select>
         <select
-          value={status}
-          onChange={(event) => setStatus(event.target.value as 'all' | ProductFilterStatus)}
+          value={stockDisplay}
+          onChange={(event) => setStockDisplay(event.target.value as ProductStockFilter)}
           className="h-9 rounded-md border border-slate-300 bg-white px-3 text-sm"
         >
           <option value="all">전체 상태</option>
-          <option value="active">판매중</option>
+          <option value="in_stock">판매중</option>
           <option value="low_stock">재고임박</option>
+          <option value="out_of_stock">품절</option>
+        </select>
+        <select
+          value={isActive}
+          onChange={(event) => setIsActive(event.target.value as ProductActiveFilter)}
+          className="h-9 rounded-md border border-slate-300 bg-white px-3 text-sm"
+        >
+          <option value="all">전체 활성상태</option>
+          <option value="active">활성</option>
+          <option value="inactive">비활성</option>
         </select>
         <Input
           value={brand}
@@ -200,8 +211,8 @@ export function AdminCatalogPage() {
                 <TableCell>{item.brand}</TableCell>
                 <TableCell>{item.categoryName}</TableCell>
                 <TableCell>
-                  <Badge variant={statusBadgeVariant[item.status]}>
-                    {statusLabel[item.status]}
+                  <Badge variant={stockBadgeVariant[item.stockDisplay]}>
+                    {stockDisplayLabel[item.stockDisplay]}
                   </Badge>
                 </TableCell>
                 <TableCell>{formatPrice(item.price)}</TableCell>
@@ -209,30 +220,28 @@ export function AdminCatalogPage() {
                 <TableCell className="text-right">
                   <div className="flex items-center justify-end gap-2">
                     <select
-                      value={item.status}
+                      value={item.isActive ? 'active' : 'inactive'}
                       onChange={async (e) => {
-                        const newStatus = e.target.value as CatalogProductStatus
-                        if (newStatus === item.status) return
+                        const nextIsActive = e.target.value === 'active'
+                        if (nextIsActive === item.isActive) return
                         const confirmed = await confirmAction({
-                          title: '상태 변경',
-                          description: `상태를 '${statusLabel[newStatus]}'(으)로 변경하시겠습니까?`,
+                          title: '활성 상태 변경',
+                          description: `상품을 '${nextIsActive ? '활성' : '비활성'}' 상태로 변경하시겠습니까?`,
                         })
                         if (!confirmed) {
-                          e.target.value = item.status
+                          e.target.value = item.isActive ? 'active' : 'inactive'
                           return
                         }
-                        updateStatusMutation.mutate({
+                        updateActiveMutation.mutate({
                           id: item.id,
-                          data: { status: newStatus },
+                          data: { isActive: nextIsActive },
                         })
                       }}
                       className="h-8 rounded-md border border-slate-300 bg-white px-2 text-xs"
-                      disabled={updateStatusMutation.isPending}
+                      disabled={updateActiveMutation.isPending}
                     >
                       <option value="active">판매중</option>
-                      <option value="low_stock">재고임박</option>
-                      <option value="out_of_stock">품절</option>
-                      <option value="discontinued">단종</option>
+                      <option value="inactive">비활성</option>
                     </select>
                     <Link
                       to="/products/$id/edit"

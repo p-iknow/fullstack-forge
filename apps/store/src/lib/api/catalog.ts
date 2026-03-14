@@ -1,6 +1,6 @@
 import { ApiClientError, fetchWithRefresh } from '~/lib/api/core'
 
-export type CatalogProductStatus = 'active' | 'low_stock' | 'out_of_stock' | 'discontinued'
+export type StockDisplay = 'in_stock' | 'low_stock' | 'out_of_stock'
 
 export type CatalogCategory = {
   id: string
@@ -19,7 +19,8 @@ export type CatalogProductSummary = {
   categoryName: string
   price: number
   weight: number
-  status: CatalogProductStatus
+  isActive: boolean
+  stockDisplay: StockDisplay
   isSubstitutable: boolean
   thumbUrl: string
   detailUrl: string
@@ -34,7 +35,8 @@ export type CatalogProductDetail = CatalogProductSummary & {
 export type CatalogListParams = {
   q?: string
   category?: string
-  status?: CatalogProductStatus
+  isActive?: boolean
+  stockDisplay?: StockDisplay
   brand?: string
   sort?: 'latest' | 'price' | 'name'
   order?: 'asc' | 'desc'
@@ -57,7 +59,8 @@ const toQueryString = (params: CatalogListParams) => {
 
   if (params.q) query.set('q', params.q)
   if (params.category) query.set('category', params.category)
-  if (params.status) query.set('status', params.status)
+  if (params.isActive !== undefined) query.set('isActive', String(params.isActive))
+  if (params.stockDisplay) query.set('stockDisplay', params.stockDisplay)
   if (params.brand) query.set('brand', params.brand)
   if (params.sort) query.set('sort', params.sort)
   if (params.order) query.set('order', params.order)

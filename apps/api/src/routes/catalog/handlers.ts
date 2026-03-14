@@ -17,9 +17,9 @@ import {
   getProductImageUrls,
   getProductSku,
   getProductWeight,
+  getStockDisplay,
+  type StockDisplay,
 } from './@shared/view-model'
-
-type CatalogStatus = 'active' | 'low_stock' | 'out_of_stock' | 'discontinued'
 
 type CatalogProduct = {
   id: string
@@ -31,7 +31,8 @@ type CatalogProduct = {
   categoryName: string
   price: number
   weight: number
-  status: CatalogStatus
+  isActive: boolean
+  stockDisplay: StockDisplay
   isSubstitutable: boolean
   thumbUrl: string
   detailUrl: string
@@ -48,7 +49,7 @@ type CatalogProductRow = {
   brand?: string | null
   price: number
   weight?: number | null
-  status: string
+  isActive: boolean
   categoryId?: string | null
   thumbUrl?: string | null
   detailUrl?: string | null
@@ -56,6 +57,7 @@ type CatalogProductRow = {
   createdAt: Date
   onHand: number | null
   reserved: number | null
+  safetyThreshold: number | null
 }
 
 const normalizeKeyword = (value: string | undefined) => value?.trim().toLowerCase() ?? ''
@@ -63,7 +65,8 @@ const normalizeKeyword = (value: string | undefined) => value?.trim().toLowerCas
 const parseListQuery = (query: {
   q?: string
   category?: string
-  status?: CatalogStatus
+  isActive?: boolean
+  stockDisplay?: StockDisplay
   brand?: string
   sort?: 'latest' | 'price' | 'name'
   order?: 'asc' | 'desc'
@@ -73,7 +76,8 @@ const parseListQuery = (query: {
   return {
     q: normalizeKeyword(query.q),
     category: normalizeKeyword(query.category),
-    status: query.status,
+    isActive: query.isActive,
+    stockDisplay: query.stockDisplay,
     brand: normalizeKeyword(query.brand),
     sort: query.sort ?? 'latest',
     order: query.order ?? 'desc',
@@ -92,7 +96,7 @@ const selectCatalogProductRowsWithImageColumns = async (): Promise<CatalogProduc
       brand: products.brand,
       price: products.price,
       weight: products.weight,
-      status: products.status,
+      isActive: products.isActive,
       categoryId: products.categoryId,
       thumbUrl: products.thumbUrl,
       detailUrl: products.detailUrl,
@@ -100,6 +104,7 @@ const selectCatalogProductRowsWithImageColumns = async (): Promise<CatalogProduc
       createdAt: products.createdAt,
       onHand: inventory.onHand,
       reserved: inventory.reserved,
+      safetyThreshold: inventory.safetyThreshold,
     })
     .from(products)
     .leftJoin(inventory, eq(inventory.productId, products.id))
@@ -112,7 +117,7 @@ const loadCatalogProducts = async (categoryList: CatalogCategory[]): Promise<Cat
   return rows.map((row) => {
     const category = getCatalogCategoryById(categoryList, row.categoryId)
     const availableStock = getAvailableStock(row.onHand, row.reserved)
-    const status = row.status as CatalogStatus
+    const stockDisplay = getStockDisplay(availableStock, row.safetyThreshold ?? 5)
     const brand = row.brand ?? getProductBrand(category, row.name)
     const generatedImageUrls = getProductImageUrls(row.id)
     const thumbUrl = row.thumbUrl ?? generatedImageUrls.thumbUrl
@@ -128,12 +133,13 @@ const loadCatalogProducts = async (categoryList: CatalogCategory[]): Promise<Cat
       categoryName: category?.name ?? '미분류',
       price: row.price,
       weight: row.weight ?? getProductWeight(row.price),
-      status,
+      isActive: row.isActive,
+      stockDisplay,
       isSubstitutable: row.isSubstitutable ?? true,
       thumbUrl,
       detailUrl,
       availableStock,
-      canPurchase: getCanPurchase({ status, availableStock, category }),
+      canPurchase: getCanPurchase({ isActive: row.isActive, availableStock, category }),
       createdAt: row.createdAt,
     }
   })
@@ -145,11 +151,12 @@ const filterCatalogProducts = (
   filters: {
     q: string
     category: string
-    status?: CatalogStatus
+    isActive?: boolean
+    stockDisplay?: StockDisplay
     brand: string
   },
 ) => {
-  const { q, category, status, brand } = filters
+  const { q, category, isActive, stockDisplay, brand } = filters
   const categoryMatch = findCatalogCategory(category, categoryList)
 
   return productsList.filter((item) => {
@@ -173,7 +180,11 @@ const filterCatalogProducts = (
       }
     }
 
-    if (status && item.status !== status) {
+    if (isActive !== undefined && item.isActive !== isActive) {
+      return false
+    }
+
+    if (stockDisplay && item.stockDisplay !== stockDisplay) {
       return false
     }
 
@@ -214,7 +225,8 @@ const toProductSummary = (item: CatalogProduct) => ({
   categoryName: item.categoryName,
   price: item.price,
   weight: item.weight,
-  status: item.status,
+  isActive: item.isActive,
+  stockDisplay: item.stockDisplay,
   isSubstitutable: item.isSubstitutable,
   thumbUrl: item.thumbUrl,
   detailUrl: item.detailUrl,

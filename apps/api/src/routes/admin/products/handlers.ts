@@ -2,8 +2,8 @@ import type { RouteHandler } from '@hono/zod-openapi'
 import {
   createAdminProductRoute,
   deleteAdminProductRoute,
+  updateAdminProductActiveRoute,
   updateAdminProductRoute,
-  updateAdminProductStatusRoute,
   uploadAdminProductImagesRoute,
 } from '@fullstack-forge/api-spec/routes/admin'
 import { PutObjectCommand } from '@aws-sdk/client-s3'
@@ -13,12 +13,36 @@ import { db } from '~/db/client'
 import { categories, inventory, orderItems, products } from '~/db/schema/index'
 import { getFallbackProductImageUrls } from '~/lib/product-image'
 import { MINIO_BUCKET, publicUrl, s3 } from '~/lib/s3-client'
-import { getProductSku } from '~/routes/catalog/@shared/view-model'
+import {
+  getAvailableStock,
+  getProductSku,
+  getStockDisplay,
+} from '~/routes/catalog/@shared/view-model'
 
 const ALLOWED_IMAGE_TYPES = new Set(['image/jpeg', 'image/png', 'image/webp'])
 const MAX_FILE_SIZE_BYTES = 5 * 1024 * 1024
 
-const toAdminProduct = (product: {
+const getInventorySnapshot = async (productId: string) => {
+  const [inventoryRow] = await db
+    .select({
+      onHand: inventory.onHand,
+      reserved: inventory.reserved,
+      safetyThreshold: inventory.safetyThreshold,
+    })
+    .from(inventory)
+    .where(eq(inventory.productId, productId))
+    .limit(1)
+
+  const available = getAvailableStock(inventoryRow?.onHand ?? 0, inventoryRow?.reserved ?? 0)
+  const safetyThreshold = inventoryRow?.safetyThreshold ?? 5
+
+  return {
+    available,
+    stockDisplay: getStockDisplay(available, safetyThreshold),
+  }
+}
+
+const toAdminProduct = async (product: {
   id: string
   name: string
   description: string
@@ -26,27 +50,32 @@ const toAdminProduct = (product: {
   brand: string | null
   price: number
   weight: number | null
-  status: 'active' | 'low_stock' | 'out_of_stock' | 'discontinued'
+  isActive: boolean
   categoryId: string | null
   thumbUrl: string | null
   detailUrl: string | null
   isSubstitutable: boolean
   createdAt: Date
-}) => ({
-  id: product.id,
-  name: product.name,
-  description: product.description,
-  sku: product.sku,
-  brand: product.brand,
-  price: product.price,
-  weight: product.weight,
-  status: product.status,
-  categoryId: product.categoryId,
-  thumbUrl: product.thumbUrl,
-  detailUrl: product.detailUrl,
-  isSubstitutable: product.isSubstitutable,
-  createdAt: product.createdAt.toISOString(),
-})
+}) => {
+  const inventorySnapshot = await getInventorySnapshot(product.id)
+
+  return {
+    id: product.id,
+    name: product.name,
+    description: product.description,
+    sku: product.sku,
+    brand: product.brand,
+    price: product.price,
+    weight: product.weight,
+    isActive: product.isActive,
+    stockDisplay: inventorySnapshot.stockDisplay,
+    categoryId: product.categoryId,
+    thumbUrl: product.thumbUrl,
+    detailUrl: product.detailUrl,
+    isSubstitutable: product.isSubstitutable,
+    createdAt: product.createdAt.toISOString(),
+  }
+}
 
 const selectProductColumns = {
   id: products.id,
@@ -56,7 +85,7 @@ const selectProductColumns = {
   brand: products.brand,
   price: products.price,
   weight: products.weight,
-  status: products.status,
+  isActive: products.isActive,
   categoryId: products.categoryId,
   thumbUrl: products.thumbUrl,
   detailUrl: products.detailUrl,
@@ -107,7 +136,7 @@ export const createAdminProductHandler: RouteHandler<typeof createAdminProductRo
       brand: body.brand,
       price: body.price,
       weight: body.weight,
-      status: 'active',
+      isActive: true,
       categoryId: body.categoryId,
       thumbUrl: fallbackImages.thumbUrl,
       detailUrl: fallbackImages.detailUrl,
@@ -123,7 +152,7 @@ export const createAdminProductHandler: RouteHandler<typeof createAdminProductRo
     version: 1,
   })
 
-  return c.json(toAdminProduct(created), 201)
+  return c.json(await toAdminProduct(created), 201)
 }
 
 export const updateAdminProductHandler: RouteHandler<typeof updateAdminProductRoute> = async (
@@ -160,11 +189,11 @@ export const updateAdminProductHandler: RouteHandler<typeof updateAdminProductRo
     .where(eq(products.id, id))
     .returning(selectProductColumns)
 
-  return c.json(toAdminProduct(updated), 200)
+  return c.json(await toAdminProduct(updated), 200)
 }
 
-export const updateAdminProductStatusHandler: RouteHandler<
-  typeof updateAdminProductStatusRoute
+export const updateAdminProductActiveHandler: RouteHandler<
+  typeof updateAdminProductActiveRoute
 > = async (c) => {
   const { id } = c.req.valid('param')
   const body = c.req.valid('json')
@@ -181,11 +210,11 @@ export const updateAdminProductStatusHandler: RouteHandler<
 
   const [updated] = await db
     .update(products)
-    .set({ status: body.status })
+    .set({ isActive: body.isActive })
     .where(eq(products.id, id))
     .returning(selectProductColumns)
 
-  return c.json(toAdminProduct(updated), 200)
+  return c.json(await toAdminProduct(updated), 200)
 }
 
 export const deleteAdminProductHandler: RouteHandler<typeof deleteAdminProductRoute> = async (
