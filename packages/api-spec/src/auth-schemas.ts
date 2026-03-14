@@ -6,7 +6,7 @@ export const authUserStatusSchema = z.enum(authUserStatuses)
 
 export const authUserSchema = z.object({
   id: z.string(),
-  email: z.string().email(),
+  email: z.email(),
   name: z.string(),
   role: authRoleSchema,
   status: authUserStatusSchema,
