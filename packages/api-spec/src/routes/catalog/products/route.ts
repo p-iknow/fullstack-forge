@@ -11,7 +11,7 @@ import {
 export const catalogCommonQuerySchema = z.object({
   q: z.string().optional(),
   category: z.string().optional(),
-  isActive: z.boolean().optional(),
+  isActive: z.stringbool().optional(),
   stockDisplay: stockDisplaySchema.optional(),
   brand: z.string().optional(),
 })

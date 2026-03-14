@@ -1577,7 +1577,7 @@ paths:
           name: category
           in: query
         - schema:
-            type: boolean
+            type: string
           required: false
           name: isActive
           in: query
@@ -1737,7 +1737,7 @@ paths:
           name: category
           in: query
         - schema:
-            type: boolean
+            type: string
           required: false
           name: isActive
           in: query
