@@ -3,7 +3,7 @@ import { z } from 'zod'
 import { authErrorSchema } from '../../../../auth-schemas'
 
 export const passwordResetRequestRequestSchema = z.object({
-  email: z.string().email(),
+  email: z.email(),
 })
 
 export const passwordResetRequestResponseSchema = z.object({

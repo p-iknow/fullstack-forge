@@ -1613,17 +1613,12 @@ paths:
           name: order
           in: query
         - schema:
-            type: integer
-            minimum: 0
-            exclusiveMinimum: true
+            type: number
           required: false
           name: page
           in: query
         - schema:
-            type: integer
-            minimum: 0
-            exclusiveMinimum: true
-            maximum: 100
+            type: number
           required: false
           name: page_size
           in: query
@@ -1773,17 +1768,12 @@ paths:
           name: order
           in: query
         - schema:
-            type: integer
-            minimum: 0
-            exclusiveMinimum: true
+            type: number
           required: false
           name: page
           in: query
         - schema:
-            type: integer
-            minimum: 0
-            exclusiveMinimum: true
-            maximum: 100
+            type: number
           required: false
           name: page_size
           in: query
@@ -2021,3 +2011,618 @@ paths:
                         - isActive
                 required:
                   - items
+  /cart:
+    get:
+      responses:
+        "200":
+          description: Active cart with items
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    format: uuid
+                  status:
+                    type: string
+                    enum:
+                      - active
+                      - converted
+                      - expired
+                  itemCount:
+                    type: integer
+                    minimum: 0
+                  totalAmount:
+                    type: integer
+                    minimum: 0
+                  expiresAt:
+                    type: string
+                    format: date-time
+                  version:
+                    type: integer
+                  items:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: string
+                          format: uuid
+                        productId:
+                          type: string
+                          format: uuid
+                        productName:
+                          type: string
+                        sku:
+                          type: string
+                        quantity:
+                          type: integer
+                          minimum: 0
+                          exclusiveMinimum: true
+                          maximum: 15
+                        unitPriceSnapshot:
+                          type: integer
+                          minimum: 0
+                        isSubstitutable:
+                          type: boolean
+                        stockDisplay:
+                          type: string
+                          enum:
+                            - in_stock
+                            - low_stock
+                            - out_of_stock
+                        availableStock:
+                          type: integer
+                          minimum: 0
+                        thumbUrl:
+                          type: string
+                        createdAt:
+                          type: string
+                          format: date-time
+                        updatedAt:
+                          type: string
+                          format: date-time
+                      required:
+                        - id
+                        - productId
+                        - productName
+                        - sku
+                        - quantity
+                        - unitPriceSnapshot
+                        - isSubstitutable
+                        - stockDisplay
+                        - availableStock
+                        - thumbUrl
+                        - createdAt
+                        - updatedAt
+                required:
+                  - id
+                  - status
+                  - itemCount
+                  - totalAmount
+                  - expiresAt
+                  - version
+                  - items
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: string
+                  error:
+                    type: string
+                required:
+                  - code
+                  - error
+    delete:
+      responses:
+        "204":
+          description: Cart cleared
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: string
+                  error:
+                    type: string
+                required:
+                  - code
+                  - error
+        "409":
+          description: Cart not active
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: string
+                  error:
+                    type: string
+                required:
+                  - code
+                  - error
+  /cart/items:
+    post:
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                productId:
+                  type: string
+                  format: uuid
+                quantity:
+                  type: integer
+                  minimum: 0
+                  exclusiveMinimum: true
+                  maximum: 15
+              required:
+                - productId
+                - quantity
+      responses:
+        "201":
+          description: Item added to cart
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    format: uuid
+                  status:
+                    type: string
+                    enum:
+                      - active
+                      - converted
+                      - expired
+                  itemCount:
+                    type: integer
+                    minimum: 0
+                  totalAmount:
+                    type: integer
+                    minimum: 0
+                  expiresAt:
+                    type: string
+                    format: date-time
+                  version:
+                    type: integer
+                  items:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: string
+                          format: uuid
+                        productId:
+                          type: string
+                          format: uuid
+                        productName:
+                          type: string
+                        sku:
+                          type: string
+                        quantity:
+                          type: integer
+                          minimum: 0
+                          exclusiveMinimum: true
+                          maximum: 15
+                        unitPriceSnapshot:
+                          type: integer
+                          minimum: 0
+                        isSubstitutable:
+                          type: boolean
+                        stockDisplay:
+                          type: string
+                          enum:
+                            - in_stock
+                            - low_stock
+                            - out_of_stock
+                        availableStock:
+                          type: integer
+                          minimum: 0
+                        thumbUrl:
+                          type: string
+                        createdAt:
+                          type: string
+                          format: date-time
+                        updatedAt:
+                          type: string
+                          format: date-time
+                      required:
+                        - id
+                        - productId
+                        - productName
+                        - sku
+                        - quantity
+                        - unitPriceSnapshot
+                        - isSubstitutable
+                        - stockDisplay
+                        - availableStock
+                        - thumbUrl
+                        - createdAt
+                        - updatedAt
+                required:
+                  - id
+                  - status
+                  - itemCount
+                  - totalAmount
+                  - expiresAt
+                  - version
+                  - items
+        "400":
+          description: Quantity exceeded or max items exceeded
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: string
+                  error:
+                    type: string
+                required:
+                  - code
+                  - error
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: string
+                  error:
+                    type: string
+                required:
+                  - code
+                  - error
+        "409":
+          description: Cart not active or version conflict
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: string
+                  error:
+                    type: string
+                required:
+                  - code
+                  - error
+        "422":
+          description: Product unavailable
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: string
+                  error:
+                    type: string
+                required:
+                  - code
+                  - error
+  /cart/items/{cartItemId}:
+    patch:
+      parameters:
+        - schema:
+            type: string
+            format: uuid
+          required: true
+          name: cartItemId
+          in: path
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                quantity:
+                  type: integer
+                  minimum: 0
+                  exclusiveMinimum: true
+                  maximum: 15
+              required:
+                - quantity
+      responses:
+        "200":
+          description: Cart item quantity updated
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    format: uuid
+                  status:
+                    type: string
+                    enum:
+                      - active
+                      - converted
+                      - expired
+                  itemCount:
+                    type: integer
+                    minimum: 0
+                  totalAmount:
+                    type: integer
+                    minimum: 0
+                  expiresAt:
+                    type: string
+                    format: date-time
+                  version:
+                    type: integer
+                  items:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: string
+                          format: uuid
+                        productId:
+                          type: string
+                          format: uuid
+                        productName:
+                          type: string
+                        sku:
+                          type: string
+                        quantity:
+                          type: integer
+                          minimum: 0
+                          exclusiveMinimum: true
+                          maximum: 15
+                        unitPriceSnapshot:
+                          type: integer
+                          minimum: 0
+                        isSubstitutable:
+                          type: boolean
+                        stockDisplay:
+                          type: string
+                          enum:
+                            - in_stock
+                            - low_stock
+                            - out_of_stock
+                        availableStock:
+                          type: integer
+                          minimum: 0
+                        thumbUrl:
+                          type: string
+                        createdAt:
+                          type: string
+                          format: date-time
+                        updatedAt:
+                          type: string
+                          format: date-time
+                      required:
+                        - id
+                        - productId
+                        - productName
+                        - sku
+                        - quantity
+                        - unitPriceSnapshot
+                        - isSubstitutable
+                        - stockDisplay
+                        - availableStock
+                        - thumbUrl
+                        - createdAt
+                        - updatedAt
+                required:
+                  - id
+                  - status
+                  - itemCount
+                  - totalAmount
+                  - expiresAt
+                  - version
+                  - items
+        "400":
+          description: Quantity exceeded
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: string
+                  error:
+                    type: string
+                required:
+                  - code
+                  - error
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: string
+                  error:
+                    type: string
+                required:
+                  - code
+                  - error
+        "404":
+          description: Item not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: string
+                  error:
+                    type: string
+                required:
+                  - code
+                  - error
+        "409":
+          description: Cart not active or version conflict
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: string
+                  error:
+                    type: string
+                required:
+                  - code
+                  - error
+    delete:
+      parameters:
+        - schema:
+            type: string
+            format: uuid
+          required: true
+          name: cartItemId
+          in: path
+      responses:
+        "200":
+          description: Cart item removed
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    format: uuid
+                  status:
+                    type: string
+                    enum:
+                      - active
+                      - converted
+                      - expired
+                  itemCount:
+                    type: integer
+                    minimum: 0
+                  totalAmount:
+                    type: integer
+                    minimum: 0
+                  expiresAt:
+                    type: string
+                    format: date-time
+                  version:
+                    type: integer
+                  items:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: string
+                          format: uuid
+                        productId:
+                          type: string
+                          format: uuid
+                        productName:
+                          type: string
+                        sku:
+                          type: string
+                        quantity:
+                          type: integer
+                          minimum: 0
+                          exclusiveMinimum: true
+                          maximum: 15
+                        unitPriceSnapshot:
+                          type: integer
+                          minimum: 0
+                        isSubstitutable:
+                          type: boolean
+                        stockDisplay:
+                          type: string
+                          enum:
+                            - in_stock
+                            - low_stock
+                            - out_of_stock
+                        availableStock:
+                          type: integer
+                          minimum: 0
+                        thumbUrl:
+                          type: string
+                        createdAt:
+                          type: string
+                          format: date-time
+                        updatedAt:
+                          type: string
+                          format: date-time
+                      required:
+                        - id
+                        - productId
+                        - productName
+                        - sku
+                        - quantity
+                        - unitPriceSnapshot
+                        - isSubstitutable
+                        - stockDisplay
+                        - availableStock
+                        - thumbUrl
+                        - createdAt
+                        - updatedAt
+                required:
+                  - id
+                  - status
+                  - itemCount
+                  - totalAmount
+                  - expiresAt
+                  - version
+                  - items
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: string
+                  error:
+                    type: string
+                required:
+                  - code
+                  - error
+        "404":
+          description: Item not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: string
+                  error:
+                    type: string
+                required:
+                  - code
+                  - error
+        "409":
+          description: Cart not active
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: string
+                  error:
+                    type: string
+                required:
+                  - code
+                  - error

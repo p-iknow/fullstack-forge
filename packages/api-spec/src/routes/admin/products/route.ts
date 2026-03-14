@@ -11,7 +11,7 @@ import {
 import { authErrorSchema } from '../../../auth-schemas'
 
 export const adminProductIdParamsSchema = z.object({
-  id: z.string().uuid(),
+  id: z.uuid(),
 })
 
 export const createAdminProductRoute = createRoute({
