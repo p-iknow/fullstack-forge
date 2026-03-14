@@ -21,6 +21,8 @@
 | [frontend-code-quality](frontend-code-quality/)     | "code quality", "code review", "frontend fundamentals"   | Apply Toss FF 4 principles: readability, predictability, cohesion, coupling  |
 | [typescript-patterns](typescript-patterns/)         | "PredefinedType", "discriminated union", "const object"  | TypeScript type design: PredefinedType, tagged unions, const object, Zod     |
 | [mermaid-syntax](mermaid-syntax/)                   | "mermaid", "diagram", "flowchart", "sequenceDiagram"     | Enforce correct Mermaid syntax: `<br>` line breaks, safe labels, edge syntax |
+| [prd-review](prd-review/)                           | "PRD review", "requirements gap", "cross-domain check"   | Review PRD docs for completeness, consistency, and depth from domain expert view |
+| [adr-prd-sync](adr-prd-sync/)                       | "ADR review", "architecture sync", "PRD traceability"    | Review backend ADRs against PRD for decision adequacy, traceability, consistency |
 
 ## STRUCTURE PATTERN
 
