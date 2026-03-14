@@ -1,7 +1,12 @@
-import { useQuery } from '@tanstack/react-query'
+import { useState } from 'react'
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { Link } from '@tanstack/react-router'
+import { Loader2Icon, ShoppingCartIcon } from 'lucide-react'
+import { Button } from '@fullstack-forge/design-system/components/button'
 import { Skeleton } from '@fullstack-forge/design-system/components/skeleton'
 import { catalogDetailQueryOptions } from '~/lib/queries/catalog'
+import { addCartItemMutationOptions, cartQueryKeys } from '~/lib/queries/cart'
+import { cartToast } from '~/lib/ui/cart-toast'
 
 const formatPrice = (price: number) => `${new Intl.NumberFormat('ko-KR').format(price)}원`
 
@@ -21,7 +26,7 @@ export function ProductDetailPage({ productId }: Readonly<{ productId: string }>
           상품 정보를 불러오지 못했습니다.
         </p>
       ) : (
-        <ProductDetailContent product={productQuery.data} />
+        <ProductDetailContent product={productQuery.data} productId={productId} />
       )}
     </main>
   )
@@ -41,7 +46,10 @@ type ProductData = {
   canPurchase: boolean
 }
 
-function ProductDetailContent({ product }: Readonly<{ product: ProductData }>) {
+function ProductDetailContent({
+  product,
+  productId,
+}: Readonly<{ product: ProductData; productId: string }>) {
   return (
     <section className="mt-4 grid gap-6 rounded-xl border border-slate-200 bg-white p-6 md:grid-cols-2">
       <div>
@@ -79,12 +87,75 @@ function ProductDetailContent({ product }: Readonly<{ product: ProductData }>) {
               : '품절 상태로 구매가 불가합니다.'}
           </p>
         ) : (
-          <p className="rounded bg-emerald-100 p-3 text-sm text-emerald-700">
-            구매 가능한 상품입니다.
-          </p>
+          <AddToCartControl productId={productId} />
         )}
       </div>
     </section>
+  )
+}
+
+function AddToCartControl({ productId }: Readonly<{ productId: string }>) {
+  const queryClient = useQueryClient()
+  const [quantity, setQuantity] = useState(1)
+
+  const addMutation = useMutation({
+    ...addCartItemMutationOptions(),
+    onSuccess: () => {
+      void queryClient.invalidateQueries({ queryKey: cartQueryKeys.cart })
+      cartToast.success({
+        title: '장바구니에 담았습니다',
+        description: `${quantity}개 추가됨`,
+        actionLabel: '장바구니 보기',
+        actionHref: '/cart',
+      })
+      setQuantity(1)
+    },
+    onError: (err: Error) => {
+      cartToast.error({ title: '장바구니 담기 실패', description: err.message })
+    },
+  })
+
+  const onAdd = () => {
+    addMutation.mutate({ productId, quantity })
+  }
+
+  return (
+    <div className="space-y-2">
+      <div className="flex items-center gap-2">
+        <Button
+          type="button"
+          size="sm"
+          variant="outline"
+          onClick={() => setQuantity((q) => Math.max(1, q - 1))}
+          disabled={quantity <= 1}
+        >
+          −
+        </Button>
+        <span className="w-8 text-center text-sm font-medium tabular-nums">{quantity}</span>
+        <Button
+          type="button"
+          size="sm"
+          variant="outline"
+          onClick={() => setQuantity((q) => Math.min(15, q + 1))}
+          disabled={quantity >= 15}
+        >
+          +
+        </Button>
+      </div>
+      <Button
+        type="button"
+        onClick={onAdd}
+        disabled={addMutation.isPending}
+        className="relative w-full gap-2"
+      >
+        <ShoppingCartIcon className="h-4 w-4" />
+        장바구니 담기
+        <Loader2Icon
+          className={`absolute right-3 h-3.5 w-3.5 transition-opacity duration-200 ${addMutation.isPending ? 'animate-spin opacity-60' : 'opacity-0'}`}
+          aria-hidden={!addMutation.isPending}
+        />
+      </Button>
+    </div>
   )
 }
 
