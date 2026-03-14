@@ -4,7 +4,7 @@ import { Button } from '@fullstack-forge/design-system/components/button'
 import { Input } from '@fullstack-forge/design-system/components/input'
 import { Skeleton } from '@fullstack-forge/design-system/components/skeleton'
 import { Link } from '@tanstack/react-router'
-import { SearchIcon } from 'lucide-react'
+import { ChevronLeftIcon, ChevronRightIcon, ChevronsLeftIcon, ChevronsRightIcon, SearchIcon } from 'lucide-react'
 import {
   catalogCategoriesQueryOptions,
   catalogListQueryOptions,
@@ -15,7 +15,6 @@ type CatalogStockFilter = 'all' | 'in_stock' | 'low_stock' | 'out_of_stock'
 
 const stockDisplayOptions: Array<{ value: CatalogStockFilter; label: string }> = [
   { value: 'all', label: '전체' },
-  { value: 'in_stock', label: '재고충분' },
   { value: 'low_stock', label: '재고임박' },
   { value: 'out_of_stock', label: '품절' },
 ]
@@ -78,7 +77,14 @@ export function HomePage() {
   const showProductsSkeleton = isProductsLoading || showProductsLoader
   const totalItems = productsQuery.data?.total ?? 0
   const totalPages = Math.max(1, Math.ceil(totalItems / pageSize))
-  const visibleItems = productsQuery.data?.items ?? []
+  const visibleItems = useMemo(() => {
+    const items = productsQuery.data?.items ?? []
+    return items.toSorted((a, b) => {
+      const aUnavailable = !a.isActive || a.stockDisplay === 'out_of_stock' ? 1 : 0
+      const bUnavailable = !b.isActive || b.stockDisplay === 'out_of_stock' ? 1 : 0
+      return aUnavailable - bUnavailable
+    })
+  }, [productsQuery.data?.items])
   const hasActiveFilters = Boolean(submittedKeyword || category || brand || stockDisplay !== 'all')
   const showEmptyFallback =
     !showProductsSkeleton && !productsQuery.isError && visibleItems.length === 0
@@ -373,7 +379,7 @@ export function HomePage() {
                 className="flex h-8 w-8 items-center justify-center rounded-full text-sm text-muted-foreground transition-colors hover:bg-muted hover:text-foreground disabled:opacity-30"
                 aria-label="처음"
               >
-                <span className="text-base">«</span>
+                <ChevronsLeftIcon className="h-4 w-4" />
               </button>
               <button
                 type="button"
@@ -382,7 +388,7 @@ export function HomePage() {
                 className="flex h-8 w-8 items-center justify-center rounded-full text-sm text-muted-foreground transition-colors hover:bg-muted hover:text-foreground disabled:opacity-30"
                 aria-label="이전"
               >
-                <span className="text-base">‹</span>
+                <ChevronLeftIcon className="h-4 w-4" />
               </button>
               {pageNumbers.map((pageNumber) => (
                 <button
@@ -406,7 +412,7 @@ export function HomePage() {
                 className="flex h-8 w-8 items-center justify-center rounded-full text-sm text-muted-foreground transition-colors hover:bg-muted hover:text-foreground disabled:opacity-30"
                 aria-label="다음"
               >
-                <span className="text-base">›</span>
+                <ChevronRightIcon className="h-4 w-4" />
               </button>
               <button
                 type="button"
@@ -415,7 +421,7 @@ export function HomePage() {
                 className="flex h-8 w-8 items-center justify-center rounded-full text-sm text-muted-foreground transition-colors hover:bg-muted hover:text-foreground disabled:opacity-30"
                 aria-label="마지막"
               >
-                <span className="text-base">»</span>
+                <ChevronsRightIcon className="h-4 w-4" />
               </button>
             </nav>
           </>
@@ -440,8 +446,12 @@ function StockBadge({
       ? '품절'
       : '재고임박'
 
+  const colorClass = stockDisplay === 'low_stock' && isActive
+    ? 'bg-amber-500 text-white'
+    : 'bg-foreground/75 text-background'
+
   return (
-    <span className="absolute left-2 top-2 rounded bg-foreground/75 px-1.5 py-0.5 text-[10px] font-medium leading-normal text-background backdrop-blur-sm">
+    <span className={`absolute left-2 top-2 rounded px-1.5 py-0.5 text-[10px] font-medium leading-normal backdrop-blur-sm ${colorClass}`}>
       {label}
     </span>
   )
