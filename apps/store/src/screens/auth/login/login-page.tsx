@@ -64,74 +64,91 @@ export function LoginPage() {
   }
 
   return (
-    <main className="mx-auto flex min-h-screen w-full max-w-md flex-col justify-center p-6">
-      <h1 className="text-3xl font-semibold">Sign in</h1>
-      <p className="mt-2 text-sm text-slate-600">Use Email, Google, or Kakao to continue.</p>
+    <main className="flex min-h-screen items-center justify-center bg-muted/30 px-4 py-12">
+      <div className="w-full max-w-sm">
+        <div className="text-center">
+          <Link to="/" className="text-lg font-bold tracking-tight text-foreground">
+            FORGE STORE
+          </Link>
+          <h1 className="mt-6 text-2xl font-bold tracking-tight text-foreground">로그인</h1>
+          <p className="mt-1.5 text-sm text-muted-foreground">
+            이메일 또는 소셜 계정으로 로그인하세요.
+          </p>
+        </div>
 
-      {errorMessage ? (
-        <p role="alert" className="mt-4 rounded bg-rose-100 p-3 text-sm text-rose-900">
-          {errorMessage}
-        </p>
-      ) : null}
-      {loginMutation.isSuccess ? (
-        <p className="mt-4 rounded bg-emerald-100 p-3 text-sm text-emerald-900">Signed in.</p>
-      ) : null}
-
-      <form className="mt-6 flex flex-col gap-3" onSubmit={form.handleSubmit(onSubmit)} noValidate>
-        <Label htmlFor="email">Email</Label>
-        <Input id="email" type="email" autoComplete="email" required {...form.register('email')} />
-        {form.formState.errors.email?.message ? (
-          <p role="alert" className="text-sm text-rose-700">
-            {form.formState.errors.email.message}
+        {errorMessage ? (
+          <p role="alert" className="mt-5 rounded-lg bg-destructive/10 p-3 text-sm text-destructive">
+            {errorMessage}
           </p>
         ) : null}
-
-        <Label htmlFor="password">Password</Label>
-        <Input
-          id="password"
-          type="password"
-          autoComplete="current-password"
-          required
-          {...form.register('password')}
-        />
-        {form.formState.errors.password?.message ? (
-          <p role="alert" className="text-sm text-rose-700">
-            {form.formState.errors.password.message}
-          </p>
+        {loginMutation.isSuccess ? (
+          <p className="mt-5 rounded-lg bg-primary/10 p-3 text-sm text-primary">로그인 완료.</p>
         ) : null}
 
-        <Button type="submit" disabled={loginMutation.isPending} className="mt-2">
-          {loginMutation.isPending ? 'Signing in...' : 'Sign in with Email'}
-        </Button>
-      </form>
+        <form className="mt-6 space-y-4" onSubmit={form.handleSubmit(onSubmit)} noValidate>
+          <div className="space-y-1.5">
+            <Label htmlFor="email">이메일</Label>
+            <Input id="email" type="email" autoComplete="email" required {...form.register('email')} />
+            {form.formState.errors.email?.message ? (
+              <p role="alert" className="text-xs text-destructive">
+                {form.formState.errors.email.message}
+              </p>
+            ) : null}
+          </div>
 
-      <div className="mt-6 grid gap-2">
-        <a className={buttonVariants({ variant: 'outline' }) + ' w-full'} href={googleStartUrl}>
-          Continue with Google
-        </a>
-        <a className={buttonVariants({ variant: 'outline' }) + ' w-full'} href={kakaoStartUrl}>
-          Continue with Kakao
-        </a>
+          <div className="space-y-1.5">
+            <Label htmlFor="password">비밀번호</Label>
+            <Input
+              id="password"
+              type="password"
+              autoComplete="current-password"
+              required
+              {...form.register('password')}
+            />
+            {form.formState.errors.password?.message ? (
+              <p role="alert" className="text-xs text-destructive">
+                {form.formState.errors.password.message}
+              </p>
+            ) : null}
+          </div>
+
+          <Button type="submit" disabled={loginMutation.isPending} className="h-11 w-full">
+            {loginMutation.isPending ? '로그인 중...' : '이메일로 로그인'}
+          </Button>
+        </form>
+
+        <div className="relative my-6">
+          <div className="absolute inset-0 flex items-center">
+            <div className="w-full border-t border-border" />
+          </div>
+          <div className="relative flex justify-center text-xs">
+            <span className="bg-muted/30 px-2 text-muted-foreground">또는</span>
+          </div>
+        </div>
+
+        <div className="grid gap-2">
+          <a className={buttonVariants({ variant: 'outline' }) + ' h-11 w-full'} href={googleStartUrl}>
+            Google로 계속하기
+          </a>
+          <a className={buttonVariants({ variant: 'outline' }) + ' h-11 w-full'} href={kakaoStartUrl}>
+            Kakao로 계속하기
+          </a>
+        </div>
+
+        <div className="mt-8 space-y-2 text-center text-sm text-muted-foreground">
+          <p>
+            계정이 없으신가요?{' '}
+            <Link to="/signup" className="font-medium text-foreground underline underline-offset-2">
+              회원가입
+            </Link>
+          </p>
+          <p>
+            <Link to="/password-update" className="text-muted-foreground underline underline-offset-2 hover:text-foreground">
+              비밀번호 재설정
+            </Link>
+          </p>
+        </div>
       </div>
-
-      <p className="mt-6 text-sm text-slate-600">
-        New here?{' '}
-        <Link to="/signup" className="underline">
-          Create account
-        </Link>
-      </p>
-      <p className="mt-2 text-sm text-slate-600">
-        Have a reset token?{' '}
-        <Link to="/password-update" className="underline">
-          Update password
-        </Link>
-      </p>
-      <p className="mt-2 text-sm text-slate-600">
-        Back to{' '}
-        <Link to="/" className="underline">
-          Home
-        </Link>
-      </p>
     </main>
   )
 }

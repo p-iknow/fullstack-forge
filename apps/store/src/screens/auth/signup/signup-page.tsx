@@ -61,66 +61,80 @@ export function SignupPage() {
   }
 
   return (
-    <main className="mx-auto flex min-h-screen w-full max-w-md flex-col justify-center p-6">
-      <h1 className="text-3xl font-semibold">Create account</h1>
-      <p className="mt-2 text-sm text-slate-600">
-        Create your customer account with email and password.
-      </p>
+    <main className="flex min-h-screen items-center justify-center bg-muted/30 px-4 py-12">
+      <div className="w-full max-w-sm">
+        <div className="text-center">
+          <Link to="/" className="text-lg font-bold tracking-tight text-foreground">
+            FORGE STORE
+          </Link>
+          <h1 className="mt-6 text-2xl font-bold tracking-tight text-foreground">회원가입</h1>
+          <p className="mt-1.5 text-sm text-muted-foreground">
+            이메일과 비밀번호로 계정을 만드세요.
+          </p>
+        </div>
 
-      {errorMessage ? (
-        <p role="alert" className="mt-4 rounded bg-rose-100 p-3 text-sm text-rose-900">
-          {errorMessage}
-        </p>
-      ) : null}
-
-      <form className="mt-6 flex flex-col gap-3" onSubmit={form.handleSubmit(onSubmit)} noValidate>
-        <Label htmlFor="name">Name</Label>
-        <Input id="name" type="text" autoComplete="name" required {...form.register('name')} />
-        {form.formState.errors.name?.message ? (
-          <p role="alert" className="text-sm text-rose-700">
-            {form.formState.errors.name.message}
+        {errorMessage ? (
+          <p role="alert" className="mt-5 rounded-lg bg-destructive/10 p-3 text-sm text-destructive">
+            {errorMessage}
           </p>
         ) : null}
 
-        <Label htmlFor="email">Email</Label>
-        <Input id="email" type="email" autoComplete="email" required {...form.register('email')} />
-        {form.formState.errors.email?.message ? (
-          <p role="alert" className="text-sm text-rose-700">
-            {form.formState.errors.email.message}
+        <form className="mt-6 space-y-4" onSubmit={form.handleSubmit(onSubmit)} noValidate>
+          <div className="space-y-1.5">
+            <Label htmlFor="name">이름</Label>
+            <Input id="name" type="text" autoComplete="name" required {...form.register('name')} />
+            {form.formState.errors.name?.message ? (
+              <p role="alert" className="text-xs text-destructive">
+                {form.formState.errors.name.message}
+              </p>
+            ) : null}
+          </div>
+
+          <div className="space-y-1.5">
+            <Label htmlFor="email">이메일</Label>
+            <Input id="email" type="email" autoComplete="email" required {...form.register('email')} />
+            {form.formState.errors.email?.message ? (
+              <p role="alert" className="text-xs text-destructive">
+                {form.formState.errors.email.message}
+              </p>
+            ) : null}
+          </div>
+
+          <div className="space-y-1.5">
+            <Label htmlFor="password">비밀번호</Label>
+            <Input
+              id="password"
+              type="password"
+              autoComplete="new-password"
+              required
+              {...form.register('password')}
+            />
+            {form.formState.errors.password?.message ? (
+              <p role="alert" className="text-xs text-destructive">
+                {form.formState.errors.password.message}
+              </p>
+            ) : null}
+          </div>
+
+          <Button type="submit" disabled={signupMutation.isPending} className="h-11 w-full">
+            {signupMutation.isPending ? '가입 중...' : '회원가입'}
+          </Button>
+        </form>
+
+        <div className="mt-8 space-y-2 text-center text-sm text-muted-foreground">
+          <p>
+            이미 계정이 있으신가요?{' '}
+            <Link to="/login" className="font-medium text-foreground underline underline-offset-2">
+              로그인
+            </Link>
           </p>
-        ) : null}
-
-        <Label htmlFor="password">Password</Label>
-        <Input
-          id="password"
-          type="password"
-          autoComplete="new-password"
-          required
-          {...form.register('password')}
-        />
-        {form.formState.errors.password?.message ? (
-          <p role="alert" className="text-sm text-rose-700">
-            {form.formState.errors.password.message}
+          <p>
+            <Link to="/" className="text-muted-foreground underline underline-offset-2 hover:text-foreground">
+              홈으로 돌아가기
+            </Link>
           </p>
-        ) : null}
-
-        <Button type="submit" disabled={signupMutation.isPending} className="mt-2">
-          {signupMutation.isPending ? 'Creating account...' : 'Sign up with Email'}
-        </Button>
-      </form>
-
-      <p className="mt-6 text-sm text-slate-600">
-        Already have an account?{' '}
-        <Link to="/login" className="underline">
-          Sign in
-        </Link>
-      </p>
-      <p className="mt-2 text-sm text-slate-600">
-        Back to{' '}
-        <Link to="/" className="underline">
-          Home
-        </Link>
-      </p>
+        </div>
+      </div>
     </main>
   )
 }
