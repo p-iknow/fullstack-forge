@@ -97,9 +97,12 @@ graph TD
 - `PointLedger`
 - `PointRedemption`
 - `Review`
+- `ReviewImage`
 - `ReviewComment`
 - `CustomerInquiry`
 - `InquiryReply`
+- `Notification`
+- `NotificationPreference`
 
 ### 핵심 엔터티 관계(ER)
 
@@ -120,9 +123,12 @@ erDiagram
   PointRedemption ||--|| PointLedger : "원장 항목 참조"
   Product ||--o{ Review : "리뷰 대상"
   Order ||--o{ Review : "구매 검증"
+  Review ||--o{ ReviewImage : "이미지 첨부"
   Review ||--o{ ReviewComment : "운영 답글"
   Order ||--o{ CustomerInquiry : "문의 생성"
   CustomerInquiry ||--o{ InquiryReply : "운영 답변"
+  User ||--o{ Notification : "알림 수신"
+  User ||--o| NotificationPreference : "알림 설정"
 ```
 
 ## 5. 비기능 요구사항
@@ -139,19 +145,41 @@ erDiagram
 | ----------------------- | -------------------------------------- | ------ |
 | 안전재고 임계치         | 5개                                    | 재고   |
 | 결제 타임아웃           | 30초                                   | 결제   |
+| 최소 결제 금액          | 100원                                  | 결제   |
+| 결제 재시도 제한        | 동일 주문 5회                          | 결제   |
+| Idempotency key TTL    | 24시간                                 | 결제   |
+| 결제-주문 대사 주기     | 10분                                   | 결제   |
+| 결제 데이터 보존        | 5년                                    | 결제   |
 | 포인트 적립률           | 결제금액의 1%                          | 포인트 |
+| 최소 적립 주문 금액     | 5,000원                                | 포인트 |
 | 최소 사용 포인트        | 1,000원                                | 포인트 |
 | 포인트 유효기간         | 12개월(적립일 기준)                    | 포인트 |
 | 대체상품 가격 허용 범위 | 원본 대비 120% 이내 자동, 초과 시 승인 | 주문   |
+| 대체 승인 타임아웃       | 10분                                   | 주문   |
 | 리뷰 본문 최대 길이     | 2,000자                                | 리뷰   |
+| 리뷰 이미지 최대 장수   | 5장                                    | 리뷰   |
+| 리뷰 이미지 최대 크기   | 5 MB (장당)                            | 리뷰   |
+| 문의 제목 최대 길이     | 200자                                  | 문의   |
 | 문의 본문 최대 길이     | 5,000자                                | 문의   |
+| 답변 본문 최대 길이     | 10,000자                               | 문의   |
+| 문의 재오픈 횟수 제한   | 최대 3회                               | 문의   |
+| 문의 데이터 보관        | 3년 (이후 비식별화)                    | 문의   |
+| 문의 SLA 주의 경과      | 12시간                                 | 문의   |
+| 문의 SLA 알림 경과      | 20시간                                 | 문의   |
+| 즉시배송 SLA            | 30분                                   | 배송   |
+| 예약배송 SLA 허용 범위  | ±15분                                  | 배송   |
 | 예약배송 슬롯 단위      | 1시간                                  | 배송   |
+| 배차 자동 재시도        | 1회 실패 시 즉시 자동 재배차           | 배송   |
+| 배차 운영자 개입 기준   | 2회 연속 실패                          | 배송   |
 | SQS VisibilityTimeout   | 90초                                   | 이벤트 |
 | SQS maxReceiveCount     | 3                                      | 이벤트 |
 | Source 큐 retention     | 4일                                    | 이벤트 |
 | DLQ retention           | 14일                                   | 이벤트 |
 | 비밀번호 최소 길이      | 8자                                    | 인증   |
 | 비밀번호 해싱           | bcrypt (cost factor 12)                | 인증   |
+| 최소주문금액(프로모션)  | 15,000원                               | 프로모션 |
+| 최대 할인 상한(정률)    | 주문금액의 50%, 최대 10,000원          | 프로모션 |
+| 쿠폰 per_user_limit     | 기본 1회(쿠폰별 설정 가능)             | 프로모션 |
 | 가격 단위               | KRW (원)                               | 공통   |
 | 무게 단위               | g (그램)                               | 공통   |
 
@@ -173,11 +201,19 @@ graph LR
   D05 --> D06["06-payment"]
   D05 --> D07["07-delivery"]
   D05 --> D08["08-promotion"]
+  D08 --> D05
   D05 --> D09["09-loyalty"]
   D05 --> D10["10-review"]
   D05 --> D11["11-inquiry"]
   D05 --> D12["12-notification"]
   D05 --> D13["13-event"]
+  D06 --> D12
+  D07 --> D12
+  D04 --> D12
+  D09 --> D12
+  D08 --> D12
+  D10 --> D12
+  D11 --> D12
   D13 --> D03
   D13 --> D07
   D13 --> D12
@@ -201,7 +237,7 @@ graph LR
 | Stage 0 | Workspace Baseline          | 모노레포 실행 루프, codegen/build/typecheck 안정화 | `00-overview.md`                  |
 | Stage 1 | Auth                        | 이메일/OAuth 로그인, 세션/보안 정책                | `01-auth/01-overview.md`          |
 | Stage 2 | Catalog                     | SKU seed, 상품 탐색/장바구니 연계, 품절 노출       | `02-catalog/01-overview.md`       |
-| Stage 3 | Order Core                  | 주문 생성/조회, 상태 전이, 대체상품 흐름           | `05-order/01-overview.md`         |
+| Stage 3 | Order Core + Promotion      | 주문 생성/조회, 상태 전이, 대체상품 흐름, 쿠폰/카테고리 할인 기본 | `05-order/01-overview.md`, `08-promotion/01-overview.md` |
 | Stage 4 | Event Fanout                | `OrderCreated` 발행, SQS fanout 소비자 분리        | `13-event/01-overview.md`         |
 | Stage 5 | Reliability                 | idempotency, DLQ/redrive 운영 루프                 | `13-event/01-overview.md`         |
 | Stage 6 | Admin Operations            | 운영자 상태 전이, 실패 이벤트 관리/redrive         | `05-order/01-overview.md`         |

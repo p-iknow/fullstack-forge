@@ -25,13 +25,13 @@
 - [03-inventory](./03-inventory/01-overview.md) — 안전재고 임계치(5개), 라이프사이클 다이어그램
 - [04-cart](./04-cart/01-overview.md) — 라이프사이클 다이어그램, 주문 전환 흐름
 - [05-order](./05-order/01-overview.md) — 상태 머신 다이어그램, 취소 시퀀스
-- [06-payment](./06-payment/01-overview.md) — 상태 머신, 30초 타임아웃 확정
+- [06-payment](./06-payment/01-overview.md) — 상태 머신(환불 포함), 30초 타임아웃, 자동 capture, Admin 환불
 - [07-delivery](./07-delivery/01-overview.md) — 상태 머신, SLA 계산
 - [08-promotion](./08-promotion/01-overview.md) — 계산 흐름도, 15,000원 최소주문금액
 - [09-loyalty](./09-loyalty/01-overview.md) — 포인트 라이프사이클, 1% 적립률 확정
 - [10-review](./10-review/01-overview.md) — 상태 머신, 길이 제한
 - [11-inquiry](./11-inquiry/01-overview.md) — 상태 머신, 재오픈 정책
-- [12-notification](./12-notification/01-overview.md) — 깨진 참조 수정 완료
+- [12-notification](./12-notification/01-overview.md) — 상태 머신, 28건 이벤트 소비 매핑, SLA 30초, API 4개
 - [13-event](./13-event/01-overview.md) — SNS→SQS 흐름도, payload 개요
 - [14-observability](./14-observability/01-overview.md) — 관측 아키텍처 다이어그램, KPI 단일 소스화
 

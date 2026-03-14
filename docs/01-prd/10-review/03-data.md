@@ -8,6 +8,7 @@
 ## 2) 핵심 엔터티 (PRD §1 원문)
 
 - `Review`
+- `ReviewImage`
 - `ReviewComment`
 
 ## 3) Review 엔터티 필드
@@ -34,7 +35,27 @@
 - 평점 범위: `1..5`
 - 리뷰 상태: `visible|hidden|flagged`
 
-## 5) ReviewComment 엔터티 필드
+## 5) ReviewImage 엔터티 필드
+
+| 필드            | 설명                   | 제약                                          |
+| --------------- | ---------------------- | --------------------------------------------- |
+| `id`            | 이미지 고유 식별자     | PK                                            |
+| `review_id`     | 대상 리뷰              | FK                                            |
+| `thumb_url`     | 썸네일 이미지 URL      | 400×400 WebP                                  |
+| `detail_url`    | 상세 이미지 URL        | 1200×900 WebP                                 |
+| `display_order` | 이미지 표시 순서       | `0..4` 정수                                   |
+| `file_size`     | 원본 파일 크기 (bytes) | 최대 5,242,880 (5 MB)                         |
+| `content_type`  | 원본 MIME 타입         | `image/jpeg\|image/png\|image/webp`           |
+| `created_at`    | 생성 시각              | 서버 기준 UTC                                 |
+
+### ReviewImage 엔터티 규칙
+
+- 리뷰당 최대 **5장** (unique 제약: `review_id` + `display_order`)
+- 삭제 방식: **hard delete** (MinIO 파일 + DB 레코드 동시 삭제)
+- 파일명 규칙: `review-{review_id}-{index}-{thumb|detail}.webp`
+- 저장소: MinIO(S3 호환) — catalog 이미지와 동일 버킷 인프라
+
+## 6) ReviewComment 엔터티 필드
 
 | 필드         | 설명             | 제약          |
 | ------------ | ---------------- | ------------- |
@@ -45,7 +66,7 @@
 | `deleted_at` | soft delete 시각 | nullable      |
 | `created_at` | 생성 시각        | 서버 기준 UTC |
 
-## 6) ReviewComment 엔터티 반영 정책 (PRD §10 원문)
+## 7) ReviewComment 엔터티 반영 정책 (PRD §10 원문)
 
 - 댓글 작성 권한: `customer|operator|admin`
 - 숨김/삭제 권한: `operator|admin`
