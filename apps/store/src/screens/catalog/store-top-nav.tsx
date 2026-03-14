@@ -3,8 +3,10 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { Link } from '@tanstack/react-router'
 import { Button, buttonVariants } from '@fullstack-forge/design-system/components/button'
 
+import { ShoppingCartIcon } from 'lucide-react'
 import { readApiError } from '~/lib/api'
 import { authQueryKeys, logoutMutationOptions, meQueryOptions } from '~/lib/queries/auth'
+import { cartQueryOptions } from '~/lib/queries/cart'
 
 
 const MIN_PLACEHOLDER_VISIBLE_MS = 600
@@ -51,6 +53,12 @@ export function StoreTopNav() {
   const currentUser = meQuery.data?.user ?? null
   const isCheckingSession = !isHydrated || (meQuery.isPending && !meQuery.isFetched && !currentUser)
 
+  const cartQuery = useQuery({
+    ...cartQueryOptions(),
+    enabled: isHydrated && !!currentUser,
+  })
+  const cartItemCount = cartQuery.data?.itemCount ?? 0
+
   useEffect(() => {
     if (isCheckingSession) {
       if (!keepPlaceholderVisible) {
@@ -96,6 +104,20 @@ export function StoreTopNav() {
         >
           fullstack-forge store
         </Link>
+
+        <div className="flex min-h-8 shrink-0 items-center justify-end gap-2">
+          {!showPlaceholder && currentUser ? (
+            <Link to="/cart" className="relative mr-1 p-1.5 text-slate-600 hover:text-slate-900">
+              <ShoppingCartIcon className="h-5 w-5" aria-hidden="true" />
+              {cartItemCount > 0 ? (
+                <span className="absolute -right-0.5 -top-0.5 flex h-4 min-w-4 items-center justify-center rounded-full bg-primary/80 px-1 text-[10px] font-bold text-primary-foreground">
+                  {cartItemCount > 99 ? '99+' : cartItemCount}
+                </span>
+              ) : null}
+              <span className="sr-only">장바구니{cartItemCount > 0 ? ` (${cartItemCount}개)` : ''}</span>
+            </Link>
+          ) : null}
+        </div>
 
         <div className="flex min-h-8 shrink-0 items-center justify-end gap-2">
           {showPlaceholder ? (
