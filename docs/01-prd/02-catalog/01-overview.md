@@ -21,10 +21,10 @@
 
 - SKU 정책:
   - SKU 수: 40~60
-  - SKU 속성: `sku`, `name`, `brand`, `price`, `weight`, `status`, `is_substitutable`
+  - SKU 속성: `sku`, `slug`, `name`, `description`, `brand`, `price`, `weight`, `status`, `is_substitutable`, `display_order`, `tags`
   - 가격 단위: KRW(원)
   - 중량 단위: g(그램)
-  - 상태: `active | low_stock | out_of_stock | discontinued`
+  - `is_active`: 판매 가능 여부 (boolean, default true)
 
 ## §3 이미지/목업 정책
 
@@ -41,32 +41,50 @@
   - sharp로 리사이즈 (thumb 400×400, detail 800×600) 후 WebP 변환
   - MinIO(S3 호환) 버킷에 저장
 
-## §4 상품 상태/판매조건
+## §4 상품 활성 상태/판매조건
 
-- 상품 상태:
-  - `active`
-  - `low_stock`
-  - `out_of_stock`
-  - `discontinued`
-- 판매 가능 조건:
-  - `active | low_stock`
-  - 재고 수량 > 0
-- `discontinued`는 신규 구매 불가, 주문 이력 조회만 허용
+- 상품 활성 상태 (저장):
+  - `is_active = true` — 판매 의사 있음 (default)
+  - `is_active = false` — 단종/비활성화 (admin 수동 설정). 신규 구매 불가, 주문 이력 조회만 허용
+- 재고 표시 상태 (조회 시 계산, 저장하지 않음):
+  - `in_stock` — `available > safety_threshold(5)`
+  - `low_stock` — `available > 0 && available <= safety_threshold(5)`
+  - `out_of_stock` — `available == 0`
+- 판매 가능 조건 (세 조건 모두 충족):
+  1. `product.is_active = true`
+  2. `category.is_active = true`
+  3. `available > 0`
 
 ### 판매 가능 여부 판정 흐름
 
 ```mermaid
 flowchart TD
-    A[상품 판매 요청] --> B{상품 상태 확인}
-    B -->|active / low_stock| C{카테고리 활성 여부}
-    B -->|out_of_stock / discontinued| F[판매 불가]
+    A[상품 판매 요청] --> B{상품 활성 여부}
+    B -->|is_active = true| C{카테고리 활성 여부}
+    B -->|is_active = false| F[판매 불가]
     C -->|is_active = true| D{재고 수량 > 0}
     C -->|is_active = false| F
     D -->|예| E[판매 가능]
     D -->|아니오| F
 ```
 
-## §5 Stage 게이트 (카탈로그 부분)
+## §5 재고 표시 상태 규칙
+
+- 재고 표시 상태(`in_stock`, `low_stock`, `out_of_stock`)는 상품에 저장하지 않으며, 조회 시 inventory의 가용 수량으로 **계산**한다.
+  - `available > safety_threshold(5)` → `in_stock`
+  - `available > 0 && available <= safety_threshold(5)` → `low_stock`
+  - `available == 0` → `out_of_stock`
+- API 응답에 계산된 `stock_display` 필드로 포함한다.
+- `is_active`는 admin만 변경할 수 있으며, 재고 변동에 의한 자동 전이 대상이 아니다.
+- 이 설계는 상품의 판매 의사(`is_active`)와 재고 현실(`stock_display`)을 분리하여, 상태 동기화 이벤트 없이 항상 정확한 표시를 보장한다.
+
+## §6 연관 도메인
+
+- `inventory`: 상품 생성 시 재고 레코드 자동 생성, 재고 수준에 따른 상품 상태 자동 전이
+- `cart`: 상품 가격 변경/품절/삭제 시 활성 장바구니 영향
+- `order`: 주문 이력이 있는 상품은 삭제 불가
+
+## §7 Stage 게이트 (카탈로그 부분)
 
 ### Stage 2 Exit Criteria (조회 기능)
 
