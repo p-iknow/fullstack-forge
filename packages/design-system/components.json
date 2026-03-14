@@ -16,5 +16,13 @@
     "lib": "@/lib",
     "ui": "@/components",
     "utils": "@/lib/utils"
+  },
+  "registries": {
+    "@shadcndesign": {
+      "url": "https://www.shadcndesign.com/api/registry/{name}",
+      "headers": {
+        "X-License-Key": "${SHADCNDESIGN_LICENSE_KEY}"
+      }
+    }
   }
 }
