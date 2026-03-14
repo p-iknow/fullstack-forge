@@ -3,6 +3,7 @@ import { auditLogs, userCredentials, userOauthAccounts, userSessions, users } fr
 import { customerInquiries, inquiryReplies } from './inquiry'
 import { deliveries, orderItems, orders, payments, substitutions } from './order'
 import { loyaltyAccounts, pointLedgers, pointPolicies, pointRedemptions } from './points'
+import { categories } from './category'
 import { inventory, products } from './product'
 import {
   couponRedemptions,
@@ -36,6 +37,10 @@ export const usersRelations = relations(users, ({ one, many }) => ({
 }))
 
 export const productsRelations = relations(products, ({ one, many }) => ({
+  category: one(categories, {
+    fields: [products.categoryId],
+    references: [categories.id],
+  }),
   inventory: one(inventory, {
     fields: [products.id],
     references: [inventory.productId],
@@ -45,6 +50,10 @@ export const productsRelations = relations(products, ({ one, many }) => ({
   substitutionsAsSubstitute: many(substitutions, {
     relationName: 'substitute_product_substitutions',
   }),
+}))
+
+export const categoriesRelations = relations(categories, ({ many }) => ({
+  products: many(products),
 }))
 
 export const ordersRelations = relations(orders, ({ one, many }) => ({

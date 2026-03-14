@@ -1,6 +1,12 @@
 import { http, HttpResponse } from 'msw'
 
 export const handlers = [
+  http.post('/api/auth/refresh', () => {
+    return HttpResponse.json(
+      { code: 'auth_session_expired', error: 'Session expired' },
+      { status: 401 },
+    )
+  }),
   http.post('/api/auth/login', async ({ request }) => {
     const body = (await request.json()) as { email?: string; password?: string }
     if (body.email === 'blocked@example.com') {
@@ -46,7 +52,10 @@ export const handlers = [
     )
   }),
   http.get('/api/auth/me', () => {
-    return HttpResponse.json({ code: 'auth_session_expired', error: 'Session expired' }, { status: 401 })
+    return HttpResponse.json(
+      { code: 'auth_session_expired', error: 'Session expired' },
+      { status: 401 },
+    )
   }),
   http.post('/api/auth/logout', () => {
     return HttpResponse.json({ ok: true as const }, { status: 200 })

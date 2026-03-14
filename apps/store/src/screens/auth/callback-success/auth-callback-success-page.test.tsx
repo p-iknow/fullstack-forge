@@ -1,5 +1,6 @@
 import { cleanup, render, screen } from '@testing-library/react'
 import { afterEach, describe, expect, it } from 'vitest'
+import { page } from 'vitest/browser'
 import { AuthCallbackSuccessPage } from './auth-callback-success-page'
 
 describe('auth callback success page', () => {
@@ -16,5 +17,8 @@ describe('auth callback success page', () => {
     // then
     expect(await screen.findByText('OAuth callback complete')).toBeInTheDocument()
     expect(screen.getByRole('link', { name: 'Go to Home' })).toHaveAttribute('href', '/')
+
+    // visual regression
+    await expect(page.getByRole('main')).toMatchScreenshot('auth-callback-success')
   })
 })

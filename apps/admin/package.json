@@ -16,14 +16,18 @@
   "dependencies": {
     "@fullstack-forge/api-spec": "workspace:*",
     "@fullstack-forge/design-system": "workspace:*",
+    "@hookform/resolvers": "^5.2.2",
     "@suspensive/react": "catalog:",
     "@suspensive/react-query": "catalog:",
     "@tanstack/react-query": "catalog:",
     "@tanstack/react-router": "catalog:",
     "@tanstack/react-router-devtools": "catalog:",
     "@tanstack/react-start": "catalog:",
+    "overlay-kit": "^1.9.0",
     "react": "catalog:",
-    "react-dom": "catalog:"
+    "react-dom": "catalog:",
+    "react-hook-form": "^7.71.1",
+    "zod": "catalog:"
   },
   "devDependencies": {
     "@tailwindcss/vite": "catalog:",

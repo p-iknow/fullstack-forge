@@ -1,13 +1,6 @@
 import { createFileRoute } from '@tanstack/react-router'
+import { AdminCatalogPage } from '~/screens/catalog/admin-catalog-page'
 
 export const Route = createFileRoute('/')({
-  component: Home,
+  component: AdminCatalogPage,
 })
-
-function Home() {
-  return (
-    <div>
-      <h1>Welcome to Admin</h1>
-    </div>
-  )
-}

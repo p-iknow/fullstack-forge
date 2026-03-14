@@ -29,6 +29,10 @@
       "types": "./src/oauth-schemas.ts",
       "default": "./src/oauth-schemas.ts"
     },
+    "./admin-catalog-schemas": {
+      "types": "./src/admin-catalog-schemas.ts",
+      "default": "./src/admin-catalog-schemas.ts"
+    },
     "./routes/auth": {
       "types": "./src/routes/auth/index.ts",
       "default": "./src/routes/auth/index.ts"
@@ -40,6 +44,10 @@
     "./routes/health": {
       "types": "./src/routes/health/index.ts",
       "default": "./src/routes/health/index.ts"
+    },
+    "./routes/catalog": {
+      "types": "./src/routes/catalog/index.ts",
+      "default": "./src/routes/catalog/index.ts"
     },
     "./client/admin/client.gen": {
       "types": "./generated/client/admin/client.gen.ts",

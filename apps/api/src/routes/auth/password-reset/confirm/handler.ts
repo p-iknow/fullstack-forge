@@ -9,7 +9,9 @@ import { hashPassword } from '~/routes/auth/@shared/security/password'
 import { revokeAllUserSessions } from '~/routes/auth/@shared/session/session'
 import { consumePasswordResetToken } from '~/routes/auth/password-reset/@shared/token-store'
 
-export const passwordResetConfirmHandler: RouteHandler<typeof passwordResetConfirmRoute> = async (c) => {
+export const passwordResetConfirmHandler: RouteHandler<typeof passwordResetConfirmRoute> = async (
+  c,
+) => {
   const body = c.req.valid('json')
   const requestMeta = getRequestMeta(c)
 

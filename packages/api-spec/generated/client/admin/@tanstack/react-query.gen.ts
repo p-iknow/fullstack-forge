@@ -3,8 +3,8 @@
 import { queryOptions, type UseMutationOptions } from '@tanstack/react-query';
 
 import { client } from '../client.gen';
-import { getAdminDashboard, type Options, postAdminRedrive } from '../sdk.gen';
-import type { GetAdminDashboardData, GetAdminDashboardError, GetAdminDashboardResponse, PostAdminRedriveData, PostAdminRedriveError, PostAdminRedriveResponse } from '../types.gen';
+import { deleteAdminCategoriesById, deleteAdminProductsById, getAdminCategories, getAdminDashboard, type Options, patchAdminCategoriesById, patchAdminProductsById, patchAdminProductsByIdActive, postAdminCategories, postAdminProducts, postAdminProductsByIdImages, postAdminRedrive } from '../sdk.gen';
+import type { DeleteAdminCategoriesByIdData, DeleteAdminCategoriesByIdError, DeleteAdminCategoriesByIdResponse, DeleteAdminProductsByIdData, DeleteAdminProductsByIdError, DeleteAdminProductsByIdResponse, GetAdminCategoriesData, GetAdminCategoriesError, GetAdminCategoriesResponse, GetAdminDashboardData, GetAdminDashboardError, GetAdminDashboardResponse, PatchAdminCategoriesByIdData, PatchAdminCategoriesByIdError, PatchAdminCategoriesByIdResponse, PatchAdminProductsByIdActiveData, PatchAdminProductsByIdActiveError, PatchAdminProductsByIdActiveResponse, PatchAdminProductsByIdData, PatchAdminProductsByIdError, PatchAdminProductsByIdResponse, PostAdminCategoriesData, PostAdminCategoriesError, PostAdminCategoriesResponse, PostAdminProductsByIdImagesData, PostAdminProductsByIdImagesError, PostAdminProductsByIdImagesResponse, PostAdminProductsData, PostAdminProductsError, PostAdminProductsResponse, PostAdminRedriveData, PostAdminRedriveError, PostAdminRedriveResponse } from '../types.gen';
 
 export type QueryKey<TOptions extends Options> = [
     Pick<TOptions, 'baseUrl' | 'body' | 'headers' | 'path' | 'query'> & {
@@ -58,6 +58,133 @@ export const postAdminRedriveMutation = (options?: Partial<Options<PostAdminRedr
     const mutationOptions: UseMutationOptions<PostAdminRedriveResponse, PostAdminRedriveError, Options<PostAdminRedriveData>> = {
         mutationFn: async (fnOptions) => {
             const { data } = await postAdminRedrive({
+                ...options,
+                ...fnOptions,
+                throwOnError: true
+            });
+            return data;
+        }
+    };
+    return mutationOptions;
+};
+
+export const getAdminCategoriesQueryKey = (options?: Options<GetAdminCategoriesData>) => createQueryKey('getAdminCategories', options);
+
+export const getAdminCategoriesOptions = (options?: Options<GetAdminCategoriesData>) => queryOptions<GetAdminCategoriesResponse, GetAdminCategoriesError, GetAdminCategoriesResponse, ReturnType<typeof getAdminCategoriesQueryKey>>({
+    queryFn: async ({ queryKey, signal }) => {
+        const { data } = await getAdminCategories({
+            ...options,
+            ...queryKey[0],
+            signal,
+            throwOnError: true
+        });
+        return data;
+    },
+    queryKey: getAdminCategoriesQueryKey(options)
+});
+
+export const postAdminCategoriesMutation = (options?: Partial<Options<PostAdminCategoriesData>>): UseMutationOptions<PostAdminCategoriesResponse, PostAdminCategoriesError, Options<PostAdminCategoriesData>> => {
+    const mutationOptions: UseMutationOptions<PostAdminCategoriesResponse, PostAdminCategoriesError, Options<PostAdminCategoriesData>> = {
+        mutationFn: async (fnOptions) => {
+            const { data } = await postAdminCategories({
+                ...options,
+                ...fnOptions,
+                throwOnError: true
+            });
+            return data;
+        }
+    };
+    return mutationOptions;
+};
+
+export const deleteAdminCategoriesByIdMutation = (options?: Partial<Options<DeleteAdminCategoriesByIdData>>): UseMutationOptions<DeleteAdminCategoriesByIdResponse, DeleteAdminCategoriesByIdError, Options<DeleteAdminCategoriesByIdData>> => {
+    const mutationOptions: UseMutationOptions<DeleteAdminCategoriesByIdResponse, DeleteAdminCategoriesByIdError, Options<DeleteAdminCategoriesByIdData>> = {
+        mutationFn: async (fnOptions) => {
+            const { data } = await deleteAdminCategoriesById({
+                ...options,
+                ...fnOptions,
+                throwOnError: true
+            });
+            return data;
+        }
+    };
+    return mutationOptions;
+};
+
+export const patchAdminCategoriesByIdMutation = (options?: Partial<Options<PatchAdminCategoriesByIdData>>): UseMutationOptions<PatchAdminCategoriesByIdResponse, PatchAdminCategoriesByIdError, Options<PatchAdminCategoriesByIdData>> => {
+    const mutationOptions: UseMutationOptions<PatchAdminCategoriesByIdResponse, PatchAdminCategoriesByIdError, Options<PatchAdminCategoriesByIdData>> = {
+        mutationFn: async (fnOptions) => {
+            const { data } = await patchAdminCategoriesById({
+                ...options,
+                ...fnOptions,
+                throwOnError: true
+            });
+            return data;
+        }
+    };
+    return mutationOptions;
+};
+
+export const postAdminProductsMutation = (options?: Partial<Options<PostAdminProductsData>>): UseMutationOptions<PostAdminProductsResponse, PostAdminProductsError, Options<PostAdminProductsData>> => {
+    const mutationOptions: UseMutationOptions<PostAdminProductsResponse, PostAdminProductsError, Options<PostAdminProductsData>> = {
+        mutationFn: async (fnOptions) => {
+            const { data } = await postAdminProducts({
+                ...options,
+                ...fnOptions,
+                throwOnError: true
+            });
+            return data;
+        }
+    };
+    return mutationOptions;
+};
+
+export const deleteAdminProductsByIdMutation = (options?: Partial<Options<DeleteAdminProductsByIdData>>): UseMutationOptions<DeleteAdminProductsByIdResponse, DeleteAdminProductsByIdError, Options<DeleteAdminProductsByIdData>> => {
+    const mutationOptions: UseMutationOptions<DeleteAdminProductsByIdResponse, DeleteAdminProductsByIdError, Options<DeleteAdminProductsByIdData>> = {
+        mutationFn: async (fnOptions) => {
+            const { data } = await deleteAdminProductsById({
+                ...options,
+                ...fnOptions,
+                throwOnError: true
+            });
+            return data;
+        }
+    };
+    return mutationOptions;
+};
+
+export const patchAdminProductsByIdMutation = (options?: Partial<Options<PatchAdminProductsByIdData>>): UseMutationOptions<PatchAdminProductsByIdResponse, PatchAdminProductsByIdError, Options<PatchAdminProductsByIdData>> => {
+    const mutationOptions: UseMutationOptions<PatchAdminProductsByIdResponse, PatchAdminProductsByIdError, Options<PatchAdminProductsByIdData>> = {
+        mutationFn: async (fnOptions) => {
+            const { data } = await patchAdminProductsById({
+                ...options,
+                ...fnOptions,
+                throwOnError: true
+            });
+            return data;
+        }
+    };
+    return mutationOptions;
+};
+
+export const patchAdminProductsByIdActiveMutation = (options?: Partial<Options<PatchAdminProductsByIdActiveData>>): UseMutationOptions<PatchAdminProductsByIdActiveResponse, PatchAdminProductsByIdActiveError, Options<PatchAdminProductsByIdActiveData>> => {
+    const mutationOptions: UseMutationOptions<PatchAdminProductsByIdActiveResponse, PatchAdminProductsByIdActiveError, Options<PatchAdminProductsByIdActiveData>> = {
+        mutationFn: async (fnOptions) => {
+            const { data } = await patchAdminProductsByIdActive({
+                ...options,
+                ...fnOptions,
+                throwOnError: true
+            });
+            return data;
+        }
+    };
+    return mutationOptions;
+};
+
+export const postAdminProductsByIdImagesMutation = (options?: Partial<Options<PostAdminProductsByIdImagesData>>): UseMutationOptions<PostAdminProductsByIdImagesResponse, PostAdminProductsByIdImagesError, Options<PostAdminProductsByIdImagesData>> => {
+    const mutationOptions: UseMutationOptions<PostAdminProductsByIdImagesResponse, PostAdminProductsByIdImagesError, Options<PostAdminProductsByIdImagesData>> = {
+        mutationFn: async (fnOptions) => {
+            const { data } = await postAdminProductsByIdImages({
                 ...options,
                 ...fnOptions,
                 throwOnError: true

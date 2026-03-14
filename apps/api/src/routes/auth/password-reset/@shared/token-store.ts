@@ -4,7 +4,8 @@ import { createOpaqueToken, hashToken } from '~/routes/auth/@shared/session/toke
 const PASSWORD_RESET_TOKEN_TTL_SECONDS = 15 * 60
 const passwordResetKeyPrefix = 'auth:password-reset:'
 
-const resolvePasswordResetKey = (tokenHash: string): string => `${passwordResetKeyPrefix}${tokenHash}`
+const resolvePasswordResetKey = (tokenHash: string): string =>
+  `${passwordResetKeyPrefix}${tokenHash}`
 
 export const createPasswordResetToken = async (userId: string): Promise<string> => {
   const token = createOpaqueToken()

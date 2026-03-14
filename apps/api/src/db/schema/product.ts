@@ -3,28 +3,25 @@ import {
   boolean,
   check,
   integer,
-  pgEnum,
   pgTable,
   text,
   timestamp,
   uuid,
 } from 'drizzle-orm/pg-core'
-
-export const productStatusEnum = pgEnum('product_status', [
-  'active',
-  'low_stock',
-  'out_of_stock',
-  'discontinued',
-])
+import { categories } from './category'
 
 export const products = pgTable('products', {
   id: uuid('id').defaultRandom().primaryKey(),
   name: text('name').notNull(),
   description: text('description').notNull(),
+  sku: text('sku'),
+  brand: text('brand'),
+  weight: integer('weight'),
   price: integer('price').notNull(),
-  status: productStatusEnum('status').notNull().default('active'),
-  categoryId: text('category_id'),
-  imageUrl: text('image_url'),
+  isActive: boolean('is_active').notNull().default(true),
+  categoryId: uuid('category_id').references(() => categories.id),
+  thumbUrl: text('thumb_url'),
+  detailUrl: text('detail_url'),
   isSubstitutable: boolean('is_substitutable').notNull().default(true),
   createdAt: timestamp('created_at', { withTimezone: true }).defaultNow().notNull(),
 })

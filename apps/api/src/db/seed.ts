@@ -1,6 +1,8 @@
 import { db } from '~/db/client'
+import { publicUrl } from '~/lib/s3-client'
 import {
   auditLogs,
+  categories,
   couponRedemptions,
   coupons,
   customerInquiries,
@@ -26,6 +28,7 @@ import {
   userSessions,
   users,
 } from '~/db/schema/index'
+import { PRODUCT_CATALOG } from '~/db/seed-product-catalog'
 import { buildSeedUserCredentialRows } from '~/db/seed-users'
 
 async function seed(): Promise<void> {
@@ -51,6 +54,7 @@ async function seed(): Promise<void> {
   await db.delete(orders)
   await db.delete(inventory)
   await db.delete(products)
+  await db.delete(categories)
   await db.delete(auditLogs)
   await db.delete(userOauthAccounts)
   await db.delete(userSessions)
@@ -85,33 +89,105 @@ async function seed(): Promise<void> {
 
   await db.insert(userCredentials).values(credentialRows)
 
-  const seededProducts = Array.from({ length: 48 }, (_, index) => {
-    const status: 'active' | 'low_stock' = index % 10 === 0 ? 'low_stock' : 'active'
-    return {
-      name: `Seed Product ${index + 1}`,
-      description: `Seeded product description ${index + 1}`,
-      price: 1200 + index * 90,
-      status,
-      categoryId: `cat-${(index % 6) + 1}`,
-      imageUrl: `https://example.com/products/${index + 1}.png`,
-      isSubstitutable: index % 4 !== 0,
-    }
-  })
+  const insertedCategories = await db
+    .insert(categories)
+    .values([
+      {
+        name: '상온 간편식',
+        slug: 'convenience-food',
+        displayOrder: 1,
+        isActive: true,
+      },
+      {
+        name: '음료',
+        slug: 'beverage',
+        displayOrder: 2,
+        isActive: true,
+      },
+      {
+        name: '위생용품',
+        slug: 'hygiene',
+        displayOrder: 3,
+        isActive: true,
+      },
+      {
+        name: '세탁/청소',
+        slug: 'laundry-cleaning',
+        displayOrder: 4,
+        isActive: true,
+      },
+      {
+        name: '반려소모품',
+        slug: 'pet-supplies',
+        displayOrder: 5,
+        isActive: true,
+      },
+      {
+        name: '셀프케어',
+        slug: 'self-care',
+        displayOrder: 6,
+        isActive: true,
+      },
+    ])
+    .returning({ id: categories.id, slug: categories.slug })
+
+  const legacyCategoryIdToUuid = new Map<string, string>(
+    insertedCategories.map((category, index) => [`cat-${index + 1}`, category.id]),
+  )
+
+  const seededProducts = PRODUCT_CATALOG.map((product) => ({
+    categoryId: legacyCategoryIdToUuid.get(product.categoryId),
+    sku: product.sku,
+    name: product.name,
+    brand: product.brand,
+    description: product.description,
+    price: product.price,
+    weight: product.weight,
+    isActive: product.isActive,
+    thumbUrl: publicUrl(product.thumbKey),
+    detailUrl: publicUrl(product.detailKey),
+    isSubstitutable: product.isSubstitutable,
+  }))
 
   const insertedProducts = await db
     .insert(products)
     .values(seededProducts)
-    .returning({ id: products.id, status: products.status })
+    .returning({ id: products.id })
 
   await db.insert(inventory).values(
     insertedProducts.map((product, index) => {
+      const seededProduct = PRODUCT_CATALOG[index]
+      if (!seededProduct) {
+        throw new Error('seed product catalog index mismatch')
+      }
+
+      if (!seededProduct.isActive || index % 9 === 0) {
+        return {
+          productId: product.id,
+          onHand: 0,
+          reserved: 0,
+          safetyThreshold: 5,
+          version: 1,
+        }
+      }
+
+      if (index % 6 === 0) {
+        return {
+          productId: product.id,
+          onHand: 3,
+          reserved: 0,
+          safetyThreshold: 5,
+          version: 1,
+        }
+      }
+
       const onHand = 20 + (index % 12)
       const reserved = index % 5
       return {
         productId: product.id,
         onHand,
         reserved,
-        safetyThreshold: product.status === 'low_stock' ? onHand : 8,
+        safetyThreshold: 5,
         version: 1,
       }
     }),
@@ -190,9 +266,14 @@ async function seed(): Promise<void> {
     })
     .returning({ id: promotions.id })
 
+  const convenienceFoodCategoryId = legacyCategoryIdToUuid.get('cat-1')
+  if (!convenienceFoodCategoryId) {
+    throw new Error('seed category mapping for cat-1 not found')
+  }
+
   await db.insert(promotionCategories).values({
     promotionId: seedCategoryPromotion.id,
-    categoryId: 'cat-1',
+    categoryId: convenienceFoodCategoryId,
   })
 
   const [welcomeCoupon] = await db

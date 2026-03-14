@@ -1,3 +1,5 @@
+export { categories } from './category'
+
 export {
   auditLogs,
   oauthProviderEnum,
@@ -53,9 +55,10 @@ export {
   substitutions,
 } from './order'
 
-export { inventory, products, productStatusEnum } from './product'
+export { inventory, products } from './product'
 
 export {
+  categoriesRelations,
   couponRedemptionsRelations,
   couponsRelations,
   customerInquiriesRelations,

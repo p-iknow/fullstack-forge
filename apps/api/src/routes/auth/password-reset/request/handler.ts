@@ -8,7 +8,9 @@ import { getRequestMeta } from '~/routes/auth/@shared/http/service'
 import { sendPasswordResetEmail } from '~/routes/auth/password-reset/@shared/email'
 import { createPasswordResetToken } from '~/routes/auth/password-reset/@shared/token-store'
 
-export const passwordResetRequestHandler: RouteHandler<typeof passwordResetRequestRoute> = async (c) => {
+export const passwordResetRequestHandler: RouteHandler<typeof passwordResetRequestRoute> = async (
+  c,
+) => {
   const body = c.req.valid('json')
   const requestMeta = getRequestMeta(c)
 

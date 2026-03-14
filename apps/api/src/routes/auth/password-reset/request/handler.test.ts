@@ -4,12 +4,13 @@ import { authIndex } from '~/routes/auth/index'
 
 type DbState = { selectQueue: unknown[] }
 
-const { dbState, createPasswordResetTokenMock, sendPasswordResetEmailMock, logAuditEventMock } = vi.hoisted(() => ({
-  dbState: { selectQueue: [] } as DbState,
-  createPasswordResetTokenMock: vi.fn(async () => 'reset-token'),
-  sendPasswordResetEmailMock: vi.fn(async () => {}),
-  logAuditEventMock: vi.fn(async () => {}),
-}))
+const { dbState, createPasswordResetTokenMock, sendPasswordResetEmailMock, logAuditEventMock } =
+  vi.hoisted(() => ({
+    dbState: { selectQueue: [] } as DbState,
+    createPasswordResetTokenMock: vi.fn(async () => 'reset-token'),
+    sendPasswordResetEmailMock: vi.fn(async () => {}),
+    logAuditEventMock: vi.fn(async () => {}),
+  }))
 
 vi.mock('~/db/client', () => ({
   db: {

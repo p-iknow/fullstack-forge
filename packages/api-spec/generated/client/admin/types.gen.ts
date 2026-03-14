@@ -80,3 +80,551 @@ export type PostAdminRedriveResponses = {
 };
 
 export type PostAdminRedriveResponse = PostAdminRedriveResponses[keyof PostAdminRedriveResponses];
+
+export type GetAdminCategoriesData = {
+    body?: never;
+    path?: never;
+    query?: never;
+    url: '/admin/categories';
+};
+
+export type GetAdminCategoriesErrors = {
+    /**
+     * Unauthorized
+     */
+    401: {
+        code: string;
+        error: string;
+    };
+    /**
+     * Forbidden
+     */
+    403: {
+        code: string;
+        error: string;
+    };
+};
+
+export type GetAdminCategoriesError = GetAdminCategoriesErrors[keyof GetAdminCategoriesErrors];
+
+export type GetAdminCategoriesResponses = {
+    /**
+     * Admin category list
+     */
+    200: {
+        items: Array<{
+            id: string;
+            name: string;
+            slug: string;
+            displayOrder: number;
+            isActive: boolean;
+            createdAt: string;
+        }>;
+    };
+};
+
+export type GetAdminCategoriesResponse = GetAdminCategoriesResponses[keyof GetAdminCategoriesResponses];
+
+export type PostAdminCategoriesData = {
+    body?: {
+        name: string;
+        slug: string;
+        displayOrder: number;
+        isActive?: boolean;
+    };
+    path?: never;
+    query?: never;
+    url: '/admin/categories';
+};
+
+export type PostAdminCategoriesErrors = {
+    /**
+     * Invalid input
+     */
+    400: {
+        code: string;
+        error: string;
+    };
+    /**
+     * Unauthorized
+     */
+    401: {
+        code: string;
+        error: string;
+    };
+    /**
+     * Forbidden
+     */
+    403: {
+        code: string;
+        error: string;
+    };
+    /**
+     * Slug already exists
+     */
+    409: {
+        code: string;
+        error: string;
+    };
+};
+
+export type PostAdminCategoriesError = PostAdminCategoriesErrors[keyof PostAdminCategoriesErrors];
+
+export type PostAdminCategoriesResponses = {
+    /**
+     * Category created
+     */
+    201: {
+        id: string;
+        name: string;
+        slug: string;
+        displayOrder: number;
+        isActive: boolean;
+        createdAt: string;
+    };
+};
+
+export type PostAdminCategoriesResponse = PostAdminCategoriesResponses[keyof PostAdminCategoriesResponses];
+
+export type DeleteAdminCategoriesByIdData = {
+    body?: never;
+    path: {
+        id: string;
+    };
+    query?: never;
+    url: '/admin/categories/{id}';
+};
+
+export type DeleteAdminCategoriesByIdErrors = {
+    /**
+     * Unauthorized
+     */
+    401: {
+        code: string;
+        error: string;
+    };
+    /**
+     * Forbidden
+     */
+    403: {
+        code: string;
+        error: string;
+    };
+    /**
+     * Category not found
+     */
+    404: {
+        code: string;
+        error: string;
+    };
+    /**
+     * Category has products
+     */
+    409: {
+        code: string;
+        error: string;
+    };
+};
+
+export type DeleteAdminCategoriesByIdError = DeleteAdminCategoriesByIdErrors[keyof DeleteAdminCategoriesByIdErrors];
+
+export type DeleteAdminCategoriesByIdResponses = {
+    /**
+     * Category deleted
+     */
+    204: void;
+};
+
+export type DeleteAdminCategoriesByIdResponse = DeleteAdminCategoriesByIdResponses[keyof DeleteAdminCategoriesByIdResponses];
+
+export type PatchAdminCategoriesByIdData = {
+    body?: {
+        name?: string;
+        slug?: string;
+        displayOrder?: number;
+        isActive?: boolean;
+    };
+    path: {
+        id: string;
+    };
+    query?: never;
+    url: '/admin/categories/{id}';
+};
+
+export type PatchAdminCategoriesByIdErrors = {
+    /**
+     * Invalid input
+     */
+    400: {
+        code: string;
+        error: string;
+    };
+    /**
+     * Unauthorized
+     */
+    401: {
+        code: string;
+        error: string;
+    };
+    /**
+     * Forbidden
+     */
+    403: {
+        code: string;
+        error: string;
+    };
+    /**
+     * Category not found
+     */
+    404: {
+        code: string;
+        error: string;
+    };
+    /**
+     * Slug already exists
+     */
+    409: {
+        code: string;
+        error: string;
+    };
+};
+
+export type PatchAdminCategoriesByIdError = PatchAdminCategoriesByIdErrors[keyof PatchAdminCategoriesByIdErrors];
+
+export type PatchAdminCategoriesByIdResponses = {
+    /**
+     * Category updated
+     */
+    200: {
+        id: string;
+        name: string;
+        slug: string;
+        displayOrder: number;
+        isActive: boolean;
+        createdAt: string;
+    };
+};
+
+export type PatchAdminCategoriesByIdResponse = PatchAdminCategoriesByIdResponses[keyof PatchAdminCategoriesByIdResponses];
+
+export type PostAdminProductsData = {
+    body?: {
+        name: string;
+        description: string;
+        brand?: string;
+        price: number;
+        weight?: number;
+        categoryId: string;
+        isSubstitutable?: boolean;
+    };
+    path?: never;
+    query?: never;
+    url: '/admin/products';
+};
+
+export type PostAdminProductsErrors = {
+    /**
+     * Invalid input
+     */
+    400: {
+        code: string;
+        error: string;
+    };
+    /**
+     * Unauthorized
+     */
+    401: {
+        code: string;
+        error: string;
+    };
+    /**
+     * Forbidden
+     */
+    403: {
+        code: string;
+        error: string;
+    };
+    /**
+     * Product name conflict
+     */
+    409: {
+        code: string;
+        error: string;
+    };
+};
+
+export type PostAdminProductsError = PostAdminProductsErrors[keyof PostAdminProductsErrors];
+
+export type PostAdminProductsResponses = {
+    /**
+     * Product created
+     */
+    201: {
+        id: string;
+        name: string;
+        description: string;
+        sku: string;
+        brand: string;
+        price: number;
+        weight: number;
+        isActive: boolean;
+        stockDisplay: 'in_stock' | 'low_stock' | 'out_of_stock';
+        categoryId: string;
+        thumbUrl: string;
+        detailUrl: string;
+        isSubstitutable: boolean;
+        createdAt: string;
+    };
+};
+
+export type PostAdminProductsResponse = PostAdminProductsResponses[keyof PostAdminProductsResponses];
+
+export type DeleteAdminProductsByIdData = {
+    body?: never;
+    path: {
+        id: string;
+    };
+    query?: never;
+    url: '/admin/products/{id}';
+};
+
+export type DeleteAdminProductsByIdErrors = {
+    /**
+     * Unauthorized
+     */
+    401: {
+        code: string;
+        error: string;
+    };
+    /**
+     * Forbidden
+     */
+    403: {
+        code: string;
+        error: string;
+    };
+    /**
+     * Product not found
+     */
+    404: {
+        code: string;
+        error: string;
+    };
+    /**
+     * Product has orders
+     */
+    409: {
+        code: string;
+        error: string;
+    };
+};
+
+export type DeleteAdminProductsByIdError = DeleteAdminProductsByIdErrors[keyof DeleteAdminProductsByIdErrors];
+
+export type DeleteAdminProductsByIdResponses = {
+    /**
+     * Product deleted
+     */
+    204: void;
+};
+
+export type DeleteAdminProductsByIdResponse = DeleteAdminProductsByIdResponses[keyof DeleteAdminProductsByIdResponses];
+
+export type PatchAdminProductsByIdData = {
+    body?: {
+        name?: string;
+        description?: string;
+        brand?: string;
+        price?: number;
+        weight?: number;
+        categoryId?: string;
+        isSubstitutable?: boolean;
+    };
+    path: {
+        id: string;
+    };
+    query?: never;
+    url: '/admin/products/{id}';
+};
+
+export type PatchAdminProductsByIdErrors = {
+    /**
+     * Invalid input
+     */
+    400: {
+        code: string;
+        error: string;
+    };
+    /**
+     * Unauthorized
+     */
+    401: {
+        code: string;
+        error: string;
+    };
+    /**
+     * Forbidden
+     */
+    403: {
+        code: string;
+        error: string;
+    };
+    /**
+     * Product not found
+     */
+    404: {
+        code: string;
+        error: string;
+    };
+};
+
+export type PatchAdminProductsByIdError = PatchAdminProductsByIdErrors[keyof PatchAdminProductsByIdErrors];
+
+export type PatchAdminProductsByIdResponses = {
+    /**
+     * Product updated
+     */
+    200: {
+        id: string;
+        name: string;
+        description: string;
+        sku: string;
+        brand: string;
+        price: number;
+        weight: number;
+        isActive: boolean;
+        stockDisplay: 'in_stock' | 'low_stock' | 'out_of_stock';
+        categoryId: string;
+        thumbUrl: string;
+        detailUrl: string;
+        isSubstitutable: boolean;
+        createdAt: string;
+    };
+};
+
+export type PatchAdminProductsByIdResponse = PatchAdminProductsByIdResponses[keyof PatchAdminProductsByIdResponses];
+
+export type PatchAdminProductsByIdActiveData = {
+    body?: {
+        isActive: boolean;
+    };
+    path: {
+        id: string;
+    };
+    query?: never;
+    url: '/admin/products/{id}/active';
+};
+
+export type PatchAdminProductsByIdActiveErrors = {
+    /**
+     * Invalid active state
+     */
+    400: {
+        code: string;
+        error: string;
+    };
+    /**
+     * Unauthorized
+     */
+    401: {
+        code: string;
+        error: string;
+    };
+    /**
+     * Forbidden
+     */
+    403: {
+        code: string;
+        error: string;
+    };
+    /**
+     * Product not found
+     */
+    404: {
+        code: string;
+        error: string;
+    };
+};
+
+export type PatchAdminProductsByIdActiveError = PatchAdminProductsByIdActiveErrors[keyof PatchAdminProductsByIdActiveErrors];
+
+export type PatchAdminProductsByIdActiveResponses = {
+    /**
+     * Product active state updated
+     */
+    200: {
+        id: string;
+        name: string;
+        description: string;
+        sku: string;
+        brand: string;
+        price: number;
+        weight: number;
+        isActive: boolean;
+        stockDisplay: 'in_stock' | 'low_stock' | 'out_of_stock';
+        categoryId: string;
+        thumbUrl: string;
+        detailUrl: string;
+        isSubstitutable: boolean;
+        createdAt: string;
+    };
+};
+
+export type PatchAdminProductsByIdActiveResponse = PatchAdminProductsByIdActiveResponses[keyof PatchAdminProductsByIdActiveResponses];
+
+export type PostAdminProductsByIdImagesData = {
+    body?: {
+        thumb: Blob | File;
+        detail: Blob | File;
+    };
+    path: {
+        id: string;
+    };
+    query?: never;
+    url: '/admin/products/{id}/images';
+};
+
+export type PostAdminProductsByIdImagesErrors = {
+    /**
+     * Invalid file
+     */
+    400: {
+        code: string;
+        error: string;
+    };
+    /**
+     * Unauthorized
+     */
+    401: {
+        code: string;
+        error: string;
+    };
+    /**
+     * Forbidden
+     */
+    403: {
+        code: string;
+        error: string;
+    };
+    /**
+     * Product not found
+     */
+    404: {
+        code: string;
+        error: string;
+    };
+};
+
+export type PostAdminProductsByIdImagesError = PostAdminProductsByIdImagesErrors[keyof PostAdminProductsByIdImagesErrors];
+
+export type PostAdminProductsByIdImagesResponses = {
+    /**
+     * Images uploaded
+     */
+    200: {
+        thumbUrl: string;
+        detailUrl: string;
+    };
+};
+
+export type PostAdminProductsByIdImagesResponse = PostAdminProductsByIdImagesResponses[keyof PostAdminProductsByIdImagesResponses];
