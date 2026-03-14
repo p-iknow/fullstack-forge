@@ -41,6 +41,20 @@ stateDiagram-v2
 | 리뷰 본문 (`body`)  | **2,000자** |
 | 댓글 본문 (`body`)  | **500자**   |
 
+### 리뷰 이미지 첨부 정책
+
+- 리뷰당 최대 이미지: **5장**
+- 허용 포맷: JPEG, PNG, WebP
+- 최대 파일 크기: **5 MB** (장당)
+- 리사이즈 정책: sharp로 리사이즈 후 WebP 변환하여 저장
+  - `thumb`: 400×400 (목록/요약 표시용)
+  - `detail`: 1200×900 (갤러리 확대용)
+- 저장소: MinIO(S3 호환) — catalog 이미지와 동일 인프라 사용
+- 파일명 규칙: `review-{review_id}-{index}-{thumb|detail}.webp`
+- 이미지 업로드 시점: 리뷰 작성 시 본문과 함께 업로드 (리뷰 생성 후 추가/삭제도 허용)
+- 이미지 순서: `display_order` 필드로 관리 (0-based)
+- 삭제 정책: 리뷰 작성자만 자신의 이미지를 삭제 가능, 운영자는 리뷰 숨김으로 대응
+
 ### 리뷰 댓글 정책
 
 - 댓글 작성 권한: `customer|operator|admin`
@@ -69,7 +83,16 @@ stateDiagram-v2
 - 비구매자 리뷰 작성 차단 + 구매자 리뷰 작성 성공
 - 리뷰 댓글 작성/조회 성공
 
-## 6) Stage 6 — Admin Operations (모더레이션)
+## 6) 연관 도메인
+
+| 도메인 | 연관 내용 | 참조 |
+| --- | --- | --- |
+| order | 배송 완료 주문 기반 리뷰 작성 가능 여부 판단 | `../05-order/01-overview.md` |
+| delivery | `DeliveryStatusChanged`(delivered) 수신 시 `ReviewEligible` 발행 | `../07-delivery/05-events.md` |
+| notification | `ReviewEligible`(리뷰 작성 유도), `ReviewCreated`(등록 완료) 알림 발송 | `../12-notification/05-events.md` |
+| observability | 리뷰 작성 전환율, 모더레이션 처리율 메트릭 수집 | `../14-observability/01-overview.md` |
+
+## 7) Stage 6 — Admin Operations (모더레이션)
 
 ### 구현 목표
 
