@@ -150,7 +150,7 @@ export const loadCartWithItems = async (cartId: string) => {
       }
     })
 
-  const itemCount = items.reduce((count, item) => count + item.quantity, 0)
+  const itemCount = items.length
   const totalAmount = items.reduce((sum, item) => sum + item.unitPriceSnapshot * item.quantity, 0)
 
   return {

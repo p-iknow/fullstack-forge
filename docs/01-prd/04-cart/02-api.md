@@ -16,7 +16,7 @@
 
 - `GET /api/store/cart`
   - 목적: 현재 사용자 장바구니 조회
-  - 포함: 항목, 수량, 만료 예정 시각, 장바구니 상태(`active`, `converted`, `expired`)
+  - 포함: 항목, 수량, 담긴 상품 종류 수(`itemCount` — 총 수량 합이 아닌 고유 상품 수), 만료 예정 시각, 장바구니 상태(`active`, `converted`, `expired`)
   - 실시간 재고 확인: 각 항목의 현재 재고 상태(`in_stock`, `low_stock`, `out_of_stock`)를 inventory에서 조회하여 응답에 포함한다.
 
 ## 4) 생성/수정 API
