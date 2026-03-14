@@ -51,7 +51,7 @@ let refreshPromise: Promise<boolean> | null = null
 
 async function tryRefreshToken(): Promise<boolean> {
   try {
-    const res = await fetch('/auth/refresh', { method: 'POST', credentials: 'include' })
+    const res = await fetch('/api/auth/refresh', { method: 'POST', credentials: 'include' })
     return res.ok
   } catch {
     return false
@@ -59,25 +59,36 @@ async function tryRefreshToken(): Promise<boolean> {
 }
 
 /**
- * Fetch wrapper that transparently retries once on 401 after refreshing the
- * access token via the `/auth/refresh` endpoint.
- *
- * Concurrent callers share a single in-flight refresh to avoid token-reuse
- * detection on the server.
+ * Attempt to refresh the access token. Concurrent callers share a single
+ * in-flight request to avoid refresh-token reuse detection on the server.
  */
-export async function fetchWithRefresh(input: RequestInfo | URL, init?: RequestInit): Promise<Response> {
+export function refreshAccessToken(): Promise<boolean> {
+  if (!refreshPromise) {
+    refreshPromise = tryRefreshToken().finally(() => {
+      refreshPromise = null
+    })
+  }
+  return refreshPromise
+}
+
+/**
+ * Fetch wrapper that transparently retries once on 401 after refreshing the
+ * access token via the `/api/auth/refresh` endpoint.
+ *
+ * Use this for hand-written fetch calls (e.g. catalog API). The generated
+ * openapi-ts client uses a response interceptor instead — see generated-client.ts.
+ */
+export async function fetchWithRefresh(
+  input: RequestInfo | URL,
+  init?: RequestInit,
+): Promise<Response> {
   const response = await fetch(input, init)
 
   if (response.status !== 401) {
     return response
   }
 
-  // Deduplicate concurrent refresh attempts
-  if (!refreshPromise) {
-    refreshPromise = tryRefreshToken().finally(() => { refreshPromise = null })
-  }
-
-  const refreshed = await refreshPromise
+  const refreshed = await refreshAccessToken()
 
   if (!refreshed) {
     return response
