@@ -199,6 +199,13 @@
   .section-title-gap-sm {
     gap: 1rem;
   }
+  .scrollbar-none {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  .scrollbar-none::-webkit-scrollbar {
+    display: none;
+  }
 }
 
 @media (max-width: 40rem) {
