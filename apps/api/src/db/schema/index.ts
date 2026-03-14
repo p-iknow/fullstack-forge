@@ -55,9 +55,13 @@ export {
   substitutions,
 } from './order'
 
+export { cartItems, cartStatusEnum, carts } from './cart'
+
 export { inventory, products } from './product'
 
 export {
+  cartItemsRelations,
+  cartsRelations,
   categoriesRelations,
   couponRedemptionsRelations,
   couponsRelations,

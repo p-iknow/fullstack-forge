@@ -50,6 +50,13 @@
       "when": 1773475970594,
       "tag": "0006_familiar_chat",
       "breakpoints": true
+    },
+    {
+      "idx": 7,
+      "version": "7",
+      "when": 1773504127531,
+      "tag": "0007_mean_stephen_strange",
+      "breakpoints": true
     }
   ]
 }
