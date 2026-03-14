@@ -11,6 +11,7 @@
 | [doc-frontmatter](doc-frontmatter/)                 | "frontmatter", "add frontmatter"                         | Generate/validate YAML frontmatter for docs                                  |
 | [frontend-api-patterns](frontend-api-patterns/)     | "API pattern", "useSuspenseQuery", "Route Loader"        | Apply TanStack Query + Suspensive data fetching patterns                     |
 | [frontend-error-handling](frontend-error-handling/) | "AsyncResult", "HTTPError", "ErrorBoundary"              | Standardize frontend error handling for async flows and UI boundaries        |
+| [frontend-design](frontend-design/)                 | "polish UI", "a11y", "dark mode", "state coverage", "token consistency" | Build production-grade frontend UI with token-first styling, accessibility, dark mode, and complete state coverage |
 | [frontend-page-structure](frontend-page-structure/) | "screens/ structure", "page folder", "@shared"           | Apply cohesion-driven screens/ folder structure conventions                  |
 | [frontend-style-layout](frontend-style-layout/)     | "Tailwind v4", "spacing", "responsive image", "layout"   | Apply Tailwind v4 styling, spacing, and responsive image patterns            |
 | [meta-prompt-engineer](meta-prompt-engineer/)       | "write a prompt", "create prompt", "meta-prompt"         | Generate high-quality prompts using proven techniques                        |
@@ -23,6 +24,7 @@
 | [mermaid-syntax](mermaid-syntax/)                   | "mermaid", "diagram", "flowchart", "sequenceDiagram"     | Enforce correct Mermaid syntax: `<br>` line breaks, safe labels, edge syntax |
 | [prd-review](prd-review/)                           | "PRD review", "requirements gap", "cross-domain check"   | Review PRD docs for completeness, consistency, and depth from domain expert view |
 | [adr-prd-sync](adr-prd-sync/)                       | "ADR review", "architecture sync", "PRD traceability"    | Review backend ADRs against PRD for decision adequacy, traceability, consistency |
+| [slice-planner](slice-planner/)                     | "plan slice", "session plan", "세부구현"                 | Create agent-executable session plans for vertical slices with progressive tasks |
 
 ## STRUCTURE PATTERN
 
