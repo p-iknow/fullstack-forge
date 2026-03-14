@@ -4,6 +4,7 @@ import { registerOpenApiDocument } from '~/lib/openapi'
 import { createApp } from '~/lib/create-app'
 import { adminIndex } from '~/routes/admin/admin.index'
 import { authIndex } from '~/routes/auth/index'
+import { cartIndex } from '~/routes/cart'
 import { catalogIndex } from '~/routes/catalog'
 import { healthIndex } from '~/routes/health/health.index'
 
@@ -17,5 +18,6 @@ app.route('/health', healthIndex)
 app.route('/auth', authIndex)
 app.route('/admin', adminIndex)
 app.route('/', catalogIndex)
+app.route('/cart', cartIndex)
 
 registerOpenApiDocument(app)
