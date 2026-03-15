@@ -1,6 +1,6 @@
 import { afterEach, describe, expect, test } from 'vitest'
 import { http, HttpResponse } from 'msw'
-import { worker } from '~/test/msw/browser'
+import { worker } from '~/test/msw'
 import { fetchWithRefresh, refreshAccessToken } from '~/@shared/api/core'
 
 describe(fetchWithRefresh.name, () => {

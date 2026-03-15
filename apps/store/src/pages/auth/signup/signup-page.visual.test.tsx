@@ -2,7 +2,7 @@ import { cleanup, fireEvent, screen, waitFor } from '@testing-library/react'
 import { afterEach, describe, expect, it } from 'vitest'
 import { page } from 'vitest/browser'
 import { http, HttpResponse } from 'msw'
-import { worker } from '~/test/msw/browser'
+import { worker } from '~/test/msw'
 import { renderWithRouter } from '~/test/router-utils'
 import { SignupPage } from './signup-page'
 

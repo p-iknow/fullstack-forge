@@ -2,7 +2,7 @@ import { cleanup, fireEvent, screen } from '@testing-library/react'
 import { afterEach, describe, expect, it, vi } from 'vitest'
 import { page } from 'vitest/browser'
 import { http, HttpResponse } from 'msw'
-import { worker } from '~/test/msw/browser'
+import { worker } from '~/test/msw'
 import { renderWithRouter } from '~/test/router-utils'
 import { PasswordUpdatePageContent } from './password-update-page'
 

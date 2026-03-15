@@ -25,7 +25,7 @@ export default defineConfig({
         test: {
           name: 'store-visual',
           include: ['src/**/*.test.{ts,tsx}'],
-          setupFiles: ['./vitest.setup.ts'],
+          setupFiles: ['./vitest.setup.visual.ts'],
           css: true,
           browser: {
             enabled: true,
