@@ -15,8 +15,8 @@ const googleStartUrl = '/api/auth/oauth/google/start?redirect=/auth/callback/suc
 const kakaoStartUrl = '/api/auth/oauth/kakao/start?redirect=/auth/callback/success'
 
 const loginSchema = z.object({
-  email: z.string().email('Invalid email address.'),
-  password: z.string().min(1, 'Password is required.'),
+  email: z.string().email('유효하지 않은 이메일 주소입니다.'),
+  password: z.string().min(1, '비밀번호를 입력해주세요.'),
 })
 
 type LoginFormValues = z.infer<typeof loginSchema>
@@ -43,7 +43,7 @@ export function LoginPage() {
         user: result.user,
       })
       void navigate({ to: '/' })
-      setErrorMessage(`Signed in as ${result.user.email}`)
+      setErrorMessage(`${result.user.email}로 로그인되었습니다`)
     },
   })
 
@@ -58,7 +58,7 @@ export function LoginPage() {
         const details = parsed.code ? ` (${parsed.code})` : ''
         setErrorMessage(parsed.error + details)
       } else {
-        setErrorMessage('Login failed. Please check your credentials.')
+        setErrorMessage('로그인에 실패했습니다. 인증 정보를 확인해주세요.')
       }
     }
   }

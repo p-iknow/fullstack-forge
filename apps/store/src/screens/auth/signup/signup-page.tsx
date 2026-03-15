@@ -12,9 +12,9 @@ import type { MeResponse } from '~/lib/queries/auth'
 import { authQueryKeys, signupMutationOptions } from '~/lib/queries/auth'
 
 const signupSchema = z.object({
-  name: z.string().min(1, 'Name is required.'),
-  email: z.string().email('Invalid email address.'),
-  password: z.string().min(8, 'Password must be at least 8 characters.'),
+  name: z.string().min(1, '이름을 입력해주세요.'),
+  email: z.string().email('유효하지 않은 이메일 주소입니다.'),
+  password: z.string().min(8, '비밀번호는 최소 8자 이상이어야 합니다.'),
 })
 
 type SignupFormValues = z.infer<typeof signupSchema>
@@ -55,7 +55,7 @@ export function SignupPage() {
         const details = parsed.code ? ` (${parsed.code})` : ''
         setErrorMessage(parsed.error + details)
       } else {
-        setErrorMessage('Sign up failed. Please try again.')
+        setErrorMessage('회원가입에 실패했습니다. 다시 시도해주세요.')
       }
     }
   }

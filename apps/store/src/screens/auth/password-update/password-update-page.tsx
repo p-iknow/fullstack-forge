@@ -12,13 +12,13 @@ import { passwordResetConfirmMutationOptions } from '~/lib/queries/auth'
 
 const passwordUpdateSchema = z
   .object({
-    token: z.string().trim().min(1, 'Reset token is required.'),
-    password: z.string().min(8, 'Password must be at least 8 characters.'),
-    confirmPassword: z.string().min(1, 'Confirm password is required.'),
+    token: z.string().trim().min(1, '재설정 토큰을 입력해주세요.'),
+    password: z.string().min(8, '비밀번호는 최소 8자 이상이어야 합니다.'),
+    confirmPassword: z.string().min(1, '비밀번호 확인을 입력해주세요.'),
   })
   .refine((value) => value.password === value.confirmPassword, {
     path: ['confirmPassword'],
-    message: 'Password confirmation does not match.',
+    message: '비밀번호가 일치하지 않습니다.',
   })
 
 type PasswordUpdateFormValues = z.infer<typeof passwordUpdateSchema>
@@ -71,7 +71,7 @@ export function PasswordUpdatePageContent({
   const confirmMutation = useMutation({
     ...passwordResetConfirmMutationOptions(),
     onSuccess: async () => {
-      setSuccessMessage('Password updated. Please sign in with your new password.')
+      setSuccessMessage('비밀번호가 변경되었습니다. 새 비밀번호로 로그인해주세요.')
       setErrorMessage(null)
       onSuccessNavigate?.()
     },
@@ -92,87 +92,95 @@ export function PasswordUpdatePageContent({
         const details = parsed.code ? ` (${parsed.code})` : ''
         setErrorMessage(parsed.error + details)
       } else {
-        setErrorMessage('Password update failed. Please try again.')
+        setErrorMessage('비밀번호 변경에 실패했습니다. 다시 시도해주세요.')
       }
     }
   }
 
   return (
-    <main className="mx-auto flex min-h-screen w-full max-w-md flex-col justify-center p-6">
-      <h1 className="text-3xl font-semibold">Update password</h1>
-      <p className="mt-2 text-sm text-slate-600">
-        Enter your reset token and choose a new password.
-      </p>
+    <main className="flex min-h-screen items-center justify-center bg-muted/30 px-4 py-12">
+      <div className="w-full max-w-sm">
+        <div className="text-center">
+          <Link to="/" className="text-lg font-bold tracking-tight text-foreground">
+            FORGE STORE
+          </Link>
+          <h1 className="mt-6 text-2xl font-bold tracking-tight text-foreground">비밀번호 재설정</h1>
+          <p className="mt-1.5 text-sm text-muted-foreground">
+            재설정 토큰과 새 비밀번호를 입력하세요.
+          </p>
+        </div>
 
-      {errorMessage ? (
-        <p role="alert" className="mt-4 rounded bg-rose-100 p-3 text-sm text-rose-900">
-          {errorMessage}
-        </p>
-      ) : null}
-      {successMessage ? (
-        <p className="mt-4 rounded bg-emerald-100 p-3 text-sm text-emerald-900">{successMessage}</p>
-      ) : null}
-
-      <form className="mt-6 flex flex-col gap-3" onSubmit={form.handleSubmit(onSubmit)} noValidate>
-        <Label className="text-sm font-medium" htmlFor="reset-token">
-          Reset token
-        </Label>
-        <Input
-          id="reset-token"
-          type="text"
-          {...form.register('token')}
-          autoComplete="off"
-          required
-        />
-        {form.formState.errors.token?.message ? (
-          <p role="alert" className="text-sm text-rose-700">
-            {form.formState.errors.token.message}
+        {errorMessage ? (
+          <p role="alert" className="mt-5 rounded-lg bg-destructive/10 p-3 text-sm text-destructive">
+            {errorMessage}
           </p>
         ) : null}
-
-        <Label className="text-sm font-medium" htmlFor="new-password">
-          New password
-        </Label>
-        <Input
-          id="new-password"
-          type="password"
-          {...form.register('password')}
-          autoComplete="new-password"
-          required
-        />
-        {form.formState.errors.password?.message ? (
-          <p role="alert" className="text-sm text-rose-700">
-            {form.formState.errors.password.message}
-          </p>
+        {successMessage ? (
+          <p className="mt-5 rounded-lg bg-primary/10 p-3 text-sm text-primary">{successMessage}</p>
         ) : null}
 
-        <Label className="text-sm font-medium" htmlFor="confirm-password">
-          Confirm password
-        </Label>
-        <Input
-          id="confirm-password"
-          type="password"
-          {...form.register('confirmPassword')}
-          autoComplete="new-password"
-          required
-        />
-        {form.formState.errors.confirmPassword?.message ? (
-          <p role="alert" className="text-sm text-rose-700">
-            {form.formState.errors.confirmPassword.message}
+        <form className="mt-6 space-y-4" onSubmit={form.handleSubmit(onSubmit)} noValidate>
+          <div className="space-y-1.5">
+            <Label htmlFor="reset-token">재설정 토큰</Label>
+            <Input
+              id="reset-token"
+              type="text"
+              {...form.register('token')}
+              autoComplete="off"
+              required
+            />
+            {form.formState.errors.token?.message ? (
+              <p role="alert" className="text-xs text-destructive">
+                {form.formState.errors.token.message}
+              </p>
+            ) : null}
+          </div>
+
+          <div className="space-y-1.5">
+            <Label htmlFor="new-password">새 비밀번호</Label>
+            <Input
+              id="new-password"
+              type="password"
+              {...form.register('password')}
+              autoComplete="new-password"
+              required
+            />
+            {form.formState.errors.password?.message ? (
+              <p role="alert" className="text-xs text-destructive">
+                {form.formState.errors.password.message}
+              </p>
+            ) : null}
+          </div>
+
+          <div className="space-y-1.5">
+            <Label htmlFor="confirm-password">비밀번호 확인</Label>
+            <Input
+              id="confirm-password"
+              type="password"
+              {...form.register('confirmPassword')}
+              autoComplete="new-password"
+              required
+            />
+            {form.formState.errors.confirmPassword?.message ? (
+              <p role="alert" className="text-xs text-destructive">
+                {form.formState.errors.confirmPassword.message}
+              </p>
+            ) : null}
+          </div>
+
+          <Button type="submit" disabled={confirmMutation.isPending} className="h-11 w-full">
+            {confirmMutation.isPending ? '변경 중...' : '비밀번호 변경'}
+          </Button>
+        </form>
+
+        <div className="mt-8 space-y-2 text-center text-sm text-muted-foreground">
+          <p>
+            <Link to="/login" className="font-medium text-foreground underline underline-offset-2">
+              로그인으로 돌아가기
+            </Link>
           </p>
-        ) : null}
-
-        <Button type="submit" disabled={confirmMutation.isPending} className="mt-2">
-          {confirmMutation.isPending ? 'Updating password...' : 'Update password'}
-        </Button>
-      </form>
-
-      <p className="mt-6 text-sm text-slate-600">
-        Back to{' '}
-        <Link to="/login" className="underline">
-          Sign in
-        </Link>
-      </p>
+        </div>
+      </div>
     </main>
   )
 }
