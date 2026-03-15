@@ -72,7 +72,7 @@ export const config: SheriffConfig = {
   },
 
   modules: {
-    'apps/<app>/src/screens': 'app:<app>',
+    'apps/<app>/src/pages': 'app:<app>',
     'apps/<app>/src/routes': 'app:<app>',
     'apps/<svc>/src': 'svc:<svc>',
     'packages/shared/src': 'lib:shared',
@@ -161,7 +161,7 @@ test('GET /health → 200', async () => {
 **프론트엔드 컴포넌트 테스트**:
 
 ```tsx
-// src/screens/login.test.tsx
+// src/pages/login.test.tsx
 import { render, screen } from '@testing-library/react'
 import { LoginForm } from './login'
 

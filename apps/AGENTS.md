@@ -18,9 +18,9 @@ apps/
 | API endpoints/auth flows  | `api/src/routes/`                          | domain route modules  |
 | DB schema/migrations/seed | `api/src/db/`                              | Drizzle schema + seed |
 | API app bootstrap         | `api/src/app.ts`, `api/src/index.ts`       | app wiring + entry    |
-| Store routes/screens      | `store/src/routes/`                        | file-based routing    |
-| Admin routes/screens      | `admin/src/routes/`                        | file-based routing    |
-| Shared frontend API calls | `store/src/lib/api/`, `admin/src/lib/api/` | domain clients        |
+| Store routes/pages        | `store/src/routes/`, `store/src/pages/`    | file-based routing    |
+| Admin routes/pages        | `admin/src/routes/`, `admin/src/pages/`    | file-based routing    |
+| Shared frontend API calls | `store/src/@shared/api/`, `admin/src/@shared/api/` | domain clients  |
 
 ## CONVENTIONS
 

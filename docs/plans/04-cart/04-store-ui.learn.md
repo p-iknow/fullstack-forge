@@ -2,15 +2,15 @@
 
 ## 구현 요약
 
-- `apps/store/src/lib/api/cart.ts` — 5개 API 함수 (getCart, addCartItem, updateCartItem, deleteCartItem, clearCart)
-- `apps/store/src/lib/queries/cart.ts` — queryOptions + 4개 mutationOptions
+- `apps/store/src/@shared/api/cart.ts` — 5개 API 함수 (getCart, addCartItem, updateCartItem, deleteCartItem, clearCart)
+- `apps/store/src/@shared/queries/cart.ts` — queryOptions + 4개 mutationOptions
 - `apps/store/src/routes/_catalog/cart.tsx` — /cart 라우트
-- `apps/store/src/screens/cart/cart-page.tsx` — 메인 장바구니 페이지
-- `apps/store/src/screens/cart/cart-item-row.tsx` — 장바구니 아이템 행 (수량 조절, 삭제, 재고 배지)
-- `apps/store/src/screens/cart/cart-summary.tsx` — 합계 + 만료시간 + 주문 버튼
-- `apps/store/src/screens/cart/empty-cart.tsx` — 빈 장바구니 안내
-- `apps/store/src/screens/catalog/product-detail-page.tsx` — "장바구니 담기" 버튼 추가
-- `apps/store/src/screens/catalog/store-top-nav.tsx` — 장바구니 아이콘 + 배지 추가
+- `apps/store/src/pages/cart/cart-page.tsx` — 메인 장바구니 페이지
+- `apps/store/src/pages/cart/cart-item-row.tsx` — 장바구니 아이템 행 (수량 조절, 삭제, 재고 배지)
+- `apps/store/src/pages/cart/cart-summary.tsx` — 합계 + 만료시간 + 주문 버튼
+- `apps/store/src/pages/cart/empty-cart.tsx` — 빈 장바구니 안내
+- `apps/store/src/pages/catalog/product-detail-page.tsx` — "장바구니 담기" 버튼 추가
+- `apps/store/src/pages/catalog/store-top-nav.tsx` — 장바구니 아이콘 + 배지 추가
 
 ## 배운 점
 

@@ -133,5 +133,5 @@ const changeQuantity = async (newQty: number) => {
 - 패턴 스킬: [frontend-optimistic-updates](../../../.claude/skills/frontend-optimistic-updates/SKILL.md)
 - API 패턴: [02-api-patterns.md](./02-api-patterns.md) — Pattern 9: Mutation Imperative Flow
 - Call-site Readability: [04-callsite-readability.md](./04-callsite-readability.md)
-- 적용 사례: `apps/store/src/screens/cart/cart-item-row.tsx`
+- 적용 사례: `apps/store/src/pages/cart/cart-page.sub/cart-item-row/cart-item-row.tsx`
 - React 공식 문서: [useOptimistic](https://react.dev/reference/react/useOptimistic)

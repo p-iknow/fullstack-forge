@@ -1,11 +1,11 @@
 ---
 name: frontend-page-structure
-description: Apply the screens/ folder structure convention for cohesion-driven page organization. Use when creating new pages, splitting components, deciding file placement, naming files, or organizing shared code with the @shared pattern in frontend apps.
+description: Apply the pages/ folder structure convention for cohesion-driven page organization. Use when creating new pages, splitting components, deciding file placement, naming files, or organizing shared code with the @shared pattern in frontend apps.
 ---
 
 # Frontend Page Structure
 
-Cohesion-driven `screens/` folder structure. Routes in `src/routes/` are thin wrappers; actual page components live in `src/screens/`.
+Cohesion-driven `pages/` folder structure. Routes in `src/routes/` are thin wrappers; actual page components live in `src/pages/`.
 
 ## Quick Reference
 
@@ -45,19 +45,19 @@ When keeping everything in one file (< 500 lines):
 2. Sub UI components
 3. Helper functions
 
-## Route → Screen Bridge
+## Route → Page Bridge
 
 ```tsx
 // src/routes/orders/checkout/intro.tsx — thin wrapper
 import { createFileRoute } from '@tanstack/react-router'
-import { CheckoutIntroPage } from '~/screens/orders/checkout/intro/checkout-intro-page'
+import { CheckoutIntroPage } from '~/pages/orders/checkout/intro/checkout-intro-page'
 
 export const Route = createFileRoute('/orders/checkout/intro')({
   component: CheckoutIntroPage,
 })
 ```
 
-> Layout routes (`_layout.tsx`) exist only in `routes/`. No layout files in `screens/`.
+> Layout routes (`_layout.tsx`) exist only in `routes/`. No layout files in `pages/`.
 
 ## Naming Rules
 
@@ -113,26 +113,60 @@ export const CheckoutIntroContent = () => {
 | Test   | `*.test.ts`   | Co-located unit tests                          |
 | Event  | `*.event.ts`  | Analytics event constants (optional)           |
 
-## @shared Model
+## @shared Model — Scope Localization
 
-3-tier sharing hierarchy. Move to `@shared/` the moment 2+ consumers exist.
+**Core Principle**: Share at the narrowest possible scope. Start local, promote only when needed.
+
+### 4-tier Hierarchy
 
 ```
-src/screens/
-├── @shared/              # App-level (all domains)
-├── orders/
-│   ├── @shared/          # Domain-level (all order pages)
-│   └── checkout/
-│       ├── @shared/      # Feature-level (checkout pages)
-│       ├── intro/
-│       └── result/
+src/
+├── @shared/                    # L1: App infrastructure (cross-domain)
+│   ├── api/                    #     API client, error handling
+│   ├── queries/                #     React Query options
+│   └── ui/                     #     App-wide UI helpers
+│
+├── pages/
+│   ├── @shared/                # L2: Cross-domain page shared
+│   ├── auth/
+│   │   ├── @shared/            # L3: Auth domain shared
+│   │   ├── login/
+│   │   └── signup/
+│   ├── catalog/
+│   │   └── @shared/            # L3: Catalog domain shared
+│   └── cart/
+│       └── @shared/            # L3: Cart domain shared
 ```
 
-| @shared type | Complexity | Structure     | Example        |
-| ------------ | ---------- | ------------- | -------------- |
-| `ui/`        | Simple     | Single file   | `OrderBadge`   |
-| `sub/`       | Complex    | Folder        | `OrderSummary` |
-| `views/`     | Full view  | Folder (rare) | `ErrorView`    |
+### Scope Decision Flow
+
+```
+1. Used in 1 page only?     → Co-locate inside the page (*.helper.ts, *.ui.tsx)
+2. Used in 2+ pages, SAME domain? → pages/{domain}/@shared/ (L3)
+3. Used in 2+ domains?      → src/@shared/ (L1)
+4. Used in 2+ apps?         → packages/ (L0)
+```
+
+### Promotion/Demotion Rules
+
+| Situation | Action |
+| --------- | ------ |
+| 1 consumer only | Co-locate in that page/component |
+| **2+ pages, same domain** | **Promote to `pages/{domain}/@shared/`** |
+| **2+ domains** | **Promote to `src/@shared/`** |
+| **2+ apps** | **Promote to `packages/`** |
+| Consumer count drops to 1 | **Demote back (co-locate)** |
+
+> **Always start at narrowest scope. Promote only when needed. Demote when no longer needed.**
+
+### @shared Internal Structure
+
+| Folder | Contains | Example |
+| ------ | -------- | ------- |
+| `api/` | API client functions | `catalogApi.list()` |
+| `queries/` | React Query options | `cartQueryOptions` |
+| `ui/` | Shared UI components/helpers | `AuthFormLayout`, `cartToast` |
+| `helper/` | Shared business logic | `validateOrder`, `formatPrice` |
 
 Cross-app sharing (store + admin) → `packages/design-system` or `packages/shared`.
 

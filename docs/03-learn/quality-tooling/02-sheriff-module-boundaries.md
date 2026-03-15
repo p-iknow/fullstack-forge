@@ -26,9 +26,9 @@ export const config: SheriffConfig = {
   },
 
   modules: {
-    'apps/store/src/screens': 'app:store',
+    'apps/store/src/pages': 'app:store',
     'apps/store/src/routes': 'app:store',
-    'apps/admin/src/screens': 'app:admin',
+    'apps/admin/src/pages': 'app:admin',
     'apps/admin/src/routes': 'app:admin',
     'apps/api/src': 'svc:api',
     'packages/design-system/src': 'lib:design-system',
@@ -65,9 +65,9 @@ import { Button } from '@fullstack-forge/design-system/components/button'
 ```ts
 modules: {
   // 프론트엔드 앱: app:* 태그
-  'apps/store/src/screens': 'app:store',
+  'apps/store/src/pages': 'app:store',
   'apps/store/src/routes': 'app:store',
-  'apps/admin/src/screens': 'app:admin',
+  'apps/admin/src/pages': 'app:admin',
   'apps/admin/src/routes': 'app:admin',
 
   // 백엔드 서비스: svc:* 태그
@@ -126,7 +126,7 @@ svc:api    ──→  lib:design-system  ❌  ← 핵심 차단 포인트
 lib:*      ──→  (아무것도)          ❌  ← 순수 유지
 ```
 
-`sameTag`는 같은 태그 내의 모듈 간 import를 허용한다 (예: `app:store` 내의 screens → routes).
+`sameTag`는 같은 태그 내의 모듈 간 import를 허용한다 (예: `app:store` 내의 pages → routes).
 
 **Result** — 의존 방향이 코드로 강제된다. API 서버에서 React 컴포넌트를 import하면 `pnpm sheriff`가 즉시 에러를 보고한다. CI에서 자동 검증되므로 코드 리뷰 부담이 줄어든다. ✅ 2026.02 기준 모노레포 아키텍처 경계 강제의 표준 접근법.
 

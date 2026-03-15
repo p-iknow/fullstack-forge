@@ -16,7 +16,7 @@ packages/api-spec/generated/     ← codegen 산출물 (수정 금지)
     └── @tanstack/
         └── react-query.gen.ts   ← queryOptions / mutationOptions (generated)
 
-apps/{app}/src/lib/
+apps/{app}/src/@shared/
   api/
     ├── core.ts                  ← ApiClientError, readApiError (에러 유틸)
     ├── generated-client.ts      ← generated client 인스턴스 설정 (baseUrl, credentials, timeout)
@@ -118,7 +118,7 @@ export const meQueryOptions = (initialData?) =>
 ### 새 도메인 query 추가 시
 
 ```typescript
-// apps/store/src/lib/queries/orders.ts
+// apps/store/src/@shared/queries/orders.ts
 
 import { queryOptions, mutationOptions } from '@tanstack/react-query'
 // 1. Generated에서: SDK 함수, 타입, Query Key
@@ -130,8 +130,8 @@ import type {
   PostOrdersResponse,
 } from '@fullstack-forge/api-spec/client/store/types.gen'
 // 2. 앱 레벨: 에러 유틸, 클라이언트 인스턴스
-import { ApiClientError } from '~/lib/api/core'
-import { storeClient } from '~/lib/api/generated-client'
+import { ApiClientError } from '~/@shared/api/core'
+import { storeClient } from '~/@shared/api/generated-client'
 
 // 3. 타입 alias로 가독성 확보
 export type CreateOrderInput = NonNullable<PostOrdersData['body']>
@@ -183,7 +183,7 @@ export const createOrderMutationOptions = () =>
 ### Generated client 인스턴스 설정
 
 ```typescript
-// apps/store/src/lib/api/generated-client.ts
+// apps/store/src/@shared/api/generated-client.ts
 import { client } from '@fullstack-forge/api-spec/client/auth/client.gen'
 
 client.setConfig({

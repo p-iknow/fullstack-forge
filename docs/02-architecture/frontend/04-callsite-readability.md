@@ -319,4 +319,4 @@ disabled={deleteMutation.isPending}
 
 - 내부 스킬: `.claude/skills/frontend-api-patterns/SKILL.md` — Pattern 2 (Mutation Namespace), Pattern 9 (Mutation Imperative Flow)
 - 내부 스킬: `.claude/skills/frontend-code-quality/SKILL.md` — Readability: "Name handlers by action, not event"
-- 적용 사례: `apps/store/src/screens/cart/cart-item-row.tsx`
+- 적용 사례: `apps/store/src/pages/cart/cart-page.sub/cart-item-row/cart-item-row.tsx`

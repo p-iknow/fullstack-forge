@@ -206,7 +206,7 @@ export const orderStatusEnum = pgEnum('order_status', [
 
 ```typescript
 import { createFileRoute } from '@tanstack/react-router'
-import { HomePage } from '~/screens/home/home-page'
+import { HomePage } from '~/pages/home/home-page'
 
 export const Route = createFileRoute('/_catalog/')({
   component: HomePage,
@@ -215,15 +215,15 @@ export const Route = createFileRoute('/_catalog/')({
 
 - 파일 기반 라우팅: `routes/_catalog/index.tsx` → URL `/`
 - `routes/_catalog/products.$productId.tsx` → URL `/products/:productId`
-- Route 파일은 thin wrapper — 실제 UI는 `screens/` 폴더에서 구현
+- Route 파일은 thin wrapper — 실제 UI는 `pages/` 폴더에서 구현
 
 ### Screen 컴포넌트
 
-**참조**: `apps/store/src/screens/home/home-page.tsx`
+**참조**: `apps/store/src/pages/home/home-page.tsx`
 
 ```typescript
 import { useQuery, keepPreviousData } from '@tanstack/react-query'
-import { catalogListQueryOptions } from '~/lib/queries/catalog'
+import { catalogListQueryOptions } from '~/@shared/queries/catalog'
 
 export const HomePage = () => {
   const [params, setParams] = useState<CatalogListParams>({ page: 1, page_size: 20 })
@@ -239,10 +239,10 @@ export const HomePage = () => {
 
 ### API Client
 
-**참조**: `apps/store/src/lib/api/catalog.ts`
+**참조**: `apps/store/src/@shared/api/catalog.ts`
 
 ```typescript
-import { ApiClientError, fetchWithRefresh } from '~/lib/api/core'
+import { ApiClientError, fetchWithRefresh } from '~/@shared/api/core'
 
 export type CatalogProductSummary = { id: string; name: string; ... }
 
@@ -263,7 +263,7 @@ export const getCatalogProducts = (params: CatalogListParams) =>
 
 ### Query Options
 
-**참조**: `apps/store/src/lib/queries/catalog.ts`
+**참조**: `apps/store/src/@shared/queries/catalog.ts`
 
 ```typescript
 import { queryOptions } from '@tanstack/react-query'
@@ -284,7 +284,7 @@ export const catalogListQueryOptions = (params: CatalogListParams) =>
 
 ### Mutation Options (Admin)
 
-**참조**: `apps/admin/src/lib/queries/catalog.ts`
+**참조**: `apps/admin/src/@shared/queries/catalog.ts`
 
 ```typescript
 export const createProductMutationOptions = () => ({
@@ -301,7 +301,7 @@ Store와 동일한 패턴이나 다음이 추가됨:
 
 ### Mutation API Client
 
-**참조**: `apps/admin/src/lib/api/catalog.ts`
+**참조**: `apps/admin/src/@shared/api/catalog.ts`
 
 ```typescript
 const requestMutate = async <T>(method: string, path: string, body?: unknown): Promise<T> => {
@@ -401,7 +401,7 @@ describe('POST /auth/login', () => {
 
 ### Frontend Test
 
-**참조**: `apps/store/src/screens/home/home-page.test.tsx`
+**참조**: `apps/store/src/pages/home/home-page.test.tsx`
 
 ```typescript
 import { describe, expect, it } from 'vitest'
@@ -438,9 +438,9 @@ describe('HomePage', () => {
 - API spec route: `packages/api-spec/src/routes/{domain}/{resource}/route.ts`
 - API spec schemas: `packages/api-spec/src/{domain}-schemas.ts`
 - Store route: `apps/store/src/routes/{path}.tsx`
-- Store screen: `apps/store/src/screens/{domain}/{page-name}.tsx`
-- Store API client: `apps/store/src/lib/api/{domain}.ts`
-- Store queries: `apps/store/src/lib/queries/{domain}.ts`
+- Store screen: `apps/store/src/pages/{domain}/{page-name}.tsx`
+- Store API client: `apps/store/src/@shared/api/{domain}.ts`
+- Store queries: `apps/store/src/@shared/queries/{domain}.ts`
 - Admin: store와 동일 구조
 
 ### Export 스타일
