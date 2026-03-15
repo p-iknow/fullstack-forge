@@ -25,6 +25,7 @@
     "@softarc/sheriff-core": "^0.19.6",
     "@vitest/coverage-v8": "catalog:",
     "knip": "^5.86.0",
+    "lefthook": "^2.1.4",
     "nx": "22.5.4",
     "oxfmt": "^0.40.0",
     "oxlint": "^1.55.0",
@@ -38,6 +39,7 @@
     "onlyBuiltDependencies": [
       "@suspensive/react-query",
       "esbuild",
+      "lefthook",
       "msw",
       "nx",
       "sharp"
