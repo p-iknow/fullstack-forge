@@ -10,6 +10,7 @@
   },
   "scripts": {
     "dev": "vite",
+    "dev:full": "bash scripts/dev-with-infra.sh",
     "build": "vite build",
     "start": "node dist/index.js",
     "typecheck": "tsc --noEmit",
@@ -27,9 +28,14 @@
     "db:restore:rehearsal": "bash scripts/db-backup-restore.sh rehearse",
     "db:minio:start": "bash scripts/minio-local.sh start",
     "db:minio:health": "bash scripts/minio-local.sh health",
+    "fauxqs:start": "bash scripts/fauxqs-local.sh start",
+    "fauxqs:health": "bash scripts/fauxqs-local.sh health",
+    "fauxqs:stop": "bash scripts/fauxqs-local.sh stop",
     "db:seed:images": "tsx src/db/seed-product-images.ts"
   },
   "dependencies": {
+    "@aws-sdk/client-sns": "^3.1009.0",
+    "@aws-sdk/client-sqs": "^3.1009.0",
     "@fullstack-forge/api-spec": "workspace:*",
     "@hono/node-server": "catalog:",
     "@hono/zod-openapi": "catalog:",
@@ -46,6 +52,7 @@
     "@types/node": "catalog:",
     "@types/pg": "catalog:",
     "drizzle-kit": "catalog:",
+    "fauxqs": "^2.3.1",
     "sharp": "^0.34.5",
     "tsx": "^4.21.0",
     "typescript": "catalog:",
