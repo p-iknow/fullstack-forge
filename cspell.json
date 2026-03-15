@@ -1,11 +1,18 @@
 {
   "version": "0.2",
   "words": [
+    "codegen",
     "contravariance",
+    "fanout",
+    "fauxqs",
     "hono",
     "jsdom",
+    "kibertoad",
     "oxlint",
     "Pocock",
+    "redrive",
+    "redriven",
+    "timestamptz",
     "triggerdotdev",
     "tsdown",
     "typespec",

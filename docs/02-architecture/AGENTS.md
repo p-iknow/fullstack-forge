@@ -19,7 +19,7 @@ docs/02-architecture/
 | Global architecture map  | `base/01-overview.md`               | starting point                |
 | Backend stack rationale  | `backend/01-backend.adr.md`         | Hono/Drizzle/Postgres/Redis   |
 | Frontend stack rationale | `frontend/01-frontend.adr.md`       | TanStack Start/React/Tailwind |
-| Integration rationale    | `integration/01-integration.adr.md` | Docker/K8s/LocalStack         |
+| Integration rationale    | `integration/01-integration.adr.md` | Docker/K8s/fauxqs             |
 
 ## CONVENTIONS
 
