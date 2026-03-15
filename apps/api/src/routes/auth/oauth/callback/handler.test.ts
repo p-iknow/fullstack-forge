@@ -7,7 +7,7 @@ const oauthState = {
     state: 'oauth-state',
     provider: 'google' as const,
     nonce: 'oauth-nonce',
-    redirectPath: '/auth/callback/success',
+    redirectPath: '/',
   } as { state: string; provider: 'google' | 'kakao'; nonce: string; redirectPath: string } | null,
 }
 
@@ -65,7 +65,7 @@ describe('oauth callback handler', () => {
       state: 'oauth-state',
       provider: 'google',
       nonce: 'oauth-nonce',
-      redirectPath: '/auth/callback/success',
+      redirectPath: '/',
     }
     dbState.selectQueue = []
     dbState.insertReturningQueue = []
@@ -107,6 +107,6 @@ describe('oauth callback handler', () => {
 
     // then
     expect(res.status).toBe(302)
-    expect(res.headers.get('location')).toBe('http://localhost:3000/auth/callback/success')
+    expect(res.headers.get('location')).toBe('http://localhost:3000/')
   })
 })

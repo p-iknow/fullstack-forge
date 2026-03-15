@@ -3,7 +3,7 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { Link } from '@tanstack/react-router'
 import { Button, buttonVariants } from '@fullstack-forge/design-system/components/button'
 
-import { ShoppingCartIcon } from 'lucide-react'
+import { ShoppingCartIcon, UserIcon } from 'lucide-react'
 import { readApiError } from '~/lib/api'
 import { authQueryKeys, logoutMutationOptions, meQueryOptions } from '~/lib/queries/auth'
 import { cartQueryOptions } from '~/lib/queries/cart'
@@ -97,68 +97,73 @@ export function StoreTopNav() {
 
   return (
     <>
-      <nav className="mx-auto flex w-full max-w-6xl items-center justify-between gap-4 px-6 py-3">
+      <nav className="mx-auto flex w-full max-w-7xl items-center justify-between gap-3 px-4 py-3 md:px-6">
         <Link
           to="/"
-          className="shrink-0 whitespace-nowrap text-sm font-semibold tracking-tight text-slate-900"
+          className="shrink-0 whitespace-nowrap text-base font-bold tracking-tight text-foreground"
         >
-          fullstack-forge store
+          FORGE STORE
         </Link>
 
-        <div className="flex min-h-8 shrink-0 items-center justify-end gap-2">
+        <div className="flex shrink-0 items-center gap-1">
           {!showPlaceholder && currentUser ? (
-            <Link to="/cart" className="relative mr-1 p-1.5 text-slate-600 hover:text-slate-900">
+            <Link
+              to="/cart"
+              className="relative rounded-lg p-2 text-muted-foreground transition-colors hover:bg-accent hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+            >
               <ShoppingCartIcon className="h-5 w-5" aria-hidden="true" />
               {cartItemCount > 0 ? (
-                <span className="absolute -right-0.5 -top-0.5 flex h-4 min-w-4 items-center justify-center rounded-full bg-primary/80 px-1 text-[10px] font-bold text-primary-foreground">
+                <span className="absolute -right-0.5 -top-0.5 flex h-[18px] min-w-[18px] items-center justify-center rounded-full bg-primary px-1 text-[10px] font-bold leading-none text-primary-foreground">
                   {cartItemCount > 99 ? '99+' : cartItemCount}
                 </span>
               ) : null}
               <span className="sr-only">장바구니{cartItemCount > 0 ? ` (${cartItemCount}개)` : ''}</span>
             </Link>
           ) : null}
-        </div>
 
-        <div className="flex min-h-8 shrink-0 items-center justify-end gap-2">
           {showPlaceholder ? (
             <div
-              className="flex animate-pulse items-center justify-end"
+              className="flex animate-pulse items-center gap-2"
               role="status"
               aria-label="Checking session"
             >
-              <div
-                className={`${buttonVariants({ size: 'sm' })} pointer-events-none !bg-slate-200 !text-slate-200 hover:!bg-slate-200`}
-                aria-hidden
-              >
-                Log out
-              </div>
+              <div className="h-8 w-8 rounded-lg bg-muted" aria-hidden />
+              <div className="h-8 w-16 rounded-lg bg-muted" aria-hidden />
             </div>
           ) : null}
 
           {!showPlaceholder && currentUser ? (
-            <Button
-              type="button"
-              onClick={() => {
-                void onLogout()
-              }}
-              disabled={logoutMutation.isPending}
-              size="sm"
-            >
-              Log out
-            </Button>
+            <>
+              <span className="flex items-center gap-1.5 rounded-lg px-2 py-1.5 text-sm text-muted-foreground">
+                <UserIcon className="h-4 w-4" aria-hidden="true" />
+                <span className="sr-only">로그인됨</span>
+              </span>
+              <Button
+                type="button"
+                onClick={() => {
+                  void onLogout()
+                }}
+                disabled={logoutMutation.isPending}
+                size="sm"
+                variant="ghost"
+                className="text-muted-foreground hover:text-foreground"
+              >
+                로그아웃
+              </Button>
+            </>
           ) : null}
 
           {!showPlaceholder && !currentUser ? (
             <Link to="/login" className={buttonVariants({ size: 'sm' })}>
-              Log in
+              로그인
             </Link>
           ) : null}
         </div>
       </nav>
 
       {errorMessage ? (
-        <p className="mx-auto max-w-6xl px-6 pb-2">
-          <span className="block rounded bg-rose-100 p-3 text-sm text-rose-900">
+        <p className="mx-auto max-w-7xl px-4 pb-2 md:px-6">
+          <span className="block rounded-lg bg-destructive/10 p-3 text-sm text-destructive">
             {errorMessage}
           </span>
         </p>

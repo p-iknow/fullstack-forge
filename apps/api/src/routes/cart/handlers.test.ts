@@ -180,7 +180,7 @@ describe('GET /cart', () => {
     // then
     expect(res.status).toBe(200)
     await expect(res.json()).resolves.toMatchObject({
-      itemCount: 2,
+      itemCount: 1,
       totalAmount: 7800,
       items: [
         {
@@ -232,7 +232,7 @@ describe('POST /cart/items', () => {
     // then
     expect(res.status).toBe(201)
     await expect(res.json()).resolves.toMatchObject({
-      itemCount: 2,
+      itemCount: 1,
       items: [{ productId: '33333333-3333-4333-8333-333333333333' }],
     })
   })
@@ -271,7 +271,7 @@ describe('POST /cart/items', () => {
     // then
     expect(res.status).toBe(201)
     await expect(res.json()).resolves.toMatchObject({
-      itemCount: 5,
+      itemCount: 1,
       totalAmount: 19500,
     })
   })
@@ -418,7 +418,7 @@ describe('PATCH /cart/items/{cartItemId}', () => {
     // then
     expect(res.status).toBe(200)
     await expect(res.json()).resolves.toMatchObject({
-      itemCount: 4,
+      itemCount: 1,
     })
   })
 

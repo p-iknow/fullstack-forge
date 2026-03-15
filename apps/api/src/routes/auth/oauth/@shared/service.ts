@@ -57,7 +57,7 @@ export const upsertOAuthIdentity = async (input: OAuthIdentityInput): Promise<st
 }
 
 export const resolveAllowedRedirectPath = (rawPath: string | undefined): string => {
-  const fallbackPath = '/auth/callback/success'
+  const fallbackPath = '/'
   if (!rawPath || !rawPath.startsWith('/')) {
     return resolveFrontendRedirectUrl(fallbackPath)
   }

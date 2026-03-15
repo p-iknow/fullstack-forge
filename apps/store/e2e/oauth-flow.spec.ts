@@ -25,11 +25,11 @@ test.describe('OAuth login flow', () => {
     // then
     await expect(googleOAuthLink).toHaveAttribute(
       'href',
-      '/api/auth/oauth/google/start?redirect=/auth/callback/success',
+      '/api/auth/oauth/google/start?redirect=/',
     )
     await expect(kakaoOAuthLink).toHaveAttribute(
       'href',
-      '/api/auth/oauth/kakao/start?redirect=/auth/callback/success',
+      '/api/auth/oauth/kakao/start?redirect=/',
     )
   })
 
@@ -37,11 +37,11 @@ test.describe('OAuth login flow', () => {
     // given
     // Intercept the start endpoint BEFORE navigating so the route is registered early.
     // Use regex because Playwright glob '*' does not match '?' in query strings.
-    // In production: start → external provider → callback → success.
-    // In test: start → success (skipping external provider and callback).
+    // In production: start → external provider → callback → home.
+    // In test: start → home (skipping external provider and callback).
     await page.route(/\/api\/auth\/oauth\/google\/start/, async (route) => {
       const url = new URL(route.request().url())
-      const redirect = url.searchParams.get('redirect') ?? '/auth/callback/success'
+      const redirect = url.searchParams.get('redirect') ?? '/'
       await route.fulfill({
         status: 200,
         contentType: 'text/html',
@@ -54,15 +54,14 @@ test.describe('OAuth login flow', () => {
     await page.getByRole('link', { name: 'Continue with Google' }).click()
 
     // then
-    await expect(page).toHaveURL(/\/auth\/callback\/success/)
-    await expect(page.getByRole('heading', { name: 'OAuth callback complete' })).toBeVisible()
+    await expect(page).toHaveURL(/^\/?$/)
   })
 
   test('completes Kakao OAuth flow via route interception', async ({ page }) => {
     // given
     await page.route(/\/api\/auth\/oauth\/kakao\/start/, async (route) => {
       const url = new URL(route.request().url())
-      const redirect = url.searchParams.get('redirect') ?? '/auth/callback/success'
+      const redirect = url.searchParams.get('redirect') ?? '/'
       await route.fulfill({
         status: 200,
         contentType: 'text/html',
@@ -75,7 +74,6 @@ test.describe('OAuth login flow', () => {
     await page.getByRole('link', { name: 'Continue with Kakao' }).click()
 
     // then
-    await expect(page).toHaveURL(/\/auth\/callback\/success/)
-    await expect(page.getByRole('heading', { name: 'OAuth callback complete' })).toBeVisible()
+    await expect(page).toHaveURL(/^\/?$/)
   })
 })

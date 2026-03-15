@@ -1,7 +1,13 @@
 import { useState } from 'react'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { Link } from '@tanstack/react-router'
-import { Loader2Icon, ShoppingCartIcon } from 'lucide-react'
+import {
+  ChevronRightIcon,
+  Loader2Icon,
+  MinusIcon,
+  PlusIcon,
+  ShoppingCartIcon,
+} from 'lucide-react'
 import { Button } from '@fullstack-forge/design-system/components/button'
 import { Skeleton } from '@fullstack-forge/design-system/components/skeleton'
 import { catalogDetailQueryOptions } from '~/lib/queries/catalog'
@@ -14,17 +20,22 @@ export function ProductDetailPage({ productId }: Readonly<{ productId: string }>
   const productQuery = useQuery(catalogDetailQueryOptions(productId))
 
   return (
-    <main className="mx-auto w-full max-w-6xl px-6 py-10">
-      <Link to="/" className="text-sm text-slate-600 underline">
-        상품 목록으로 돌아가기
-      </Link>
+    <main className="mx-auto w-full max-w-7xl px-4 py-6 pb-24 md:px-6 md:py-8 md:pb-8">
+      {/* Breadcrumb */}
+      <nav aria-label="breadcrumb" className="flex items-center gap-1 text-sm text-muted-foreground">
+        <Link to="/" className="transition-colors hover:text-foreground">
+          홈
+        </Link>
+        <ChevronRightIcon className="h-3.5 w-3.5" aria-hidden="true" />
+        <span className="text-foreground">상품 상세</span>
+      </nav>
 
       {productQuery.isPending ? (
         <ProductDetailSkeleton />
       ) : productQuery.isError || !productQuery.data ? (
-        <p className="mt-4 rounded bg-rose-100 p-3 text-sm text-rose-800">
-          상품 정보를 불러오지 못했습니다.
-        </p>
+        <div className="mt-6 rounded-lg border border-destructive/20 bg-destructive/5 p-4 text-sm text-destructive">
+          상품 정보를 불러오지 못했습니다. 잠시 후 다시 시도해주세요.
+        </div>
       ) : (
         <ProductDetailContent product={productQuery.data} productId={productId} />
       )}
@@ -50,45 +61,79 @@ function ProductDetailContent({
   product,
   productId,
 }: Readonly<{ product: ProductData; productId: string }>) {
+  const stockLabel = !product.isActive
+    ? '비활성'
+    : product.stockDisplay === 'out_of_stock'
+      ? '품절'
+      : product.stockDisplay === 'low_stock'
+        ? '재고임박'
+        : '판매중'
+
+  const stockColor = !product.isActive || product.stockDisplay === 'out_of_stock'
+    ? 'text-destructive'
+    : product.stockDisplay === 'low_stock'
+      ? 'text-amber-600'
+      : 'text-primary'
+
   return (
-    <section className="mt-4 grid gap-6 rounded-xl border border-slate-200 bg-white p-6 md:grid-cols-2">
-      <div>
+    <section className="mt-6 grid gap-6 md:mt-8 md:grid-cols-2 md:gap-10">
+      {/* Image */}
+      <div className="overflow-hidden rounded-xl border border-border bg-muted md:rounded-2xl">
         <img
           src={product.detailUrl}
           alt={`${product.name} 이미지`}
           loading="lazy"
-          className="aspect-square w-full rounded-lg bg-slate-100 object-cover"
+          className="aspect-[4/3] w-full object-contain md:aspect-square md:object-cover"
         />
       </div>
 
-      <div className="space-y-3">
-        <p className="text-xs text-slate-500">{product.categoryName}</p>
-        <h1 className="text-2xl font-semibold">{product.name}</h1>
-        <p className="text-sm text-slate-600">브랜드: {product.brand}</p>
-        <p className="text-lg font-semibold">{formatPrice(product.price)}</p>
-        <p className="text-sm text-slate-600">중량: {product.weight}g</p>
-        <p className="text-sm text-slate-600">
-          상태:{' '}
-          {!product.isActive
-            ? '비활성'
-            : product.stockDisplay === 'out_of_stock'
-              ? '품절'
-              : product.stockDisplay === 'low_stock'
-                ? '재고임박'
-                : '판매중'}
-        </p>
-        <p className="text-sm text-slate-600">가용 재고: {product.availableStock}개</p>
-        <p className="text-sm text-slate-700">{product.description}</p>
+      {/* Info */}
+      <div className="flex flex-col">
+        <p className="text-xs text-muted-foreground md:text-sm">{product.categoryName}</p>
+        <h1 className="mt-1 text-xl font-bold tracking-tight text-foreground md:text-3xl">
+          {product.name}
+        </h1>
+        <p className="mt-1 text-xs text-muted-foreground md:text-sm">{product.brand}</p>
 
-        {!product.canPurchase ? (
-          <p className="rounded bg-rose-100 p-3 text-sm text-rose-700">
-            {!product.isActive
-              ? '단종 상품으로 신규 구매가 불가합니다.'
-              : '품절 상태로 구매가 불가합니다.'}
-          </p>
-        ) : (
-          <AddToCartControl productId={productId} />
-        )}
+        <p className="mt-4 text-2xl font-bold tracking-tight text-foreground md:mt-6 md:text-3xl">
+          {formatPrice(product.price)}
+        </p>
+
+        {/* Attributes */}
+        <dl className="mt-6 border-t border-border pt-6">
+          <div className="flex items-baseline justify-between py-2 text-sm">
+            <dt className="text-muted-foreground">상태</dt>
+            <dd className={`font-semibold ${stockColor}`}>
+              {stockLabel}
+            </dd>
+          </div>
+          <div className="flex items-baseline justify-between py-2 text-sm">
+            <dt className="text-muted-foreground">가용 재고</dt>
+            <dd className="font-medium text-foreground">{product.availableStock}개</dd>
+          </div>
+          <div className="flex items-baseline justify-between py-2 text-sm">
+            <dt className="text-muted-foreground">중량</dt>
+            <dd className="font-medium text-foreground">{product.weight}g</dd>
+          </div>
+        </dl>
+
+        {/* Description */}
+        <p className="mt-6 text-sm leading-relaxed text-muted-foreground">
+          {product.description}
+        </p>
+
+        {/* Purchase */}
+        <div className="mt-auto pt-8">
+          {!product.canPurchase ? (
+            <div className="rounded-lg border border-destructive/20 bg-destructive/5 p-4 text-sm text-destructive">
+              {!product.isActive
+                ? '단종 상품으로 신규 구매가 불가합니다.'
+                : '품절 상태로 구매가 불가합니다.'}
+            </div>
+          ) : (
+            <AddToCartControl productId={productId} />
+          )}
+        </div>
       </div>
     </section>
   )
@@ -120,41 +165,48 @@ function AddToCartControl({ productId }: Readonly<{ productId: string }>) {
   }
 
   return (
-    <div className="space-y-2">
-      <div className="flex items-center gap-2">
+    <div className="fixed inset-x-0 bottom-0 z-40 border-t border-border bg-background/95 px-4 py-3 backdrop-blur-sm md:static md:inset-auto md:z-auto md:border-t-0 md:bg-transparent md:px-0 md:py-0 md:backdrop-blur-none">
+      <div className="flex items-center gap-3 md:gap-4">
+        {/* Quantity stepper */}
+        <div className="inline-flex shrink-0 items-center rounded-lg border border-border">
+          <button
+            type="button"
+            onClick={() => setQuantity((q) => Math.max(1, q - 1))}
+            disabled={quantity <= 1}
+            className="flex h-10 w-10 items-center justify-center text-muted-foreground transition-colors hover:text-foreground disabled:opacity-30"
+          >
+            <MinusIcon className="h-4 w-4" />
+            <span className="sr-only">수량 감소</span>
+          </button>
+          <span className="flex h-10 w-14 items-center justify-center border-x border-border text-sm font-semibold tabular-nums text-foreground">
+            {quantity}
+          </span>
+          <button
+            type="button"
+            onClick={() => setQuantity((q) => Math.min(15, q + 1))}
+            disabled={quantity >= 15}
+            className="flex h-10 w-10 items-center justify-center text-muted-foreground transition-colors hover:text-foreground disabled:opacity-30"
+          >
+            <PlusIcon className="h-4 w-4" />
+            <span className="sr-only">수량 증가</span>
+          </button>
+        </div>
+
+        {/* Add to cart button */}
         <Button
           type="button"
-          size="sm"
-          variant="outline"
-          onClick={() => setQuantity((q) => Math.max(1, q - 1))}
-          disabled={quantity <= 1}
+          onClick={onAdd}
+          disabled={addMutation.isPending}
+          className="relative h-12 flex-1 gap-2 text-sm font-semibold md:w-52 md:flex-none"
         >
-          −
-        </Button>
-        <span className="w-8 text-center text-sm font-medium tabular-nums">{quantity}</span>
-        <Button
-          type="button"
-          size="sm"
-          variant="outline"
-          onClick={() => setQuantity((q) => Math.min(15, q + 1))}
-          disabled={quantity >= 15}
-        >
-          +
+          <ShoppingCartIcon className="h-5 w-5" />
+          장바구니 담기
+          <Loader2Icon
+            className={`absolute right-4 h-4 w-4 transition-opacity duration-200 ${addMutation.isPending ? 'animate-spin opacity-60' : 'opacity-0'}`}
+            aria-hidden={!addMutation.isPending}
+          />
         </Button>
       </div>
-      <Button
-        type="button"
-        onClick={onAdd}
-        disabled={addMutation.isPending}
-        className="relative w-full gap-2"
-      >
-        <ShoppingCartIcon className="h-4 w-4" />
-        장바구니 담기
-        <Loader2Icon
-          className={`absolute right-3 h-3.5 w-3.5 transition-opacity duration-200 ${addMutation.isPending ? 'animate-spin opacity-60' : 'opacity-0'}`}
-          aria-hidden={!addMutation.isPending}
-        />
-      </Button>
     </div>
   )
 }
@@ -165,23 +217,22 @@ function ProductDetailSkeleton() {
       data-testid="product-detail-skeleton"
       role="status"
       aria-live="polite"
-      className="mt-4 grid gap-6 rounded-xl border border-slate-200 bg-white p-6 md:grid-cols-2"
+      className="mt-6 grid gap-6 md:mt-8 md:grid-cols-2 md:gap-10"
     >
       <p className="sr-only">상품 상세를 불러오는 중...</p>
-      <div>
-        <Skeleton className="aspect-square w-full rounded-lg bg-slate-200!" />
-      </div>
-
-      <div className="space-y-3">
-        <Skeleton className="h-3 w-16 bg-slate-300!" />
-        <Skeleton className="h-7 w-3/4 bg-slate-300!" />
-        <Skeleton className="h-4 w-1/3 bg-slate-300!" />
-        <Skeleton className="h-5 w-1/4 bg-slate-300!" />
-        <Skeleton className="h-4 w-24 bg-slate-300!" />
-        <Skeleton className="h-4 w-20 bg-slate-300!" />
-        <Skeleton className="h-4 w-28 bg-slate-300!" />
-        <Skeleton className="h-16 w-full bg-slate-300!" />
-        <Skeleton className="h-10 w-full rounded bg-slate-200!" />
+      <Skeleton className="aspect-square w-full rounded-2xl" />
+      <div className="space-y-4">
+        <Skeleton className="h-4 w-20" />
+        <Skeleton className="h-8 w-3/4" />
+        <Skeleton className="h-4 w-1/3" />
+        <Skeleton className="mt-4 h-10 w-1/3" />
+        <div className="mt-6 space-y-3 border-t border-border pt-6">
+          <Skeleton className="h-4 w-full" />
+          <Skeleton className="h-4 w-full" />
+          <Skeleton className="h-4 w-full" />
+        </div>
+        <Skeleton className="mt-4 h-20 w-full" />
+        <Skeleton className="mt-6 h-12 w-full rounded-lg" />
       </div>
     </section>
   )

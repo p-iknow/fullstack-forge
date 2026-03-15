@@ -38,6 +38,7 @@
 | 이벤트 신뢰성 설계        | 의사결정  | [backend/02-eventing.adr.md](./backend/02-eventing.adr.md)               |
 | 관측성 설계               | 의사결정  | [base/08-observability.adr.md](./base/08-observability.adr.md)           |
 | 통합 설계                 | 의사결정  | [integration/01-integration.adr.md](./integration/01-integration.adr.md) |
+| Optimistic Updates 패턴   | 패턴 가이드 | [frontend/05-optimistic-updates.md](./frontend/05-optimistic-updates.md) |
 
 ## PRD 추적 인덱스
 

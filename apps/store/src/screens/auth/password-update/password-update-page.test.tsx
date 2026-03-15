@@ -25,15 +25,15 @@ describe('password update page', () => {
     await expect(page.getByRole('main')).toMatchScreenshot('password-update-form')
 
     // when
-    fireEvent.change(screen.getByLabelText('Reset token'), { target: { value: 'token-1' } })
-    fireEvent.change(screen.getByLabelText('New password'), { target: { value: 'NewPassw0rd!' } })
-    fireEvent.change(screen.getByLabelText('Confirm password'), {
+    fireEvent.change(screen.getByLabelText('재설정 토큰'), { target: { value: 'token-1' } })
+    fireEvent.change(screen.getByLabelText('새 비밀번호'), { target: { value: 'NewPassw0rd!' } })
+    fireEvent.change(screen.getByLabelText('비밀번호 확인'), {
       target: { value: 'Mismatch123!' },
     })
-    fireEvent.click(screen.getByRole('button', { name: 'Update password' }))
+    fireEvent.click(screen.getByRole('button', { name: '비밀번호 변경' }))
 
     // then
-    expect(await screen.findByText('Password confirmation does not match.')).toBeInTheDocument()
+    expect(await screen.findByText('비밀번호가 일치하지 않습니다.')).toBeInTheDocument()
 
     // visual regression — validation error
     await expect(page.getByRole('main')).toMatchScreenshot('password-update-validation-error')
@@ -45,16 +45,16 @@ describe('password update page', () => {
     await renderPage(onSuccessNavigate)
 
     // when
-    fireEvent.change(screen.getByLabelText('Reset token'), { target: { value: 'token-1' } })
-    fireEvent.change(screen.getByLabelText('New password'), { target: { value: 'NewPassw0rd!' } })
-    fireEvent.change(screen.getByLabelText('Confirm password'), {
+    fireEvent.change(screen.getByLabelText('재설정 토큰'), { target: { value: 'token-1' } })
+    fireEvent.change(screen.getByLabelText('새 비밀번호'), { target: { value: 'NewPassw0rd!' } })
+    fireEvent.change(screen.getByLabelText('비밀번호 확인'), {
       target: { value: 'NewPassw0rd!' },
     })
-    fireEvent.click(screen.getByRole('button', { name: 'Update password' }))
+    fireEvent.click(screen.getByRole('button', { name: '비밀번호 변경' }))
 
     // then
     expect(
-      await screen.findByText('Password updated. Please sign in with your new password.'),
+      await screen.findByText('비밀번호가 변경되었습니다. 새 비밀번호로 로그인해주세요.'),
     ).toBeInTheDocument()
     expect(onSuccessNavigate).toHaveBeenCalledTimes(1)
   })
@@ -75,12 +75,12 @@ describe('password update page', () => {
     await renderPage()
 
     // when
-    fireEvent.change(screen.getByLabelText('Reset token'), { target: { value: 'expired-token' } })
-    fireEvent.change(screen.getByLabelText('New password'), { target: { value: 'NewPassw0rd!' } })
-    fireEvent.change(screen.getByLabelText('Confirm password'), {
+    fireEvent.change(screen.getByLabelText('재설정 토큰'), { target: { value: 'expired-token' } })
+    fireEvent.change(screen.getByLabelText('새 비밀번호'), { target: { value: 'NewPassw0rd!' } })
+    fireEvent.change(screen.getByLabelText('비밀번호 확인'), {
       target: { value: 'NewPassw0rd!' },
     })
-    fireEvent.click(screen.getByRole('button', { name: 'Update password' }))
+    fireEvent.click(screen.getByRole('button', { name: '비밀번호 변경' }))
 
     // then
     expect(await screen.findByText('Session expired (auth_session_expired)')).toBeInTheDocument()

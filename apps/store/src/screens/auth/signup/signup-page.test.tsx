@@ -23,11 +23,11 @@ describe('signup page', () => {
     await expect(page.getByRole('main')).toMatchScreenshot('signup-form')
 
     // when
-    fireEvent.change(screen.getByLabelText('Password'), { target: { value: '123' } })
-    fireEvent.click(screen.getByRole('button', { name: 'Sign up with Email' }))
+    fireEvent.change(screen.getByLabelText('비밀번호'), { target: { value: '123' } })
+    fireEvent.click(screen.getByRole('button', { name: '회원가입' }))
 
     // then
-    expect(await screen.findByText('Password must be at least 8 characters.')).toBeInTheDocument()
+    expect(await screen.findByText('비밀번호는 최소 8자 이상이어야 합니다.')).toBeInTheDocument()
 
     // visual regression — validation error
     await expect(page.getByRole('main')).toMatchScreenshot('signup-validation-error')
@@ -38,10 +38,10 @@ describe('signup page', () => {
     const { router } = await renderPage()
 
     // when
-    fireEvent.change(screen.getByLabelText('Name'), { target: { value: 'Alice' } })
-    fireEvent.change(screen.getByLabelText('Email'), { target: { value: 'alice@example.com' } })
-    fireEvent.change(screen.getByLabelText('Password'), { target: { value: 'Passw0rd!' } })
-    fireEvent.click(screen.getByRole('button', { name: 'Sign up with Email' }))
+    fireEvent.change(screen.getByLabelText('이름'), { target: { value: 'Alice' } })
+    fireEvent.change(screen.getByLabelText('이메일'), { target: { value: 'alice@example.com' } })
+    fireEvent.change(screen.getByLabelText('비밀번호'), { target: { value: 'Passw0rd!' } })
+    fireEvent.click(screen.getByRole('button', { name: '회원가입' }))
 
     // then
     await waitFor(() => {
@@ -62,9 +62,9 @@ describe('signup page', () => {
     await renderPage()
 
     // when
-    fireEvent.change(screen.getByLabelText('Email'), { target: { value: 'taken@example.com' } })
-    fireEvent.change(screen.getByLabelText('Password'), { target: { value: 'Passw0rd!' } })
-    fireEvent.click(screen.getByRole('button', { name: 'Sign up with Email' }))
+    fireEvent.change(screen.getByLabelText('이메일'), { target: { value: 'taken@example.com' } })
+    fireEvent.change(screen.getByLabelText('비밀번호'), { target: { value: 'Passw0rd!' } })
+    fireEvent.click(screen.getByRole('button', { name: '회원가입' }))
 
     // then
     expect(await screen.findByRole('alert')).toHaveTextContent(

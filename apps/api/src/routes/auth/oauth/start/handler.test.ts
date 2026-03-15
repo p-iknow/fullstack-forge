@@ -129,7 +129,7 @@ describe('oauth start handler', () => {
     expect(createOAuthStateMock).toHaveBeenCalledWith(
       expect.objectContaining({
         provider: 'google',
-        redirectPath: 'http://localhost:3000/auth/callback/success',
+        redirectPath: 'http://localhost:3000/',
       }),
     )
     expect(logAuditEventMock).toHaveBeenCalledWith(

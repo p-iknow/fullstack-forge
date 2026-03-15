@@ -58,7 +58,7 @@ export const cartItemSchema = z.object({
 export const cartResponseSchema = z.object({
   id: z.string().uuid(),
   status: cartStatusSchema,
-  itemCount: z.number().int().nonnegative(),
+  itemCount: z.number().int().nonnegative(), // 고유 상품 종류 수 (items.length). 총 수량 합이 아님
   totalAmount: z.number().int().nonnegative(),
   expiresAt: z.string().datetime(),
   version: z.number().int(),
