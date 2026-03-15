@@ -35,8 +35,11 @@
   "packageManager": "pnpm@10.5.2",
   "pnpm": {
     "onlyBuiltDependencies": [
+      "@suspensive/react-query",
       "esbuild",
-      "nx"
+      "msw",
+      "nx",
+      "sharp"
     ]
   }
 }
