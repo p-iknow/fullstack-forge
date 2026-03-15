@@ -1,7 +1,8 @@
 # ADR-0004: 이벤트 신뢰성 구조로 SNS → SQS fanout + DLQ + Idempotency 선택
 
-- Status: Accepted
+- Status: Accepted (amended 2026-03-15)
 - Date: 2026-02-15
+- Amended: 2026-03-15
 - Decision Makers: Architecture, Backend, Operations
 
 ## Context
@@ -23,7 +24,7 @@ PRD는 주문 이벤트를 notifications/inventory/dispatch/order로 fanout하�
 - 소비자 독립 확장 및 장애 격리
 - 실패 격리와 재처리 가능성
 - at-least-once 환경에서 부작용 방지
-- LocalStack으로 로컬/CI 환경 완전 재현
+- 로컬/CI 환경에서 AWS 에뮬레이터로 완전 재현 (fauxqs)
 
 ## Considered Options
 
@@ -63,7 +64,7 @@ DLQ와 redrive 운영 절차를 표준화한다.
 | 메시지 보존      | 처리 후 삭제 (pull-and-delete)   | 보존 기간 동안 재소비 가능         |
 | DLQ              | 네이티브 지원                    | 직접 구현 필요                     |
 | 처리량           | 수만 msg/s (충분)                | 수십만~수백만 msg/s                |
-| LocalStack 지원  | 완전 지원 (Community)            | 미지원 (별도 Docker Kafka 필요)    |
+| 로컬 에뮬레이션  | 완전 지원 (fauxqs)               | 미지원 (별도 Docker Kafka 필요)    |
 | 비용 (규모 대비) | 요청 기반 과금 — 소규모에서 저렴 | 브로커 상시 운영 비용              |
 
 **Kafka 기각 근거:**
@@ -71,7 +72,7 @@ DLQ와 redrive 운영 절차를 표준화한다.
 1. **규모 불일치**: 이 프로젝트의 예상 처리량(수백~수천 msg/min)에서 Kafka는 과잉이다. Kafka의 가치는 수십만 msg/s 이상의 스트리밍 시나리오에서 발현된다.
 2. **순서 보장 불필요**: PRD의 이벤트 소비자는 모두 멱등 처리를 전제하므로, 메시지 순서에 의존하지 않는다. 주문 상태 전이 순서는 DB의 `version` 컬럼(낙관적 락)으로 보호한다.
 3. **운영 복잡도**: Kafka 브로커, ZooKeeper(또는 KRaft), 파티션 리밸런싱, consumer lag 모니터링 등의 운영 부담이 이 프로젝트 규모에서는 비합리적이다.
-4. **LocalStack 지원**: SNS+SQS는 LocalStack Community에서 완전 지원되어 로컬/CI에서 실제와 동일한 이벤트 흐름을 재현할 수 있다. Kafka는 별도 Docker Compose 구성이 필요하다.
+4. **로컬 에뮬레이션**: SNS+SQS는 fauxqs(TypeScript 네이티브 에뮬레이터)로 로컬/CI에서 실제와 동일한 이벤트 흐름을 재현할 수 있다. Kafka는 별도 Docker Compose 구성이 필요하다.
 
 ### SNS+SQS vs EventBridge
 
@@ -80,13 +81,13 @@ DLQ와 redrive 운영 절차를 표준화한다.
 | 라우팅     | 단순 fanout (Topic → 모든 구독자) | 규칙 기반 패턴 매칭        |
 | 필터링     | SNS 메시지 속성 필터 (제한적)     | 이벤트 패턴 규칙 (강력)    |
 | DLQ        | SQS 네이티브                      | 타겟별 DLQ 설정            |
-| LocalStack | 완전 지원                         | 부분 지원 (규칙 엔진 제약) |
+| 로컬 에뮬  | 완전 지원 (fauxqs)                | 부분 지원 (규칙 엔진 제약) |
 | 디버깅     | SQS 메시지 직접 조회 가능         | CloudWatch Logs로만 추적   |
 
 **EventBridge 기각 근거:**
 
 1. **단순 fanout이면 충분**: 현재 4개 소비자(notifications, inventory, dispatch, order)에게 동일 이벤트를 전달하는 단순 fanout 패턴이다. EventBridge의 규칙 기반 라우팅은 불필요한 복잡성이다.
-2. **LocalStack 호환성**: EventBridge의 규칙 엔진은 LocalStack에서 제약이 있어 로컬 개발 경험이 불완전하다.
+2. **로컬 에뮬레이터 호환성**: EventBridge는 fauxqs 등 경량 에뮬레이터에서 규칙 엔진을 지원하지 않아 로컬 개발 경험이 불완전하다.
 3. **디버깅 용이성**: SQS 큐의 메시지를 직접 조회/삭제할 수 있어 문제 추적이 단순하다. EventBridge는 CloudWatch Logs를 통해야 해 간접적이다.
 
 향후 이벤트 타입이 50+로 증가하고 소비자별 선택적 구독이 필요해지면 EventBridge 전환을 재검토한다.
@@ -188,16 +189,38 @@ FIFO Queue는 exactly-once를 지원하지만, **처리량 제한(3,000 msg/s)**
 4. **일괄 redrive**: 검증 통과 후 나머지 메시지 일괄 redrive
 5. **동일 오류 반복 시 자동 redrive 금지** — 원인 미해결 상태에서 redrive하면 DLQ로 재진입할 뿐이다
 
-## 로컬 개발 환경 (LocalStack)
+## 로컬 개발 환경 (fauxqs)
 
 AWS 계정 없이 SNS+SQS를 로컬에서 완전 재현한다:
 
-- **LocalStack Community**: SNS, SQS, DLQ 모두 지원
-- **Docker Compose**: `infra/localstack/docker-compose.yml`로 원클릭 기동
-- **초기화 스크립트**: `infra/localstack/init-aws.sh`에서 Topic/Queue/Subscription 자동 생성
+- **fauxqs**: TypeScript 네이티브 SNS/SQS/DLQ 에뮬레이터 (`kibertoad/fauxqs`)
+- **두 가지 모드**:
+  - **Library mode**: 테스트 내부에서 `startFauxqs()` 호출 — 밀리초 시작, message spy 포함
+  - **Docker mode**: `infra/fauxqs/docker-compose.yml`로 로컬 개발 환경 기동
+- **선언적 초기화**: `infra/fauxqs/init.json`에서 Topic/Queue/Subscription/DLQ 자동 생성
 - **환경 변수**: `AWS_ENDPOINT_URL=http://localhost:4566`으로 SDK 엔드포인트 오버라이드
 
-CI 환경에서도 동일한 LocalStack 설정을 사용하여 이벤트 통합 테스트를 실행한다.
+CI 환경에서는 fauxqs library mode를 사용하여 Docker 없이 이벤트 통합 테스트를 실행한다.
+
+### LocalStack에서 fauxqs로 전환한 이유
+
+LocalStack은 2026-03-23부터 Community Edition을 포함한 모든 사용에 인증 토큰(`LOCALSTACK_AUTH_TOKEN`)을 요구한다.
+비상업 무료 tier는 유지되지만, 계정 생성/토큰 관리/CI 시크릿 주입 등 운영 부담이 추가된다.
+
+fauxqs를 선택한 근거:
+
+| 기준           | LocalStack                           | fauxqs                              |
+| -------------- | ------------------------------------ | ----------------------------------- |
+| 인증           | 필수 (2026-03-23~)                   | 불필요                              |
+| 언어           | Python (Docker 필수)                 | TypeScript (프로젝트 스택 동일)     |
+| SNS+SQS+DLQ   | 완전 지원                            | 완전 지원                           |
+| Filter Policy  | 완전 지원                            | 완전 지원                           |
+| 테스트 통합    | Docker 필요                          | Library mode — Docker 없이 in-process |
+| Message Spy    | 없음                                 | `waitForMessage()`, `expectNoMessage()` |
+| 시작 속도      | ~10초                                | ~100ms (library), ~2초 (Docker)     |
+| 리스크         | 검증된 생태계 (58K ⭐)               | 신생 프로젝트 (2026-02 출시)        |
+
+**리스크 대응**: fauxqs는 AWS SDK v3 호환 HTTP 서버이므로, 문제 발생 시 `endpoint` 값만 변경하면 LocalStack이나 실제 AWS로 즉시 전환할 수 있다. 코드 변경 없음.
 
 ## Consequences
 
@@ -206,7 +229,7 @@ CI 환경에서도 동일한 LocalStack 설정을 사용하여 이벤트 통합 
 - fanout 구조에서 소비자 독립 배포/확장 가능 — 알림 SLA와 재고 정합성을 독립적으로 보장
 - 장애가 큐 단위로 격리되어 운영 안정성 향상 — 한 소비자 장애가 전체 시스템에 전파되지 않음
 - DLQ 기반 재처리로 명확한 복구 경로 확보 — "메시지가 어디 갔는지 모르는" 상황 방지
-- LocalStack으로 로컬/CI에서 실제와 동일한 이벤트 흐름 재현 — 통합 테스트 신뢰도 향상
+- fauxqs로 로컬/CI에서 실제와 동일한 이벤트 흐름 재현 — Docker 없이 library mode 테스트 가능
 - Redis 기반 멱등성으로 중복 처리 비용 최소화 — DB 부하 없이 O(1) 중복 검사
 
 ### Bad
@@ -235,5 +258,6 @@ CI 환경에서도 동일한 LocalStack 설정을 사용하여 이벤트 통합 
 - AWS SNS→SQS: <https://docs.aws.amazon.com/sns/latest/dg/sns-sqs-as-subscriber.html>
 - AWS SQS DLQ: <https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/sqs-dead-letter-queues.html>
 - AWS SQS FIFO: <https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/FIFO-queues.html>
-- LocalStack SNS/SQS: <https://docs.localstack.cloud/user-guide/aws/sns/> / <https://docs.localstack.cloud/user-guide/aws/sqs/>
+- fauxqs: <https://github.com/kibertoad/fauxqs>
+- LocalStack 유료화 공지: <https://blog.localstack.cloud/localstack-single-image-next-steps/>
 - 내부 근거: `docs/02-architecture/base/01-overview.md`, `docs/01-prd/13-event/01-overview.md`
