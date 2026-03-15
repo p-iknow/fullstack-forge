@@ -10,10 +10,12 @@ export const config: SheriffConfig = {
   },
 
   modules: {
-    'apps/store/src/screens': 'app:store',
+    'apps/store/src/pages': 'app:store',
     'apps/store/src/routes': 'app:store',
-    'apps/admin/src/screens': 'app:admin',
+    'apps/store/src/@shared': 'app:store',
+    'apps/admin/src/pages': 'app:admin',
     'apps/admin/src/routes': 'app:admin',
+    'apps/admin/src/@shared': 'app:admin',
     'apps/api/src': 'svc:api',
     'packages/design-system/src': 'lib:design-system',
     'packages/api-spec/src': 'lib:api-spec',

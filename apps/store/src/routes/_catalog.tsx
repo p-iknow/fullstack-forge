@@ -1,6 +1,6 @@
 import { Outlet, createFileRoute } from '@tanstack/react-router'
 import { Toaster } from 'sonner'
-import { StoreTopNav } from '~/screens/catalog/store-top-nav'
+import { StoreTopNav } from '~/pages/catalog/store-top-nav'
 
 export const Route = createFileRoute('/_catalog')({
   component: CatalogLayout,
