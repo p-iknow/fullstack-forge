@@ -1,6 +1,7 @@
 import { relations } from 'drizzle-orm'
 import { auditLogs, userCredentials, userOauthAccounts, userSessions, users } from './auth'
 import { cartItems, carts } from './cart'
+import { eventConsumerLog, eventOutbox } from './event'
 import { customerInquiries, inquiryReplies } from './inquiry'
 import { deliveries, orderItems, orders, payments, substitutions } from './order'
 import { loyaltyAccounts, pointLedgers, pointPolicies, pointRedemptions } from './points'
@@ -64,6 +65,10 @@ export const cartItemsRelations = relations(cartItems, ({ one }) => ({
   cart: one(carts, { fields: [cartItems.cartId], references: [carts.id] }),
   product: one(products, { fields: [cartItems.productId], references: [products.id] }),
 }))
+
+export const eventOutboxRelations = relations(eventOutbox, () => ({}))
+
+export const eventConsumerLogRelations = relations(eventConsumerLog, () => ({}))
 
 export const categoriesRelations = relations(categories, ({ many }) => ({
   products: many(products),

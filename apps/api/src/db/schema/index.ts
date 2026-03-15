@@ -59,6 +59,8 @@ export { cartItems, cartStatusEnum, carts } from './cart'
 
 export { inventory, products } from './product'
 
+export { consumerStatusEnum, eventConsumerLog, eventOutbox, eventStatusEnum } from './event'
+
 export {
   cartItemsRelations,
   cartsRelations,
@@ -67,6 +69,8 @@ export {
   couponsRelations,
   customerInquiriesRelations,
   deliveriesRelations,
+  eventConsumerLogRelations,
+  eventOutboxRelations,
   inquiryRepliesRelations,
   loyaltyAccountsRelations,
   orderItemsRelations,
