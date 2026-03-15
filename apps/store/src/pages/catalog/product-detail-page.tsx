@@ -1,29 +1,17 @@
-import { useState } from "react";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { Link } from "@tanstack/react-router";
-import {
-  ChevronRightIcon,
-  Loader2Icon,
-  MinusIcon,
-  PlusIcon,
-  ShoppingCartIcon,
-} from "lucide-react";
-import { Button } from "@fullstack-forge/design-system/components/button";
-import { Skeleton } from "@fullstack-forge/design-system/components/skeleton";
-import { catalogDetailQueryOptions } from "~/@shared/queries/catalog";
-import {
-  addCartItemMutationOptions,
-  cartQueryKeys,
-} from "~/@shared/queries/cart";
-import { cartToast } from "~/@shared/ui/cart-toast";
+import { useState } from 'react'
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
+import { Link } from '@tanstack/react-router'
+import { ChevronRightIcon, Loader2Icon, MinusIcon, PlusIcon, ShoppingCartIcon } from 'lucide-react'
+import { Button } from '@fullstack-forge/design-system/components/button'
+import { Skeleton } from '@fullstack-forge/design-system/components/skeleton'
+import { catalogDetailQueryOptions } from '~/@shared/queries/catalog'
+import { addCartItemMutationOptions, cartQueryKeys } from '~/@shared/queries/cart'
+import { cartToast } from '~/@shared/ui/cart-toast'
 
-const formatPrice = (price: number) =>
-  `${new Intl.NumberFormat("ko-KR").format(price)}원`;
+const formatPrice = (price: number) => `${new Intl.NumberFormat('ko-KR').format(price)}원`
 
-export function ProductDetailPage({
-  productId,
-}: Readonly<{ productId: string }>) {
-  const productQuery = useQuery(catalogDetailQueryOptions(productId));
+export function ProductDetailPage({ productId }: Readonly<{ productId: string }>) {
+  const productQuery = useQuery(catalogDetailQueryOptions(productId))
 
   return (
     <main className="mx-auto w-full max-w-7xl px-4 py-6 pb-24 md:px-6 md:py-8 md:pb-8">
@@ -46,47 +34,44 @@ export function ProductDetailPage({
           상품 정보를 불러오지 못했습니다. 잠시 후 다시 시도해주세요.
         </div>
       ) : (
-        <ProductDetailContent
-          product={productQuery.data}
-          productId={productId}
-        />
+        <ProductDetailContent product={productQuery.data} productId={productId} />
       )}
     </main>
-  );
+  )
 }
 
 type ProductData = {
-  detailUrl: string;
-  name: string;
-  categoryName: string;
-  brand: string;
-  price: number;
-  weight: number;
-  isActive: boolean;
-  stockDisplay: "in_stock" | "low_stock" | "out_of_stock";
-  availableStock: number;
-  description: string;
-  canPurchase: boolean;
-};
+  detailUrl: string
+  name: string
+  categoryName: string
+  brand: string
+  price: number
+  weight: number
+  isActive: boolean
+  stockDisplay: 'in_stock' | 'low_stock' | 'out_of_stock'
+  availableStock: number
+  description: string
+  canPurchase: boolean
+}
 
 function ProductDetailContent({
   product,
   productId,
 }: Readonly<{ product: ProductData; productId: string }>) {
   const stockLabel = !product.isActive
-    ? "비활성"
-    : product.stockDisplay === "out_of_stock"
-      ? "품절"
-      : product.stockDisplay === "low_stock"
-        ? "재고임박"
-        : "판매중";
+    ? '비활성'
+    : product.stockDisplay === 'out_of_stock'
+      ? '품절'
+      : product.stockDisplay === 'low_stock'
+        ? '재고임박'
+        : '판매중'
 
   const stockColor =
-    !product.isActive || product.stockDisplay === "out_of_stock"
-      ? "text-destructive"
-      : product.stockDisplay === "low_stock"
-        ? "text-amber-600"
-        : "text-primary";
+    !product.isActive || product.stockDisplay === 'out_of_stock'
+      ? 'text-destructive'
+      : product.stockDisplay === 'low_stock'
+        ? 'text-amber-600'
+        : 'text-primary'
 
   return (
     <section className="mt-6 grid gap-6 md:mt-8 md:grid-cols-2 md:gap-10">
@@ -102,15 +87,11 @@ function ProductDetailContent({
 
       {/* Info */}
       <div className="flex flex-col">
-        <p className="text-xs text-muted-foreground md:text-sm">
-          {product.categoryName}
-        </p>
+        <p className="text-xs text-muted-foreground md:text-sm">{product.categoryName}</p>
         <h1 className="mt-1 text-xl font-bold tracking-tight text-foreground md:text-3xl">
           {product.name}
         </h1>
-        <p className="mt-1 text-xs text-muted-foreground md:text-sm">
-          {product.brand}
-        </p>
+        <p className="mt-1 text-xs text-muted-foreground md:text-sm">{product.brand}</p>
 
         <p className="mt-4 text-2xl font-bold tracking-tight text-foreground md:mt-6 md:text-3xl">
           {formatPrice(product.price)}
@@ -124,9 +105,7 @@ function ProductDetailContent({
           </div>
           <div className="flex items-baseline justify-between py-2 text-sm">
             <dt className="text-muted-foreground">가용 재고</dt>
-            <dd className="font-medium text-foreground">
-              {product.availableStock}개
-            </dd>
+            <dd className="font-medium text-foreground">{product.availableStock}개</dd>
           </div>
           <div className="flex items-baseline justify-between py-2 text-sm">
             <dt className="text-muted-foreground">중량</dt>
@@ -135,17 +114,15 @@ function ProductDetailContent({
         </dl>
 
         {/* Description */}
-        <p className="mt-6 text-sm leading-relaxed text-muted-foreground">
-          {product.description}
-        </p>
+        <p className="mt-6 text-sm leading-relaxed text-muted-foreground">{product.description}</p>
 
         {/* Purchase */}
         <div className="mt-auto pt-8">
           {!product.canPurchase ? (
             <div className="rounded-lg border border-destructive/20 bg-destructive/5 p-4 text-sm text-destructive">
               {!product.isActive
-                ? "단종 상품으로 신규 구매가 불가합니다."
-                : "품절 상태로 구매가 불가합니다."}
+                ? '단종 상품으로 신규 구매가 불가합니다.'
+                : '품절 상태로 구매가 불가합니다.'}
             </div>
           ) : (
             <AddToCartControl productId={productId} />
@@ -153,36 +130,36 @@ function ProductDetailContent({
         </div>
       </div>
     </section>
-  );
+  )
 }
 
 function AddToCartControl({ productId }: Readonly<{ productId: string }>) {
-  const queryClient = useQueryClient();
-  const [quantity, setQuantity] = useState(1);
+  const queryClient = useQueryClient()
+  const [quantity, setQuantity] = useState(1)
 
   const addMutation = useMutation({
     ...addCartItemMutationOptions(),
     onSuccess: () => {
-      void queryClient.invalidateQueries({ queryKey: cartQueryKeys.cart });
+      void queryClient.invalidateQueries({ queryKey: cartQueryKeys.cart })
       cartToast.success({
-        title: "장바구니에 담았습니다",
+        title: '장바구니에 담았습니다',
         description: `${quantity}개 추가됨`,
-        actionLabel: "장바구니 보기",
-        actionHref: "/cart",
-      });
-      setQuantity(1);
+        actionLabel: '장바구니 보기',
+        actionHref: '/cart',
+      })
+      setQuantity(1)
     },
     onError: (err: Error) => {
       cartToast.error({
-        title: "장바구니 담기 실패",
+        title: '장바구니 담기 실패',
         description: err.message,
-      });
+      })
     },
-  });
+  })
 
   const onAdd = () => {
-    addMutation.mutate({ productId, quantity });
-  };
+    addMutation.mutate({ productId, quantity })
+  }
 
   return (
     <div className="fixed inset-x-0 bottom-0 z-40 border-t border-border bg-background/95 px-4 py-3 backdrop-blur-sm md:static md:inset-auto md:z-auto md:border-t-0 md:bg-transparent md:px-0 md:py-0 md:backdrop-blur-none">
@@ -222,13 +199,13 @@ function AddToCartControl({ productId }: Readonly<{ productId: string }>) {
           <ShoppingCartIcon className="h-5 w-5" />
           장바구니 담기
           <Loader2Icon
-            className={`absolute right-4 h-4 w-4 transition-opacity duration-200 ${addMutation.isPending ? "animate-spin opacity-60" : "opacity-0"}`}
+            className={`absolute right-4 h-4 w-4 transition-opacity duration-200 ${addMutation.isPending ? 'animate-spin opacity-60' : 'opacity-0'}`}
             aria-hidden={!addMutation.isPending}
           />
         </Button>
       </div>
     </div>
-  );
+  )
 }
 
 function ProductDetailSkeleton() {
@@ -255,5 +232,5 @@ function ProductDetailSkeleton() {
         <Skeleton className="mt-6 h-12 w-full rounded-lg" />
       </div>
     </section>
-  );
+  )
 }
