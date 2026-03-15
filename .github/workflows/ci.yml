@@ -33,4 +33,4 @@ jobs:
 
       - run: pnpm lint
       - run: pnpm format:check
-      - run: pnpm exec nx affected -t codegen typecheck build test --base=origin/main
+      - run: pnpm exec nx affected -t typecheck build test --base=origin/main
