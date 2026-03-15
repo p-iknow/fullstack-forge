@@ -108,6 +108,7 @@ describe('password reset request handler', () => {
     app.route('/auth', authIndex)
     dbState.selectQueue.push([{ id: 'user-1', email: 'demo@example.com' }])
     sendPasswordResetEmailMock.mockRejectedValueOnce(new Error('mail provider unavailable'))
+    const errorSpy = vi.spyOn(console, 'error').mockImplementation(() => {})
 
     // when
     const res = await app.request('http://localhost/auth/password-reset/request', {
@@ -121,5 +122,10 @@ describe('password reset request handler', () => {
     await expect(res.json()).resolves.toMatchObject({ ok: true })
     expect(createPasswordResetTokenMock).toHaveBeenCalledWith('user-1')
     expect(sendPasswordResetEmailMock).toHaveBeenCalledTimes(1)
+    expect(errorSpy).toHaveBeenCalledWith(
+      '[auth] password reset mail send failed',
+      expect.objectContaining({ userId: 'user-1' }),
+    )
+    errorSpy.mockRestore()
   })
 })
