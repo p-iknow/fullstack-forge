@@ -217,6 +217,24 @@ const buildDefs = (color: string, id: string): string => {
 /*  Label (white rect + product name + brand)                          */
 /* ------------------------------------------------------------------ */
 
+const estimateTextUnits = (text: string): number => {
+  let units = 0
+  for (const ch of text) {
+    if (ch === ' ') {
+      units += 0.35
+    } else if (/[A-Z]/.test(ch)) {
+      units += 0.68
+    } else if (/[a-z]/.test(ch)) {
+      units += 0.58
+    } else if (/[0-9]/.test(ch)) {
+      units += 0.56
+    } else {
+      units += 1
+    }
+  }
+  return units
+}
+
 const buildLabel = (
   cx: number,
   y: number,
@@ -228,24 +246,6 @@ const buildLabel = (
   brandFontSize: number,
   accent: string,
 ): string => {
-  const estimateTextUnits = (text: string): number => {
-    let units = 0
-    for (const ch of text) {
-      if (ch === ' ') {
-        units += 0.35
-      } else if (/[A-Z]/.test(ch)) {
-        units += 0.68
-      } else if (/[a-z]/.test(ch)) {
-        units += 0.58
-      } else if (/[0-9]/.test(ch)) {
-        units += 0.56
-      } else {
-        units += 1
-      }
-    }
-    return units
-  }
-
   const wrapByUnits = (text: string, maxUnits: number): string[] => {
     const lines: string[] = []
     let line = ''

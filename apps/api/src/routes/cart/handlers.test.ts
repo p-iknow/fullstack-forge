@@ -32,6 +32,7 @@ vi.mock('~/db/client', () => ({
         limit: vi.fn(async () => dequeueSelectRows()),
         leftJoin: vi.fn(() => builder),
         innerJoin: vi.fn(() => builder),
+        // eslint-disable-next-line unicorn/no-thenable -- required to mock Drizzle's thenable query builder
         then: (resolve: (rows: unknown[]) => unknown) => resolve(dequeueSelectRows()),
       }
 

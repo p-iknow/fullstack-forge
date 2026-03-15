@@ -99,7 +99,7 @@ export function AdminCatalogPage() {
 
   const distribution = useMemo(() => {
     const raw = productsQuery.data?.categoryDistribution ?? {}
-    return Object.entries(raw).sort((a, b) => a[0].localeCompare(b[0], 'ko-KR'))
+    return Object.entries(raw).toSorted((a, b) => a[0].localeCompare(b[0], 'ko-KR'))
   }, [productsQuery.data])
 
   return (
