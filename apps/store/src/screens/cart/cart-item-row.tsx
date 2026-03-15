@@ -19,88 +19,73 @@ export function CartItemRow({ item }: Readonly<{ item: CartItem }>) {
 
   const displayQty = optimisticQty ?? item.quantity
 
-  const updateMutation = useMutation({
-    ...updateCartItemMutationOptions(),
-    onMutate: async ({ quantity: newQty }) => {
-      await queryClient.cancelQueries({ queryKey: cartQueryKeys.cart })
+  const updateMutation = useMutation(updateCartItemMutationOptions())
 
-      const previous = queryClient.getQueryData<CartResponse>(cartQueryKeys.cart)
+  const deleteMutation = useMutation(deleteCartItemMutationOptions())
 
-      setOptimisticQty(newQty)
-
-      if (previous) {
-        queryClient.setQueryData<CartResponse>(cartQueryKeys.cart, {
-          ...previous,
-          totalAmount: previous.items.reduce(
-            (sum, i) =>
-              sum + i.unitPriceSnapshot * (i.id === item.id ? newQty : i.quantity),
-            0,
-          ),
-          items: previous.items.map((i) =>
-            i.id === item.id ? { ...i, quantity: newQty } : i,
-          ),
-        })
-      }
-
-      setError(null)
-      return { previous }
-    },
-    onError: (err: Error, _vars, context) => {
-      if (context?.previous) {
-        queryClient.setQueryData(cartQueryKeys.cart, context.previous)
-      }
-      setOptimisticQty(null)
-      setError(err.message)
-    },
-    onSettled: () => {
-      setOptimisticQty(null)
-      void queryClient.invalidateQueries({ queryKey: cartQueryKeys.cart })
-    },
-  })
-
-  const deleteMutation = useMutation({
-    ...deleteCartItemMutationOptions(),
-    onMutate: async () => {
-      await queryClient.cancelQueries({ queryKey: cartQueryKeys.cart })
-
-      const previous = queryClient.getQueryData<CartResponse>(cartQueryKeys.cart)
-
-      if (previous) {
-        const filtered = previous.items.filter((i) => i.id !== item.id)
-        queryClient.setQueryData<CartResponse>(cartQueryKeys.cart, {
-          ...previous,
-          itemCount: filtered.length,
-          totalAmount: filtered.reduce(
-            (sum, i) => sum + i.unitPriceSnapshot * i.quantity,
-            0,
-          ),
-          items: filtered,
-        })
-      }
-
-      return { previous }
-    },
-    onError: (_err, _vars, context) => {
-      if (context?.previous) {
-        queryClient.setQueryData(cartQueryKeys.cart, context.previous)
-      }
-      cartToast.error({ title: '삭제에 실패했습니다' })
-    },
-    onSettled: () => {
-      void queryClient.invalidateQueries({ queryKey: cartQueryKeys.cart })
-    },
-  })
-
-  const isMutating = deleteMutation.isPending
-
-  const onQuantityChange = (newQty: number) => {
+  const changeQuantity = async (newQty: number) => {
     if (newQty < 1 || newQty > 15) return
     setError(null)
-    updateMutation.mutate({ cartItemId: item.id, quantity: newQty })
+
+    await queryClient.cancelQueries({ queryKey: cartQueryKeys.cart })
+    const previous = queryClient.getQueryData<CartResponse>(cartQueryKeys.cart)
+
+    setOptimisticQty(newQty)
+
+    if (previous) {
+      queryClient.setQueryData<CartResponse>(cartQueryKeys.cart, {
+        ...previous,
+        totalAmount: previous.items.reduce(
+          (sum, i) =>
+            sum + i.unitPriceSnapshot * (i.id === item.id ? newQty : i.quantity),
+          0,
+        ),
+        items: previous.items.map((i) =>
+          i.id === item.id ? { ...i, quantity: newQty } : i,
+        ),
+      })
+    }
+
+    try {
+      await updateMutation.mutateAsync({ cartItemId: item.id, quantity: newQty })
+    } catch (err) {
+      if (previous) {
+        queryClient.setQueryData(cartQueryKeys.cart, previous)
+      }
+      setError(err instanceof Error ? err.message : '수량 변경에 실패했습니다')
+    } finally {
+      setOptimisticQty(null)
+      void queryClient.invalidateQueries({ queryKey: cartQueryKeys.cart })
+    }
   }
 
-  const onDelete = () => {
-    deleteMutation.mutate(item.id)
+  const removeItem = async () => {
+    await queryClient.cancelQueries({ queryKey: cartQueryKeys.cart })
+    const previous = queryClient.getQueryData<CartResponse>(cartQueryKeys.cart)
+
+    if (previous) {
+      const filtered = previous.items.filter((i) => i.id !== item.id)
+      queryClient.setQueryData<CartResponse>(cartQueryKeys.cart, {
+        ...previous,
+        itemCount: filtered.length,
+        totalAmount: filtered.reduce(
+          (sum, i) => sum + i.unitPriceSnapshot * i.quantity,
+          0,
+        ),
+        items: filtered,
+      })
+    }
+
+    try {
+      await deleteMutation.mutateAsync(item.id)
+    } catch {
+      if (previous) {
+        queryClient.setQueryData(cartQueryKeys.cart, previous)
+      }
+      cartToast.error({ title: '삭제에 실패했습니다' })
+    } finally {
+      void queryClient.invalidateQueries({ queryKey: cartQueryKeys.cart })
+    }
   }
 
   return (
@@ -124,8 +109,8 @@ export function CartItemRow({ item }: Readonly<{ item: CartItem }>) {
             type="button"
             size="sm"
             variant="ghost"
-            onClick={onDelete}
-            disabled={isMutating}
+            onClick={removeItem}
+            disabled={deleteMutation.isPending}
             aria-label={`${item.productName} 삭제`}
           >
             ✕
@@ -148,8 +133,8 @@ export function CartItemRow({ item }: Readonly<{ item: CartItem }>) {
               type="button"
               size="sm"
               variant="outline"
-              onClick={() => onQuantityChange(displayQty - 1)}
-              disabled={isMutating || isOutOfStock || displayQty <= 1}
+              onClick={() => changeQuantity(displayQty - 1)}
+              disabled={deleteMutation.isPending || isOutOfStock || displayQty <= 1}
               aria-label="수량 감소"
             >
               −
@@ -161,8 +146,8 @@ export function CartItemRow({ item }: Readonly<{ item: CartItem }>) {
               type="button"
               size="sm"
               variant="outline"
-              onClick={() => onQuantityChange(displayQty + 1)}
-              disabled={isMutating || isOutOfStock || displayQty >= 15}
+              onClick={() => changeQuantity(displayQty + 1)}
+              disabled={deleteMutation.isPending || isOutOfStock || displayQty >= 15}
               aria-label="수량 증가"
             >
               +

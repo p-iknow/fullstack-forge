@@ -22,6 +22,7 @@ Minimize cognitive load per function/component. A reader should understand behav
 | Split multi-concern functions   | One hook per responsibility, not one per "page"                         |
 | Name complex conditions         | Extract `&&`/`\|\|` chains into named booleans (`isSameCategory`)       |
 | Name magic numbers              | Replace raw numbers with constants (`ANIMATION_DELAY_MS = 300`)         |
+| Name handlers by action, not event | `onClick={removeItem}` not `onClick={onDelete}` — "when"은 할당처가 표현, 함수명은 "what"만 |
 | Reduce eye-travel               | Keep conditions and effects in same scope; avoid multi-file indirection |
 | Simplify ternaries              | Replace nested ternaries with IIFE + early returns                      |
 | Order comparisons naturally     | Write `min <= x && x <= max` not `x >= min && x <= max`                 |
