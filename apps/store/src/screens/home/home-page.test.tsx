@@ -201,7 +201,7 @@ describe('home page', () => {
 
     // when
     await renderPage()
-    fireEvent.change(screen.getByPlaceholderText('검색어 (상품명, 브랜드, SKU)'), {
+    fireEvent.change(screen.getByPlaceholderText('상품명, 브랜드, SKU로 검색'), {
       target: { value: 'apple' },
     })
     fireEvent.click(screen.getByRole('button', { name: '검색' }))
@@ -249,14 +249,14 @@ describe('home page', () => {
 
     // when
     await renderPage()
-    fireEvent.change(screen.getByPlaceholderText('검색어 (상품명, 브랜드, SKU)'), {
+    fireEvent.change(screen.getByPlaceholderText('상품명, 브랜드, SKU로 검색'), {
       target: { value: 'not-found' },
     })
     fireEvent.click(screen.getByRole('button', { name: '검색' }))
 
     // then
     expect(await screen.findByText('조건에 맞는 상품이 없습니다')).toBeInTheDocument()
-    expect(screen.getByRole('button', { name: '검색/필터 초기화' })).toBeInTheDocument()
+    expect(screen.getAllByRole('button', { name: '초기화' }).length).toBeGreaterThanOrEqual(1)
     expect(screen.queryByText('Apple Juice')).not.toBeInTheDocument()
   })
 

@@ -23,11 +23,11 @@ describe('login page', () => {
     await expect(page.getByRole('main')).toMatchScreenshot('login-form')
 
     // when
-    fireEvent.change(screen.getByLabelText('Email'), { target: { value: 'not-an-email' } })
-    fireEvent.click(screen.getByRole('button', { name: 'Sign in with Email' }))
+    fireEvent.change(screen.getByLabelText('이메일'), { target: { value: 'not-an-email' } })
+    fireEvent.click(screen.getByRole('button', { name: '이메일로 로그인' }))
 
     // then
-    expect(await screen.findByText('Invalid email address.')).toBeInTheDocument()
+    expect(await screen.findByText('유효하지 않은 이메일 주소입니다.')).toBeInTheDocument()
 
     // visual regression — validation error
     await expect(page.getByRole('main')).toMatchScreenshot('login-validation-error')
@@ -38,9 +38,9 @@ describe('login page', () => {
     const { router } = await renderPage()
 
     // when
-    fireEvent.change(screen.getByLabelText('Email'), { target: { value: 'customer@example.com' } })
-    fireEvent.change(screen.getByLabelText('Password'), { target: { value: 'Passw0rd!' } })
-    fireEvent.click(screen.getByRole('button', { name: 'Sign in with Email' }))
+    fireEvent.change(screen.getByLabelText('이메일'), { target: { value: 'customer@example.com' } })
+    fireEvent.change(screen.getByLabelText('비밀번호'), { target: { value: 'Passw0rd!' } })
+    fireEvent.click(screen.getByRole('button', { name: '이메일로 로그인' }))
 
     // then — with real router, navigate({ to: '/' }) triggers route change
     await waitFor(() => {
@@ -61,9 +61,9 @@ describe('login page', () => {
     await renderPage()
 
     // when
-    fireEvent.change(screen.getByLabelText('Email'), { target: { value: 'blocked@example.com' } })
-    fireEvent.change(screen.getByLabelText('Password'), { target: { value: 'Passw0rd!' } })
-    fireEvent.click(screen.getByRole('button', { name: 'Sign in with Email' }))
+    fireEvent.change(screen.getByLabelText('이메일'), { target: { value: 'blocked@example.com' } })
+    fireEvent.change(screen.getByLabelText('비밀번호'), { target: { value: 'Passw0rd!' } })
+    fireEvent.click(screen.getByRole('button', { name: '이메일로 로그인' }))
 
     // then
     expect(await screen.findByRole('alert')).toHaveTextContent(
@@ -79,8 +79,8 @@ describe('login page', () => {
     await renderPage()
 
     // when
-    const googleLink = screen.getByRole('link', { name: 'Continue with Google' })
-    const kakaoLink = screen.getByRole('link', { name: 'Continue with Kakao' })
+    const googleLink = screen.getByRole('link', { name: 'Google로 계속하기' })
+    const kakaoLink = screen.getByRole('link', { name: 'Kakao로 계속하기' })
 
     // then
     expect(googleLink).toHaveAttribute(

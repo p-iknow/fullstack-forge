@@ -15,8 +15,8 @@ describe('auth callback success page', () => {
     // when
 
     // then
-    expect(await screen.findByText('OAuth callback complete')).toBeInTheDocument()
-    expect(screen.getByRole('link', { name: 'Go to Home' })).toHaveAttribute('href', '/')
+    expect(await screen.findByText('소셜 로그인 완료')).toBeInTheDocument()
+    expect(screen.getByRole('link', { name: '홈으로 이동' })).toHaveAttribute('href', '/')
 
     // visual regression
     await expect(page.getByRole('main')).toMatchScreenshot('auth-callback-success')
