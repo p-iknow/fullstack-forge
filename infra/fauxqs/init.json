@@ -1,0 +1,83 @@
+{
+  "queues": [
+    {
+      "name": "notifications-dlq",
+      "attributes": {
+        "MessageRetentionPeriod": "1209600"
+      }
+    },
+    {
+      "name": "inventory-dlq",
+      "attributes": {
+        "MessageRetentionPeriod": "1209600"
+      }
+    },
+    {
+      "name": "dispatch-dlq",
+      "attributes": {
+        "MessageRetentionPeriod": "1209600"
+      }
+    },
+    {
+      "name": "order-dlq",
+      "attributes": {
+        "MessageRetentionPeriod": "1209600"
+      }
+    },
+    {
+      "name": "notifications",
+      "attributes": {
+        "VisibilityTimeout": "90",
+        "MessageRetentionPeriod": "345600",
+        "RedrivePolicy": "{\"deadLetterTargetArn\":\"arn:aws:sqs:us-east-1:000000000000:notifications-dlq\",\"maxReceiveCount\":\"3\"}"
+      }
+    },
+    {
+      "name": "inventory",
+      "attributes": {
+        "VisibilityTimeout": "90",
+        "MessageRetentionPeriod": "345600",
+        "RedrivePolicy": "{\"deadLetterTargetArn\":\"arn:aws:sqs:us-east-1:000000000000:inventory-dlq\",\"maxReceiveCount\":\"3\"}"
+      }
+    },
+    {
+      "name": "dispatch",
+      "attributes": {
+        "VisibilityTimeout": "90",
+        "MessageRetentionPeriod": "345600",
+        "RedrivePolicy": "{\"deadLetterTargetArn\":\"arn:aws:sqs:us-east-1:000000000000:dispatch-dlq\",\"maxReceiveCount\":\"3\"}"
+      }
+    },
+    {
+      "name": "order",
+      "attributes": {
+        "VisibilityTimeout": "90",
+        "MessageRetentionPeriod": "345600",
+        "RedrivePolicy": "{\"deadLetterTargetArn\":\"arn:aws:sqs:us-east-1:000000000000:order-dlq\",\"maxReceiveCount\":\"3\"}"
+      }
+    }
+  ],
+  "topics": [
+    {
+      "name": "fullstack-forge-events"
+    }
+  ],
+  "subscriptions": [
+    {
+      "topic": "fullstack-forge-events",
+      "queue": "notifications"
+    },
+    {
+      "topic": "fullstack-forge-events",
+      "queue": "inventory"
+    },
+    {
+      "topic": "fullstack-forge-events",
+      "queue": "dispatch"
+    },
+    {
+      "topic": "fullstack-forge-events",
+      "queue": "order"
+    }
+  ]
+}
