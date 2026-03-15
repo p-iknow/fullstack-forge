@@ -76,13 +76,13 @@ DLQ와 redrive 운영 절차를 표준화한다.
 
 ### SNS+SQS vs EventBridge
 
-| 기준       | SNS+SQS                           | EventBridge                |
-| ---------- | --------------------------------- | -------------------------- |
-| 라우팅     | 단순 fanout (Topic → 모든 구독자) | 규칙 기반 패턴 매칭        |
-| 필터링     | SNS 메시지 속성 필터 (제한적)     | 이벤트 패턴 규칙 (강력)    |
-| DLQ        | SQS 네이티브                      | 타겟별 DLQ 설정            |
-| 로컬 에뮬  | 완전 지원 (fauxqs)                | 부분 지원 (규칙 엔진 제약) |
-| 디버깅     | SQS 메시지 직접 조회 가능         | CloudWatch Logs로만 추적   |
+| 기준      | SNS+SQS                           | EventBridge                |
+| --------- | --------------------------------- | -------------------------- |
+| 라우팅    | 단순 fanout (Topic → 모든 구독자) | 규칙 기반 패턴 매칭        |
+| 필터링    | SNS 메시지 속성 필터 (제한적)     | 이벤트 패턴 규칙 (강력)    |
+| DLQ       | SQS 네이티브                      | 타겟별 DLQ 설정            |
+| 로컬 에뮬 | 완전 지원 (fauxqs)                | 부분 지원 (규칙 엔진 제약) |
+| 디버깅    | SQS 메시지 직접 조회 가능         | CloudWatch Logs로만 추적   |
 
 **EventBridge 기각 근거:**
 
@@ -209,16 +209,16 @@ LocalStack은 2026-03-23부터 Community Edition을 포함한 모든 사용에 �
 
 fauxqs를 선택한 근거:
 
-| 기준           | LocalStack                           | fauxqs                              |
-| -------------- | ------------------------------------ | ----------------------------------- |
-| 인증           | 필수 (2026-03-23~)                   | 불필요                              |
-| 언어           | Python (Docker 필수)                 | TypeScript (프로젝트 스택 동일)     |
-| SNS+SQS+DLQ   | 완전 지원                            | 완전 지원                           |
-| Filter Policy  | 완전 지원                            | 완전 지원                           |
-| 테스트 통합    | Docker 필요                          | Library mode — Docker 없이 in-process |
-| Message Spy    | 없음                                 | `waitForMessage()`, `expectNoMessage()` |
-| 시작 속도      | ~10초                                | ~100ms (library), ~2초 (Docker)     |
-| 리스크         | 검증된 생태계 (58K ⭐)               | 신생 프로젝트 (2026-02 출시)        |
+| 기준          | LocalStack             | fauxqs                                  |
+| ------------- | ---------------------- | --------------------------------------- |
+| 인증          | 필수 (2026-03-23~)     | 불필요                                  |
+| 언어          | Python (Docker 필수)   | TypeScript (프로젝트 스택 동일)         |
+| SNS+SQS+DLQ   | 완전 지원              | 완전 지원                               |
+| Filter Policy | 완전 지원              | 완전 지원                               |
+| 테스트 통합   | Docker 필요            | Library mode — Docker 없이 in-process   |
+| Message Spy   | 없음                   | `waitForMessage()`, `expectNoMessage()` |
+| 시작 속도     | ~10초                  | ~100ms (library), ~2초 (Docker)         |
+| 리스크        | 검증된 생태계 (58K ⭐) | 신생 프로젝트 (2026-02 출시)            |
 
 **리스크 대응**: fauxqs는 AWS SDK v3 호환 HTTP 서버이므로, 문제 발생 시 `endpoint` 값만 변경하면 LocalStack이나 실제 AWS로 즉시 전환할 수 있다. 코드 변경 없음.
 

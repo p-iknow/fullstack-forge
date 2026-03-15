@@ -1,11 +1,5 @@
-import {
-  DeleteMessageCommand,
-  ReceiveMessageCommand,
-} from '@aws-sdk/client-sqs'
-import {
-  eventEnvelopeSchema,
-  type EventEnvelope,
-} from '@fullstack-forge/api-spec/event-schemas'
+import { DeleteMessageCommand, ReceiveMessageCommand } from '@aws-sdk/client-sqs'
+import { eventEnvelopeSchema, type EventEnvelope } from '@fullstack-forge/api-spec/event-schemas'
 import { db } from '~/db/client'
 import { eventConsumerLog } from '~/db/schema/index'
 import { checkIdempotency, clearIdempotencyKey, markProcessed } from './idempotency-guard'
@@ -71,7 +65,10 @@ export function createConsumer(params: {
             continue
           }
 
-          const receiveCount = Number.parseInt(message.Attributes?.ApproximateReceiveCount ?? '1', 10)
+          const receiveCount = Number.parseInt(
+            message.Attributes?.ApproximateReceiveCount ?? '1',
+            10,
+          )
 
           try {
             const envelope = eventEnvelopeSchema.parse(JSON.parse(message.Body))

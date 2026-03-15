@@ -14,14 +14,12 @@ export const sqs = new SQSClient({
 
 export const QUEUE_URLS = {
   notifications:
-    process.env.SQS_NOTIFICATIONS_URL
-    ?? `http://sqs.${REGION}.localhost:4566/000000000000/notifications`,
+    process.env.SQS_NOTIFICATIONS_URL ??
+    `http://sqs.${REGION}.localhost:4566/000000000000/notifications`,
   inventory:
-    process.env.SQS_INVENTORY_URL
-    ?? `http://sqs.${REGION}.localhost:4566/000000000000/inventory`,
+    process.env.SQS_INVENTORY_URL ?? `http://sqs.${REGION}.localhost:4566/000000000000/inventory`,
   dispatch:
-    process.env.SQS_DISPATCH_URL
-    ?? `http://sqs.${REGION}.localhost:4566/000000000000/dispatch`,
+    process.env.SQS_DISPATCH_URL ?? `http://sqs.${REGION}.localhost:4566/000000000000/dispatch`,
   order: process.env.SQS_ORDER_URL ?? `http://sqs.${REGION}.localhost:4566/000000000000/order`,
 } as const
 

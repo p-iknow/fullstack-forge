@@ -70,10 +70,7 @@ export async function checkIdempotency(params: {
   eventId: string
 }): Promise<{ isDuplicate: boolean }>
 
-export async function markProcessed(params: {
-  consumer: string
-  eventId: string
-}): Promise<void>
+export async function markProcessed(params: { consumer: string; eventId: string }): Promise<void>
 
 export async function clearIdempotencyKey(params: {
   consumer: string
@@ -220,10 +217,12 @@ export { getDlqMessagesRoute, redriveAllRoute, redriveSingleRoute } from './dlq/
 ```typescript
 import { createRouter } from '~/lib/create-app'
 import { requireAuth } from '~/routes/auth/@shared/http/middleware'
-import { getDlqMessagesRoute, redriveAllRoute, redriveSingleRoute }
-  from '@fullstack-forge/api-spec/routes/events'
-import { getDlqMessagesHandler, redriveAllHandler, redriveSingleHandler }
-  from './handlers'
+import {
+  getDlqMessagesRoute,
+  redriveAllRoute,
+  redriveSingleRoute,
+} from '@fullstack-forge/api-spec/routes/events'
+import { getDlqMessagesHandler, redriveAllHandler, redriveSingleHandler } from './handlers'
 
 export const eventsIndex = createRouter()
 eventsIndex.use('*', requireAuth) // admin 권한 필요 — PRD §5
@@ -262,9 +261,11 @@ import { describe, it, expect, beforeAll, afterAll } from 'vitest'
 fauxqs message spy 활용:
 
 ```typescript
-const msg = await server.spy.waitForMessage(
-  { service: 'sqs', queueName: 'notifications', status: 'published' }
-)
+const msg = await server.spy.waitForMessage({
+  service: 'sqs',
+  queueName: 'notifications',
+  status: 'published',
+})
 ```
 
 ### 8. 통합 테스트 — Admin DLQ Handlers
@@ -284,34 +285,34 @@ const msg = await server.spy.waitForMessage(
 
 ### Endpoints
 
-| Method | Path | Request | 성공 | 에러 코드 |
-| --- | --- | --- | --- | --- |
-| GET | /admin/events/dlq/messages | query: queueName | 200 dlqMessagesResponseSchema | 400, 401, 404 |
-| POST | /admin/events/dlq/redrive | body: redriveRequestSchema | 200 redriveResponseSchema | 400, 401, 404 |
-| POST | /admin/events/dlq/redrive/{messageId} | body: redriveSingleRequestSchema | 200 redriveResponseSchema | 400, 401, 404 |
+| Method | Path                                  | Request                          | 성공                          | 에러 코드     |
+| ------ | ------------------------------------- | -------------------------------- | ----------------------------- | ------------- |
+| GET    | /admin/events/dlq/messages            | query: queueName                 | 200 dlqMessagesResponseSchema | 400, 401, 404 |
+| POST   | /admin/events/dlq/redrive             | body: redriveRequestSchema       | 200 redriveResponseSchema     | 400, 401, 404 |
+| POST   | /admin/events/dlq/redrive/{messageId} | body: redriveSingleRequestSchema | 200 redriveResponseSchema     | 400, 401, 404 |
 
 ### Error Codes
 
-| code | 의미 | HTTP |
-| --- | --- | --- |
-| `invalid_queue_name` | 존재하지 않는 큐 이름 | 400 |
-| `unauthorized` | 인증 실패 | 401 |
-| `queue_not_found` | DLQ가 존재하지 않음 | 404 |
-| `message_not_found` | 지정한 messageId가 DLQ에 없음 | 404 |
-| `redrive_failed` | source queue 전송 실패 | 500 |
+| code                 | 의미                          | HTTP |
+| -------------------- | ----------------------------- | ---- |
+| `invalid_queue_name` | 존재하지 않는 큐 이름         | 400  |
+| `unauthorized`       | 인증 실패                     | 401  |
+| `queue_not_found`    | DLQ가 존재하지 않음           | 404  |
+| `message_not_found`  | 지정한 messageId가 DLQ에 없음 | 404  |
+| `redrive_failed`     | source queue 전송 실패        | 500  |
 
 ### Business Rules
 
-| 규칙 | 값 | 검증 시점 | PRD 근거 |
-| --- | --- | --- | --- |
-| Idempotency TTL | 7일 (604800초) | 모든 이벤트 처리 시 | `01-overview.md §3` |
-| Idempotency 키 형식 | `idempotency:{consumer}:{eventId}` | 모든 이벤트 처리 시 | `01-overview.md §3` |
-| maxReceiveCount | 3 | SQS RedrivePolicy | `01-overview.md §4` |
-| VisibilityTimeout | 90초 | SQS 큐 설정 | `01-overview.md §4` |
-| DLQ Retention | 14일 | DLQ 큐 설정 | `01-overview.md §4` |
-| Source Queue Retention | 4일 | Source 큐 설정 | `01-overview.md §4` |
-| Redrive 권한 | admin only | Admin API 호출 시 | `01-overview.md §4`, `02-api.md` |
-| 동일 오류 반복 시 | 자동 redrive 금지 | Redrive 실행 전 | `01-overview.md §4` |
+| 규칙                   | 값                                 | 검증 시점           | PRD 근거                         |
+| ---------------------- | ---------------------------------- | ------------------- | -------------------------------- |
+| Idempotency TTL        | 7일 (604800초)                     | 모든 이벤트 처리 시 | `01-overview.md §3`              |
+| Idempotency 키 형식    | `idempotency:{consumer}:{eventId}` | 모든 이벤트 처리 시 | `01-overview.md §3`              |
+| maxReceiveCount        | 3                                  | SQS RedrivePolicy   | `01-overview.md §4`              |
+| VisibilityTimeout      | 90초                               | SQS 큐 설정         | `01-overview.md §4`              |
+| DLQ Retention          | 14일                               | DLQ 큐 설정         | `01-overview.md §4`              |
+| Source Queue Retention | 4일                                | Source 큐 설정      | `01-overview.md §4`              |
+| Redrive 권한           | admin only                         | Admin API 호출 시   | `01-overview.md §4`, `02-api.md` |
+| 동일 오류 반복 시      | 자동 redrive 금지                  | Redrive 실행 전     | `01-overview.md §4`              |
 
 ## Verification
 

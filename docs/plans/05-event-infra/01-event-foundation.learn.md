@@ -81,8 +81,8 @@ source 큐의 `RedrivePolicy`가 DLQ ARN을 참조하므로, DLQ가 먼저 존�
 ## 5. `z.record` 단일/이중 인자
 
 ```typescript
-z.record(z.unknown())              // 키 = string (기본)
-z.record(z.string(), z.unknown())  // 키 = string (명시적)
+z.record(z.unknown()) // 키 = string (기본)
+z.record(z.string(), z.unknown()) // 키 = string (명시적)
 ```
 
 동일하게 동작. Zod에서 `z.record(valueSchema)`는 `z.record(z.string(), valueSchema)`의 축약형.

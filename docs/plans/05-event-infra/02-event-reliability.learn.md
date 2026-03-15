@@ -49,7 +49,7 @@ SQS `ReceiveMessage`는 기본적으로 시스템 속성을 반환하지 않는�
 new ReceiveMessageCommand({
   QueueUrl: dlqUrl,
   MaxNumberOfMessages: 10,
-  VisibilityTimeout: 0,  // ← peek only
+  VisibilityTimeout: 0, // ← peek only
 })
 ```
 
@@ -113,6 +113,7 @@ while (true) {
 
 SQS는 messageId로 직접 수신하는 API가 없으므로 이 스캔이 불가피.
 DLQ에 대량 메시지가 있으면 느릴 수 있다. 프로덕션에서는:
+
 - `VisibilityTimeout: 0`으로 peek하며 스캔
 - 또는 event_consumer_log DB에서 DLQ 메시지 목록을 관리
 
@@ -120,11 +121,11 @@ DLQ에 대량 메시지가 있으면 느릴 수 있다. 프로덕션에서는:
 
 처리 단계마다 로그를 남긴다:
 
-| 시점 | status | 용도 |
-|------|--------|------|
-| handler 실행 전 | processing | 처리 시작 추적 |
-| handler 성공 후 | success | 완료 기록, processedAt 기록 |
-| handler 실패 후 | failed | failureCode 기록, 재시도 근거 |
+| 시점            | status     | 용도                          |
+| --------------- | ---------- | ----------------------------- |
+| handler 실행 전 | processing | 처리 시작 추적                |
+| handler 성공 후 | success    | 완료 기록, processedAt 기록   |
+| handler 실패 후 | failed     | failureCode 기록, 재시도 근거 |
 
 `receiveCount`를 함께 기록하여 SQS의 재전달 횟수를 DB에서 추적 가능.
 DLQ 이동 여부는 SQS가 자동 처리하므로 consumer_log에 `dlq` 상태는 별도 로직이 필요 (현재 미구현 — SQS 레벨에서 자동).

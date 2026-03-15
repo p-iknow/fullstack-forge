@@ -68,11 +68,11 @@ import { z } from 'zod'
 
 export const eventEnvelopeSchema = z.object({
   eventId: z.string().uuid(),
-  eventType: z.string(),           // 'OrderCreated', 'PaymentCaptured', ...
-  schemaVersion: z.string(),       // 'v1'
+  eventType: z.string(), // 'OrderCreated', 'PaymentCaptured', ...
+  schemaVersion: z.string(), // 'v1'
   occurredAt: z.string().datetime(),
   traceId: z.string().uuid(),
-  source: z.string(),              // 'api'
+  source: z.string(), // 'api'
   payload: z.record(z.unknown()),
 })
 
@@ -163,14 +163,14 @@ export const sqs = new SQSClient({
 })
 
 export const QUEUE_URLS = {
-  notifications: process.env.SQS_NOTIFICATIONS_URL
-    ?? `http://sqs.${REGION}.localhost:4566/000000000000/notifications`,
-  inventory: process.env.SQS_INVENTORY_URL
-    ?? `http://sqs.${REGION}.localhost:4566/000000000000/inventory`,
-  dispatch: process.env.SQS_DISPATCH_URL
-    ?? `http://sqs.${REGION}.localhost:4566/000000000000/dispatch`,
-  order: process.env.SQS_ORDER_URL
-    ?? `http://sqs.${REGION}.localhost:4566/000000000000/order`,
+  notifications:
+    process.env.SQS_NOTIFICATIONS_URL ??
+    `http://sqs.${REGION}.localhost:4566/000000000000/notifications`,
+  inventory:
+    process.env.SQS_INVENTORY_URL ?? `http://sqs.${REGION}.localhost:4566/000000000000/inventory`,
+  dispatch:
+    process.env.SQS_DISPATCH_URL ?? `http://sqs.${REGION}.localhost:4566/000000000000/dispatch`,
+  order: process.env.SQS_ORDER_URL ?? `http://sqs.${REGION}.localhost:4566/000000000000/order`,
 } as const
 
 export type QueueName = keyof typeof QUEUE_URLS
@@ -208,10 +208,7 @@ export async function publishEvent(params: {
 파일: `apps/api/src/lib/event-consumer.ts`
 
 ```typescript
-import {
-  ReceiveMessageCommand,
-  DeleteMessageCommand,
-} from '@aws-sdk/client-sqs'
+import { ReceiveMessageCommand, DeleteMessageCommand } from '@aws-sdk/client-sqs'
 import { sqs } from './sqs-client'
 import type { EventEnvelope } from '@fullstack-forge/api-spec/event-schemas'
 
@@ -236,6 +233,7 @@ export function createConsumer(params: {
 ```
 
 핵심 파라미터 — PRD 근거: `docs/01-prd/13-event/01-overview.md §4`:
+
 - `WaitTimeSeconds`: 20 (long polling)
 - `MaxNumberOfMessages`: 10 (배치)
 - `VisibilityTimeout`: 90초 (처리시간 30초 × 3배)
@@ -269,7 +267,7 @@ services:
   fauxqs:
     image: kibertoad/fauxqs:2.3.1
     ports:
-      - "127.0.0.1:4566:4566"
+      - '127.0.0.1:4566:4566'
     environment:
       - FAUXQS_INIT=/app/init.json
       - FAUXQS_LOGGER=true
@@ -293,7 +291,7 @@ services:
         "MessageRetentionPeriod": "345600",
         "RedrivePolicy": "{\"deadLetterTargetArn\":\"arn:aws:sqs:us-east-1:000000000000:notifications-dlq\",\"maxReceiveCount\":\"3\"}"
       }
-    },
+    }
     // inventory, dispatch, order — 동일 패턴
   ],
   "topics": [{ "name": "fullstack-forge-events" }],
@@ -313,32 +311,32 @@ PRD 근거: `docs/01-prd/13-event/01-overview.md §4` — VisibilityTimeout 90s,
 
 ### DB Columns — event_outbox
 
-| 컬럼 | 타입 | 제약 | 설명 |
-| --- | --- | --- | --- |
-| id | uuid | PK, defaultRandom | 레코드 ID |
-| eventId | uuid | NOT NULL, unique | 이벤트 고유 ID |
-| eventType | text | NOT NULL | 'OrderCreated' 등 |
-| schemaVersion | text | NOT NULL, default 'v1' | 스키마 버전 |
-| occurredAt | timestamptz | NOT NULL | 이벤트 발생 시각 |
-| traceId | uuid | NOT NULL | 분산 추적 ID |
-| source | text | NOT NULL, default 'api' | 발행 서비스 |
-| payload | jsonb | NOT NULL | 이벤트 페이로드 |
-| status | event_status | NOT NULL, default 'pending' | pending/published/failed |
-| publishedAt | timestamptz | | SNS 발행 시각 |
-| createdAt | timestamptz | NOT NULL, defaultNow | 레코드 생성 시각 |
+| 컬럼          | 타입         | 제약                        | 설명                     |
+| ------------- | ------------ | --------------------------- | ------------------------ |
+| id            | uuid         | PK, defaultRandom           | 레코드 ID                |
+| eventId       | uuid         | NOT NULL, unique            | 이벤트 고유 ID           |
+| eventType     | text         | NOT NULL                    | 'OrderCreated' 등        |
+| schemaVersion | text         | NOT NULL, default 'v1'      | 스키마 버전              |
+| occurredAt    | timestamptz  | NOT NULL                    | 이벤트 발생 시각         |
+| traceId       | uuid         | NOT NULL                    | 분산 추적 ID             |
+| source        | text         | NOT NULL, default 'api'     | 발행 서비스              |
+| payload       | jsonb        | NOT NULL                    | 이벤트 페이로드          |
+| status        | event_status | NOT NULL, default 'pending' | pending/published/failed |
+| publishedAt   | timestamptz  |                             | SNS 발행 시각            |
+| createdAt     | timestamptz  | NOT NULL, defaultNow        | 레코드 생성 시각         |
 
 ### DB Columns — event_consumer_log
 
-| 컬럼 | 타입 | 제약 | 설명 |
-| --- | --- | --- | --- |
-| id | uuid | PK, defaultRandom | 레코드 ID |
-| eventId | uuid | NOT NULL | 처리한 이벤트 ID |
-| consumer | text | NOT NULL | 소비자 이름 (notifications, inventory, ...) |
-| status | consumer_status | NOT NULL | processing/success/failed/dlq |
-| failureCode | text | | 실패 코드 |
-| receiveCount | integer | NOT NULL, default 0 | 수신 횟수 |
-| processedAt | timestamptz | | 처리 완료 시각 |
-| createdAt | timestamptz | NOT NULL, defaultNow | 레코드 생성 시각 |
+| 컬럼         | 타입            | 제약                 | 설명                                        |
+| ------------ | --------------- | -------------------- | ------------------------------------------- |
+| id           | uuid            | PK, defaultRandom    | 레코드 ID                                   |
+| eventId      | uuid            | NOT NULL             | 처리한 이벤트 ID                            |
+| consumer     | text            | NOT NULL             | 소비자 이름 (notifications, inventory, ...) |
+| status       | consumer_status | NOT NULL             | processing/success/failed/dlq               |
+| failureCode  | text            |                      | 실패 코드                                   |
+| receiveCount | integer         | NOT NULL, default 0  | 수신 횟수                                   |
+| processedAt  | timestamptz     |                      | 처리 완료 시각                              |
+| createdAt    | timestamptz     | NOT NULL, defaultNow | 레코드 생성 시각                            |
 
 ## Verification
 

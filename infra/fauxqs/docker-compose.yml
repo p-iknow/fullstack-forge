@@ -2,7 +2,7 @@ services:
   fauxqs:
     image: kibertoad/fauxqs:2.3.1
     ports:
-      - "127.0.0.1:4566:4566"
+      - '127.0.0.1:4566:4566'
     environment:
       - FAUXQS_INIT=/app/init.json
       - FAUXQS_LOGGER=true

@@ -12,10 +12,7 @@ export async function checkIdempotency(params: {
   return { isDuplicate: exists !== null }
 }
 
-export async function markProcessed(params: {
-  consumer: string
-  eventId: string
-}): Promise<void> {
+export async function markProcessed(params: { consumer: string; eventId: string }): Promise<void> {
   const redis = await getRedisClient()
   const key = `idempotency:${params.consumer}:${params.eventId}`
   await redis.set(key, '1', { EX: IDEMPOTENCY_TTL, NX: true })
