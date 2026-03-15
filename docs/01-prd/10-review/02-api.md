@@ -2,15 +2,15 @@
 
 ## 1) 엔드포인트 목록
 
-| 메서드   | 경로                              | 설명                       | 권한                        |
-| -------- | --------------------------------- | -------------------------- | --------------------------- |
-| `GET`    | `/products/:id/reviews`           | 상품별 리뷰 목록/요약 조회 | 공개                        |
-| `GET`    | `/reviews/:id`                    | 리뷰 단건 조회             | 공개                        |
-| `POST`   | `/reviews`                        | 리뷰 작성                  | 구매 확인된 고객            |
-| `PATCH`  | `/reviews/:id`                    | 리뷰 수정 (본문·평점)      | 작성자 본인                 |
-| `POST`   | `/reviews/:id/comments`           | 리뷰 댓글 작성             | `customer\|operator\|admin` |
-| `POST`   | `/reviews/:id/images`             | 리뷰 이미지 업로드         | 작성자 본인                 |
-| `DELETE` | `/reviews/:id/images/:imageId`    | 리뷰 이미지 삭제           | 작성자 본인                 |
+| 메서드   | 경로                           | 설명                       | 권한                        |
+| -------- | ------------------------------ | -------------------------- | --------------------------- |
+| `GET`    | `/products/:id/reviews`        | 상품별 리뷰 목록/요약 조회 | 공개                        |
+| `GET`    | `/reviews/:id`                 | 리뷰 단건 조회             | 공개                        |
+| `POST`   | `/reviews`                     | 리뷰 작성                  | 구매 확인된 고객            |
+| `PATCH`  | `/reviews/:id`                 | 리뷰 수정 (본문·평점)      | 작성자 본인                 |
+| `POST`   | `/reviews/:id/comments`        | 리뷰 댓글 작성             | `customer\|operator\|admin` |
+| `POST`   | `/reviews/:id/images`          | 리뷰 이미지 업로드         | 작성자 본인                 |
+| `DELETE` | `/reviews/:id/images/:imageId` | 리뷰 이미지 삭제           | 작성자 본인                 |
 
 ## 2) 고객 리뷰 작성/댓글 (PRD §2 원문)
 

@@ -26,11 +26,11 @@
 
 #### 소비자
 
-| 소비 도메인 | 용도 |
-| --- | --- |
-| inventory | 재고 예약 (`reserved` 증가) |
-| payment | 결제 진행 (`initiated` 상태 생성) |
-| notification | 주문 생성 알림 발송 |
+| 소비 도메인  | 용도                              |
+| ------------ | --------------------------------- |
+| inventory    | 재고 예약 (`reserved` 증가)       |
+| payment      | 결제 진행 (`initiated` 상태 생성) |
+| notification | 주문 생성 알림 발송               |
 
 ### OrderStatusChanged
 
@@ -47,11 +47,11 @@
 
 #### 소비자
 
-| 소비 도메인 | 용도 |
-| --- | --- |
-| delivery | 배송 상태 연동 (`dispatched`, `delivered` 등) |
-| notification | 상태 변경 알림 발송 |
-| observability | 상태 전이 메트릭 수집 |
+| 소비 도메인   | 용도                                          |
+| ------------- | --------------------------------------------- |
+| delivery      | 배송 상태 연동 (`dispatched`, `delivered` 등) |
+| notification  | 상태 변경 알림 발송                           |
+| observability | 상태 전이 메트릭 수집                         |
 
 ### OrderCancelled
 
@@ -75,13 +75,13 @@
 
 #### 소비자
 
-| 소비 도메인 | 용도 |
-| --- | --- |
-| inventory | 재고 예약 해제 (`reserved` 감소) |
-| payment | 결제 취소/환불 처리 |
-| loyalty | 포인트 롤백 (적립 회수 + 사용 복원) |
-| delivery | 배송 취소 |
-| notification | 취소 완료 알림 발송 |
+| 소비 도메인  | 용도                                |
+| ------------ | ----------------------------------- |
+| inventory    | 재고 예약 해제 (`reserved` 감소)    |
+| payment      | 결제 취소/환불 처리                 |
+| loyalty      | 포인트 롤백 (적립 회수 + 사용 복원) |
+| delivery     | 배송 취소                           |
+| notification | 취소 완료 알림 발송                 |
 
 ### SubstitutionRequested
 
@@ -99,8 +99,8 @@
 
 #### 소비자
 
-| 소비 도메인 | 용도 |
-| --- | --- |
+| 소비 도메인  | 용도                                  |
+| ------------ | ------------------------------------- |
 | notification | 대체 승인 요청 알림 발송 (사용자에게) |
 
 ### SubstitutionResolved
@@ -115,25 +115,25 @@
 
 #### 소비자
 
-| 소비 도메인 | 용도 |
-| --- | --- |
-| notification | 대체 처리 결과 알림 발송 |
-| inventory | 거절/타임아웃 시 대체 SKU 예약 해제 |
+| 소비 도메인  | 용도                                |
+| ------------ | ----------------------------------- |
+| notification | 대체 처리 결과 알림 발송            |
+| inventory    | 거절/타임아웃 시 대체 SKU 예약 해제 |
 
 ## 수신 이벤트 (Inbound)
 
 주문 도메인이 다른 도메인에서 수신하여 처리하는 이벤트 목록.
 
-| 발행 도메인 | 이벤트 | 주문 도메인 처리 |
-| --- | --- | --- |
-| cart | `CartConverted` | 장바구니 전환 후속 처리 확인 |
-| payment | `PaymentCaptured` | `created` → `confirmed` 전이 |
-| payment | `PaymentFailed` | `created` → `cancelled` 전이 + 재고 해제 트리거 |
-| payment | `PaymentCancelled` | 결제 취소 상태 반영 |
-| delivery | `DeliveryStatusChanged` | 배송 상태에 따른 주문 상태 연동 (`dispatched` → `delivered` 등) |
-| loyalty | `PointsRedeemed` | 포인트 사용 금액 주문에 반영 |
-| promotion | `CouponRedeemed` | 쿠폰 할인 적용 반영 |
-| promotion | `PromotionApplied` | 프로모션 할인 적용 반영 |
+| 발행 도메인 | 이벤트                  | 주문 도메인 처리                                                |
+| ----------- | ----------------------- | --------------------------------------------------------------- |
+| cart        | `CartConverted`         | 장바구니 전환 후속 처리 확인                                    |
+| payment     | `PaymentCaptured`       | `created` → `confirmed` 전이                                    |
+| payment     | `PaymentFailed`         | `created` → `cancelled` 전이 + 재고 해제 트리거                 |
+| payment     | `PaymentCancelled`      | 결제 취소 상태 반영                                             |
+| delivery    | `DeliveryStatusChanged` | 배송 상태에 따른 주문 상태 연동 (`dispatched` → `delivered` 등) |
+| loyalty     | `PointsRedeemed`        | 포인트 사용 금액 주문에 반영                                    |
+| promotion   | `CouponRedeemed`        | 쿠폰 할인 적용 반영                                             |
+| promotion   | `PromotionApplied`      | 프로모션 할인 적용 반영                                         |
 
 ## 운영 규칙
 

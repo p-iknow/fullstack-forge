@@ -168,7 +168,7 @@ apps/store/
 │   ├── routes/
 │   │   ├── __root.tsx          # HTML shell, CSS import
 │   │   └── index.tsx           # 홈 페이지
-│   ├── screens/                # 페이지 컴포넌트
+│   ├── pages/                  # 페이지 컴포넌트
 │   └── styles/
 │       └── app.css             # @import tailwindcss + design-system globals
 ├── .storybook/
@@ -213,7 +213,7 @@ declare module '@tanstack/react-router' {
 }
 ```
 
-### src/lib/query-client.ts
+### src/@shared/query-client.ts
 
 ```ts
 import { QueryClient } from '@tanstack/react-query'
@@ -237,7 +237,7 @@ import { QueryClientProvider } from '@tanstack/react-query'
 import { Outlet, createRootRoute, HeadContent, Scripts } from '@tanstack/react-router'
 import { TanStackRouterDevtools } from '@tanstack/react-router-devtools'
 import { ErrorBoundary, Suspense } from '@suspensive/react'
-import { queryClient } from '~/lib/query-client'
+import { queryClient } from '~/@shared/query-client'
 import appCss from '~/styles/app.css?url'
 
 export const Route = createRootRoute({

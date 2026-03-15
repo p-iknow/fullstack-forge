@@ -3,7 +3,10 @@ import { beforeEach, describe, expect, test, vi } from 'vitest'
 import { cartIndex } from './index'
 
 const authenticated = {
-  value: { userId: 'user-1', sessionId: 'session-1' } as { userId: string; sessionId: string } | null,
+  value: { userId: 'user-1', sessionId: 'session-1' } as {
+    userId: string
+    sessionId: string
+  } | null,
 }
 
 const dbState = {
@@ -32,6 +35,7 @@ vi.mock('~/db/client', () => ({
         limit: vi.fn(async () => dequeueSelectRows()),
         leftJoin: vi.fn(() => builder),
         innerJoin: vi.fn(() => builder),
+        // eslint-disable-next-line unicorn/no-thenable -- required to mock Drizzle's thenable query builder
         then: (resolve: (rows: unknown[]) => unknown) => resolve(dequeueSelectRows()),
       }
 
@@ -209,7 +213,15 @@ describe('POST /cart/items', () => {
     pushAuthenticatedUserQuery()
     dbState.selectQueue.push(
       [activeCart],
-      [{ id: '33333333-3333-4333-8333-333333333333', isActive: true, categoryIsActive: true, onHand: 10, reserved: 1 }],
+      [
+        {
+          id: '33333333-3333-4333-8333-333333333333',
+          isActive: true,
+          categoryIsActive: true,
+          onHand: 10,
+          reserved: 1,
+        },
+      ],
       [],
       [{ count: 0 }],
       [{ id: '33333333-3333-4333-8333-333333333333', price: 3900, isSubstitutable: true }],
@@ -244,7 +256,15 @@ describe('POST /cart/items', () => {
     pushAuthenticatedUserQuery()
     dbState.selectQueue.push(
       [activeCart],
-      [{ id: '33333333-3333-4333-8333-333333333333', isActive: true, categoryIsActive: true, onHand: 10, reserved: 1 }],
+      [
+        {
+          id: '33333333-3333-4333-8333-333333333333',
+          isActive: true,
+          categoryIsActive: true,
+          onHand: 10,
+          reserved: 1,
+        },
+      ],
       [{ id: '22222222-2222-4222-8222-222222222222', quantity: 3 }],
       [
         {
@@ -283,7 +303,15 @@ describe('POST /cart/items', () => {
     pushAuthenticatedUserQuery()
     dbState.selectQueue.push(
       [activeCart],
-      [{ id: '33333333-3333-4333-8333-333333333333', isActive: true, categoryIsActive: true, onHand: 10, reserved: 1 }],
+      [
+        {
+          id: '33333333-3333-4333-8333-333333333333',
+          isActive: true,
+          categoryIsActive: true,
+          onHand: 10,
+          reserved: 1,
+        },
+      ],
       [{ id: '22222222-2222-4222-8222-222222222222', quantity: 14 }],
     )
 
@@ -314,7 +342,15 @@ describe('POST /cart/items', () => {
     pushAuthenticatedUserQuery()
     dbState.selectQueue.push(
       [activeCart],
-      [{ id: '33333333-3333-4333-8333-333333333333', isActive: true, categoryIsActive: true, onHand: 10, reserved: 1 }],
+      [
+        {
+          id: '33333333-3333-4333-8333-333333333333',
+          isActive: true,
+          categoryIsActive: true,
+          onHand: 10,
+          reserved: 1,
+        },
+      ],
       [],
       [{ count: 30 }],
     )
@@ -346,7 +382,15 @@ describe('POST /cart/items', () => {
     pushAuthenticatedUserQuery()
     dbState.selectQueue.push(
       [activeCart],
-      [{ id: '33333333-3333-4333-8333-333333333333', isActive: false, categoryIsActive: true, onHand: 10, reserved: 1 }],
+      [
+        {
+          id: '33333333-3333-4333-8333-333333333333',
+          isActive: false,
+          categoryIsActive: true,
+          onHand: 10,
+          reserved: 1,
+        },
+      ],
     )
 
     // when

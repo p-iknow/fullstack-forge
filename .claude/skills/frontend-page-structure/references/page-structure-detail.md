@@ -3,7 +3,7 @@
 ## Full Directory Example: Single View Page
 
 ```
-src/screens/
+src/pages/
 └── orders/
     ├── @shared/
     │   ├── ui/
@@ -138,7 +138,7 @@ export const orderQueryOptions = {
   detail: (id: string) => queryOptions({ queryKey: ['orders', id], queryFn: () => fetchOrder(id) }),
 }
 
-// screens/.../checkout-intro-page.helper.ts — Screen-local logic
+// pages/.../checkout-intro-page.helper.ts — Page-local logic
 export const calculateCheckoutProgress = (order: Order) => {
   // Calculation only needed by this screen
   return percentage

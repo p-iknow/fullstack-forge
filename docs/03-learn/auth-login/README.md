@@ -46,10 +46,10 @@ apps/api/
 └── .env.example
 
 apps/store/
-├── src/lib/api/
+├── src/@shared/api/
 │   ├── core.ts
 │   └── domains/auth-client.ts
-├── src/lib/queries/auth.ts
+├── src/@shared/queries/auth.ts
 └── src/routes/
     ├── index.tsx
     ├── login.tsx

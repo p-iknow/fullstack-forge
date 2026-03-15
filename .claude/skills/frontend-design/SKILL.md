@@ -61,14 +61,18 @@ const badgeVariants = cva('inline-flex items-center rounded-md text-sm font-medi
 ### Adding a new token (all three layers)
 
 ```css
-/* 1. @theme inline */  --color-success: var(--success);
-/* 2. :root */          --success: oklch(0.72 0.19 142);
-/* 3. .dark */          --success: oklch(0.65 0.17 142);
+/* 1. @theme inline */
+--color-success: var(--success);
+/* 2. :root */
+--success: oklch(0.72 0.19 142);
+/* 3. .dark */
+--success: oklch(0.65 0.17 142);
 ```
 
 ## References
 
 Read only when needed:
+
 - **Creative direction** (style spectrum, anti-slop): `references/creative-direction.md`
 - **Motion/a11y deep-dive** (reduced-motion CSS, state checklist, contrast rules): `references/motion-accessibility.md`
 - **Layout conventions**: `../frontend-style-layout/SKILL.md`

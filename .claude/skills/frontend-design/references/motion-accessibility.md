@@ -42,16 +42,16 @@ Focus indicators are the only way keyboard users know where they are — removin
 
 For interactive components, verify each applicable state is handled:
 
-| State | When to include |
-|---|---|
-| Default | Always |
-| Hover | Always for interactive elements |
-| Active / pressed | Buttons, links, toggles |
-| Focus-visible | Always for interactive elements |
-| Disabled | When the element can be disabled |
-| Loading | Where async operations exist |
-| Error | Where validation or request failures can occur |
-| Empty | Where no-data cases exist |
+| State            | When to include                                |
+| ---------------- | ---------------------------------------------- |
+| Default          | Always                                         |
+| Hover            | Always for interactive elements                |
+| Active / pressed | Buttons, links, toggles                        |
+| Focus-visible    | Always for interactive elements                |
+| Disabled         | When the element can be disabled               |
+| Loading          | Where async operations exist                   |
+| Error            | Where validation or request failures can occur |
+| Empty            | Where no-data cases exist                      |
 
 ## Color and Theme Checks
 

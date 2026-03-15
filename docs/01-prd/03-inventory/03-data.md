@@ -2,14 +2,14 @@
 
 ## Inventory 엔터티
 
-| 필드 | 타입 | 필수 | 기본값 | 제약 | 설명 |
-| --- | --- | --- | --- | --- | --- |
-| `product_id` | UUID (PK) | Y | - | FK → Product. UNIQUE | 상품 식별자 |
-| `on_hand` | integer | Y | `0` | `0 ≤ on_hand ≤ 999,999` | 총 재고 |
-| `reserved` | integer | Y | `0` | `0 ≤ reserved ≤ on_hand` | 주문 예약 재고 |
-| `version` | integer | Y | `1` | `≥ 1`, 매 갱신 시 +1 | 낙관적 락 버전 |
-| `created_at` | timestamp | Y | `now()` | - | 레코드 생성 시각 |
-| `updated_at` | timestamp | Y | `now()` | 매 갱신 시 자동 업데이트 | 마지막 수정 시각 |
+| 필드         | 타입      | 필수 | 기본값  | 제약                     | 설명             |
+| ------------ | --------- | ---- | ------- | ------------------------ | ---------------- |
+| `product_id` | UUID (PK) | Y    | -       | FK → Product. UNIQUE     | 상품 식별자      |
+| `on_hand`    | integer   | Y    | `0`     | `0 ≤ on_hand ≤ 999,999`  | 총 재고          |
+| `reserved`   | integer   | Y    | `0`     | `0 ≤ reserved ≤ on_hand` | 주문 예약 재고   |
+| `version`    | integer   | Y    | `1`     | `≥ 1`, 매 갱신 시 +1     | 낙관적 락 버전   |
+| `created_at` | timestamp | Y    | `now()` | -                        | 레코드 생성 시각 |
+| `updated_at` | timestamp | Y    | `now()` | 매 갱신 시 자동 업데이트 | 마지막 수정 시각 |
 
 ### 파생 값
 
@@ -35,17 +35,17 @@
 
 운영자 수동 조정 이력을 기록한다. UI 상세 패널의 "최근 조정 이력 요약"과 감사 추적에 사용된다.
 
-| 필드 | 타입 | 필수 | 기본값 | 제약 | 설명 |
-| --- | --- | --- | --- | --- | --- |
-| `id` | UUID (PK) | Y | - | - | 조정 이력 식별자 |
-| `product_id` | UUID | Y | - | FK → Inventory.product_id | 대상 상품 |
-| `delta` | integer | Y | - | `≠ 0` | 조정 수량 (양수=입고, 음수=차감) |
-| `on_hand_before` | integer | Y | - | - | 조정 전 on_hand |
-| `on_hand_after` | integer | Y | - | - | 조정 후 on_hand |
-| `reason` | string | Y | - | 1~200자 | 조정 사유 |
-| `adjusted_by` | UUID | Y | - | FK → User.id | 조정 실행자 |
-| `idempotency_key` | UUID | Y | - | UNIQUE | 중복 조정 방지 키 |
-| `created_at` | timestamp | Y | `now()` | - | 조정 시각 |
+| 필드              | 타입      | 필수 | 기본값  | 제약                      | 설명                             |
+| ----------------- | --------- | ---- | ------- | ------------------------- | -------------------------------- |
+| `id`              | UUID (PK) | Y    | -       | -                         | 조정 이력 식별자                 |
+| `product_id`      | UUID      | Y    | -       | FK → Inventory.product_id | 대상 상품                        |
+| `delta`           | integer   | Y    | -       | `≠ 0`                     | 조정 수량 (양수=입고, 음수=차감) |
+| `on_hand_before`  | integer   | Y    | -       | -                         | 조정 전 on_hand                  |
+| `on_hand_after`   | integer   | Y    | -       | -                         | 조정 후 on_hand                  |
+| `reason`          | string    | Y    | -       | 1~200자                   | 조정 사유                        |
+| `adjusted_by`     | UUID      | Y    | -       | FK → User.id              | 조정 실행자                      |
+| `idempotency_key` | UUID      | Y    | -       | UNIQUE                    | 중복 조정 방지 키                |
+| `created_at`      | timestamp | Y    | `now()` | -                         | 조정 시각                        |
 
 ### 인덱스
 

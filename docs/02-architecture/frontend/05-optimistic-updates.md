@@ -11,10 +11,10 @@
 
 장바구니 수량 변경은 사용자가 가장 자주 수행하는 mutation이다.
 
-| 방식 | 클릭 → 수량 표시 갱신 | 체감 |
-| --- | --- | --- |
-| 서버 응답 대기 | 200~500ms | 클릭 후 멈춤 → "고장났나?" |
-| Optimistic update | ~0ms | 즉시 반영 → 자연스러움 |
+| 방식              | 클릭 → 수량 표시 갱신 | 체감                       |
+| ----------------- | --------------------- | -------------------------- |
+| 서버 응답 대기    | 200~500ms             | 클릭 후 멈춤 → "고장났나?" |
+| Optimistic update | ~0ms                  | 즉시 반영 → 자연스러움     |
 
 문제는 optimistic update를 어떤 레이어에서, 어떤 메커니즘으로 구현할 것인가이다.
 
@@ -22,12 +22,12 @@
 
 #### 후보 비교
 
-| 접근 | 크로스 컴포넌트 동기화 | 롤백 | React 버전 | 상태 관리 레이어 |
-| --- | --- | --- | --- | --- |
-| **TQ Cache Imperative** | O (캐시 구독) | 수동 (snapshot) | 16.8+ | TanStack Query |
-| TQ `onMutate` 콜백 | O | 자동 (context) | 16.8+ | TanStack Query |
-| React `useOptimistic` | X (로컬만) | 자동 (transition) | 19+ | React state |
-| Hybrid (useOptimistic + TQ) | O | 혼합 | 19+ | 이중 관리 |
+| 접근                        | 크로스 컴포넌트 동기화 | 롤백              | React 버전 | 상태 관리 레이어 |
+| --------------------------- | ---------------------- | ----------------- | ---------- | ---------------- |
+| **TQ Cache Imperative**     | O (캐시 구독)          | 수동 (snapshot)   | 16.8+      | TanStack Query   |
+| TQ `onMutate` 콜백          | O                      | 자동 (context)    | 16.8+      | TanStack Query   |
+| React `useOptimistic`       | X (로컬만)             | 자동 (transition) | 19+        | React state      |
+| Hybrid (useOptimistic + TQ) | O                      | 혼합              | 19+        | 이중 관리        |
 
 #### 선택: TQ Cache Imperative (`mutateAsync` + `setQueryData`)
 
@@ -41,11 +41,11 @@
 
 #### useOptimistic을 기본으로 채택하지 않는 이유
 
-| 문제 | 설명 |
-| --- | --- |
-| 로컬 상태 한정 | `useOptimistic`은 컴포넌트 내부 상태만 관리. 장바구니 총액을 표시하는 다른 컴포넌트는 여전히 서버 응답을 기다려야 함 |
-| 이중 상태 관리 | Hybrid 패턴은 `useOptimistic` (로컬) + `setQueryData` (캐시) 두 곳에서 상태를 관리 → 디버깅 복잡도 증가 |
-| Transition 강제 | `startTransition` 래핑 필수. 현재 `async/await` 기반 imperative flow에 이질적 |
+| 문제             | 설명                                                                                                                     |
+| ---------------- | ------------------------------------------------------------------------------------------------------------------------ |
+| 로컬 상태 한정   | `useOptimistic`은 컴포넌트 내부 상태만 관리. 장바구니 총액을 표시하는 다른 컴포넌트는 여전히 서버 응답을 기다려야 함     |
+| 이중 상태 관리   | Hybrid 패턴은 `useOptimistic` (로컬) + `setQueryData` (캐시) 두 곳에서 상태를 관리 → 디버깅 복잡도 증가                  |
+| Transition 강제  | `startTransition` 래핑 필수. 현재 `async/await` 기반 imperative flow에 이질적                                            |
 | 설계 의도 불일치 | `useOptimistic`은 Server Actions + React Server Components 패러다임에 최적화. 이 프로젝트는 TanStack Start + TQ 패러다임 |
 
 #### useOptimistic 허용 시나리오
@@ -85,13 +85,10 @@ const changeQuantity = async (newQty: number) => {
     queryClient.setQueryData<CartResponse>(cartQueryKeys.cart, {
       ...previous,
       totalAmount: previous.items.reduce(
-        (sum, i) =>
-          sum + i.unitPriceSnapshot * (i.id === item.id ? newQty : i.quantity),
+        (sum, i) => sum + i.unitPriceSnapshot * (i.id === item.id ? newQty : i.quantity),
         0,
       ),
-      items: previous.items.map((i) =>
-        i.id === item.id ? { ...i, quantity: newQty } : i,
-      ),
+      items: previous.items.map((i) => (i.id === item.id ? { ...i, quantity: newQty } : i)),
     })
   }
 
@@ -110,12 +107,12 @@ const changeQuantity = async (newQty: number) => {
 
 #### 효과
 
-| 지표 | 값 |
-| --- | --- |
-| 클릭 → UI 반영 | ~0ms (캐시 직접 갱신) |
-| 롤백 시점 | catch 블록에서 즉시 (서버 에러 응답 직후) |
-| 영향 컴포넌트 | 캐시 구독 전체 (총액, 아이템 수, 개별 행) |
-| 최종 동기화 | finally에서 invalidateQueries → 서버 truth로 수렴 |
+| 지표           | 값                                                |
+| -------------- | ------------------------------------------------- |
+| 클릭 → UI 반영 | ~0ms (캐시 직접 갱신)                             |
+| 롤백 시점      | catch 블록에서 즉시 (서버 에러 응답 직후)         |
+| 영향 컴포넌트  | 캐시 구독 전체 (총액, 아이템 수, 개별 행)         |
+| 최종 동기화    | finally에서 invalidateQueries → 서버 truth로 수렴 |
 
 ---
 
@@ -133,5 +130,5 @@ const changeQuantity = async (newQty: number) => {
 - 패턴 스킬: [frontend-optimistic-updates](../../../.claude/skills/frontend-optimistic-updates/SKILL.md)
 - API 패턴: [02-api-patterns.md](./02-api-patterns.md) — Pattern 9: Mutation Imperative Flow
 - Call-site Readability: [04-callsite-readability.md](./04-callsite-readability.md)
-- 적용 사례: `apps/store/src/screens/cart/cart-item-row.tsx`
+- 적용 사례: `apps/store/src/pages/cart/cart-page.sub/cart-item-row/cart-item-row.tsx`
 - React 공식 문서: [useOptimistic](https://react.dev/reference/react/useOptimistic)

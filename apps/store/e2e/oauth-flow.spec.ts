@@ -23,14 +23,8 @@ test.describe('OAuth login flow', () => {
     const kakaoOAuthLink = page.getByRole('link', { name: 'Continue with Kakao' })
 
     // then
-    await expect(googleOAuthLink).toHaveAttribute(
-      'href',
-      '/api/auth/oauth/google/start?redirect=/',
-    )
-    await expect(kakaoOAuthLink).toHaveAttribute(
-      'href',
-      '/api/auth/oauth/kakao/start?redirect=/',
-    )
+    await expect(googleOAuthLink).toHaveAttribute('href', '/api/auth/oauth/google/start?redirect=/')
+    await expect(kakaoOAuthLink).toHaveAttribute('href', '/api/auth/oauth/kakao/start?redirect=/')
   })
 
   test('completes Google OAuth flow via route interception', async ({ page }) => {

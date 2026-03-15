@@ -59,13 +59,13 @@ stateDiagram-v2
 
 ### 상태 전이 트리거
 
-| 전이 | 트리거 | 수행 주체 | 전제 조건 |
-| --- | --- | --- | --- |
-| `[*]` → `open` | 고객 문의 생성 | customer | — |
-| `open` → `in_progress` | 운영자 접수 | operator, admin | — |
-| `in_progress` → `resolved` | 운영자 해결 처리 | operator, admin | 최소 1개 답변 등록 |
-| `resolved` → `closed` | 운영자 종결 | operator, admin | — |
-| `resolved` → `open` | 고객 추가 질문 (재오픈) | customer | `reopen_count < 3` |
+| 전이                       | 트리거                  | 수행 주체       | 전제 조건          |
+| -------------------------- | ----------------------- | --------------- | ------------------ |
+| `[*]` → `open`             | 고객 문의 생성          | customer        | —                  |
+| `open` → `in_progress`     | 운영자 접수             | operator, admin | —                  |
+| `in_progress` → `resolved` | 운영자 해결 처리        | operator, admin | 최소 1개 답변 등록 |
+| `resolved` → `closed`      | 운영자 종결             | operator, admin | —                  |
+| `resolved` → `open`        | 고객 추가 질문 (재오픈) | customer        | `reopen_count < 3` |
 
 ### 재오픈(Reopen) 정책
 
@@ -94,21 +94,21 @@ stateDiagram-v2
 
 ## 실패 시나리오 및 복구
 
-| 시나리오 | 영향 | 복구 방법 |
-| --- | --- | --- |
-| 문의 생성 시 주문 조회 실패 | `order_id` 연결 없이 문의 생성 | `order_id` null로 생성 허용, 운영자가 수동 연결 |
-| 답변 등록 후 이벤트 발행 실패 | 고객 알림 미발송 | 답변은 DB에 커밋 완료. 이벤트는 outbox 패턴 또는 재시도로 보장 |
-| SLA 타이머 서비스 장애 | 에스컬레이션 미작동 | observability 지표로 SLA 위반 문의를 사후 탐지, 수동 처리 |
-| 상태 전이 동시 충돌 | 409 Conflict | 클라이언트가 최신 상태를 재조회 후 재시도 |
+| 시나리오                      | 영향                           | 복구 방법                                                      |
+| ----------------------------- | ------------------------------ | -------------------------------------------------------------- |
+| 문의 생성 시 주문 조회 실패   | `order_id` 연결 없이 문의 생성 | `order_id` null로 생성 허용, 운영자가 수동 연결                |
+| 답변 등록 후 이벤트 발행 실패 | 고객 알림 미발송               | 답변은 DB에 커밋 완료. 이벤트는 outbox 패턴 또는 재시도로 보장 |
+| SLA 타이머 서비스 장애        | 에스컬레이션 미작동            | observability 지표로 SLA 위반 문의를 사후 탐지, 수동 처리      |
+| 상태 전이 동시 충돌           | 409 Conflict                   | 클라이언트가 최신 상태를 재조회 후 재시도                      |
 
 ## 연관 도메인
 
-| 도메인 | 연관 내용 | 참조 |
-| --- | --- | --- |
-| order | 주문 기반 문의 생성 (`order_id` 연결) | `../05-order/01-overview.md` |
-| notification | 답변 등록/상태 변경/재오픈 시 고객 알림 | `../12-notification/01-overview.md` |
-| observability | 문의 1차 응답 시간 KPI, SLA 위반 알림 | `../14-observability/01-overview.md` |
-| event | 이벤트 발행 envelope/멱등성/DLQ 규격 | `../13-event/01-overview.md` |
+| 도메인        | 연관 내용                               | 참조                                 |
+| ------------- | --------------------------------------- | ------------------------------------ |
+| order         | 주문 기반 문의 생성 (`order_id` 연결)   | `../05-order/01-overview.md`         |
+| notification  | 답변 등록/상태 변경/재오픈 시 고객 알림 | `../12-notification/01-overview.md`  |
+| observability | 문의 1차 응답 시간 KPI, SLA 위반 알림   | `../14-observability/01-overview.md` |
+| event         | 이벤트 발행 envelope/멱등성/DLQ 규격    | `../13-event/01-overview.md`         |
 
 ## Stage 6 게이트
 

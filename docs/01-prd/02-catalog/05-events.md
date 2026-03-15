@@ -9,13 +9,13 @@
 - **발행 시점**: admin에서 신규 상품을 등록할 때
 - **payload 필드**:
 
-  | 필드          | 타입      | 설명                          |
-  | ------------- | --------- | ----------------------------- |
-  | `product_id`  | `string`  | 생성된 상품 ID                |
-  | `sku`         | `string`  | 상품 SKU 식별자               |
-  | `category_id` | `string`  | 소속 카테고리 ID              |
-  | `price`       | `integer` | 가격 (KRW)                    |
-  | `created_at`  | `string`  | 생성 시각 (ISO 8601)          |
+  | 필드          | 타입      | 설명                 |
+  | ------------- | --------- | -------------------- |
+  | `product_id`  | `string`  | 생성된 상품 ID       |
+  | `sku`         | `string`  | 상품 SKU 식별자      |
+  | `category_id` | `string`  | 소속 카테고리 ID     |
+  | `price`       | `integer` | 가격 (KRW)           |
+  | `created_at`  | `string`  | 생성 시각 (ISO 8601) |
 
 - **소비자**:
   - inventory — 재고 레코드 자동 생성 (`on_hand=0`, `reserved=0`)
@@ -25,12 +25,12 @@
 - **발행 시점**: admin에서 상품 정보(이름, 가격, 카테고리, 대체 가능 여부 등)를 수정할 때
 - **payload 필드**:
 
-  | 필드             | 타입     | 설명                                                              |
-  | ---------------- | -------- | ----------------------------------------------------------------- |
-  | `product_id`     | `string` | 대상 상품 ID                                                      |
-  | `sku`            | `string` | 상품 SKU 식별자                                                   |
-  | `changes`        | `array`  | 변경 항목 목록 (`[{ field, old_value, new_value }]`), 감사 추적용 |
-  | `updated_at`     | `string` | 수정 시각 (ISO 8601)                                              |
+  | 필드         | 타입     | 설명                                                              |
+  | ------------ | -------- | ----------------------------------------------------------------- |
+  | `product_id` | `string` | 대상 상품 ID                                                      |
+  | `sku`        | `string` | 상품 SKU 식별자                                                   |
+  | `changes`    | `array`  | 변경 항목 목록 (`[{ field, old_value, new_value }]`), 감사 추적용 |
+  | `updated_at` | `string` | 수정 시각 (ISO 8601)                                              |
 
 - **소비자**:
   - cart — 가격 변경 시 활성 장바구니의 해당 상품 가격 갱신 판단
@@ -40,11 +40,11 @@
 - **발행 시점**: admin이 상품을 비활성화할 때 (`is_active: true → false`)
 - **payload 필드**:
 
-  | 필드            | 타입      | 설명                 |
-  | --------------- | --------- | -------------------- |
-  | `product_id`    | `string`  | 대상 상품 ID         |
-  | `sku`           | `string`  | 대상 상품 SKU 식별자 |
-  | `deactivated_at`| `string`  | 비활성화 시각 (ISO 8601) |
+  | 필드             | 타입     | 설명                     |
+  | ---------------- | -------- | ------------------------ |
+  | `product_id`     | `string` | 대상 상품 ID             |
+  | `sku`            | `string` | 대상 상품 SKU 식별자     |
+  | `deactivated_at` | `string` | 비활성화 시각 (ISO 8601) |
 
 - **발행 주체**:
   - admin 수동 변경 — `PATCH /admin/products/:id/active`
@@ -73,11 +73,11 @@
 - **발행 시점**: admin에서 카테고리 `is_active`를 `false`로 변경할 때
 - **payload 필드**:
 
-  | 필드            | 타입     | 설명                    |
-  | --------------- | -------- | ----------------------- |
-  | `category_id`   | `string` | 비활성화된 카테고리 ID  |
-  | `slug`          | `string` | 카테고리 slug           |
-  | `changed_at`    | `string` | 변경 시각 (ISO 8601)    |
+  | 필드          | 타입     | 설명                   |
+  | ------------- | -------- | ---------------------- |
+  | `category_id` | `string` | 비활성화된 카테고리 ID |
+  | `slug`        | `string` | 카테고리 slug          |
+  | `changed_at`  | `string` | 변경 시각 (ISO 8601)   |
 
 - **소비자**:
   - catalog (자체) — 해당 카테고리 소속 상품의 판매 가능 여부 재평가 (§4 판매 조건 flowchart 참조)

@@ -27,14 +27,14 @@
   - `points_to_use` 선택 (포인트 사용 시, 최소 1,000원)
 - 에러 응답:
 
-  | HTTP Status | 에러 코드 | 상황 |
-  | --- | --- | --- |
-  | 400 | `invalid_cart` | 장바구니가 유효하지 않음 (만료/전환 완료/비어있음) |
-  | 404 | `cart_not_found` | 장바구니 미존재 |
-  | 409 | `duplicate_order` | 동일 장바구니에 이미 활성 주문 존재 |
-  | 422 | `all_items_out_of_stock` | 모든 아이템 재고 부족 |
-  | 422 | `insufficient_points` | 포인트 잔액 부족 |
-  | 422 | `min_order_not_met` | 최소주문금액(15,000원) 미달 |
+  | HTTP Status | 에러 코드                | 상황                                               |
+  | ----------- | ------------------------ | -------------------------------------------------- |
+  | 400         | `invalid_cart`           | 장바구니가 유효하지 않음 (만료/전환 완료/비어있음) |
+  | 404         | `cart_not_found`         | 장바구니 미존재                                    |
+  | 409         | `duplicate_order`        | 동일 장바구니에 이미 활성 주문 존재                |
+  | 422         | `all_items_out_of_stock` | 모든 아이템 재고 부족                              |
+  | 422         | `insufficient_points`    | 포인트 잔액 부족                                   |
+  | 422         | `min_order_not_met`      | 최소주문금액(15,000원) 미달                        |
 
 ### GET /orders
 
@@ -48,9 +48,9 @@
 - 정렬: `created_at` 내림차순 (기본값)
 - 에러 응답:
 
-  | HTTP Status | 에러 코드 | 상황 |
-  | --- | --- | --- |
-  | 400 | `invalid_params` | 필터/페이지네이션 파라미터 형식 오류 |
+  | HTTP Status | 에러 코드        | 상황                                 |
+  | ----------- | ---------------- | ------------------------------------ |
+  | 400         | `invalid_params` | 필터/페이지네이션 파라미터 형식 오류 |
 
 ### GET /orders/:id
 
@@ -61,10 +61,10 @@
   - Admin: 모든 주문 조회 가능 (`GET /admin/orders/:id`)
 - 에러 응답:
 
-  | HTTP Status | 에러 코드 | 상황 |
-  | --- | --- | --- |
-  | 403 | `forbidden` | 타인의 주문 조회 시도 (Store) |
-  | 404 | `order_not_found` | 주문 미존재 |
+  | HTTP Status | 에러 코드         | 상황                          |
+  | ----------- | ----------------- | ----------------------------- |
+  | 403         | `forbidden`       | 타인의 주문 조회 시도 (Store) |
+  | 404         | `order_not_found` | 주문 미존재                   |
 
 ### PATCH /orders/:id/status
 
@@ -78,13 +78,13 @@
   - `version` 필수 (낙관적 락용)
 - 에러 응답:
 
-  | HTTP Status | 에러 코드 | 상황 |
-  | --- | --- | --- |
-  | 403 | `forbidden` | 권한 없는 전이 시도 |
-  | 404 | `order_not_found` | 주문 미존재 |
-  | 409 | `conflict` | 낙관적 락 충돌 (동시 전이 시도) |
-  | 422 | `invalid_transition` | 허용되지 않은 상태 전이 |
-  | 422 | `terminal_state` | 종료 상태에서 추가 전이 시도 |
+  | HTTP Status | 에러 코드            | 상황                            |
+  | ----------- | -------------------- | ------------------------------- |
+  | 403         | `forbidden`          | 권한 없는 전이 시도             |
+  | 404         | `order_not_found`    | 주문 미존재                     |
+  | 409         | `conflict`           | 낙관적 락 충돌 (동시 전이 시도) |
+  | 422         | `invalid_transition` | 허용되지 않은 상태 전이         |
+  | 422         | `terminal_state`     | 종료 상태에서 추가 전이 시도    |
 
 ### POST /orders/:id/substitutions/:substitution_id/approve
 
@@ -94,11 +94,11 @@
   - 승인 시 대체 적용, 주문 금액 재산정
 - 에러 응답:
 
-  | HTTP Status | 에러 코드 | 상황 |
-  | --- | --- | --- |
-  | 404 | `substitution_not_found` | 대체 레코드 미존재 |
-  | 409 | `already_resolved` | 이미 승인/거절/타임아웃 처리됨 |
-  | 410 | `approval_timeout` | 승인 제한 시간(10분) 초과 |
+  | HTTP Status | 에러 코드                | 상황                           |
+  | ----------- | ------------------------ | ------------------------------ |
+  | 404         | `substitution_not_found` | 대체 레코드 미존재             |
+  | 409         | `already_resolved`       | 이미 승인/거절/타임아웃 처리됨 |
+  | 410         | `approval_timeout`       | 승인 제한 시간(10분) 초과      |
 
 ### POST /orders/:id/substitutions/:substitution_id/reject
 
@@ -116,10 +116,10 @@
 
 ## RBAC 범위
 
-| 역할 | 허용 API | 허용 전이 |
-| --- | --- | --- |
-| customer | `POST /orders`, `GET /orders`, `GET /orders/:id`, `PATCH /orders/:id/status` (취소만), 대체 승인/거절 | `created` → `cancelled` |
-| operator | `GET /admin/orders`, `GET /admin/orders/:id`, `PATCH /admin/orders/:id/status` | `01-overview.md` 기준 모든 허용 전이 (customer 취소 제외) |
+| 역할     | 허용 API                                                                                              | 허용 전이                                                 |
+| -------- | ----------------------------------------------------------------------------------------------------- | --------------------------------------------------------- |
+| customer | `POST /orders`, `GET /orders`, `GET /orders/:id`, `PATCH /orders/:id/status` (취소만), 대체 승인/거절 | `created` → `cancelled`                                   |
+| operator | `GET /admin/orders`, `GET /admin/orders/:id`, `PATCH /admin/orders/:id/status`                        | `01-overview.md` 기준 모든 허용 전이 (customer 취소 제외) |
 
 - customer는 자신의 주문에만 접근 가능 (소유자 검증 필수)
 - operator 세부 역할 분리는 MVP에서 단일 `operator` 역할로 운영

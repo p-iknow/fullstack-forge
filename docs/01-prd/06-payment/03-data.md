@@ -2,25 +2,25 @@
 
 ## Payment 엔터티
 
-| 필드               | 타입           | 필수 | 설명                              |
-| ------------------ | -------------- | ---- | --------------------------------- |
-| `payment_id`       | UUID (string)  | ✅    | 결제 식별자 (PK)                  |
-| `order_id`         | UUID (string)  | ✅    | 연결된 주문 식별자 (FK, UNIQUE)   |
-| `user_id`          | UUID (string)  | ✅    | 결제 요청 사용자 식별자 (FK)      |
-| `status`           | enum           | ✅    | 결제 상태                         |
-| `payment_method`   | enum           | ✅    | 결제 수단                         |
-| `amount`           | integer        | ✅    | 결제 요청 금액 (KRW, 원 단위)     |
-| `refund_amount`    | integer        | ❌    | 환불 금액 (환불 시에만 설정)      |
-| `currency`         | string (3자)   | ✅    | 통화 코드 (고정: `KRW`)          |
-| `idempotency_key`  | string (36자)  | ✅    | 중복 결제 방지 키 (UUID v4, UNIQUE) |
-| `failure_code`     | enum           | ❌    | 실패 코드 (실패 시에만 설정)      |
-| `pg_transaction_id`| string         | ❌    | PG 거래 식별자                    |
-| `refund_reason`    | string (500자) | ❌    | 환불 사유                         |
-| `created_at`       | timestamp      | ✅    | 결제 생성 시각                    |
-| `updated_at`       | timestamp      | ✅    | 결제 갱신 시각                    |
-| `captured_at`      | timestamp      | ❌    | 매출 확정 시각                    |
-| `refunded_at`      | timestamp      | ❌    | 환불 완료 시각                    |
-| `version`          | integer        | ✅    | 낙관적 잠금용 버전 (기본값: 1)    |
+| 필드                | 타입           | 필수 | 설명                                |
+| ------------------- | -------------- | ---- | ----------------------------------- |
+| `payment_id`        | UUID (string)  | ✅   | 결제 식별자 (PK)                    |
+| `order_id`          | UUID (string)  | ✅   | 연결된 주문 식별자 (FK, UNIQUE)     |
+| `user_id`           | UUID (string)  | ✅   | 결제 요청 사용자 식별자 (FK)        |
+| `status`            | enum           | ✅   | 결제 상태                           |
+| `payment_method`    | enum           | ✅   | 결제 수단                           |
+| `amount`            | integer        | ✅   | 결제 요청 금액 (KRW, 원 단위)       |
+| `refund_amount`     | integer        | ❌   | 환불 금액 (환불 시에만 설정)        |
+| `currency`          | string (3자)   | ✅   | 통화 코드 (고정: `KRW`)             |
+| `idempotency_key`   | string (36자)  | ✅   | 중복 결제 방지 키 (UUID v4, UNIQUE) |
+| `failure_code`      | enum           | ❌   | 실패 코드 (실패 시에만 설정)        |
+| `pg_transaction_id` | string         | ❌   | PG 거래 식별자                      |
+| `refund_reason`     | string (500자) | ❌   | 환불 사유                           |
+| `created_at`        | timestamp      | ✅   | 결제 생성 시각                      |
+| `updated_at`        | timestamp      | ✅   | 결제 갱신 시각                      |
+| `captured_at`       | timestamp      | ❌   | 매출 확정 시각                      |
+| `refunded_at`       | timestamp      | ❌   | 환불 완료 시각                      |
+| `version`           | integer        | ✅   | 낙관적 잠금용 버전 (기본값: 1)      |
 
 ## 결제 상태 enum
 

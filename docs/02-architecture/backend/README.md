@@ -5,11 +5,11 @@ Hono, Drizzle ORM, PostgreSQL, Redis를 기반으로 한 설계와 의사결정�
 
 ## 문서 목록
 
-| 파일                                                     | 유형     | 설명                                               |
-| -------------------------------------------------------- | -------- | -------------------------------------------------- |
-| [01-backend.md](./01-backend.md)                         | 설계     | 백엔드 스택 개요: Hono, Drizzle, PostgreSQL, Redis |
-| [01-backend.adr.md](./01-backend.adr.md)                 | 의사결정 | 백엔드 스택 선택 근거 및 트레이드오프              |
-| [02-eventing.adr.md](./02-eventing.adr.md)               | 의사결정 | 이벤트 신뢰성 설계 (SNS-SQS, DLQ, 멱등성)         |
+| 파일                                       | 유형     | 설명                                               |
+| ------------------------------------------ | -------- | -------------------------------------------------- |
+| [01-backend.md](./01-backend.md)           | 설계     | 백엔드 스택 개요: Hono, Drizzle, PostgreSQL, Redis |
+| [01-backend.adr.md](./01-backend.adr.md)   | 의사결정 | 백엔드 스택 선택 근거 및 트레이드오프              |
+| [02-eventing.adr.md](./02-eventing.adr.md) | 의사결정 | 이벤트 신뢰성 설계 (SNS-SQS, DLQ, 멱등성)          |
 
 > 도메인별 정책(인증, 주문, 결제, 재고 등)은 ADR로 별도 관리하지 않는다.
 > PRD가 도메인 정책의 단일 기준(source of truth)이며, `docs/01-prd/` 하위 각 도메인 폴더를 참조한다.

@@ -2,33 +2,33 @@
 
 ## Delivery 엔터티
 
-| 필드                             | 타입        | 필수 | 설명                                       |
-| -------------------------------- | ----------- | ---- | ------------------------------------------ |
-| `delivery_id`                    | UUID        | ✅   | 배송 식별자 (PK)                           |
-| `order_id`                       | UUID        | ✅   | 연계 주문 식별자 (FK → Order)              |
-| `mode`                           | enum        | ✅   | 배송 모드 (`instant`, `scheduled`)         |
-| `status`                         | enum        | ✅   | 배송 상태 (DeliveryStatus)                 |
-| `dispatch_state`                 | enum        | ✅   | 배차 상태 (DispatchState)                  |
-| `sla_target_at`                  | timestamp   | ✅   | SLA 목표 시각                              |
-| `sla_window_minutes`             | integer     | ✅   | SLA 허용 범위 (분 단위, 예: `15` = ±15분)  |
-| `dispatch_attempt_count`         | integer     | ✅   | 배차 시도 횟수 (기본값: 0)                 |
-| `driver_id`                      | UUID        | ❌   | 배정된 기사 식별자 (배차 전 null)          |
-| `operator_intervention_required` | boolean     | ✅   | 운영자 개입 필요 여부 (기본값: false)      |
-| `cancelled_reason`               | string(500) | ❌   | 취소 사유 (취소 시에만)                    |
-| `version`                        | integer     | ✅   | 낙관적 잠금 버전 (기본값: 1)               |
-| `created_at`                     | timestamp   | ✅   | 생성 시각                                  |
-| `updated_at`                     | timestamp   | ✅   | 최종 수정 시각                             |
+| 필드                             | 타입        | 필수 | 설명                                      |
+| -------------------------------- | ----------- | ---- | ----------------------------------------- |
+| `delivery_id`                    | UUID        | ✅   | 배송 식별자 (PK)                          |
+| `order_id`                       | UUID        | ✅   | 연계 주문 식별자 (FK → Order)             |
+| `mode`                           | enum        | ✅   | 배송 모드 (`instant`, `scheduled`)        |
+| `status`                         | enum        | ✅   | 배송 상태 (DeliveryStatus)                |
+| `dispatch_state`                 | enum        | ✅   | 배차 상태 (DispatchState)                 |
+| `sla_target_at`                  | timestamp   | ✅   | SLA 목표 시각                             |
+| `sla_window_minutes`             | integer     | ✅   | SLA 허용 범위 (분 단위, 예: `15` = ±15분) |
+| `dispatch_attempt_count`         | integer     | ✅   | 배차 시도 횟수 (기본값: 0)                |
+| `driver_id`                      | UUID        | ❌   | 배정된 기사 식별자 (배차 전 null)         |
+| `operator_intervention_required` | boolean     | ✅   | 운영자 개입 필요 여부 (기본값: false)     |
+| `cancelled_reason`               | string(500) | ❌   | 취소 사유 (취소 시에만)                   |
+| `version`                        | integer     | ✅   | 낙관적 잠금 버전 (기본값: 1)              |
+| `created_at`                     | timestamp   | ✅   | 생성 시각                                 |
+| `updated_at`                     | timestamp   | ✅   | 최종 수정 시각                            |
 
 ## DeliveryStatus enum
 
-| 값           | 설명                 | 종료 상태               |
-| ------------ | -------------------- | ----------------------- |
-| `pending`    | 배송 생성, 배차 대기 | ❌                      |
-| `dispatched` | 배차 완료            | ❌                      |
-| `in_transit` | 배송 중 (픽업 완료)  | ❌                      |
-| `delivered`  | 배송 완료            | ✅                      |
-| `failed`     | 배송 실패            | ❌ (재배차/취소 가능)   |
-| `cancelled`  | 배송 취소            | ✅                      |
+| 값           | 설명                 | 종료 상태             |
+| ------------ | -------------------- | --------------------- |
+| `pending`    | 배송 생성, 배차 대기 | ❌                    |
+| `dispatched` | 배차 완료            | ❌                    |
+| `in_transit` | 배송 중 (픽업 완료)  | ❌                    |
+| `delivered`  | 배송 완료            | ✅                    |
+| `failed`     | 배송 실패            | ❌ (재배차/취소 가능) |
+| `cancelled`  | 배송 취소            | ✅                    |
 
 ## DispatchState enum
 

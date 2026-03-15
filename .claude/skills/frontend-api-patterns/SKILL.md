@@ -9,18 +9,18 @@ description: Apply consistent data fetching patterns using TanStack Query v5, @s
 
 ## Pattern Selection
 
-| #   | Pattern                   | Use When                                                       |
-| --- | ------------------------- | -------------------------------------------------------------- |
-| 0   | Route Loader              | Page requires data before render; prevent waterfall            |
-| 0-1 | Server Function           | Loader needs server-only logic (env vars, DB)                  |
-| 1   | SuspenseQuery Cohesion    | Query declaration and usage far apart; need co-location        |
-| 2   | Mutation Namespace        | Multiple mutations cause destructuring alias confusion         |
-| 3   | Mutation Cohesion         | Mutation declaration and usage far apart                       |
-| 4   | Mutation Conditional      | Need conditional/loop mutation without violating Hooks rules   |
-| 5   | SuspenseQuery Conditional | Need conditional data fetching without wrapper components      |
-| 6   | Parallel Queries          | Multiple independent queries waterfall via nested `<Suspense>` |
-| 7   | PrefetchQuery             | Pre-load data before user interaction (tab click, navigation)  |
-| 8   | API Composition           | Multiple APIs need combining into single query interface       |
+| #   | Pattern                   | Use When                                                                    |
+| --- | ------------------------- | --------------------------------------------------------------------------- |
+| 0   | Route Loader              | Page requires data before render; prevent waterfall                         |
+| 0-1 | Server Function           | Loader needs server-only logic (env vars, DB)                               |
+| 1   | SuspenseQuery Cohesion    | Query declaration and usage far apart; need co-location                     |
+| 2   | Mutation Namespace        | Multiple mutations cause destructuring alias confusion                      |
+| 3   | Mutation Cohesion         | Mutation declaration and usage far apart                                    |
+| 4   | Mutation Conditional      | Need conditional/loop mutation without violating Hooks rules                |
+| 5   | SuspenseQuery Conditional | Need conditional data fetching without wrapper components                   |
+| 6   | Parallel Queries          | Multiple independent queries waterfall via nested `<Suspense>`              |
+| 7   | PrefetchQuery             | Pre-load data before user interaction (tab click, navigation)               |
+| 8   | API Composition           | Multiple APIs need combining into single query interface                    |
 | 9   | Mutation Imperative Flow  | **DEFAULT.** Single-use mutation; control flow must be visible at call site |
 
 ## Route-Level Patterns
@@ -205,9 +205,15 @@ const onQuantityChange = async (newQty: number) => {
 // ❌ on* callbacks — call site에서 제어흐름이 보이지 않음
 const updateMutation = useMutation({
   ...updateItemOptions(),
-  onMutate: async () => { /* optimistic */ },
-  onError: (err, vars, ctx) => { /* rollback + error */ },
-  onSettled: () => { /* invalidate */ },
+  onMutate: async () => {
+    /* optimistic */
+  },
+  onError: (err, vars, ctx) => {
+    /* rollback + error */
+  },
+  onSettled: () => {
+    /* invalidate */
+  },
 })
 
 // 이 한 줄만 봐서는 뒤에 무슨 일이 일어나는지 알 수 없다

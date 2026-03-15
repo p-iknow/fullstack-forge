@@ -37,16 +37,16 @@
 
 ## 5) ReviewImage 엔터티 필드
 
-| 필드            | 설명                   | 제약                                          |
-| --------------- | ---------------------- | --------------------------------------------- |
-| `id`            | 이미지 고유 식별자     | PK                                            |
-| `review_id`     | 대상 리뷰              | FK                                            |
-| `thumb_url`     | 썸네일 이미지 URL      | 400×400 WebP                                  |
-| `detail_url`    | 상세 이미지 URL        | 1200×900 WebP                                 |
-| `display_order` | 이미지 표시 순서       | `0..4` 정수                                   |
-| `file_size`     | 원본 파일 크기 (bytes) | 최대 5,242,880 (5 MB)                         |
-| `content_type`  | 원본 MIME 타입         | `image/jpeg\|image/png\|image/webp`           |
-| `created_at`    | 생성 시각              | 서버 기준 UTC                                 |
+| 필드            | 설명                   | 제약                                |
+| --------------- | ---------------------- | ----------------------------------- |
+| `id`            | 이미지 고유 식별자     | PK                                  |
+| `review_id`     | 대상 리뷰              | FK                                  |
+| `thumb_url`     | 썸네일 이미지 URL      | 400×400 WebP                        |
+| `detail_url`    | 상세 이미지 URL        | 1200×900 WebP                       |
+| `display_order` | 이미지 표시 순서       | `0..4` 정수                         |
+| `file_size`     | 원본 파일 크기 (bytes) | 최대 5,242,880 (5 MB)               |
+| `content_type`  | 원본 MIME 타입         | `image/jpeg\|image/png\|image/webp` |
+| `created_at`    | 생성 시각              | 서버 기준 UTC                       |
 
 ### ReviewImage 엔터티 규칙
 

@@ -36,6 +36,7 @@ const result = await db
 ### 4. Stock Display 계산 — DB JOIN + 앱 로직
 
 재고 상태(in_stock, low_stock, out_of_stock)는 DB에 저장하지 않고 매 조회 시 계산한다:
+
 ```
 available = inventory.onHand - inventory.reserved
 available <= 0              → 'out_of_stock'

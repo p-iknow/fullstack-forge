@@ -24,6 +24,7 @@ export async function sendPasswordResetEmail(input: SendPasswordResetEmailInput)
   const mailFrom = process.env.AUTH_MAIL_FROM?.trim()
 
   if (!resendApiKey || !mailFrom) {
+    // eslint-disable-next-line no-console -- intentional fallback logging when mail service unavailable
     console.info('[auth] password reset mail fallback', {
       to: input.toEmail,
       resetLink,

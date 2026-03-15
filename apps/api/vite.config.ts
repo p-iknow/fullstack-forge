@@ -1,8 +1,6 @@
 import { defineConfig } from 'vite'
 import devServer from '@hono/vite-dev-server'
 import build from '@hono/vite-build/node'
-import tsConfigPaths from 'vite-tsconfig-paths'
-
 export default defineConfig(({ mode }) => {
   if (mode === 'client') {
     throw new Error('This is a server-only project')
@@ -11,8 +9,10 @@ export default defineConfig(({ mode }) => {
     server: {
       port: 8080,
     },
+    resolve: {
+      tsconfigPaths: true,
+    },
     plugins: [
-      tsConfigPaths(),
       devServer({
         entry: 'src/index.ts',
       }),

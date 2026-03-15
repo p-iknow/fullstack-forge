@@ -14,7 +14,7 @@ const listGeneratedDomains = () => {
   return entries
     .filter((entry) => entry.isDirectory())
     .map((entry) => entry.name)
-    .sort((a, b) => a.localeCompare(b))
+    .toSorted((a, b) => a.localeCompare(b))
 }
 
 const isDomainExportKey = (key) => {

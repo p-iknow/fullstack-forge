@@ -1,13 +1,5 @@
 import { sql } from 'drizzle-orm'
-import {
-  boolean,
-  check,
-  integer,
-  pgTable,
-  text,
-  timestamp,
-  uuid,
-} from 'drizzle-orm/pg-core'
+import { boolean, check, integer, pgTable, text, timestamp, uuid } from 'drizzle-orm/pg-core'
 import { categories } from './category'
 
 export const products = pgTable('products', {

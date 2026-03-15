@@ -25,13 +25,13 @@ Extract: slice number, name, covered domains, dependencies, PRD references.
 
 PRD 파일 5개를 모두 읽지 않는다. 세션 타입별로 필요한 파일만 읽는다.
 
-| Session type | 필수 PRD 파일 | 참고용 (필요 시) |
-|-------------|-------------|----------------|
-| api-spec | `02-api.md`, `03-data.md` | `01-overview.md` (business rules) |
-| db-schema | `03-data.md` | `01-overview.md` (enums, constraints) |
-| backend | `01-overview.md`, `02-api.md` | `05-events.md` (event publishing) |
-| store-ui | `04-ui.md` | `02-api.md` (endpoint shapes) |
-| admin-ui | `04-ui.md` | `02-api.md` (admin endpoints) |
+| Session type | 필수 PRD 파일                 | 참고용 (필요 시)                      |
+| ------------ | ----------------------------- | ------------------------------------- |
+| api-spec     | `02-api.md`, `03-data.md`     | `01-overview.md` (business rules)     |
+| db-schema    | `03-data.md`                  | `01-overview.md` (enums, constraints) |
+| backend      | `01-overview.md`, `02-api.md` | `05-events.md` (event publishing)     |
+| store-ui     | `04-ui.md`                    | `02-api.md` (endpoint shapes)         |
+| admin-ui     | `04-ui.md`                    | `02-api.md` (admin endpoints)         |
 
 **읽기 순서**: 먼저 `01-overview.md`를 빠르게 훑어 도메인 전체 구조를 파악한 뒤,
 세션별 필수 파일만 상세히 읽는다. 모든 PRD를 미리 다 읽고 시작하지 않는다.
@@ -63,13 +63,13 @@ and the slice has no admin-ui needs, generate exactly 4 (api-spec, db-schema, ba
 
 Base session types (in execution order):
 
-| # | Session | When to Include | Agent Category |
-|---|---------|----------------|----------------|
-| 01 | api-spec | Always (unless spec exists) | quick |
-| 02 | db-schema | When new tables needed (skip if tables exist) | quick |
-| 03 | backend | Always | deep |
-| 04 | store-ui | When slice has customer-facing UI | visual-engineering |
-| 05 | admin-ui | When slice has operator-facing UI | visual-engineering |
+| #   | Session   | When to Include                               | Agent Category     |
+| --- | --------- | --------------------------------------------- | ------------------ |
+| 01  | api-spec  | Always (unless spec exists)                   | quick              |
+| 02  | db-schema | When new tables needed (skip if tables exist) | quick              |
+| 03  | backend   | Always                                        | deep               |
+| 04  | store-ui  | When slice has customer-facing UI             | visual-engineering |
+| 05  | admin-ui  | When slice has operator-facing UI             | visual-engineering |
 
 ### Step 4-b: Enforce 300-Line Limit via Session Splitting
 
@@ -79,15 +79,16 @@ The total session count may increase — this is acceptable as long as each file
 
 **Splitting strategies by session type:**
 
-| Session | Split approach | Naming |
-|---------|---------------|--------|
-| api-spec | Split by audience: store routes vs admin routes | `01a-api-spec-store.plan.md`, `01b-api-spec-admin.plan.md` |
-| db-schema | Split by domain when multi-domain slice | `02a-db-order.plan.md`, `02b-db-payment.plan.md` |
-| backend | Split by domain or by CRUD vs business logic | `03a-backend-order.plan.md`, `03b-backend-payment.plan.md` |
-| store-ui | Split by page group or flow | `04a-store-checkout.plan.md`, `04b-store-order-list.plan.md` |
-| admin-ui | Split by feature area | `05a-admin-orders.plan.md`, `05b-admin-payments.plan.md` |
+| Session   | Split approach                                  | Naming                                                       |
+| --------- | ----------------------------------------------- | ------------------------------------------------------------ |
+| api-spec  | Split by audience: store routes vs admin routes | `01a-api-spec-store.plan.md`, `01b-api-spec-admin.plan.md`   |
+| db-schema | Split by domain when multi-domain slice         | `02a-db-order.plan.md`, `02b-db-payment.plan.md`             |
+| backend   | Split by domain or by CRUD vs business logic    | `03a-backend-order.plan.md`, `03b-backend-payment.plan.md`   |
+| store-ui  | Split by page group or flow                     | `04a-store-checkout.plan.md`, `04b-store-order-list.plan.md` |
+| admin-ui  | Split by feature area                           | `05a-admin-orders.plan.md`, `05b-admin-payments.plan.md`     |
 
 **Split decision rule:**
+
 1. Draft the plan mentally — estimate line count based on endpoint/table/screen count
 2. If a session covers 6+ endpoints, 4+ tables, or 4+ screens, it will likely exceed 300 lines — pre-split
 3. Multi-domain slices (e.g., order+payment+inventory) should almost always split backend and api-spec by domain
@@ -99,6 +100,7 @@ Create each file at `docs/plans/{nn}-{name}/{nn}-{layer}.plan.md`.
 Follow the mandatory format in [references/session-plan-template.md](references/session-plan-template.md).
 
 **속도 최적화 원칙:**
+
 - Plan 파일 간 공통 정보를 반복하지 않는다. 각 세션은 자기 scope만 기술한다.
 - 코드 블록은 시그니처 + 핵심 로직만 pseudocode로 작성한다. 전체 구현을 쓰지 않는다.
 - Data Contract 테이블은 해당 세션에서 직접 만드는 것만 포함한다.

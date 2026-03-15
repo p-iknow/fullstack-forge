@@ -9,12 +9,12 @@
 
 loyalty 도메인이 발행하는 이벤트 목록.
 
-| 이벤트           | 발행 시점           | 주요 소비자  | 멱등성 키                           |
-| ---------------- | ------------------- | ------------ | ----------------------------------- |
-| `PointsEarned`   | 포인트 적립 확정 시 | notification | `PointsEarned:{ledger_id}`          |
-| `PointsRedeemed` | 포인트 사용 시      | notification | `PointsRedeemed:{redemption_id}`    |
-| `PointsExpired`  | 포인트 만료 시      | notification | `PointsExpired:{ledger_id}`         |
-| `PointsAdjusted` | 운영자 수동 조정 시 | notification | `PointsAdjusted:{ledger_id}`        |
+| 이벤트           | 발행 시점           | 주요 소비자  | 멱등성 키                        |
+| ---------------- | ------------------- | ------------ | -------------------------------- |
+| `PointsEarned`   | 포인트 적립 확정 시 | notification | `PointsEarned:{ledger_id}`       |
+| `PointsRedeemed` | 포인트 사용 시      | notification | `PointsRedeemed:{redemption_id}` |
+| `PointsExpired`  | 포인트 만료 시      | notification | `PointsExpired:{ledger_id}`      |
+| `PointsAdjusted` | 운영자 수동 조정 시 | notification | `PointsAdjusted:{ledger_id}`     |
 
 ### 큐 라우팅
 
@@ -27,14 +27,14 @@ loyalty 도메인이 발행하는 이벤트 목록.
 - **소비자**: notification — 적립 확정 알림 발송
 - **페이로드**:
 
-| 필드         | 타입     | 필수 | 설명                                   |
-| ------------ | -------- | ---- | -------------------------------------- |
-| `user_id`    | `UUID`   | Y    | 대상 사용자 식별자                     |
-| `ledger_id`  | `UUID`   | Y    | 원장 항목 식별자                       |
-| `amount`     | `integer`| Y    | 적립 포인트 (양수)                     |
-| `order_id`   | `UUID`   | Y    | 연관 주문 식별자                       |
-| `earned_at`  | `string` | Y    | 적립 시각 (ISO 8601)                   |
-| `expires_at` | `string` | Y    | 만료 예정 시각 (ISO 8601, +12개월)     |
+| 필드         | 타입      | 필수 | 설명                               |
+| ------------ | --------- | ---- | ---------------------------------- |
+| `user_id`    | `UUID`    | Y    | 대상 사용자 식별자                 |
+| `ledger_id`  | `UUID`    | Y    | 원장 항목 식별자                   |
+| `amount`     | `integer` | Y    | 적립 포인트 (양수)                 |
+| `order_id`   | `UUID`    | Y    | 연관 주문 식별자                   |
+| `earned_at`  | `string`  | Y    | 적립 시각 (ISO 8601)               |
+| `expires_at` | `string`  | Y    | 만료 예정 시각 (ISO 8601, +12개월) |
 
 ### PointsRedeemed
 
@@ -45,13 +45,13 @@ loyalty 도메인이 발행하는 이벤트 목록.
 
 - **페이로드**:
 
-| 필드            | 타입     | 필수 | 설명                     |
-| --------------- | -------- | ---- | ------------------------ |
-| `user_id`       | `UUID`   | Y    | 대상 사용자 식별자       |
-| `redemption_id` | `UUID`   | Y    | 사용 이력 식별자         |
-| `amount`        | `integer`| Y    | 사용 포인트 (양수)       |
-| `order_id`      | `UUID`   | Y    | 연관 주문 식별자         |
-| `redeemed_at`   | `string` | Y    | 사용 시각 (ISO 8601)     |
+| 필드            | 타입      | 필수 | 설명                 |
+| --------------- | --------- | ---- | -------------------- |
+| `user_id`       | `UUID`    | Y    | 대상 사용자 식별자   |
+| `redemption_id` | `UUID`    | Y    | 사용 이력 식별자     |
+| `amount`        | `integer` | Y    | 사용 포인트 (양수)   |
+| `order_id`      | `UUID`    | Y    | 연관 주문 식별자     |
+| `redeemed_at`   | `string`  | Y    | 사용 시각 (ISO 8601) |
 
 ### PointsExpired
 
@@ -59,12 +59,12 @@ loyalty 도메인이 발행하는 이벤트 목록.
 - **소비자**: notification — 만료 안내 알림 발송
 - **페이로드**:
 
-| 필드         | 타입     | 필수 | 설명                       |
-| ------------ | -------- | ---- | -------------------------- |
-| `user_id`    | `UUID`   | Y    | 대상 사용자 식별자         |
-| `ledger_id`  | `UUID`   | Y    | 원장 항목 식별자           |
-| `amount`     | `integer`| Y    | 만료 포인트 (양수)         |
-| `expired_at` | `string` | Y    | 만료 처리 시각 (ISO 8601)  |
+| 필드         | 타입      | 필수 | 설명                      |
+| ------------ | --------- | ---- | ------------------------- |
+| `user_id`    | `UUID`    | Y    | 대상 사용자 식별자        |
+| `ledger_id`  | `UUID`    | Y    | 원장 항목 식별자          |
+| `amount`     | `integer` | Y    | 만료 포인트 (양수)        |
+| `expired_at` | `string`  | Y    | 만료 처리 시각 (ISO 8601) |
 
 ### PointsAdjusted
 
@@ -72,14 +72,14 @@ loyalty 도메인이 발행하는 이벤트 목록.
 - **소비자**: notification — 조정 내역 알림 발송
 - **페이로드**:
 
-| 필드          | 타입     | 필수 | 설명                           |
-| ------------- | -------- | ---- | ------------------------------ |
-| `user_id`     | `UUID`   | Y    | 대상 사용자 식별자             |
-| `ledger_id`   | `UUID`   | Y    | 원장 항목 식별자               |
-| `delta`       | `integer`| Y    | 조정량 (양수=가산, 음수=차감)  |
-| `reason`      | `string` | Y    | 조정 사유                      |
-| `adjusted_by` | `UUID`   | Y    | 조정 운영자 식별자             |
-| `adjusted_at` | `string` | Y    | 조정 시각 (ISO 8601)           |
+| 필드          | 타입      | 필수 | 설명                          |
+| ------------- | --------- | ---- | ----------------------------- |
+| `user_id`     | `UUID`    | Y    | 대상 사용자 식별자            |
+| `ledger_id`   | `UUID`    | Y    | 원장 항목 식별자              |
+| `delta`       | `integer` | Y    | 조정량 (양수=가산, 음수=차감) |
+| `reason`      | `string`  | Y    | 조정 사유                     |
+| `adjusted_by` | `UUID`    | Y    | 조정 운영자 식별자            |
+| `adjusted_at` | `string`  | Y    | 조정 시각 (ISO 8601)          |
 
 ---
 
@@ -87,12 +87,12 @@ loyalty 도메인이 발행하는 이벤트 목록.
 
 loyalty 도메인이 외부 도메인으로부터 소비하는 이벤트 목록.
 
-| 이벤트             | 발행 도메인 | 소비 시 동작                        | 멱등성 키                            |
-| ------------------ | ----------- | ----------------------------------- | ------------------------------------ |
-| `PaymentCaptured`  | payment     | `pending` 포인트 적립 (ledger 생성) | `loyalty:earn:{order_id}`            |
-| `DeliveryStatusChanged` (`new_status=delivered`)| delivery    | `pending → available` 전환          | `loyalty:confirm:{order_id}`         |
-| `OrderCancelled`   | order       | 적립 rollback + 사용 포인트 복원    | `loyalty:cancel:{order_id}`          |
-| `CouponRedeemed`   | promotion   | 적립 기준 금액에서 할인액 차감 반영 | `loyalty:coupon:{order_id}`          |
+| 이벤트                                           | 발행 도메인 | 소비 시 동작                        | 멱등성 키                    |
+| ------------------------------------------------ | ----------- | ----------------------------------- | ---------------------------- |
+| `PaymentCaptured`                                | payment     | `pending` 포인트 적립 (ledger 생성) | `loyalty:earn:{order_id}`    |
+| `DeliveryStatusChanged` (`new_status=delivered`) | delivery    | `pending → available` 전환          | `loyalty:confirm:{order_id}` |
+| `OrderCancelled`                                 | order       | 적립 rollback + 사용 포인트 복원    | `loyalty:cancel:{order_id}`  |
+| `CouponRedeemed`                                 | promotion   | 적립 기준 금액에서 할인액 차감 반영 | `loyalty:coupon:{order_id}`  |
 
 ### PaymentCaptured 소비
 

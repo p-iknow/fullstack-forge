@@ -268,7 +268,10 @@ export const uploadAdminProductImagesHandler: RouteHandler<
 
   if (!thumbFile || !detailFile) {
     return c.json(
-      { code: 'admin_product_image_invalid_file', error: 'Both thumb and detail images are required' },
+      {
+        code: 'admin_product_image_invalid_file',
+        error: 'Both thumb and detail images are required',
+      },
       400,
     )
   }
@@ -281,7 +284,10 @@ export const uploadAdminProductImagesHandler: RouteHandler<
       )
     }
     if (file.size > MAX_FILE_SIZE_BYTES) {
-      return c.json({ code: 'admin_product_image_too_large', error: 'Image exceeds 5MB limit' }, 400)
+      return c.json(
+        { code: 'admin_product_image_too_large', error: 'Image exceeds 5MB limit' },
+        400,
+      )
     }
   }
 

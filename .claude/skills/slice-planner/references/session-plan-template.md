@@ -18,18 +18,22 @@ All session plan files MUST follow this structure. Replace `{placeholders}` with
 ## Scope
 
 **이 세션에서 하는 것**:
+
 - {Specific deliverable 1}
 - {Specific deliverable 2}
 
 **이 세션에서 하지 않는 것**:
+
 - {Deferred item 1} ({which session handles it})
 - {Deferred item 2} ({which session handles it})
 
 **생성할 파일**:
+
 - `{full/path/to/file1.ts}`
 - `{full/path/to/file2.ts}`
 
 **수정할 파일**:
+
 - `{full/path/to/existing-file.ts}` ({what change})
 
 ## Progressive Tasks
@@ -49,53 +53,55 @@ All session plan files MUST follow this structure. Replace `{placeholders}` with
 
 ### Endpoints (api-spec / backend sessions)
 
-| Method | Path | Request | 성공 | 에러 코드 |
-|--------|------|---------|------|-----------|
-| {GET} | {/api/store/resource} | {—} | {200 responseSchema} | {401, 404} |
+| Method | Path                  | Request | 성공                 | 에러 코드  |
+| ------ | --------------------- | ------- | -------------------- | ---------- |
+| {GET}  | {/api/store/resource} | {—}     | {200 responseSchema} | {401, 404} |
 
 ### Error Codes (api-spec / backend sessions)
 
-| code | 의미 | HTTP |
-|------|------|------|
+| code           | 의미          | HTTP  |
+| -------------- | ------------- | ----- |
 | `{error_code}` | {description} | {400} |
 
 ### DB Columns (db-schema sessions)
 
-| 컬럼 | 타입 | 제약 | 설명 |
-|------|------|------|------|
+| 컬럼 | 타입   | 제약                | 설명          |
+| ---- | ------ | ------------------- | ------------- |
 | {id} | {uuid} | {PK, defaultRandom} | {description} |
 
 ### Business Rules (backend sessions)
 
-| 규칙 | 값 | 검증 시점 |
-|------|------|-----------|
+| 규칙        | 값               | 검증 시점       |
+| ----------- | ---------------- | --------------- |
 | {rule name} | {value from PRD} | {when enforced} |
 
 ### Component Tree (store-ui / admin-ui sessions)
-
 ```
+
 {PageComponent}
 ├── {Loading} → {Skeleton description}
 ├── {Error} → {Error handling description}
 ├── {Empty} → {Empty state description}
 └── {Content}
-    ├── {SubComponent1}
-    │   └── {details}
-    └── {SubComponent2}
-```
+├── {SubComponent1}
+│ └── {details}
+└── {SubComponent2}
+
+````
 
 ## Verification
 
 ```bash
 {exact command 1}
 {exact command 2}
-```
+````
 
 ## Exit Criteria
 
 - [ ] {Testable outcome 1}
 - [ ] {Testable outcome 2}
 - [ ] typecheck/build/test 통과
+
 ```
 
 ---
@@ -114,3 +120,4 @@ All session plan files MUST follow this structure. Replace `{placeholders}` with
 | Component Tree | store-ui, admin-ui | Indented hierarchy showing layout |
 | Verification | All sessions | Exact bash commands |
 | Exit Criteria | All sessions | Checkbox list, every item testable |
+```

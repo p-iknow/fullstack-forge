@@ -13,7 +13,7 @@ import { TanStackRouterDevtools } from '@tanstack/react-router-devtools'
 import { QueryClient } from '@tanstack/react-query'
 import { OverlayProvider } from 'overlay-kit'
 import appCss from '~/styles/app.css?url'
-import { meQueryOptions, logoutMutationOptions, authQueryKeys } from '~/lib/queries/auth'
+import { meQueryOptions, logoutMutationOptions, authQueryKeys } from '~/@shared/queries/auth'
 
 const queryClient = new QueryClient({
   defaultOptions: {

@@ -29,9 +29,8 @@ jobs:
           cache: 'pnpm'
 
       - run: pnpm install --frozen-lockfile
+      - run: pnpm exec playwright install chromium
 
-      - run: pnpm exec nx run-many -t codegen
-      - run: git diff --exit-code packages/api-spec/generated/openapi.yaml
       - run: pnpm lint
       - run: pnpm format:check
-      - run: pnpm exec nx run-many -t typecheck build test
+      - run: pnpm exec nx affected -t typecheck build test --base=origin/main

@@ -28,6 +28,7 @@ export const passwordResetRequestHandler: RouteHandler<typeof passwordResetReque
         token: resetToken,
       })
     } catch (error) {
+      // eslint-disable-next-line no-console -- intentional server-side error logging
       console.error('[auth] password reset mail send failed', {
         userId: foundUser.id,
         error,

@@ -21,14 +21,14 @@
   - `order` → 운영 inbox 분류, SLA 타이머 시작
 - **페이로드**:
 
-| 필드 | 타입 | 설명 |
-| --- | --- | --- |
-| `inquiryId` | UUID | 문의 식별자 |
-| `customerId` | UUID | 문의 작성 고객 |
-| `orderId` | UUID \| null | 관련 주문 식별자 (없으면 null) |
-| `category` | string | 문의 카테고리 |
-| `title` | string | 문의 제목 |
-| `createdAt` | ISO timestamp | 문의 생성 시각 |
+| 필드         | 타입          | 설명                           |
+| ------------ | ------------- | ------------------------------ |
+| `inquiryId`  | UUID          | 문의 식별자                    |
+| `customerId` | UUID          | 문의 작성 고객                 |
+| `orderId`    | UUID \| null  | 관련 주문 식별자 (없으면 null) |
+| `category`   | string        | 문의 카테고리                  |
+| `title`      | string        | 문의 제목                      |
+| `createdAt`  | ISO timestamp | 문의 생성 시각                 |
 
 ### `InquiryReplied`
 
@@ -39,14 +39,14 @@
   - `order` → `last_replied_at` 기반 SLA 측정 기록
 - **페이로드**:
 
-| 필드 | 타입 | 설명 |
-| --- | --- | --- |
-| `inquiryId` | UUID | 대상 문의 식별자 |
-| `replyId` | UUID | 답변 식별자 |
-| `customerId` | UUID | 문의 작성 고객 (알림 대상) |
-| `authorRole` | string | 답변 작성자 역할 (`operator\|admin`) |
-| `authorId` | UUID | 답변 작성자 식별자 |
-| `repliedAt` | ISO timestamp | 답변 생성 시각 |
+| 필드         | 타입          | 설명                                 |
+| ------------ | ------------- | ------------------------------------ |
+| `inquiryId`  | UUID          | 대상 문의 식별자                     |
+| `replyId`    | UUID          | 답변 식별자                          |
+| `customerId` | UUID          | 문의 작성 고객 (알림 대상)           |
+| `authorRole` | string        | 답변 작성자 역할 (`operator\|admin`) |
+| `authorId`   | UUID          | 답변 작성자 식별자                   |
+| `repliedAt`  | ISO timestamp | 답변 생성 시각                       |
 
 ### `InquiryStatusChanged`
 
@@ -57,14 +57,14 @@
   - `order` → 감사 로그 기록
 - **페이로드**:
 
-| 필드 | 타입 | 설명 |
-| --- | --- | --- |
-| `inquiryId` | UUID | 문의 식별자 |
-| `customerId` | UUID | 문의 작성 고객 |
-| `previousStatus` | string | 변경 전 상태 |
-| `newStatus` | string | 변경 후 상태 |
-| `changedBy` | UUID | 상태 변경 수행자 |
-| `changedAt` | ISO timestamp | 상태 변경 시각 |
+| 필드             | 타입          | 설명             |
+| ---------------- | ------------- | ---------------- |
+| `inquiryId`      | UUID          | 문의 식별자      |
+| `customerId`     | UUID          | 문의 작성 고객   |
+| `previousStatus` | string        | 변경 전 상태     |
+| `newStatus`      | string        | 변경 후 상태     |
+| `changedBy`      | UUID          | 상태 변경 수행자 |
+| `changedAt`      | ISO timestamp | 상태 변경 시각   |
 
 ### `InquiryReopened`
 
@@ -75,13 +75,13 @@
   - `order` → SLA 타이머 재시작, 감사 로그 기록
 - **페이로드**:
 
-| 필드 | 타입 | 설명 |
-| --- | --- | --- |
-| `inquiryId` | UUID | 문의 식별자 |
-| `customerId` | UUID | 재오픈 요청 고객 |
-| `reopenCount` | integer | 현재까지 재오픈 횟수 |
-| `previousReplyId` | UUID | 직전 운영자 답변 식별자 |
-| `reopenedAt` | ISO timestamp | 재오픈 시각 |
+| 필드              | 타입          | 설명                    |
+| ----------------- | ------------- | ----------------------- |
+| `inquiryId`       | UUID          | 문의 식별자             |
+| `customerId`      | UUID          | 재오픈 요청 고객        |
+| `reopenCount`     | integer       | 현재까지 재오픈 횟수    |
+| `previousReplyId` | UUID          | 직전 운영자 답변 식별자 |
+| `reopenedAt`      | ISO timestamp | 재오픈 시각             |
 
 ## 이벤트 발행 규칙
 

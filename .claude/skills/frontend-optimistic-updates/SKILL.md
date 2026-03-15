@@ -21,12 +21,12 @@ Does the mutation affect data visible in OTHER components?
 
 ## Pattern Selection
 
-| #   | Pattern                    | Use When                                                                          |
-| --- | -------------------------- | --------------------------------------------------------------------------------- |
-| 1   | TQ Cache Imperative        | **DEFAULT.** Mutation affects shared query cache; cross-component sync needed     |
-| 2   | TQ Cache Derived State     | Optimistic value derived from cache (e.g., total price from items)                |
-| 3   | useOptimistic Simple       | Component-local optimistic state; no cross-component sync; React 19+             |
-| 4   | Hybrid (useOptimistic + TQ)| Local display + cache sync both needed; Server Actions or form-based mutations    |
+| #   | Pattern                     | Use When                                                                       |
+| --- | --------------------------- | ------------------------------------------------------------------------------ |
+| 1   | TQ Cache Imperative         | **DEFAULT.** Mutation affects shared query cache; cross-component sync needed  |
+| 2   | TQ Cache Derived State      | Optimistic value derived from cache (e.g., total price from items)             |
+| 3   | useOptimistic Simple        | Component-local optimistic state; no cross-component sync; React 19+           |
+| 4   | Hybrid (useOptimistic + TQ) | Local display + cache sync both needed; Server Actions or form-based mutations |
 
 ## Pattern 1: TQ Cache Imperative — `mutateAsync` + `setQueryData`
 
@@ -52,9 +52,7 @@ const changeQuantity = async (newQty: number) => {
         (sum, i) => sum + i.unitPriceSnapshot * (i.id === item.id ? newQty : i.quantity),
         0,
       ),
-      items: previous.items.map((i) =>
-        i.id === item.id ? { ...i, quantity: newQty } : i,
-      ),
+      items: previous.items.map((i) => (i.id === item.id ? { ...i, quantity: newQty } : i)),
     })
   }
 
@@ -88,9 +86,7 @@ const removeItem = async () => {
     queryClient.setQueryData<CartResponse>(cartQueryKeys.cart, {
       ...previous,
       itemCount: filtered.length,
-      totalAmount: filtered.reduce(
-        (sum, i) => sum + i.unitPriceSnapshot * i.quantity, 0,
-      ),
+      totalAmount: filtered.reduce((sum, i) => sum + i.unitPriceSnapshot * i.quantity, 0),
       items: filtered,
     })
   }
@@ -123,11 +119,7 @@ function LikeButton({ isLiked, onToggle }: { isLiked: boolean; onToggle: () => P
     })
   }
 
-  return (
-    <button onClick={toggleLike}>
-      {optimisticLiked ? '❤️' : '🤍'}
-    </button>
-  )
+  return <button onClick={toggleLike}>{optimisticLiked ? '❤️' : '🤍'}</button>
 }
 ```
 
@@ -178,9 +170,7 @@ function CartItemRow({ item }: Readonly<{ item: CartItem }>) {
       if (previous) {
         queryClient.setQueryData<CartResponse>(cartQueryKeys.cart, {
           ...previous,
-          items: previous.items.map((i) =>
-            i.id === item.id ? { ...i, quantity: newQty } : i,
-          ),
+          items: previous.items.map((i) => (i.id === item.id ? { ...i, quantity: newQty } : i)),
         })
       }
 

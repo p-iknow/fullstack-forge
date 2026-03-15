@@ -37,6 +37,7 @@ return (
 ```
 
 **리팩토링하지 않는 경우:**
+
 - Mutation 전용 컴포넌트 (쿼리 없이 mutation만 사용)
 - 에러 시 특별한 비즈니스 로직이 필요한 경우 (redirect, 다른 API 호출 등)
 - 쿼리 결과에 따라 다른 쿼리를 조건부 호출하는 경우 (dependent queries)
@@ -67,14 +68,10 @@ return (
   {({ reset }) => (
     <ErrorBoundary
       onReset={reset}
-      fallback={({ error, reset: resetBoundary }) => (
-        <ErrorFallbackUI onRetry={resetBoundary} />
-      )}
+      fallback={({ error, reset: resetBoundary }) => <ErrorFallbackUI onRetry={resetBoundary} />}
     >
       <Suspense fallback={<Skeleton />}>
-        <SuspenseQuery {...queryOptions()}>
-          {({ data }) => <Content data={data} />}
-        </SuspenseQuery>
+        <SuspenseQuery {...queryOptions()}>{({ data }) => <Content data={data} />}</SuspenseQuery>
       </Suspense>
     </ErrorBoundary>
   )}

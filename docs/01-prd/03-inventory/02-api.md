@@ -25,13 +25,13 @@
 - 목적: 재고 목록 조회
 - 쿼리 파라미터:
 
-  | 파라미터 | 타입 | 기본값 | 설명 |
-  | --- | --- | --- | --- |
-  | `page` | integer | `1` | 페이지 번호 (1-based) |
-  | `size` | integer | `20` | 페이지 크기 (최대 100) |
-  | `sort` | string | `available:asc` | 정렬 기준 (`available:asc`, `available:desc`, `on_hand:desc`, `product_name:asc`) |
-  | `status` | string | - | 필터: `low_stock`, `out_of_stock` |
-  | `q` | string | - | 상품명/SKU 검색 |
+  | 파라미터 | 타입    | 기본값          | 설명                                                                              |
+  | -------- | ------- | --------------- | --------------------------------------------------------------------------------- |
+  | `page`   | integer | `1`             | 페이지 번호 (1-based)                                                             |
+  | `size`   | integer | `20`            | 페이지 크기 (최대 100)                                                            |
+  | `sort`   | string  | `available:asc` | 정렬 기준 (`available:asc`, `available:desc`, `on_hand:desc`, `product_name:asc`) |
+  | `status` | string  | -               | 필터: `low_stock`, `out_of_stock`                                                 |
+  | `q`      | string  | -               | 상품명/SKU 검색                                                                   |
 
 - 성공 응답 (200):
 
@@ -105,12 +105,12 @@
   }
   ```
 
-  | 필드 | 타입 | 필수 | 제약 |
-  | --- | --- | --- | --- |
-  | `delta` | integer | Y | 양수=입고, 음수=차감. 0 불가 |
-  | `reason` | string | Y | 1~200자 |
-  | `idempotency_key` | string (UUID) | Y | 중복 요청 방지 |
-  | `version` | integer | Y | 현재 재고 version (낙관적 락) |
+  | 필드              | 타입          | 필수 | 제약                          |
+  | ----------------- | ------------- | ---- | ----------------------------- |
+  | `delta`           | integer       | Y    | 양수=입고, 음수=차감. 0 불가  |
+  | `reason`          | string        | Y    | 1~200자                       |
+  | `idempotency_key` | string (UUID) | Y    | 중복 요청 방지                |
+  | `version`         | integer       | Y    | 현재 재고 version (낙관적 락) |
 
 - 성공 응답 (200): 조정 후 재고 상태 반환 (상세 조회와 동일 형태)
 
@@ -127,10 +127,10 @@
   }
   ```
 
-  | 필드 | 타입 | 필수 | 제약 |
-  | --- | --- | --- | --- |
-  | `quantity` | integer | Y | 1 이상. `available` 초과 시 거부 |
-  | `order_id` | string (UUID) | Y | 예약 연결 주문 식별자 |
+  | 필드       | 타입          | 필수 | 제약                             |
+  | ---------- | ------------- | ---- | -------------------------------- |
+  | `quantity` | integer       | Y    | 1 이상. `available` 초과 시 거부 |
+  | `order_id` | string (UUID) | Y    | 예약 연결 주문 식별자            |
 
 - 성공 응답 (200): 예약 후 재고 상태 반환
 
@@ -147,10 +147,10 @@
   }
   ```
 
-  | 필드 | 타입 | 필수 | 제약 |
-  | --- | --- | --- | --- |
-  | `quantity` | integer | Y | 1 이상. 기존 예약 수량 초과 시 거부 |
-  | `order_id` | string (UUID) | Y | 해제 대상 주문 식별자 |
+  | 필드       | 타입          | 필수 | 제약                                |
+  | ---------- | ------------- | ---- | ----------------------------------- |
+  | `quantity` | integer       | Y    | 1 이상. 기존 예약 수량 초과 시 거부 |
+  | `order_id` | string (UUID) | Y    | 해제 대상 주문 식별자               |
 
 - 성공 응답 (200): 해제 후 재고 상태 반환
 
@@ -167,10 +167,10 @@
   }
   ```
 
-  | 필드 | 타입 | 필수 | 제약 |
-  | --- | --- | --- | --- |
-  | `quantity` | integer | Y | 1 이상 |
-  | `order_id` | string (UUID) | Y | 차감 대상 주문 식별자 |
+  | 필드       | 타입          | 필수 | 제약                  |
+  | ---------- | ------------- | ---- | --------------------- |
+  | `quantity` | integer       | Y    | 1 이상                |
+  | `order_id` | string (UUID) | Y    | 차감 대상 주문 식별자 |
 
 - 성공 응답 (200): 차감 후 재고 상태 반환
 
@@ -215,18 +215,18 @@
 
 ### 에러 코드 목록
 
-| HTTP Status | 에러 코드 | 발생 조건 | 해당 엔드포인트 |
-| --- | --- | --- | --- |
-| 400 | `INVALID_REQUEST` | 필수 필드 누락, 형식 오류, delta=0 | 전체 |
-| 400 | `INVENTORY_INSUFFICIENT` | `quantity > available` (예약 불가) | reserve |
-| 400 | `NEGATIVE_RESULT` | 조정 결과 `on_hand < 0` 또는 `available < 0` | adjust |
-| 400 | `EXCEEDS_MAX_ON_HAND` | 조정 결과 `on_hand > 999,999` | adjust |
-| 400 | `RELEASE_EXCEEDS_RESERVED` | 해제 수량이 기존 예약 수량 초과 | release |
-| 403 | `FORBIDDEN` | 권한 부족 | 전체 |
-| 404 | `PRODUCT_NOT_FOUND` | 존재하지 않는 `product_id` | 전체 |
-| 409 | `VERSION_CONFLICT` | 낙관적 락 version 불일치 | adjust |
-| 409 | `DUPLICATE_REQUEST` | 동일 `idempotency_key` 재요청 | adjust |
-| 429 | `RATE_LIMITED` | 요청 빈도 초과 | 전체 (admin) |
+| HTTP Status | 에러 코드                  | 발생 조건                                    | 해당 엔드포인트 |
+| ----------- | -------------------------- | -------------------------------------------- | --------------- |
+| 400         | `INVALID_REQUEST`          | 필수 필드 누락, 형식 오류, delta=0           | 전체            |
+| 400         | `INVENTORY_INSUFFICIENT`   | `quantity > available` (예약 불가)           | reserve         |
+| 400         | `NEGATIVE_RESULT`          | 조정 결과 `on_hand < 0` 또는 `available < 0` | adjust          |
+| 400         | `EXCEEDS_MAX_ON_HAND`      | 조정 결과 `on_hand > 999,999`                | adjust          |
+| 400         | `RELEASE_EXCEEDS_RESERVED` | 해제 수량이 기존 예약 수량 초과              | release         |
+| 403         | `FORBIDDEN`                | 권한 부족                                    | 전체            |
+| 404         | `PRODUCT_NOT_FOUND`        | 존재하지 않는 `product_id`                   | 전체            |
+| 409         | `VERSION_CONFLICT`         | 낙관적 락 version 불일치                     | adjust          |
+| 409         | `DUPLICATE_REQUEST`        | 동일 `idempotency_key` 재요청                | adjust          |
+| 429         | `RATE_LIMITED`             | 요청 빈도 초과                               | 전체 (admin)    |
 
 ---
 

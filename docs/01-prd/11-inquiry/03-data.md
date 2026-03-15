@@ -2,21 +2,21 @@
 
 ## CustomerInquiry 엔터티
 
-| 필드 | 타입 | 필수 | 제약조건 | 설명 |
-| --- | --- | --- | --- | --- |
-| `id` | UUID | Y | PK | 문의 식별자 |
-| `customer_id` | UUID | Y | FK → User | 문의 작성 고객 식별자 |
-| `order_id` | UUID | N | FK → Order | 관련 주문 식별자. 주문과 무관한 문의(account, other 등)는 null |
-| `category` | enum | Y | `order\|payment\|delivery\|product\|account\|other` | 문의 카테고리 |
-| `title` | string | Y | 최대 **200자** | 문의 제목 |
-| `content` | string | Y | 최대 **5,000자** | 문의 본문 |
-| `status` | enum | Y | `open\|in_progress\|resolved\|closed`, 기본값 `open` | 문의 상태 |
-| `reopen_count` | integer | Y | 기본값 `0`, 최대 `3` | 재오픈 횟수 |
-| `assigned_operator_id` | UUID | N | FK → User | 담당 운영자 식별자 |
-| `created_at` | timestamp | Y | 생성 시 자동 설정 | 문의 생성 시각 |
-| `updated_at` | timestamp | Y | 변경 시 자동 갱신 | 문의 수정 시각 |
-| `last_replied_at` | timestamp | N | 운영자 답변 시 갱신 | 최근 답변 시각 |
-| `version` | integer | Y | 기본값 `1`, 낙관적 락용 | 동시성 제어 버전 |
+| 필드                   | 타입      | 필수 | 제약조건                                             | 설명                                                           |
+| ---------------------- | --------- | ---- | ---------------------------------------------------- | -------------------------------------------------------------- |
+| `id`                   | UUID      | Y    | PK                                                   | 문의 식별자                                                    |
+| `customer_id`          | UUID      | Y    | FK → User                                            | 문의 작성 고객 식별자                                          |
+| `order_id`             | UUID      | N    | FK → Order                                           | 관련 주문 식별자. 주문과 무관한 문의(account, other 등)는 null |
+| `category`             | enum      | Y    | `order\|payment\|delivery\|product\|account\|other`  | 문의 카테고리                                                  |
+| `title`                | string    | Y    | 최대 **200자**                                       | 문의 제목                                                      |
+| `content`              | string    | Y    | 최대 **5,000자**                                     | 문의 본문                                                      |
+| `status`               | enum      | Y    | `open\|in_progress\|resolved\|closed`, 기본값 `open` | 문의 상태                                                      |
+| `reopen_count`         | integer   | Y    | 기본값 `0`, 최대 `3`                                 | 재오픈 횟수                                                    |
+| `assigned_operator_id` | UUID      | N    | FK → User                                            | 담당 운영자 식별자                                             |
+| `created_at`           | timestamp | Y    | 생성 시 자동 설정                                    | 문의 생성 시각                                                 |
+| `updated_at`           | timestamp | Y    | 변경 시 자동 갱신                                    | 문의 수정 시각                                                 |
+| `last_replied_at`      | timestamp | N    | 운영자 답변 시 갱신                                  | 최근 답변 시각                                                 |
+| `version`              | integer   | Y    | 기본값 `1`, 낙관적 락용                              | 동시성 제어 버전                                               |
 
 ### 유니크 제약 및 인덱스
 
@@ -27,15 +27,15 @@
 
 ## InquiryReply 엔터티
 
-| 필드 | 타입 | 필수 | 제약조건 | 설명 |
-| --- | --- | --- | --- | --- |
-| `id` | UUID | Y | PK | 답변 식별자 |
-| `inquiry_id` | UUID | Y | FK → CustomerInquiry | 대상 문의 식별자 |
-| `author_role` | enum | Y | `operator\|admin\|customer` | 답변 작성 권한. 재오픈 시 고객 추가 질문도 reply로 기록 |
-| `author_id` | UUID | Y | FK → User | 답변 작성자 식별자 |
-| `content` | string | Y | 최대 **10,000자** (운영자), 최대 **5,000자** (고객 재오픈) | 답변/추가 질문 본문 |
-| `is_internal` | boolean | Y | 기본값 `false` | 내부 메모 여부. `true`이면 고객에게 비공개 |
-| `created_at` | timestamp | Y | 생성 시 자동 설정 | 답변 생성 시각 |
+| 필드          | 타입      | 필수 | 제약조건                                                   | 설명                                                    |
+| ------------- | --------- | ---- | ---------------------------------------------------------- | ------------------------------------------------------- |
+| `id`          | UUID      | Y    | PK                                                         | 답변 식별자                                             |
+| `inquiry_id`  | UUID      | Y    | FK → CustomerInquiry                                       | 대상 문의 식별자                                        |
+| `author_role` | enum      | Y    | `operator\|admin\|customer`                                | 답변 작성 권한. 재오픈 시 고객 추가 질문도 reply로 기록 |
+| `author_id`   | UUID      | Y    | FK → User                                                  | 답변 작성자 식별자                                      |
+| `content`     | string    | Y    | 최대 **10,000자** (운영자), 최대 **5,000자** (고객 재오픈) | 답변/추가 질문 본문                                     |
+| `is_internal` | boolean   | Y    | 기본값 `false`                                             | 내부 메모 여부. `true`이면 고객에게 비공개              |
+| `created_at`  | timestamp | Y    | 생성 시 자동 설정                                          | 답변 생성 시각                                          |
 
 ### 유니크 제약 및 인덱스
 

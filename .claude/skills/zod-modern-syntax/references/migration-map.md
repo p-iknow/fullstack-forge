@@ -41,9 +41,10 @@ z.string().ip({ version: 'v6' })   z.ipv6()
 ```
 
 New in v4 (no v3 equivalent):
+
 ```typescript
-z.cidrv4()    // IP range v4
-z.cidrv6()    // IP range v6
+z.cidrv4() // IP range v4
+z.cidrv6() // IP range v6
 z.base64url() // base64url encoding
 ```
 
@@ -54,8 +55,8 @@ Top-level format validators return typed schemas. Additional string refinements 
 
 ```typescript
 // If you had additional constraints
-z.string().email().min(5)  // ❌
-z.email().min(5)           // ✅ still chainable
+z.string().email().min(5) // ❌
+z.email().min(5) // ✅ still chainable
 ```
 
 ## Number/Integer
@@ -63,6 +64,7 @@ z.email().min(5)           // ✅ still chainable
 ### z.int()
 
 `z.int()` returns a `ZodNumber` pre-configured with:
+
 - Integer check
 - Range: `[Number.MIN_SAFE_INTEGER, Number.MAX_SAFE_INTEGER]`
 
@@ -81,13 +83,13 @@ z.number().safe()                        z.int()
 ### Fixed-width numeric types (new in v4)
 
 ```typescript
-z.int()       // safe integer range
-z.int32()     // [-2147483648, 2147483647]
-z.uint32()    // [0, 4294967295]
-z.float32()   // 32-bit float range
-z.float64()   // 64-bit float range
-z.int64()     // returns ZodBigInt
-z.uint64()    // returns ZodBigInt
+z.int() // safe integer range
+z.int32() // [-2147483648, 2147483647]
+z.uint32() // [0, 4294967295]
+z.float32() // 32-bit float range
+z.float64() // 64-bit float range
+z.int64() // returns ZodBigInt
+z.uint64() // returns ZodBigInt
 ```
 
 ## Object Schema

@@ -1,9 +1,8 @@
 import { defineProject } from 'vitest/config'
-import tsConfigPaths from 'vite-tsconfig-paths'
 
 export default defineProject({
-  plugins: [tsConfigPaths()],
   resolve: {
+    tsconfigPaths: true,
     conditions: ['@fullstack-forge/source'],
   },
   test: {
@@ -11,6 +10,6 @@ export default defineProject({
     environment: 'jsdom',
     include: ['src/**/*.test.{ts,tsx}'],
     setupFiles: ['./vitest.setup.ts'],
-    css: true,
+    css: false,
   },
 })
