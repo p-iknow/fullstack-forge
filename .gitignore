@@ -9,7 +9,6 @@ tmp
 storybook-static
 
 # TanStack Start
-routeTree.gen.ts
 .tanstack
 .vinxi
 .nitro
