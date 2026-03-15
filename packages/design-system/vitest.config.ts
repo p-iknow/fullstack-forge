@@ -1,9 +1,8 @@
 import { defineProject } from 'vitest/config'
-import tsConfigPaths from 'vite-tsconfig-paths'
 
 export default defineProject({
-  plugins: [tsConfigPaths()],
   resolve: {
+    tsconfigPaths: true,
     conditions: ['@fullstack-forge/source'],
   },
   test: {

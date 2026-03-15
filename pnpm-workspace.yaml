@@ -15,7 +15,6 @@ catalog:
   '@vitejs/plugin-react': ^6.0.1
   tailwindcss: ^4.2.1
   vite: ^8.0.0
-  vite-tsconfig-paths: ^6.1.1
   react-hook-form: ^7.71.2
   '@hookform/resolvers': ^5.2.2
 
