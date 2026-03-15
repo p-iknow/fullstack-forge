@@ -1,5 +1,6 @@
 import { relations } from 'drizzle-orm'
 import { auditLogs, userCredentials, userOauthAccounts, userSessions, users } from './auth'
+import { cartItems, carts } from './cart'
 import { customerInquiries, inquiryReplies } from './inquiry'
 import { deliveries, orderItems, orders, payments, substitutions } from './order'
 import { loyaltyAccounts, pointLedgers, pointPolicies, pointRedemptions } from './points'
@@ -34,6 +35,7 @@ export const usersRelations = relations(users, ({ one, many }) => ({
   inquiries: many(customerInquiries),
   inquiryReplies: many(inquiryReplies),
   couponRedemptions: many(couponRedemptions),
+  carts: many(carts),
 }))
 
 export const productsRelations = relations(products, ({ one, many }) => ({
@@ -50,6 +52,17 @@ export const productsRelations = relations(products, ({ one, many }) => ({
   substitutionsAsSubstitute: many(substitutions, {
     relationName: 'substitute_product_substitutions',
   }),
+  cartItems: many(cartItems),
+}))
+
+export const cartsRelations = relations(carts, ({ one, many }) => ({
+  user: one(users, { fields: [carts.userId], references: [users.id] }),
+  items: many(cartItems),
+}))
+
+export const cartItemsRelations = relations(cartItems, ({ one }) => ({
+  cart: one(carts, { fields: [cartItems.cartId], references: [carts.id] }),
+  product: one(products, { fields: [cartItems.productId], references: [products.id] }),
 }))
 
 export const categoriesRelations = relations(categories, ({ many }) => ({

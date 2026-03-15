@@ -45,6 +45,14 @@
       "types": "./src/routes/health/index.ts",
       "default": "./src/routes/health/index.ts"
     },
+    "./cart-schemas": {
+      "types": "./src/cart-schemas.ts",
+      "default": "./src/cart-schemas.ts"
+    },
+    "./routes/cart": {
+      "types": "./src/routes/cart/index.ts",
+      "default": "./src/routes/cart/index.ts"
+    },
     "./routes/catalog": {
       "types": "./src/routes/catalog/index.ts",
       "default": "./src/routes/catalog/index.ts"

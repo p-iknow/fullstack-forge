@@ -25,6 +25,7 @@
 | [prd-review](prd-review/)                           | "PRD review", "requirements gap", "cross-domain check"   | Review PRD docs for completeness, consistency, and depth from domain expert view |
 | [adr-prd-sync](adr-prd-sync/)                       | "ADR review", "architecture sync", "PRD traceability"    | Review backend ADRs against PRD for decision adequacy, traceability, consistency |
 | [slice-planner](slice-planner/)                     | "plan slice", "session plan", "세부구현"                 | Create agent-executable session plans for vertical slices with progressive tasks |
+| [suspensive-refactoring](suspensive-refactoring/)   | "isPending/isError 제거", "Suspensive 전환", "refactor to Suspense" | Migrate manual useQuery state checks to declarative Suspensive boundaries    |
 
 ## STRUCTURE PATTERN
 

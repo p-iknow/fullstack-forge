@@ -3,7 +3,7 @@ import { z } from 'zod'
 import { authErrorSchema, authUserSchema } from '../../../auth-schemas'
 
 export const loginRequestSchema = z.object({
-  email: z.string().email(),
+  email: z.email(),
   password: z.string().min(1),
 })
 

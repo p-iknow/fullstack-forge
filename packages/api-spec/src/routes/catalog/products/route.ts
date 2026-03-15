@@ -19,12 +19,12 @@ export const catalogCommonQuerySchema = z.object({
 export const catalogListQuerySchema = catalogCommonQuerySchema.extend({
   sort: z.enum(['latest', 'price', 'name']).optional(),
   order: z.enum(['asc', 'desc']).optional(),
-  page: z.coerce.number().int().positive().optional(),
-  page_size: z.coerce.number().int().positive().max(100).optional(),
+  page: z.coerce.number().pipe(z.int().positive()).optional(),
+  page_size: z.coerce.number().pipe(z.int().positive().max(100)).optional(),
 })
 
 export const catalogProductIdParamsSchema = z.object({
-  id: z.string().uuid(),
+  id: z.uuid(),
 })
 
 export const getProductsRoute = createRoute({

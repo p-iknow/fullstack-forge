@@ -1,4 +1,5 @@
 import { Outlet, createFileRoute } from '@tanstack/react-router'
+import { Toaster } from 'sonner'
 import { StoreTopNav } from '~/screens/catalog/store-top-nav'
 
 export const Route = createFileRoute('/_catalog')({
@@ -12,6 +13,7 @@ function CatalogLayout() {
         <StoreTopNav />
       </div>
       <Outlet />
+      <Toaster position="top-right" richColors closeButton />
     </div>
   )
 }

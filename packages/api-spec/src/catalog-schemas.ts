@@ -6,25 +6,25 @@ export const catalogCategorySchema = z.object({
   id: z.string(),
   name: z.string(),
   slug: z.string(),
-  displayOrder: z.number().int().nonnegative(),
+  displayOrder: z.int().nonnegative(),
   isActive: z.boolean(),
 })
 
 export const catalogProductSummarySchema = z.object({
-  id: z.string().uuid(),
+  id: z.uuid(),
   sku: z.string(),
   name: z.string(),
   brand: z.string(),
   categoryId: z.string(),
   categoryName: z.string(),
-  price: z.number().int().nonnegative(),
-  weight: z.number().int().nonnegative(),
+  price: z.int().nonnegative(),
+  weight: z.int().nonnegative(),
   isActive: z.boolean(),
   stockDisplay: stockDisplaySchema,
   isSubstitutable: z.boolean(),
-  thumbUrl: z.string().url(),
-  detailUrl: z.string().url(),
-  availableStock: z.number().int().nonnegative(),
+  thumbUrl: z.url(),
+  detailUrl: z.url(),
+  availableStock: z.int().nonnegative(),
   canPurchase: z.boolean(),
 })
 
@@ -34,10 +34,10 @@ export const catalogProductDetailSchema = catalogProductSummarySchema.extend({
 
 export const catalogProductListResponseSchema = z.object({
   items: z.array(catalogProductSummarySchema),
-  page: z.number().int().positive(),
-  pageSize: z.number().int().positive(),
-  total: z.number().int().nonnegative(),
-  totalPages: z.number().int().positive(),
+  page: z.int().positive(),
+  pageSize: z.int().positive(),
+  total: z.int().nonnegative(),
+  totalPages: z.int().positive(),
   hasPreviousPage: z.boolean(),
   hasNextPage: z.boolean(),
 })

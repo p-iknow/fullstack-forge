@@ -52,7 +52,7 @@ describe('ProductDetailPage', () => {
     expect(
       screen.getByText('Fresh and delicious apple juice made from premium apples.'),
     ).toBeInTheDocument()
-    expect(screen.getByText('구매 가능한 상품입니다.')).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: '장바구니 담기' })).toBeInTheDocument()
   })
 
   test('shows out-of-stock message for out_of_stock stock display', async () => {

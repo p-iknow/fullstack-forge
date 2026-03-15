@@ -1,0 +1,15 @@
+{
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "Edit|Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "file_path=$(echo \"$CLAUDE_TOOL_INPUT\" | jq -r '.file_path // .filePath // empty') && case \"$file_path\" in */api/src/db/schema/*) cd apps/api && pnpm run db:generate --name auto 2>/dev/null && pnpm run db:migrate 2>/dev/null && echo '[hook] DB schema synced' ;; esac"
+          }
+        ]
+      }
+    ]
+  }
+}
