@@ -1,11 +1,5 @@
 import { mutationOptions, queryOptions } from '@tanstack/react-query'
-import {
-  addCartItem,
-  clearCart,
-  deleteCartItem,
-  getCart,
-  updateCartItem,
-} from '~/@shared/api/cart'
+import { addCartItem, clearCart, deleteCartItem, getCart, updateCartItem } from '~/@shared/api/cart'
 
 export const cartQueryKeys = {
   cart: ['cart'] as const,

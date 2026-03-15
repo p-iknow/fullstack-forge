@@ -7,10 +7,10 @@
 
 ## 이벤트 타입
 
-| 이벤트              | 발행 시점                          | 트리거 API                          |
-| ------------------- | ---------------------------------- | ----------------------------------- |
-| `CouponRedeemed`    | 쿠폰 적용으로 할인 확정 직후       | `POST /orders/:id/apply-coupon`     |
-| `PromotionApplied`  | 카테고리 할인 적용으로 할인 확정 직후 | `POST /orders/:id/apply-coupon`  |
+| 이벤트             | 발행 시점                             | 트리거 API                      |
+| ------------------ | ------------------------------------- | ------------------------------- |
+| `CouponRedeemed`   | 쿠폰 적용으로 할인 확정 직후          | `POST /orders/:id/apply-coupon` |
+| `PromotionApplied` | 카테고리 할인 적용으로 할인 확정 직후 | `POST /orders/:id/apply-coupon` |
 
 - 하나의 주문에 대해 `CouponRedeemed` 또는 `PromotionApplied` 중 **1개만** 발행 (충돌 정책에 의해 1개 선택)
 - 쿠폰이 선택된 경우 `CouponRedeemed`, 카테고리 할인이 선택된 경우 `PromotionApplied`
@@ -28,14 +28,14 @@
 - **라우팅**: SNS fanout → `order-promotions` 큐, `loyalty-promotions` 큐
 - **payload**:
 
-| 필드              | 타입      | 설명             |
-| ----------------- | --------- | ---------------- |
-| `coupon_id`       | UUID      | 쿠폰 식별자      |
-| `promotion_id`    | UUID      | 연결 프로모션     |
-| `user_id`         | UUID      | 사용자 식별자     |
-| `order_id`        | UUID      | 주문 식별자       |
-| `discount_amount` | integer   | 할인 금액 (원)    |
-| `redeemed_at`     | timestamp | 쿠폰 사용 시각    |
+| 필드              | 타입      | 설명           |
+| ----------------- | --------- | -------------- |
+| `coupon_id`       | UUID      | 쿠폰 식별자    |
+| `promotion_id`    | UUID      | 연결 프로모션  |
+| `user_id`         | UUID      | 사용자 식별자  |
+| `order_id`        | UUID      | 주문 식별자    |
+| `discount_amount` | integer   | 할인 금액 (원) |
+| `redeemed_at`     | timestamp | 쿠폰 사용 시각 |
 
 ### PromotionApplied
 
@@ -48,8 +48,8 @@
 - **라우팅**: SNS fanout → `order-promotions` 큐, `notification-promotions` 큐
 - **payload**:
 
-| 필드              | 타입      | 설명              |
-| ----------------- | --------- | ----------------- |
+| 필드              | 타입      | 설명               |
+| ----------------- | --------- | ------------------ |
 | `promotion_id`    | UUID      | 프로모션 식별자    |
 | `order_id`        | UUID      | 주문 식별자        |
 | `user_id`         | UUID      | 사용자 식별자      |
@@ -59,9 +59,9 @@
 
 ## 소비 이벤트 (타 도메인 발행)
 
-| 소비 이벤트          | 발행 도메인 | 소비 목적                              |
-| -------------------- | ----------- | -------------------------------------- |
-| `OrderStatusChanged` | order       | 주문 취소/결제 실패 시 쿠폰 롤백 처리  |
+| 소비 이벤트          | 발행 도메인 | 소비 목적                             |
+| -------------------- | ----------- | ------------------------------------- |
+| `OrderStatusChanged` | order       | 주문 취소/결제 실패 시 쿠폰 롤백 처리 |
 
 ### OrderStatusChanged 소비 규칙
 

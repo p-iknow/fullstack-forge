@@ -104,14 +104,19 @@ export function PasswordUpdatePageContent({
           <Link to="/" className="text-lg font-bold tracking-tight text-foreground">
             FORGE STORE
           </Link>
-          <h1 className="mt-6 text-2xl font-bold tracking-tight text-foreground">비밀번호 재설정</h1>
+          <h1 className="mt-6 text-2xl font-bold tracking-tight text-foreground">
+            비밀번호 재설정
+          </h1>
           <p className="mt-1.5 text-sm text-muted-foreground">
             재설정 토큰과 새 비밀번호를 입력하세요.
           </p>
         </div>
 
         {errorMessage ? (
-          <p role="alert" className="mt-5 rounded-lg bg-destructive/10 p-3 text-sm text-destructive">
+          <p
+            role="alert"
+            className="mt-5 rounded-lg bg-destructive/10 p-3 text-sm text-destructive"
+          >
             {errorMessage}
           </p>
         ) : null}

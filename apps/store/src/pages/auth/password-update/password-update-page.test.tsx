@@ -37,7 +37,6 @@ describe('password update page', () => {
 
     // visual regression — validation error
     await expect(page.getByRole('main')).toMatchScreenshot('password-update-validation-error')
-
   })
   it('submits token and new password then runs success navigation', async () => {
     // given

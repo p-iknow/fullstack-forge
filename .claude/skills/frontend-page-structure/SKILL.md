@@ -149,24 +149,24 @@ src/
 
 ### Promotion/Demotion Rules
 
-| Situation | Action |
-| --------- | ------ |
-| 1 consumer only | Co-locate in that page/component |
+| Situation                 | Action                                   |
+| ------------------------- | ---------------------------------------- |
+| 1 consumer only           | Co-locate in that page/component         |
 | **2+ pages, same domain** | **Promote to `pages/{domain}/@shared/`** |
-| **2+ domains** | **Promote to `src/@shared/`** |
-| **2+ apps** | **Promote to `packages/`** |
-| Consumer count drops to 1 | **Demote back (co-locate)** |
+| **2+ domains**            | **Promote to `src/@shared/`**            |
+| **2+ apps**               | **Promote to `packages/`**               |
+| Consumer count drops to 1 | **Demote back (co-locate)**              |
 
 > **Always start at narrowest scope. Promote only when needed. Demote when no longer needed.**
 
 ### @shared Internal Structure
 
-| Folder | Contains | Example |
-| ------ | -------- | ------- |
-| `api/` | API client functions | `catalogApi.list()` |
-| `queries/` | React Query options | `cartQueryOptions` |
-| `ui/` | Shared UI components/helpers | `AuthFormLayout`, `cartToast` |
-| `helper/` | Shared business logic | `validateOrder`, `formatPrice` |
+| Folder     | Contains                     | Example                        |
+| ---------- | ---------------------------- | ------------------------------ |
+| `api/`     | API client functions         | `catalogApi.list()`            |
+| `queries/` | React Query options          | `cartQueryOptions`             |
+| `ui/`      | Shared UI components/helpers | `AuthFormLayout`, `cartToast`  |
+| `helper/`  | Shared business logic        | `validateOrder`, `formatPrice` |
 
 Cross-app sharing (store + admin) → `packages/design-system` or `packages/shared`.
 

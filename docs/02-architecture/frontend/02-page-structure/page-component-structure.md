@@ -1,6 +1,6 @@
 ---
-title: "Page Component Structure"
-description: "페이지 컴포넌트 자체가 테크스펙 역할을 하도록 전체 구조와 데이터 흐름을 명확히 드러내는 설계 원칙. Store 앱 실제 예시 포함."
+title: 'Page Component Structure'
+description: '페이지 컴포넌트 자체가 테크스펙 역할을 하도록 전체 구조와 데이터 흐름을 명확히 드러내는 설계 원칙. Store 앱 실제 예시 포함.'
 type: guide
 tags: [Architecture, React, BestPractice]
 order: 1
@@ -77,6 +77,7 @@ const CartPage = () => {
 ```
 
 **문제점:**
+
 - **선언부와 사용처 분리**: 상단에 모든 로직이 선언되어 실제 사용처와 멀어져 코드 흐름 파악 어려움
 - **데이터 흐름 불분명**: 어떤 API를 사용하고 어떤 데이터가 어떤 컴포넌트에서 사용되는지 파악 불가
 - **레이아웃 구조 예측 불가**: 페이지의 전체 레이아웃과 배치를 예측할 수 없음
@@ -109,11 +110,7 @@ export function CartPage() {
             <Suspense fallback={<CartSkeleton />}>
               <SuspenseQuery {...cartQueryOptions()}>
                 {({ data: cart }) =>
-                  cart.items.length === 0 ? (
-                    <EmptyCart />
-                  ) : (
-                    <CartContentSection cart={cart} />
-                  )
+                  cart.items.length === 0 ? <EmptyCart /> : <CartContentSection cart={cart} />
                 }
               </SuspenseQuery>
             </Suspense>
@@ -163,10 +160,8 @@ export function ProductDetailPage({ productId }: Readonly<{ productId: string }>
 
 ```tsx
 // ✅ SuspenseQuery — 사용하는 API와 데이터가 한눈에 보임
-<SuspenseQuery {...cartQueryOptions()}>
-  {({ data: cart }) => (
-    <CartContentSection cart={cart} />
-  )}
+;<SuspenseQuery {...cartQueryOptions()}>
+  {({ data: cart }) => <CartContentSection cart={cart} />}
 </SuspenseQuery>
 
 // ✅ useQuery — 로딩/에러/성공 분기가 명확
@@ -179,12 +174,11 @@ const productQuery = useQuery(catalogDetailQueryOptions(productId))
 // ✅ ErrorBoundary + QueryErrorResetBoundary — 에러 범위와 복구 전략이 명확
 <QueryErrorResetBoundary>
   {({ reset }) => (
-    <ErrorBoundary onReset={reset} fallback={({ reset: resetBoundary }) => (
-      <ErrorFallback onRetry={resetBoundary} />
-    )}>
-      <Suspense fallback={<LoadingSkeleton />}>
-        {/* 데이터 페칭 */}
-      </Suspense>
+    <ErrorBoundary
+      onReset={reset}
+      fallback={({ reset: resetBoundary }) => <ErrorFallback onRetry={resetBoundary} />}
+    >
+      <Suspense fallback={<LoadingSkeleton />}>{/* 데이터 페칭 */}</Suspense>
     </ErrorBoundary>
   )}
 </QueryErrorResetBoundary>
@@ -237,7 +231,7 @@ function CartContentSection({ cart }: Readonly<{ cart: CartResponse }>) {
     reviewsOptions(userId),
     favoritesOptions(userId),
     settingsOptions(userId),
-    notificationsOptions(userId)
+    notificationsOptions(userId),
   ]}
 >
   {/* 🔴 8개 API 동시 호출 → 가장 느린 API까지 전체 로딩 */}
@@ -312,23 +306,25 @@ export function CartItemRow({ item }: Readonly<{ item: CartItem }>) {
 
 ### Store 앱 실제 적용 사례
 
-| 파일 | 패턴 | 줄 수 |
-|------|------|-------|
-| `cart-page.tsx` | ErrorBoundary + SuspenseQuery + 조건부 렌더링 | 127줄 |
-| `product-detail-page.tsx` | useQuery 분기 + inline sub-components | 239줄 |
-| `login-page.tsx` | useForm + useMutation + 에러 표시 | 154줄 |
-| `home-page.tsx` | 검색/필터/페이지네이션 + inline StockBadge | 458줄 |
+| 파일                      | 패턴                                          | 줄 수 |
+| ------------------------- | --------------------------------------------- | ----- |
+| `cart-page.tsx`           | ErrorBoundary + SuspenseQuery + 조건부 렌더링 | 127줄 |
+| `product-detail-page.tsx` | useQuery 분기 + inline sub-components         | 239줄 |
+| `login-page.tsx`          | useForm + useMutation + 에러 표시             | 154줄 |
+| `home-page.tsx`           | 검색/필터/페이지네이션 + inline StockBadge    | 458줄 |
 
 ## 6. 더 알아보기
 
 ### 권장 사용 시나리오
 
 **적합한 경우:**
+
 - 복잡한 데이터 처리가 필요한 대시보드 페이지
 - 여러 API 호출과 상태 관리가 필요한 폼 페이지
 - 팀에서 코드 가독성과 유지보수성을 중시하는 경우
 
 **부적합한 경우:**
+
 - 매우 단순한 정적 페이지 (과도한 구조화 불필요)
 - 프로토타입이나 일회성 페이지
 

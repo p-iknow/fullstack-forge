@@ -26,9 +26,7 @@ function CartSuccessToast({
           <CheckCircle2Icon className="h-3.5 w-3.5 shrink-0 text-primary" />
           <p className="text-sm font-medium text-foreground">{title}</p>
         </div>
-        {description ? (
-          <p className="mt-0.5 text-xs text-muted-foreground">{description}</p>
-        ) : null}
+        {description ? <p className="mt-0.5 text-xs text-muted-foreground">{description}</p> : null}
         {actionLabel && actionHref ? (
           <a
             href={actionHref}
@@ -65,9 +63,7 @@ function CartErrorToast({
 
       <div className="min-w-0 flex-1">
         <p className="text-sm font-medium text-foreground">{title}</p>
-        {description ? (
-          <p className="mt-0.5 text-xs text-muted-foreground">{description}</p>
-        ) : null}
+        {description ? <p className="mt-0.5 text-xs text-muted-foreground">{description}</p> : null}
       </div>
 
       <button
@@ -95,8 +91,6 @@ export const cartToast = {
     ))
   },
   error: ({ title, description }: Pick<CartToastProps, 'title' | 'description'>) => {
-    toast.custom((id) => (
-      <CartErrorToast toastId={id} title={title} description={description} />
-    ))
+    toast.custom((id) => <CartErrorToast toastId={id} title={title} description={description} />)
   },
 }

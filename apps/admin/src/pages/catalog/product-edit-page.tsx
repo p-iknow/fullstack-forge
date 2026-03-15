@@ -184,22 +184,44 @@ export function ProductEditPage() {
                   <p className="text-sm font-medium text-slate-700">썸네일 (400×400)</p>
                   <div className="flex items-center gap-3">
                     {productQuery.data?.thumbUrl ? (
-                      <img src={productQuery.data.thumbUrl} alt="Thumbnail" className="h-24 w-24 rounded-md border object-cover" />
+                      <img
+                        src={productQuery.data.thumbUrl}
+                        alt="Thumbnail"
+                        className="h-24 w-24 rounded-md border object-cover"
+                      />
                     ) : (
-                      <div className="flex h-24 w-24 items-center justify-center rounded-md border bg-slate-50 text-xs text-slate-400">이미지 없음</div>
+                      <div className="flex h-24 w-24 items-center justify-center rounded-md border bg-slate-50 text-xs text-slate-400">
+                        이미지 없음
+                      </div>
                     )}
-                    <Input ref={thumbRef} type="file" accept="image/*" disabled={uploadMutation.isPending} />
+                    <Input
+                      ref={thumbRef}
+                      type="file"
+                      accept="image/*"
+                      disabled={uploadMutation.isPending}
+                    />
                   </div>
                 </div>
                 <div className="space-y-2">
                   <p className="text-sm font-medium text-slate-700">상세 이미지 (800×600)</p>
                   <div className="flex items-center gap-3">
                     {productQuery.data?.detailUrl ? (
-                      <img src={productQuery.data.detailUrl} alt="Detail" className="h-24 w-24 rounded-md border object-cover" />
+                      <img
+                        src={productQuery.data.detailUrl}
+                        alt="Detail"
+                        className="h-24 w-24 rounded-md border object-cover"
+                      />
                     ) : (
-                      <div className="flex h-24 w-24 items-center justify-center rounded-md border bg-slate-50 text-xs text-slate-400">이미지 없음</div>
+                      <div className="flex h-24 w-24 items-center justify-center rounded-md border bg-slate-50 text-xs text-slate-400">
+                        이미지 없음
+                      </div>
                     )}
-                    <Input ref={detailRef} type="file" accept="image/*" disabled={uploadMutation.isPending} />
+                    <Input
+                      ref={detailRef}
+                      type="file"
+                      accept="image/*"
+                      disabled={uploadMutation.isPending}
+                    />
                   </div>
                 </div>
               </div>

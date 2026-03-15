@@ -7,13 +7,13 @@
 
 ## 인증/인가
 
-| 접두사           | 대상 역할      | 인증 방식          |
-| ---------------- | -------------- | ------------------ |
-| `/promotions/*`  | customer       | Bearer token       |
-| `/coupons/*`     | customer       | Bearer token       |
-| `/orders/:id/*`  | customer (본인)| Bearer token + 소유 검증 |
-| `/admin/promotions/*` | operator/admin | Bearer token + role check |
-| `/admin/coupons/*`    | operator/admin | Bearer token + role check |
+| 접두사                | 대상 역할       | 인증 방식                 |
+| --------------------- | --------------- | ------------------------- |
+| `/promotions/*`       | customer        | Bearer token              |
+| `/coupons/*`          | customer        | Bearer token              |
+| `/orders/:id/*`       | customer (본인) | Bearer token + 소유 검증  |
+| `/admin/promotions/*` | operator/admin  | Bearer token + role check |
+| `/admin/coupons/*`    | operator/admin  | Bearer token + role check |
 
 ---
 
@@ -191,15 +191,15 @@
 
 ## 실패 사유 코드
 
-| 코드                         | HTTP 상태 | 설명                         |
-| ---------------------------- | --------- | ---------------------------- |
-| `coupon_not_found`           | 422       | 존재하지 않는 쿠폰 코드     |
-| `coupon_expired`             | 422       | 만료된 쿠폰                 |
-| `coupon_limit_exceeded`      | 422       | 전체 사용 한도 초과          |
-| `coupon_user_limit_exceeded` | 422       | 사용자별 사용 한도 초과      |
-| `coupon_already_applied`     | 409       | 이미 적용된 쿠폰            |
-| `promotion_min_order_not_met`| 422       | 최소주문금액 미달            |
-| `promotion_inactive`         | 422       | 비활성 프로모션              |
+| 코드                          | HTTP 상태 | 설명                    |
+| ----------------------------- | --------- | ----------------------- |
+| `coupon_not_found`            | 422       | 존재하지 않는 쿠폰 코드 |
+| `coupon_expired`              | 422       | 만료된 쿠폰             |
+| `coupon_limit_exceeded`       | 422       | 전체 사용 한도 초과     |
+| `coupon_user_limit_exceeded`  | 422       | 사용자별 사용 한도 초과 |
+| `coupon_already_applied`      | 409       | 이미 적용된 쿠폰        |
+| `promotion_min_order_not_met` | 422       | 최소주문금액 미달       |
+| `promotion_inactive`          | 422       | 비활성 프로모션         |
 
 ## 에러 응답 body 형식
 

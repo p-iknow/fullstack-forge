@@ -88,10 +88,10 @@
 
 delivery 도메인이 다른 도메인에서 수신하여 처리하는 이벤트 목록.
 
-| 소스 도메인 | 이벤트 | 처리 내용 | 소스 문서 |
-| --- | --- | --- | --- |
-| `payment` | `PaymentCaptured` | Delivery 레코드 생성 + SLA 목표 시각 산정 | [payment/05-events.md](../06-payment/05-events.md) |
-| `order` | `OrderCancelled` | 배송 취소 처리 (`pending`/`dispatched` 상태일 때) | [order/05-events.md](../05-order/05-events.md) |
+| 소스 도메인 | 이벤트            | 처리 내용                                         | 소스 문서                                          |
+| ----------- | ----------------- | ------------------------------------------------- | -------------------------------------------------- |
+| `payment`   | `PaymentCaptured` | Delivery 레코드 생성 + SLA 목표 시각 산정         | [payment/05-events.md](../06-payment/05-events.md) |
+| `order`     | `OrderCancelled`  | 배송 취소 처리 (`pending`/`dispatched` 상태일 때) | [order/05-events.md](../05-order/05-events.md)     |
 
 ## 이벤트 순서 보장
 

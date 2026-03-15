@@ -28,7 +28,9 @@ export const carts = pgTable(
     updatedAt: timestamp('updated_at', { withTimezone: true }).defaultNow().notNull(),
   },
   (table) => [
-    uniqueIndex('uq_carts_user_active').on(table.userId).where(sql`status = 'active'`),
+    uniqueIndex('uq_carts_user_active')
+      .on(table.userId)
+      .where(sql`status = 'active'`),
   ],
 )
 

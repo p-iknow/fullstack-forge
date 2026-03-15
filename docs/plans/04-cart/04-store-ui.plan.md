@@ -13,6 +13,7 @@
 ## Scope
 
 **이 세션에서 하는 것**:
+
 - Cart API client (fetch functions)
 - Cart query/mutation options
 - Cart page route + screen
@@ -20,11 +21,13 @@
 - Navigation 장바구니 아이콘 + 배지
 
 **이 세션에서 하지 않는 것**:
+
 - 주문 전환 UI (06-order-payment에서)
 - 가격 변경 고지 모달 (06-order-payment에서)
 - Admin UI (cart는 admin 화면 없음)
 
 **생성할 파일**:
+
 - `apps/store/src/@shared/api/cart.ts`
 - `apps/store/src/@shared/queries/cart.ts`
 - `apps/store/src/routes/_catalog/cart.tsx`
@@ -34,6 +37,7 @@
 - `apps/store/src/pages/cart/empty-cart.tsx`
 
 **수정할 파일**:
+
 - `apps/store/src/pages/catalog/product-detail-page.tsx` (장바구니 추가 버튼)
 - `apps/store/src/routes/__root.tsx` (장바구니 링크 + 배지)
 
@@ -60,11 +64,12 @@
 ```typescript
 export const cartQueryKeys = { cart: ['cart'] as const }
 
-export const cartQueryOptions = () => queryOptions({
-  queryKey: cartQueryKeys.cart,
-  queryFn: getCart,
-  staleTime: 10_000,  // 재고 실시간성
-})
+export const cartQueryOptions = () =>
+  queryOptions({
+    queryKey: cartQueryKeys.cart,
+    queryFn: getCart,
+    staleTime: 10_000, // 재고 실시간성
+  })
 // Mutations: addItem, updateItem, deleteItem, clearCart
 // onSuccess → invalidateQueries(['cart'])
 ```
@@ -100,6 +105,7 @@ export const cartQueryOptions = () => queryOptions({
 ### 8. 상품 상세 장바구니 추가
 
 파일: `apps/store/src/pages/catalog/product-detail-page.tsx` 수정
+
 - "장바구니 담기" Button + 수량 선택 (기본 1, 최대 15)
 - 성공 → toast "장바구니에 담았습니다"
 
@@ -133,20 +139,20 @@ CartPage
 
 ### 에러 처리 — `04-ui.md §7`
 
-| 에러 | UI |
-|------|------|
-| API 실패 | toast + 재시도 |
-| 수량 위반 (400) | 인라인 "최대 15개까지" |
-| 동시성 충돌 (409) | 자동 새로고침 |
+| 에러                  | UI                                    |
+| --------------------- | ------------------------------------- |
+| API 실패              | toast + 재시도                        |
+| 수량 위반 (400)       | 인라인 "최대 15개까지"                |
+| 동시성 충돌 (409)     | 자동 새로고침                         |
 | cart_not_active (409) | toast "장바구니를 사용할 수 없습니다" |
 
 ### 상태별 UI — `04-ui.md §6`
 
-| 상태 | 처리 |
-|------|------|
-| active | CRUD + 주문 허용 |
+| 상태      | 처리                           |
+| --------- | ------------------------------ |
+| active    | CRUD + 주문 허용               |
 | converted | 변경 불가, 주문 내역 이동 유도 |
-| expired | 항목 비활성, 새 장바구니 유도 |
+| expired   | 항목 비활성, 새 장바구니 유도  |
 
 ## Verification
 

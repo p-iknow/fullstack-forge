@@ -43,11 +43,11 @@ const updateMutation = useMutation({
 updateMutation.mutate({ cartItemId: item.id, quantity: newQty })
 ```
 
-| 문제 | 설명 |
-| --- | --- |
-| **제어흐름 단절** | `mutate()` 호출 후 optimistic update → rollback → invalidation이 어디서 일어나는지 call site에서 전혀 보이지 않는다 |
+| 문제                    | 설명                                                                                                                        |
+| ----------------------- | --------------------------------------------------------------------------------------------------------------------------- |
+| **제어흐름 단절**       | `mutate()` 호출 후 optimistic update → rollback → invalidation이 어디서 일어나는지 call site에서 전혀 보이지 않는다         |
 | **콜백 간 암묵적 의존** | `onMutate`가 반환한 `context`를 `onError`가 받아 쓰는 관계가 코드 구조로 드러나지 않고, TanStack Query 내부 규약에 의존한다 |
-| **디버깅 비용** | 버그 발생 시 `onMutate` → `onError` → `onSettled` 세 곳을 순회해야 흐름을 재구성할 수 있다 |
+| **디버깅 비용**         | 버그 발생 시 `onMutate` → `onError` → `onSettled` 세 곳을 순회해야 흐름을 재구성할 수 있다                                  |
 
 #### 2. `onXX` 핸들러명이 정보를 전달하지 않는다
 
@@ -62,10 +62,10 @@ const onQuantityChange = async (newQty: number) => { ... }
 
 정보이론 관점에서 `onDelete`는 정보량이 0이다:
 
-| 구성 요소 | 이미 표현하는 것 | 함수명이 추가하는 것 |
-| --- | --- | --- |
-| `onClick=` | **when** — 클릭 시점에 실행됨 | — |
-| `{onDelete}` | "on" → **when** (중복) | "Delete" → **what** (유일한 정보) |
+| 구성 요소    | 이미 표현하는 것              | 함수명이 추가하는 것              |
+| ------------ | ----------------------------- | --------------------------------- |
+| `onClick=`   | **when** — 클릭 시점에 실행됨 | —                                 |
+| `{onDelete}` | "on" → **when** (중복)        | "Delete" → **what** (유일한 정보) |
 
 `onClick={onDelete}`를 읽으면 "클릭할 때(on) 삭제할 때(onDelete)" — "when"이 두 번 반복된다. 함수명에 남아야 할 것은 "그 시점에 **무엇**을 하느냐"뿐이다.
 
@@ -79,9 +79,9 @@ const isMutating = deleteMutation.isPending
 <Button disabled={isMutating || isOutOfStock}>−</Button>  // 어떤 mutation의 pending인지 즉시 알 수 없음
 ```
 
-| 문제 | 설명 |
-| --- | --- |
-| **출처 단절** | `isMutating`만 보면 어떤 mutation이 pending인지 알 수 없다. 선언부까지 시선이 이동해야 한다 |
+| 문제               | 설명                                                                                                                   |
+| ------------------ | ---------------------------------------------------------------------------------------------------------------------- |
+| **출처 단절**      | `isMutating`만 보면 어떤 mutation이 pending인지 알 수 없다. 선언부까지 시선이 이동해야 한다                            |
 | **이름 충돌 위험** | mutation이 2개 이상이면 `isMutating`이 어떤 것을 가리키는지 모호해진다. `isDeleting`, `isUpdating` 등 alias가 증식한다 |
 
 ---
@@ -140,12 +140,12 @@ onClick={removeItem}           // "click할 때" → "아이템을 제거한다"
 onClick={() => changeQuantity(displayQty - 1)}  // "click할 때" → "수량을 변경한다"
 ```
 
-| 접두사 | 문제 | 대안 |
-| --- | --- | --- |
-| `onDelete` | "when" 중복, action 불명확 | `removeItem` — 무엇을 제거하는지 명시 |
-| `onQuantityChange` | "when" 중복, 주체 불명 | `changeQuantity` — 동사 + 목적어 |
-| `onSubmit` | "when" 중복 | `submitOrder`, `saveProfile` 등 도메인 동작으로 |
-| `handleClick` | "when" 중복 + 너무 범용 | 구체적인 action 명으로 |
+| 접두사             | 문제                       | 대안                                            |
+| ------------------ | -------------------------- | ----------------------------------------------- |
+| `onDelete`         | "when" 중복, action 불명확 | `removeItem` — 무엇을 제거하는지 명시           |
+| `onQuantityChange` | "when" 중복, 주체 불명     | `changeQuantity` — 동사 + 목적어                |
+| `onSubmit`         | "when" 중복                | `submitOrder`, `saveProfile` 등 도메인 동작으로 |
+| `handleClick`      | "when" 중복 + 너무 범용    | 구체적인 action 명으로                          |
 
 #### 규칙 3: mutation 상태는 mutation 객체에서 직접 읽는다
 
@@ -173,16 +173,28 @@ export function CartItemRow({ item }: Readonly<{ item: CartItem }>) {
   // mutation 선언부에 로직이 흩어져 있다 (38줄)
   const updateMutation = useMutation({
     ...updateCartItemMutationOptions(),
-    onMutate: async ({ quantity: newQty }) => { /* optimistic update 10줄 */ },
-    onError: (err, _vars, context) => { /* rollback 5줄 */ },
-    onSettled: () => { /* invalidation 3줄 */ },
+    onMutate: async ({ quantity: newQty }) => {
+      /* optimistic update 10줄 */
+    },
+    onError: (err, _vars, context) => {
+      /* rollback 5줄 */
+    },
+    onSettled: () => {
+      /* invalidation 3줄 */
+    },
   })
 
   const deleteMutation = useMutation({
     ...deleteCartItemMutationOptions(),
-    onMutate: async () => { /* optimistic update 12줄 */ },
-    onError: (_err, _vars, context) => { /* rollback + toast 4줄 */ },
-    onSettled: () => { /* invalidation 2줄 */ },
+    onMutate: async () => {
+      /* optimistic update 12줄 */
+    },
+    onError: (_err, _vars, context) => {
+      /* rollback + toast 4줄 */
+    },
+    onSettled: () => {
+      /* invalidation 2줄 */
+    },
   })
 
   // 중간 변수 — 출처가 끊김
@@ -192,18 +204,24 @@ export function CartItemRow({ item }: Readonly<{ item: CartItem }>) {
   const onQuantityChange = (newQty: number) => {
     if (newQty < 1 || newQty > 15) return
     setError(null)
-    updateMutation.mutate({ cartItemId: item.id, quantity: newQty })  // 뒤에 뭐가 일어나지?
+    updateMutation.mutate({ cartItemId: item.id, quantity: newQty }) // 뒤에 뭐가 일어나지?
   }
 
   const onDelete = () => {
-    deleteMutation.mutate(item.id)  // 뒤에 뭐가 일어나지?
+    deleteMutation.mutate(item.id) // 뒤에 뭐가 일어나지?
   }
 
   return (
     <div>
-      <Button onClick={onDelete} disabled={isMutating}>삭제</Button>
-      <Button onClick={() => onQuantityChange(displayQty - 1)} disabled={isMutating}>−</Button>
-      <Button onClick={() => onQuantityChange(displayQty + 1)} disabled={isMutating}>+</Button>
+      <Button onClick={onDelete} disabled={isMutating}>
+        삭제
+      </Button>
+      <Button onClick={() => onQuantityChange(displayQty - 1)} disabled={isMutating}>
+        −
+      </Button>
+      <Button onClick={() => onQuantityChange(displayQty + 1)} disabled={isMutating}>
+        +
+      </Button>
     </div>
   )
 }
@@ -296,24 +314,24 @@ disabled={deleteMutation.isPending}
 
 #### 효과 정리
 
-| 지표 | Before | After |
-| --- | --- | --- |
-| 제어흐름 파악에 필요한 시선 점프 | 3단계 (핸들러 → mutate → onMutate/onError/onSettled) | 0단계 (함수 본문에 전부 기술) |
-| mutation 선언부 크기 | 38줄 (update) + 31줄 (delete) = 69줄 | 1줄 + 1줄 = 2줄 |
-| 콜백 간 암묵적 의존 (`context`) | `onMutate` → `onError`로 context 전달 (TanStack 내부 규약) | 로컬 변수 `previous`로 명시적 (언어 수준 스코프) |
-| 핸들러명 정보량 | `onDelete` — "when" 중복, action 불명확 | `removeItem` — action만, 도메인 맥락 포함 |
-| 상태 출처 추적 | `isMutating` → 선언부 거슬러 올라감 | `deleteMutation.isPending` → 즉시 파악 |
-| 디버깅 시 순회 범위 | 콜백 3개 + 핸들러 1개 = 4곳 | 함수 1개 |
+| 지표                             | Before                                                     | After                                            |
+| -------------------------------- | ---------------------------------------------------------- | ------------------------------------------------ |
+| 제어흐름 파악에 필요한 시선 점프 | 3단계 (핸들러 → mutate → onMutate/onError/onSettled)       | 0단계 (함수 본문에 전부 기술)                    |
+| mutation 선언부 크기             | 38줄 (update) + 31줄 (delete) = 69줄                       | 1줄 + 1줄 = 2줄                                  |
+| 콜백 간 암묵적 의존 (`context`)  | `onMutate` → `onError`로 context 전달 (TanStack 내부 규약) | 로컬 변수 `previous`로 명시적 (언어 수준 스코프) |
+| 핸들러명 정보량                  | `onDelete` — "when" 중복, action 불명확                    | `removeItem` — action만, 도메인 맥락 포함        |
+| 상태 출처 추적                   | `isMutating` → 선언부 거슬러 올라감                        | `deleteMutation.isPending` → 즉시 파악           |
+| 디버깅 시 순회 범위              | 콜백 3개 + 핸들러 1개 = 4곳                                | 함수 1개                                         |
 
 ---
 
 ## 세 가지 규칙 요약
 
-| # | 규칙 | 핵심 원리 | 예외 |
-| --- | --- | --- | --- |
-| 1 | `mutateAsync` + try/catch/finally at call site | 제어흐름을 사용처에서 순차적으로 읽히게 | 동일 mutation이 3곳+ 동일 side-effect로 호출될 때 `on*` 허용 |
-| 2 | 핸들러명은 action(what)만 | `onClick`이 when을 이미 표현. 함수명에 when 중복 금지 | — |
-| 3 | mutation 상태는 mutation 객체에서 직접 참조 | 중간 변수가 출처를 끊음 | — |
+| #   | 규칙                                           | 핵심 원리                                             | 예외                                                         |
+| --- | ---------------------------------------------- | ----------------------------------------------------- | ------------------------------------------------------------ |
+| 1   | `mutateAsync` + try/catch/finally at call site | 제어흐름을 사용처에서 순차적으로 읽히게               | 동일 mutation이 3곳+ 동일 side-effect로 호출될 때 `on*` 허용 |
+| 2   | 핸들러명은 action(what)만                      | `onClick`이 when을 이미 표현. 함수명에 when 중복 금지 | —                                                            |
+| 3   | mutation 상태는 mutation 객체에서 직접 참조    | 중간 변수가 출처를 끊음                               | —                                                            |
 
 ## References
 

@@ -15,6 +15,7 @@
 처음에 route path를 `/cart`, `/cart/items` 등 절대 경로로 작성했다. 이 접근은 `app.route('/', cartIndex)`로 마운트할 때는 동작하지만, `app.route('/cart', cartIndex)`로 마운트하면 최종 경로가 `/cart/cart`가 되어 의도와 다르다.
 
 **올바른 패턴**: admin 라우터처럼 상대 경로 사용.
+
 - Route path: `/`, `/items`, `/items/{cartItemId}`
 - Mount: `app.route('/cart', cartIndex)`
 - 최종: `/cart`, `/cart/items`, `/cart/items/{cartItemId}`
@@ -28,6 +29,7 @@
 ### 3. Zod 스키마 네이밍 컨벤션
 
 기존 패턴 관찰:
+
 - `catalog-schemas.ts`: `catalogProductSummarySchema`, `catalogErrorSchema`
 - `auth-schemas.ts`: `authErrorSchema`, `authUserSchema`
 
@@ -40,6 +42,7 @@
 ### 5. codegen 파이프라인 이해
 
 `pnpm nx run @fullstack-forge/api-spec:codegen` 실행 시:
+
 1. `extract-openapi.ts` — Hono 앱을 부팅하고 GET /openapi.json 호출
 2. `openapi-typescript` — YAML → TypeScript 타입 생성
 3. `generate-openapi-clients.mjs` — hey-api로 도메인별 SDK 생성

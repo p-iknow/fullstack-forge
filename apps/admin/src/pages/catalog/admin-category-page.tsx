@@ -24,11 +24,16 @@ import { alertAction, confirmAction } from '~/@shared/overlay/confirm'
 
 const categorySchema = z.object({
   name: z.string().min(1, '이름을 입력해주세요'),
-  slug: z.string().min(1, '슬러그를 입력해주세요').regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/, '소문자, 숫자, 하이픈만 사용 가능합니다 (예: my-category)'),
+  slug: z
+    .string()
+    .min(1, '슬러그를 입력해주세요')
+    .regex(
+      /^[a-z0-9]+(?:-[a-z0-9]+)*$/,
+      '소문자, 숫자, 하이픈만 사용 가능합니다 (예: my-category)',
+    ),
   displayOrder: z.number().int().nonnegative('표시 순서는 0 이상이어야 합니다'),
   isActive: z.boolean(),
 })
-
 
 export function AdminCategoryPage() {
   const queryClient = useQueryClient()
@@ -84,18 +89,29 @@ export function AdminCategoryPage() {
       setEditingId(null)
     } catch (error) {
       const apiError = await readApiError(error)
-      await alertAction({ title: '수정 실패', description: apiError.error || '카테고리 수정에 실패했습니다' })
+      await alertAction({
+        title: '수정 실패',
+        description: apiError.error || '카테고리 수정에 실패했습니다',
+      })
     }
   }
 
   const handleDelete = async (id: string) => {
-    const confirmed = await confirmAction({ title: '카테고리 삭제', description: '정말 삭제하시겠습니까? 이 작업은 되돌릴 수 없습니다.', confirmLabel: '삭제', variant: 'destructive' })
+    const confirmed = await confirmAction({
+      title: '카테고리 삭제',
+      description: '정말 삭제하시겠습니까? 이 작업은 되돌릴 수 없습니다.',
+      confirmLabel: '삭제',
+      variant: 'destructive',
+    })
     if (!confirmed) return
     try {
       await deleteMutation.mutateAsync(id)
     } catch (error) {
       const apiError = await readApiError(error)
-      await alertAction({ title: '삭제 실패', description: apiError.error || '카테고리 삭제에 실패했습니다' })
+      await alertAction({
+        title: '삭제 실패',
+        description: apiError.error || '카테고리 삭제에 실패했습니다',
+      })
     }
   }
 
@@ -116,7 +132,10 @@ export function AdminCategoryPage() {
       setCreateForm({ name: '', slug: '', displayOrder: 0, isActive: true })
     } catch (error) {
       const apiError = await readApiError(error)
-      await alertAction({ title: '생성 실패', description: apiError.error || '카테고리 생성에 실패했습니다' })
+      await alertAction({
+        title: '생성 실패',
+        description: apiError.error || '카테고리 생성에 실패했습니다',
+      })
     }
   }
 
@@ -154,7 +173,9 @@ export function AdminCategoryPage() {
                     placeholder="이름"
                     className="h-8"
                   />
-                  {validationErrors.name && <p className="mt-1 text-xs text-rose-500">{validationErrors.name}</p>}
+                  {validationErrors.name && (
+                    <p className="mt-1 text-xs text-rose-500">{validationErrors.name}</p>
+                  )}
                 </TableCell>
                 <TableCell>
                   <Input
@@ -163,7 +184,9 @@ export function AdminCategoryPage() {
                     placeholder="슬러그"
                     className="h-8"
                   />
-                  {validationErrors.slug && <p className="mt-1 text-xs text-rose-500">{validationErrors.slug}</p>}
+                  {validationErrors.slug && (
+                    <p className="mt-1 text-xs text-rose-500">{validationErrors.slug}</p>
+                  )}
                 </TableCell>
                 <TableCell>
                   <Input
@@ -174,7 +197,9 @@ export function AdminCategoryPage() {
                     }
                     className="h-8 w-24"
                   />
-                  {validationErrors.displayOrder && <p className="mt-1 text-xs text-rose-500">{validationErrors.displayOrder}</p>}
+                  {validationErrors.displayOrder && (
+                    <p className="mt-1 text-xs text-rose-500">{validationErrors.displayOrder}</p>
+                  )}
                 </TableCell>
                 <TableCell>
                   <select
@@ -211,7 +236,9 @@ export function AdminCategoryPage() {
                         onChange={(e) => setEditForm({ ...editForm, name: e.target.value })}
                         className="h-8"
                       />
-                      {validationErrors.name && <p className="mt-1 text-xs text-rose-500">{validationErrors.name}</p>}
+                      {validationErrors.name && (
+                        <p className="mt-1 text-xs text-rose-500">{validationErrors.name}</p>
+                      )}
                     </TableCell>
                     <TableCell>
                       <Input
@@ -219,7 +246,9 @@ export function AdminCategoryPage() {
                         onChange={(e) => setEditForm({ ...editForm, slug: e.target.value })}
                         className="h-8"
                       />
-                      {validationErrors.slug && <p className="mt-1 text-xs text-rose-500">{validationErrors.slug}</p>}
+                      {validationErrors.slug && (
+                        <p className="mt-1 text-xs text-rose-500">{validationErrors.slug}</p>
+                      )}
                     </TableCell>
                     <TableCell>
                       <Input
@@ -230,7 +259,11 @@ export function AdminCategoryPage() {
                         }
                         className="h-8 w-24"
                       />
-                      {validationErrors.displayOrder && <p className="mt-1 text-xs text-rose-500">{validationErrors.displayOrder}</p>}
+                      {validationErrors.displayOrder && (
+                        <p className="mt-1 text-xs text-rose-500">
+                          {validationErrors.displayOrder}
+                        </p>
+                      )}
                     </TableCell>
                     <TableCell>
                       <select

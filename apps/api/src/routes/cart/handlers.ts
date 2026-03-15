@@ -18,23 +18,29 @@ import {
   validateProductPurchasable,
 } from './@shared/cart-helpers'
 
-const getUnauthorizedResponse = () => ({ code: 'auth_session_expired', error: 'Session expired' } as const)
+const getUnauthorizedResponse = () =>
+  ({ code: 'auth_session_expired', error: 'Session expired' }) as const
 
-const toCartNotActiveError = () => ({ code: 'cart_not_active', error: 'Cart is not active' } as const)
+const toCartNotActiveError = () =>
+  ({ code: 'cart_not_active', error: 'Cart is not active' }) as const
 
-const toQuantityExceededError = () => ({ code: 'quantity_exceeded', error: 'Quantity exceeds maximum of 15' } as const)
+const toQuantityExceededError = () =>
+  ({ code: 'quantity_exceeded', error: 'Quantity exceeds maximum of 15' }) as const
 
-const toMaxItemsExceededError = () => ({
-  code: 'max_items_exceeded',
-  error: 'Cart cannot contain more than 30 items',
-} as const)
+const toMaxItemsExceededError = () =>
+  ({
+    code: 'max_items_exceeded',
+    error: 'Cart cannot contain more than 30 items',
+  }) as const
 
-const toItemNotFoundError = () => ({ code: 'item_not_found', error: 'Cart item not found' } as const)
+const toItemNotFoundError = () =>
+  ({ code: 'item_not_found', error: 'Cart item not found' }) as const
 
-const toProductUnavailableError = () => ({
-  code: 'product_unavailable',
-  error: 'Product is not available for purchase',
-} as const)
+const toProductUnavailableError = () =>
+  ({
+    code: 'product_unavailable',
+    error: 'Product is not available for purchase',
+  }) as const
 
 export const getCartHandler: RouteHandler<typeof getCartRoute> = async (c) => {
   const user = getAuthUser(c)

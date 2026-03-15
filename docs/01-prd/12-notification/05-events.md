@@ -13,36 +13,36 @@
 
 ## 소비 이벤트 요약 테이블
 
-| 원본 이벤트 | 발행 도메인 | Notification type | title 템플릿 | 대상 | 소스 문서 |
-| --- | --- | --- | --- | --- | --- |
-| `OrderCreated` | order | `order` | 주문 접수 완료 | 고객 | `../05-order/05-events.md` |
-| `OrderStatusChanged` | order | `order` | 주문 상태 업데이트 | 고객 | `../05-order/05-events.md` |
-| `OrderCancelled` | order | `order` | 주문 취소 완료 | 고객 | `../05-order/05-events.md` |
-| `SubstitutionRequested` | order | `order` | 대체상품 승인 요청 | 고객 | `../05-order/05-events.md` |
-| `SubstitutionResolved` | order | `order` | 대체상품 처리 결과 | 고객 | `../05-order/05-events.md` |
-| `PaymentCaptured` | payment | `payment` | 결제 완료 | 고객 | `../06-payment/05-events.md` |
-| `PaymentFailed` | payment | `payment` | 결제 실패 | 고객 | `../06-payment/05-events.md` |
-| `PaymentCancelled` | payment | `payment` | 결제 취소 | 고객 | `../06-payment/05-events.md` |
-| `PaymentRefunded` | payment | `payment` | 환불 완료 | 고객 | `../06-payment/05-events.md` |
-| `DeliveryCreated` | delivery | `delivery` | 배송 준비 시작 | 고객 | `../07-delivery/05-events.md` |
-| `DeliveryDispatched` | delivery | `delivery` | 배차 완료 | 고객 | `../07-delivery/05-events.md` |
-| `DeliveryStatusChanged` | delivery | `delivery` | 배송 상태 업데이트 | 고객 | `../07-delivery/05-events.md` |
-| `DeliveryDispatchFailed` | delivery | `delivery` | 배차 지연 안내 | 고객 | `../07-delivery/05-events.md` |
-| `DeliveryCancelled` | delivery | `delivery` | 배송 취소 | 고객 | `../07-delivery/05-events.md` |
-| `ReviewEligible` | review | `review` | 리뷰 작성 가능 | 고객 | `../10-review/05-events.md` |
-| `ReviewCreated` | review | `review` | 리뷰 등록 완료 | 고객 | `../10-review/05-events.md` |
-| `InventoryLevelChanged` | inventory | `inventory` | 관심 상품 품절/재입고 | 고객 | `../03-inventory/05-events.md` |
-| `CartExpired` | cart | `cart` | 장바구니 만료 안내 | 고객 | `../04-cart/05-events.md` |
-| `CartConverted` | cart | `cart` | 주문 전환 완료 | 고객 | `../04-cart/05-events.md` |
-| `PointsEarned` | loyalty | `loyalty` | 포인트 적립 완료 | 고객 | `../09-loyalty/05-events.md` |
-| `PointsRedeemed` | loyalty | `loyalty` | 포인트 사용 완료 | 고객 | `../09-loyalty/05-events.md` |
-| `PointsExpired` | loyalty | `loyalty` | 포인트 만료 안내 | 고객 | `../09-loyalty/05-events.md` |
-| `PointsAdjusted` | loyalty | `loyalty` | 포인트 조정 안내 | 고객 | `../09-loyalty/05-events.md` |
-| `PromotionApplied` | promotion | `promotion` | 할인 적용 안내 | 고객 | `../08-promotion/05-events.md` |
-| `InquiryCreated` | inquiry | `inquiry` | 문의 접수 확인 | 고객 | `../11-inquiry/05-events.md` |
-| `InquiryReplied` | inquiry | `inquiry` | 문의 답변 등록 | 고객 | `../11-inquiry/05-events.md` |
-| `InquiryStatusChanged` | inquiry | `inquiry` | 문의 상태 변경 | 고객 | `../11-inquiry/05-events.md` |
-| `InquiryReopened` | inquiry | `inquiry` | 문의 재오픈 알림 | 운영자 | `../11-inquiry/05-events.md` |
+| 원본 이벤트              | 발행 도메인 | Notification type | title 템플릿          | 대상   | 소스 문서                      |
+| ------------------------ | ----------- | ----------------- | --------------------- | ------ | ------------------------------ |
+| `OrderCreated`           | order       | `order`           | 주문 접수 완료        | 고객   | `../05-order/05-events.md`     |
+| `OrderStatusChanged`     | order       | `order`           | 주문 상태 업데이트    | 고객   | `../05-order/05-events.md`     |
+| `OrderCancelled`         | order       | `order`           | 주문 취소 완료        | 고객   | `../05-order/05-events.md`     |
+| `SubstitutionRequested`  | order       | `order`           | 대체상품 승인 요청    | 고객   | `../05-order/05-events.md`     |
+| `SubstitutionResolved`   | order       | `order`           | 대체상품 처리 결과    | 고객   | `../05-order/05-events.md`     |
+| `PaymentCaptured`        | payment     | `payment`         | 결제 완료             | 고객   | `../06-payment/05-events.md`   |
+| `PaymentFailed`          | payment     | `payment`         | 결제 실패             | 고객   | `../06-payment/05-events.md`   |
+| `PaymentCancelled`       | payment     | `payment`         | 결제 취소             | 고객   | `../06-payment/05-events.md`   |
+| `PaymentRefunded`        | payment     | `payment`         | 환불 완료             | 고객   | `../06-payment/05-events.md`   |
+| `DeliveryCreated`        | delivery    | `delivery`        | 배송 준비 시작        | 고객   | `../07-delivery/05-events.md`  |
+| `DeliveryDispatched`     | delivery    | `delivery`        | 배차 완료             | 고객   | `../07-delivery/05-events.md`  |
+| `DeliveryStatusChanged`  | delivery    | `delivery`        | 배송 상태 업데이트    | 고객   | `../07-delivery/05-events.md`  |
+| `DeliveryDispatchFailed` | delivery    | `delivery`        | 배차 지연 안내        | 고객   | `../07-delivery/05-events.md`  |
+| `DeliveryCancelled`      | delivery    | `delivery`        | 배송 취소             | 고객   | `../07-delivery/05-events.md`  |
+| `ReviewEligible`         | review      | `review`          | 리뷰 작성 가능        | 고객   | `../10-review/05-events.md`    |
+| `ReviewCreated`          | review      | `review`          | 리뷰 등록 완료        | 고객   | `../10-review/05-events.md`    |
+| `InventoryLevelChanged`  | inventory   | `inventory`       | 관심 상품 품절/재입고 | 고객   | `../03-inventory/05-events.md` |
+| `CartExpired`            | cart        | `cart`            | 장바구니 만료 안내    | 고객   | `../04-cart/05-events.md`      |
+| `CartConverted`          | cart        | `cart`            | 주문 전환 완료        | 고객   | `../04-cart/05-events.md`      |
+| `PointsEarned`           | loyalty     | `loyalty`         | 포인트 적립 완료      | 고객   | `../09-loyalty/05-events.md`   |
+| `PointsRedeemed`         | loyalty     | `loyalty`         | 포인트 사용 완료      | 고객   | `../09-loyalty/05-events.md`   |
+| `PointsExpired`          | loyalty     | `loyalty`         | 포인트 만료 안내      | 고객   | `../09-loyalty/05-events.md`   |
+| `PointsAdjusted`         | loyalty     | `loyalty`         | 포인트 조정 안내      | 고객   | `../09-loyalty/05-events.md`   |
+| `PromotionApplied`       | promotion   | `promotion`       | 할인 적용 안내        | 고객   | `../08-promotion/05-events.md` |
+| `InquiryCreated`         | inquiry     | `inquiry`         | 문의 접수 확인        | 고객   | `../11-inquiry/05-events.md`   |
+| `InquiryReplied`         | inquiry     | `inquiry`         | 문의 답변 등록        | 고객   | `../11-inquiry/05-events.md`   |
+| `InquiryStatusChanged`   | inquiry     | `inquiry`         | 문의 상태 변경        | 고객   | `../11-inquiry/05-events.md`   |
+| `InquiryReopened`        | inquiry     | `inquiry`         | 문의 재오픈 알림      | 운영자 | `../11-inquiry/05-events.md`   |
 
 > 운영자 대상 경보(저재고 경고, 재고 조정 확인, 배차 실패 운영 경보 등)는 `../14-observability/01-overview.md` 범위에서 처리한다. `InventoryAdjusted`, `InventoryLevelChanged`(운영자 향), `DeliveryDispatchFailed`(운영자 향) 등의 운영 알림은 observability 도메인이 담당한다.
 

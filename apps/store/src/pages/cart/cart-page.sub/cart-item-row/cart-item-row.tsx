@@ -36,13 +36,10 @@ export function CartItemRow({ item }: Readonly<{ item: CartItem }>) {
       queryClient.setQueryData<CartResponse>(cartQueryKeys.cart, {
         ...previous,
         totalAmount: previous.items.reduce(
-          (sum, i) =>
-            sum + i.unitPriceSnapshot * (i.id === item.id ? newQty : i.quantity),
+          (sum, i) => sum + i.unitPriceSnapshot * (i.id === item.id ? newQty : i.quantity),
           0,
         ),
-        items: previous.items.map((i) =>
-          i.id === item.id ? { ...i, quantity: newQty } : i,
-        ),
+        items: previous.items.map((i) => (i.id === item.id ? { ...i, quantity: newQty } : i)),
       })
     }
 
@@ -68,10 +65,7 @@ export function CartItemRow({ item }: Readonly<{ item: CartItem }>) {
       queryClient.setQueryData<CartResponse>(cartQueryKeys.cart, {
         ...previous,
         itemCount: filtered.length,
-        totalAmount: filtered.reduce(
-          (sum, i) => sum + i.unitPriceSnapshot * i.quantity,
-          0,
-        ),
+        totalAmount: filtered.reduce((sum, i) => sum + i.unitPriceSnapshot * i.quantity, 0),
         items: filtered,
       })
     }
@@ -139,9 +133,7 @@ export function CartItemRow({ item }: Readonly<{ item: CartItem }>) {
             >
               −
             </Button>
-            <span className="w-8 text-center text-sm font-medium tabular-nums">
-              {displayQty}
-            </span>
+            <span className="w-8 text-center text-sm font-medium tabular-nums">{displayQty}</span>
             <Button
               type="button"
               size="sm"

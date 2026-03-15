@@ -43,7 +43,9 @@ export function CartPage() {
             size="sm"
             variant="outline"
             className="mt-2"
-            onClick={() => { void cartQuery.refetch() }}
+            onClick={() => {
+              void cartQuery.refetch()
+            }}
           >
             다시 시도
           </Button>
@@ -61,7 +63,9 @@ export function CartPage() {
           </div>
           {[...cartQuery.data.items]
             .sort((a, b) => a.createdAt.localeCompare(b.createdAt))
-            .map((item) => <CartItemRow key={item.id} item={item} />)}
+            .map((item) => (
+              <CartItemRow key={item.id} item={item} />
+            ))}
           <CartSummary cart={cartQuery.data} />
         </div>
       )}
@@ -120,11 +124,7 @@ export function CartPage() {
             <Suspense fallback={<CartSkeleton />}>
               <SuspenseQuery {...cartQueryOptions()}>
                 {({ data: cart }) =>
-                  cart.items.length === 0 ? (
-                    <EmptyCart />
-                  ) : (
-                    <CartContentSection cart={cart} />
-                  )
+                  cart.items.length === 0 ? <EmptyCart /> : <CartContentSection cart={cart} />
                 }
               </SuspenseQuery>
             </Suspense>
@@ -192,17 +192,17 @@ function CartContentSection({ cart }: Readonly<{ cart: CartResponse }>) {
 
 ## 변환 체크리스트
 
-| #   | 항목                                              | 확인 |
-| --- | ------------------------------------------------- | ---- |
-| 1   | `useQuery` → `SuspenseQuery` render prop으로 교체 |      |
-| 2   | `isPending` 분기 → `<Suspense fallback={}>` 교체  |      |
+| #   | 항목                                                | 확인 |
+| --- | --------------------------------------------------- | ---- |
+| 1   | `useQuery` → `SuspenseQuery` render prop으로 교체   |      |
+| 2   | `isPending` 분기 → `<Suspense fallback={}>` 교체    |      |
 | 3   | `isError` 분기 → `<ErrorBoundary fallback={}>` 교체 |      |
-| 4   | `QueryErrorResetBoundary`로 ErrorBoundary 래핑    |      |
-| 5   | 정적 UI(제목 등)는 경계 바깥에 배치               |      |
-| 6   | Mutation 로직은 별도 컴포넌트로 추출               |      |
-| 7   | `Readonly<>` 타입 래퍼 적용                        |      |
-| 8   | LSP 진단 클린 확인                                 |      |
-| 9   | 기존 테스트 통과 확인                              |      |
+| 4   | `QueryErrorResetBoundary`로 ErrorBoundary 래핑      |      |
+| 5   | 정적 UI(제목 등)는 경계 바깥에 배치                 |      |
+| 6   | Mutation 로직은 별도 컴포넌트로 추출                |      |
+| 7   | `Readonly<>` 타입 래퍼 적용                         |      |
+| 8   | LSP 진단 클린 확인                                  |      |
+| 9   | 기존 테스트 통과 확인                               |      |
 
 ---
 

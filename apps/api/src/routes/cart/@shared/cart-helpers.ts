@@ -37,7 +37,10 @@ export const isCartErrorPayload = (value: unknown): value is CartErrorPayload =>
   return (
     typeof candidate.code === 'string' &&
     typeof candidate.error === 'string' &&
-    (candidate.status === 400 || candidate.status === 404 || candidate.status === 409 || candidate.status === 422)
+    (candidate.status === 400 ||
+      candidate.status === 404 ||
+      candidate.status === 409 ||
+      candidate.status === 422)
   )
 }
 
@@ -181,7 +184,10 @@ export const validateProductPurchasable = async (productId: string) => {
 
   const availableStock = Math.max(0, (productRow?.onHand ?? 0) - (productRow?.reserved ?? 0))
   const isPurchasable =
-    !!productRow && productRow.isActive && (productRow.categoryIsActive ?? false) && availableStock > 0
+    !!productRow &&
+    productRow.isActive &&
+    (productRow.categoryIsActive ?? false) &&
+    availableStock > 0
 
   if (!isPurchasable) {
     throw createCartError('product_unavailable', 'Product is not available for purchase', 422)

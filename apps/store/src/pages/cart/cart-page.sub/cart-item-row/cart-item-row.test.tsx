@@ -34,7 +34,11 @@ describe('CartItemRow', () => {
 
   test('renders item name, sku, and price', async () => {
     // given
-    const item = createCartItem({ productName: 'Apple Juice', sku: 'SKU-1111', unitPriceSnapshot: 2900 })
+    const item = createCartItem({
+      productName: 'Apple Juice',
+      sku: 'SKU-1111',
+      unitPriceSnapshot: 2900,
+    })
 
     // when
     await renderRow(item)

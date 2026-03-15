@@ -4,7 +4,13 @@ import { Button } from '@fullstack-forge/design-system/components/button'
 import { Input } from '@fullstack-forge/design-system/components/input'
 import { Skeleton } from '@fullstack-forge/design-system/components/skeleton'
 import { Link } from '@tanstack/react-router'
-import { ChevronLeftIcon, ChevronRightIcon, ChevronsLeftIcon, ChevronsRightIcon, SearchIcon } from 'lucide-react'
+import {
+  ChevronLeftIcon,
+  ChevronRightIcon,
+  ChevronsLeftIcon,
+  ChevronsRightIcon,
+  SearchIcon,
+} from 'lucide-react'
 import {
   catalogCategoriesQueryOptions,
   catalogListQueryOptions,
@@ -275,9 +281,7 @@ export function HomePage() {
 
         {/* Result count */}
         {!showProductsSkeleton && !productsQuery.isError ? (
-          <p className="text-xs text-muted-foreground">
-            {totalItems.toLocaleString()}개 상품
-          </p>
+          <p className="text-xs text-muted-foreground">{totalItems.toLocaleString()}개 상품</p>
         ) : null}
 
         {showProductsSkeleton ? <p className="sr-only">상품 목록을 불러오는 중...</p> : null}
@@ -311,12 +315,8 @@ export function HomePage() {
             <div className="mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-muted">
               <SearchIcon className="h-6 w-6 text-muted-foreground" />
             </div>
-            <h2 className="text-base font-semibold text-foreground">
-              조건에 맞는 상품이 없습니다
-            </h2>
-            <p className="mt-1.5 text-sm text-muted-foreground">
-              검색어 또는 필터를 조정해보세요.
-            </p>
+            <h2 className="text-base font-semibold text-foreground">조건에 맞는 상품이 없습니다</h2>
+            <p className="mt-1.5 text-sm text-muted-foreground">검색어 또는 필터를 조정해보세요.</p>
             {hasActiveFilters ? (
               <button
                 type="button"
@@ -440,18 +440,17 @@ function StockBadge({
 }>) {
   if (isActive && stockDisplay === 'in_stock') return null
 
-  const label = !isActive
-    ? '판매종료'
-    : stockDisplay === 'out_of_stock'
-      ? '품절'
-      : '재고임박'
+  const label = !isActive ? '판매종료' : stockDisplay === 'out_of_stock' ? '품절' : '재고임박'
 
-  const colorClass = stockDisplay === 'low_stock' && isActive
-    ? 'bg-amber-500 text-white'
-    : 'bg-foreground/75 text-background'
+  const colorClass =
+    stockDisplay === 'low_stock' && isActive
+      ? 'bg-amber-500 text-white'
+      : 'bg-foreground/75 text-background'
 
   return (
-    <span className={`absolute left-2 top-2 rounded px-1.5 py-0.5 text-[10px] font-medium leading-normal backdrop-blur-sm ${colorClass}`}>
+    <span
+      className={`absolute left-2 top-2 rounded px-1.5 py-0.5 text-[10px] font-medium leading-normal backdrop-blur-sm ${colorClass}`}
+    >
       {label}
     </span>
   )

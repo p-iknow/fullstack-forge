@@ -44,7 +44,6 @@ export async function readApiError(error: unknown): Promise<ApiError> {
   }
 }
 
-
 // --- Token refresh interceptor ---
 
 let refreshPromise: Promise<boolean> | null = null

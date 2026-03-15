@@ -8,7 +8,6 @@ import { readApiError } from '~/@shared/api'
 import { authQueryKeys, logoutMutationOptions, meQueryOptions } from '~/@shared/queries/auth'
 import { cartQueryOptions } from '~/@shared/queries/cart'
 
-
 const MIN_PLACEHOLDER_VISIBLE_MS = 600
 
 export function StoreTopNav() {
@@ -26,8 +25,6 @@ export function StoreTopNav() {
     ...meQueryOptions(),
     enabled: isHydrated,
   })
-
-
 
   const logoutMutation = useMutation({
     ...logoutMutationOptions(),
@@ -117,7 +114,9 @@ export function StoreTopNav() {
                   {cartItemCount > 99 ? '99+' : cartItemCount}
                 </span>
               ) : null}
-              <span className="sr-only">장바구니{cartItemCount > 0 ? ` (${cartItemCount}개)` : ''}</span>
+              <span className="sr-only">
+                장바구니{cartItemCount > 0 ? ` (${cartItemCount}개)` : ''}
+              </span>
             </Link>
           ) : null}
 

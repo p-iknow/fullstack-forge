@@ -80,10 +80,7 @@ export const getCart = async (): Promise<CartResponse> => {
   return requestJson<CartResponse>('/api/cart')
 }
 
-export const addCartItem = async (
-  productId: string,
-  quantity: number,
-): Promise<CartResponse> => {
+export const addCartItem = async (productId: string, quantity: number): Promise<CartResponse> => {
   return requestJson<CartResponse>('/api/cart/items', {
     method: 'POST',
     headers: { 'content-type': 'application/json' },

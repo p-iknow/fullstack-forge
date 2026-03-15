@@ -41,14 +41,14 @@ Node.js 런타임을 전제로 하며, TypeScript first 환경에서 최소 복�
 
 ### HTTP 프레임워크: Hono vs NestJS vs Fastify
 
-| 기준 | Hono | NestJS | Fastify |
-|------|------|--------|---------|
-| 번들 크기 | ~14KB (ultralight) | ~2MB+ (framework + decorators) | ~250KB |
-| 러닝커브 | 낮음 (Express-like, 추가 개념 최소) | 높음 (DI, Module, Guard, Pipe, Interceptor) | 중간 (plugin 생태계 학습) |
-| TypeScript 통합 | Native (generics 기반 타입 추론) | 데코레이터 기반 (reflect-metadata 의존) | 플러그인별 상이 |
-| OpenAPI 통합 | `@hono/zod-openapi`로 route 정의 시 자동 생성 | `@nestjs/swagger` 데코레이터 수동 부착 | `@fastify/swagger` 스키마 별도 관리 |
-| 아키텍처 강제 | 없음 — 자유도 높음, 규율 직접 수립 | 강제 — Module/Controller/Service 구조 고정 | 약한 강제 — plugin 중심 |
-| 런타임 호환 | Node, Bun, Deno, Cloudflare Workers, Vercel Edge 등 | Node 전용 (Express/Fastify adapter) | Node 전용 |
+| 기준            | Hono                                                | NestJS                                      | Fastify                             |
+| --------------- | --------------------------------------------------- | ------------------------------------------- | ----------------------------------- |
+| 번들 크기       | ~14KB (ultralight)                                  | ~2MB+ (framework + decorators)              | ~250KB                              |
+| 러닝커브        | 낮음 (Express-like, 추가 개념 최소)                 | 높음 (DI, Module, Guard, Pipe, Interceptor) | 중간 (plugin 생태계 학습)           |
+| TypeScript 통합 | Native (generics 기반 타입 추론)                    | 데코레이터 기반 (reflect-metadata 의존)     | 플러그인별 상이                     |
+| OpenAPI 통합    | `@hono/zod-openapi`로 route 정의 시 자동 생성       | `@nestjs/swagger` 데코레이터 수동 부착      | `@fastify/swagger` 스키마 별도 관리 |
+| 아키텍처 강제   | 없음 — 자유도 높음, 규율 직접 수립                  | 강제 — Module/Controller/Service 구조 고정  | 약한 강제 — plugin 중심             |
+| 런타임 호환     | Node, Bun, Deno, Cloudflare Workers, Vercel Edge 등 | Node 전용 (Express/Fastify adapter)         | Node 전용                           |
 
 **Hono 선택 근거:**
 
@@ -66,14 +66,14 @@ Node.js 런타임을 전제로 하며, TypeScript first 환경에서 최소 복�
 
 ### ORM: Drizzle vs TypeORM vs Prisma
 
-| 기준 | Drizzle | TypeORM | Prisma |
-|------|---------|---------|--------|
-| 쿼리 스타일 | SQL-first (TypeScript로 SQL을 작성) | Active Record / Data Mapper | 선언적 Client API |
-| 생성 SQL 가시성 | 높음 — 작성한 코드가 거의 그대로 SQL | 낮음 — 내부 query builder 변환 | 중간 — `prisma.log`로 확인 가능 |
-| 타입 안전성 | 스키마에서 추론 (zero codegen) | 데코레이터 기반 (런타임 타입) | codegen 기반 (빌드 타임 생성) |
-| 마이그레이션 | `drizzle-kit generate` → SQL 리뷰 → `migrate` | `synchronize: true` 또는 수동 | `prisma migrate dev` → SQL 자동 |
-| 관계 조인 | `relations()` API + `with` 절 | `@ManyToOne` 데코레이터 | `include` / `select` 중첩 |
-| Raw SQL 접근 | `sql` template literal (first-class) | `query()` 메서드 | `$queryRaw` (escape hatch) |
+| 기준            | Drizzle                                       | TypeORM                        | Prisma                          |
+| --------------- | --------------------------------------------- | ------------------------------ | ------------------------------- |
+| 쿼리 스타일     | SQL-first (TypeScript로 SQL을 작성)           | Active Record / Data Mapper    | 선언적 Client API               |
+| 생성 SQL 가시성 | 높음 — 작성한 코드가 거의 그대로 SQL          | 낮음 — 내부 query builder 변환 | 중간 — `prisma.log`로 확인 가능 |
+| 타입 안전성     | 스키마에서 추론 (zero codegen)                | 데코레이터 기반 (런타임 타입)  | codegen 기반 (빌드 타임 생성)   |
+| 마이그레이션    | `drizzle-kit generate` → SQL 리뷰 → `migrate` | `synchronize: true` 또는 수동  | `prisma migrate dev` → SQL 자동 |
+| 관계 조인       | `relations()` API + `with` 절                 | `@ManyToOne` 데코레이터        | `include` / `select` 중첩       |
+| Raw SQL 접근    | `sql` template literal (first-class)          | `query()` 메서드               | `$queryRaw` (escape hatch)      |
 
 **Drizzle 선택 근거:**
 
@@ -106,12 +106,12 @@ NoSQL(MongoDB 등) 기각: 도메인 정합성(FK 제약, 트랜잭션)이 핵�
 
 Redis는 **영속 데이터가 아닌 휘발성/TTL 기반 데이터**의 전용 저장소로 사용한다.
 
-| 용도 | 키 패턴 | TTL | 근거 |
-|------|---------|-----|------|
-| 세션 (refresh token hash) | `session:{id}` | 7~14일 | 빠른 조회 + TTL 기반 자동 만료 |
-| Rate limit 카운터 | `ratelimit:{surface}:{type}:{key}` | 15분 | 윈도우 기반 카운팅, 원자적 INCR |
-| OAuth state/nonce | `oauth:{type}:{provider}:{value}` | 5분 | 1회성 소비 후 즉시 삭제 |
-| 멱등 키 | `idempotency:{consumer}:{eventId}` | 7일 | 이벤트 중복 처리 방지 |
+| 용도                      | 키 패턴                            | TTL    | 근거                            |
+| ------------------------- | ---------------------------------- | ------ | ------------------------------- |
+| 세션 (refresh token hash) | `session:{id}`                     | 7~14일 | 빠른 조회 + TTL 기반 자동 만료  |
+| Rate limit 카운터         | `ratelimit:{surface}:{type}:{key}` | 15분   | 윈도우 기반 카운팅, 원자적 INCR |
+| OAuth state/nonce         | `oauth:{type}:{provider}:{value}`  | 5분    | 1회성 소비 후 즉시 삭제         |
+| 멱등 키                   | `idempotency:{consumer}:{eventId}` | 7일    | 이벤트 중복 처리 방지           |
 
 **PostgreSQL이 아닌 Redis를 사용하는 이유:**
 

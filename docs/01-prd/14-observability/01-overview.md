@@ -79,25 +79,25 @@ graph LR
 
 ### 알림 임계치(기본)
 
-| 지표 | 임계치 | 관찰 윈도우 | 용도 |
-| --- | --- | --- | --- |
-| API 오류율 (`api_error_total / api_request_total`) | 1% 초과 | 5분 | 서비스 이상 감지 |
-| API p95 지연 | 500ms 초과 | 5분 | KPI 위반 감지 |
-| API p99 지연 | 2초 초과 | 5분 | 심각한 성능 저하 감지 |
-| DLQ 메시지 수 | 5건 초과 | — | 처리 실패 누적 감지 |
-| Queue depth | 1,000 초과 | — | 소비자 적체 감지 |
-| 문의 1차 응답 지연 | 20시간 초과 | — | SLA 위반 임박 감지 |
+| 지표                                               | 임계치      | 관찰 윈도우 | 용도                  |
+| -------------------------------------------------- | ----------- | ----------- | --------------------- |
+| API 오류율 (`api_error_total / api_request_total`) | 1% 초과     | 5분         | 서비스 이상 감지      |
+| API p95 지연                                       | 500ms 초과  | 5분         | KPI 위반 감지         |
+| API p99 지연                                       | 2초 초과    | 5분         | 심각한 성능 저하 감지 |
+| DLQ 메시지 수                                      | 5건 초과    | —           | 처리 실패 누적 감지   |
+| Queue depth                                        | 1,000 초과  | —           | 소비자 적체 감지      |
+| 문의 1차 응답 지연                                 | 20시간 초과 | —           | SLA 위반 임박 감지    |
 
 > **KPI 측정 vs 알림 구분**: `p95 ≤ 500ms`는 KPI 달성 여부 측정 기준(`00-overview.md §3`)이고, `p99 > 2s`는 심각한 성능 저하에 대한 운영 알림 트리거 기준이다. 두 지표는 목적이 다르므로 대시보드 패널과 알림 규칙에 각각 별도로 구성한다.
 
 ### 알림 에스컬레이션 정책
 
-| 단계 | 경과 시간 | 조치 |
-| --- | --- | --- |
-| 1차 | 즉시 | 운영 Slack 채널에 알림 발송 |
-| 2차 | 5분 후 미응답 | 담당 on-call 운영자에게 개인 알림(Slack DM/Email) |
-| 3차 | 15분 후 미응답 | 상위 관리자에게 에스컬레이션 |
-| 4차 | 30분 후 미응답 | 전체 운영팀 알림 + 장애 대응 채널 개설 |
+| 단계 | 경과 시간      | 조치                                              |
+| ---- | -------------- | ------------------------------------------------- |
+| 1차  | 즉시           | 운영 Slack 채널에 알림 발송                       |
+| 2차  | 5분 후 미응답  | 담당 on-call 운영자에게 개인 알림(Slack DM/Email) |
+| 3차  | 15분 후 미응답 | 상위 관리자에게 에스컬레이션                      |
+| 4차  | 30분 후 미응답 | 전체 운영팀 알림 + 장애 대응 채널 개설            |
 
 ### 롤백 기준
 
@@ -145,35 +145,35 @@ graph LR
 
 ### KPI ↔ 메트릭 매핑
 
-| KPI | 목표 | Prometheus 메트릭 | 집계 방식 | 대시보드 패널 |
-| --- | --- | --- | --- | --- |
-| 주문 성공률 | 98% 이상 | `order_created_total`, `order_completed_total` | `rate(order_completed_total) / rate(order_created_total)` | 핵심 카드 |
-| 중복 처리 오류 | 0건 | `duplicate_event_skipped_total` | `sum(duplicate_event_skipped_total)` — skip은 멱등 정상 동작이며, 실제 중복 side-effect 발생은 감사 로그로 추적 | 핵심 카드 |
-| DLQ 복구 성공률 | 95% 이상 | `dlq_redrive_total`, `dlq_redrive_success_total` | `rate(dlq_redrive_success_total) / rate(dlq_redrive_total)` | 큐 운영 패널 |
-| 운영 복구 시간 | 10분 이내 | 알림 발생 시각 → 복구 완료 시각 | 감사 로그 기반 집계 | 큐 운영 패널 |
-| p95 주문 조회 지연 | 500ms 이하 | `api_request_duration_seconds{handler="/orders"}` | `histogram_quantile(0.95, rate(...))` | 시계열 그래프 |
-| 리뷰 작성 전환율 | 25% 이상 | `review_created_total`, `order_completed_total` | `sum(review_created_total) / sum(order_completed_total)` | 핵심 카드 |
-| 문의 1차 응답 시간 | 24시간 이내 | `inquiry_first_response_latency` | `histogram_quantile(0.95, rate(...))` | 시계열 그래프 |
+| KPI                | 목표        | Prometheus 메트릭                                 | 집계 방식                                                                                                       | 대시보드 패널 |
+| ------------------ | ----------- | ------------------------------------------------- | --------------------------------------------------------------------------------------------------------------- | ------------- |
+| 주문 성공률        | 98% 이상    | `order_created_total`, `order_completed_total`    | `rate(order_completed_total) / rate(order_created_total)`                                                       | 핵심 카드     |
+| 중복 처리 오류     | 0건         | `duplicate_event_skipped_total`                   | `sum(duplicate_event_skipped_total)` — skip은 멱등 정상 동작이며, 실제 중복 side-effect 발생은 감사 로그로 추적 | 핵심 카드     |
+| DLQ 복구 성공률    | 95% 이상    | `dlq_redrive_total`, `dlq_redrive_success_total`  | `rate(dlq_redrive_success_total) / rate(dlq_redrive_total)`                                                     | 큐 운영 패널  |
+| 운영 복구 시간     | 10분 이내   | 알림 발생 시각 → 복구 완료 시각                   | 감사 로그 기반 집계                                                                                             | 큐 운영 패널  |
+| p95 주문 조회 지연 | 500ms 이하  | `api_request_duration_seconds{handler="/orders"}` | `histogram_quantile(0.95, rate(...))`                                                                           | 시계열 그래프 |
+| 리뷰 작성 전환율   | 25% 이상    | `review_created_total`, `order_completed_total`   | `sum(review_created_total) / sum(order_completed_total)`                                                        | 핵심 카드     |
+| 문의 1차 응답 시간 | 24시간 이내 | `inquiry_first_response_latency`                  | `histogram_quantile(0.95, rate(...))`                                                                           | 시계열 그래프 |
 
 ## 장애 시나리오 및 복구 정책
 
-| 시나리오 | 영향 | 복구 방법 |
-| --- | --- | --- |
-| Prometheus 다운 | 메트릭 수집 중단, 알림 미발생 | Prometheus HA 구성(MVP 이후). 단기 장애 시 CloudWatch 지표로 대체 관측 |
-| Grafana 접근 불가 | 대시보드 조회 불가 | Prometheus API 직접 쿼리 또는 Alertmanager 독립 알림으로 운영 지속 |
-| 감사 로그 쓰기 실패 | 추적 데이터 유실 | 로그 버퍼링(파일 기반 fallback) 후 복구 시 일괄 적재. 유실 구간은 수동 점검 |
-| Alert 채널 전송 실패 | 운영자 알림 미수신 | 다중 채널 구성(Slack + Email 동시). 단일 채널 실패 시 대체 채널로 전달 |
-| 메트릭 스크레이프 지연 | 알림 발생 지연 | 스크레이프 타임아웃 초과 시 `up` 메트릭 기반 알림으로 감지 |
+| 시나리오               | 영향                          | 복구 방법                                                                   |
+| ---------------------- | ----------------------------- | --------------------------------------------------------------------------- |
+| Prometheus 다운        | 메트릭 수집 중단, 알림 미발생 | Prometheus HA 구성(MVP 이후). 단기 장애 시 CloudWatch 지표로 대체 관측      |
+| Grafana 접근 불가      | 대시보드 조회 불가            | Prometheus API 직접 쿼리 또는 Alertmanager 독립 알림으로 운영 지속          |
+| 감사 로그 쓰기 실패    | 추적 데이터 유실              | 로그 버퍼링(파일 기반 fallback) 후 복구 시 일괄 적재. 유실 구간은 수동 점검 |
+| Alert 채널 전송 실패   | 운영자 알림 미수신            | 다중 채널 구성(Slack + Email 동시). 단일 채널 실패 시 대체 채널로 전달      |
+| 메트릭 스크레이프 지연 | 알림 발생 지연                | 스크레이프 타임아웃 초과 시 `up` 메트릭 기반 알림으로 감지                  |
 
 ## 연관 도메인
 
-| 도메인 | 연관 내용 | 참조 |
-| --- | --- | --- |
-| order | 주문 성공률, 주문 조회 지연 KPI 메트릭 수집 | `../05-order/01-overview.md` |
-| review | 리뷰 작성 전환율, 리뷰 신고 처리량 메트릭 수집 | `../10-review/01-overview.md` |
-| inquiry | 문의 1차 응답 시간 KPI, SLA 위반 알림 연동 | `../11-inquiry/01-overview.md` |
+| 도메인       | 연관 내용                                                              | 참조                                |
+| ------------ | ---------------------------------------------------------------------- | ----------------------------------- |
+| order        | 주문 성공률, 주문 조회 지연 KPI 메트릭 수집                            | `../05-order/01-overview.md`        |
+| review       | 리뷰 작성 전환율, 리뷰 신고 처리량 메트릭 수집                         | `../10-review/01-overview.md`       |
+| inquiry      | 문의 1차 응답 시간 KPI, SLA 위반 알림 연동                             | `../11-inquiry/01-overview.md`      |
 | notification | 운영 경보는 observability 범위, 사용자 알림은 notification 범위로 분리 | `../12-notification/01-overview.md` |
-| event | 큐 상태/처리율/실패율/DLQ 지표 수집, 이벤트 envelope traceId 연계 | `../13-event/01-overview.md` |
+| event        | 큐 상태/처리율/실패율/DLQ 지표 수집, 이벤트 envelope traceId 연계      | `../13-event/01-overview.md`        |
 
 ## Stage 7 Gate
 

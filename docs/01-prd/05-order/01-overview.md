@@ -81,35 +81,35 @@ stateDiagram-v2
 
 ### 상태 전이 트리거
 
-| 전이 | 트리거 | 수행 주체 | 전제 조건 |
-| --- | --- | --- | --- |
-| `created` → `confirmed` | `PaymentCaptured` 이벤트 수신 | system | 재고 예약 완료 + 결제 승인 완료 |
-| `created` → `cancelled` | 고객 취소 요청 또는 `PaymentFailed` 수신 | customer / system | — |
-| `confirmed` → `preparing` | 운영자 피킹 시작 | operator | — |
-| `confirmed` → `partially_cancelled` | 부분 품절 확인 (대체 불가 아이템) | system / operator | `is_substitutable=false`인 아이템 품절 |
-| `confirmed` → `cancelled` | 운영자 전체 취소 | operator | — |
-| `preparing` → `ready` | 피킹/패킹 완료 | operator | 모든 활성 아이템 준비 완료 |
-| `preparing` → `partially_cancelled` | 준비 중 부분 품절 발견 | operator | — |
-| `preparing` → `cancelled` | 운영자 전체 취소 | operator | — |
-| `ready` → `dispatched` | `DeliveryDispatched` 이벤트 수신 | system | 배송 기사 배정 완료 |
-| `ready` → `partially_cancelled` | 출고 직전 부분 취소 | operator | — |
-| `ready` → `cancelled` | 운영자 전체 취소 | operator | — |
-| `partially_cancelled` → `preparing` | 잔여 아이템 피킹 재개 | operator | 취소되지 않은 아이템 존재 |
-| `partially_cancelled` → `ready` | 잔여 아이템 준비 완료 | operator | — |
-| `partially_cancelled` → `dispatched` | 잔여 아이템 배차 완료 | system | — |
-| `partially_cancelled` → `delivered` | 잔여 아이템 배송 완료 | system | — |
-| `partially_cancelled` → `cancelled` | 잔여 전체 취소 | operator / customer | 남은 활성 아이템 없음 |
-| `dispatched` → `delivered` | `DeliveryStatusChanged`(delivered) 수신 | system | — |
+| 전이                                 | 트리거                                   | 수행 주체           | 전제 조건                              |
+| ------------------------------------ | ---------------------------------------- | ------------------- | -------------------------------------- |
+| `created` → `confirmed`              | `PaymentCaptured` 이벤트 수신            | system              | 재고 예약 완료 + 결제 승인 완료        |
+| `created` → `cancelled`              | 고객 취소 요청 또는 `PaymentFailed` 수신 | customer / system   | —                                      |
+| `confirmed` → `preparing`            | 운영자 피킹 시작                         | operator            | —                                      |
+| `confirmed` → `partially_cancelled`  | 부분 품절 확인 (대체 불가 아이템)        | system / operator   | `is_substitutable=false`인 아이템 품절 |
+| `confirmed` → `cancelled`            | 운영자 전체 취소                         | operator            | —                                      |
+| `preparing` → `ready`                | 피킹/패킹 완료                           | operator            | 모든 활성 아이템 준비 완료             |
+| `preparing` → `partially_cancelled`  | 준비 중 부분 품절 발견                   | operator            | —                                      |
+| `preparing` → `cancelled`            | 운영자 전체 취소                         | operator            | —                                      |
+| `ready` → `dispatched`               | `DeliveryDispatched` 이벤트 수신         | system              | 배송 기사 배정 완료                    |
+| `ready` → `partially_cancelled`      | 출고 직전 부분 취소                      | operator            | —                                      |
+| `ready` → `cancelled`                | 운영자 전체 취소                         | operator            | —                                      |
+| `partially_cancelled` → `preparing`  | 잔여 아이템 피킹 재개                    | operator            | 취소되지 않은 아이템 존재              |
+| `partially_cancelled` → `ready`      | 잔여 아이템 준비 완료                    | operator            | —                                      |
+| `partially_cancelled` → `dispatched` | 잔여 아이템 배차 완료                    | system              | —                                      |
+| `partially_cancelled` → `delivered`  | 잔여 아이템 배송 완료                    | system              | —                                      |
+| `partially_cancelled` → `cancelled`  | 잔여 전체 취소                           | operator / customer | 남은 활성 아이템 없음                  |
+| `dispatched` → `delivered`           | `DeliveryStatusChanged`(delivered) 수신  | system              | —                                      |
 
 > **SLA 기준 시각**: delivery 도메인의 SLA 목표 시각(`sla_target_at`)은 `confirmed` 전이 시각(= `PaymentCaptured` 수신 시각)을 기준으로 산정한다. `../07-delivery/01-overview.md` 참조.
 
 ### 취소 가능 상태 요약
 
-| 수행 주체 | 취소 가능 상태 | 취소 유형 |
-| --- | --- | --- |
-| customer | `created` | 전체 취소 |
-| operator | `created`, `confirmed`, `preparing`, `ready`, `partially_cancelled` | 전체 취소 |
-| system / operator | `confirmed`, `preparing`, `ready` | 부분 취소 (아이템 단위) |
+| 수행 주체         | 취소 가능 상태                                                      | 취소 유형               |
+| ----------------- | ------------------------------------------------------------------- | ----------------------- |
+| customer          | `created`                                                           | 전체 취소               |
+| operator          | `created`, `confirmed`, `preparing`, `ready`, `partially_cancelled` | 전체 취소               |
+| system / operator | `confirmed`, `preparing`, `ready`                                   | 부분 취소 (아이템 단위) |
 
 - `dispatched` 이후 고객/운영자 취소 불가 (반품 절차로 전환 — MVP 제외)
 
@@ -139,12 +139,12 @@ flowchart TD
 
 ### 단계별 실패 처리
 
-| 단계 | 실패 시 처리 |
-| --- | --- |
-| 재고 확인/예약 | 전체 품절이면 주문 생성 거부. 부분 품절이면 대체/부분 취소 진행 |
-| 프로모션 적용 | 프로모션 조건 미달 시 할인 없이 진행 (주문 생성은 차단하지 않음) |
-| 포인트 차감 | 잔액 부족 시 포인트 사용 거부, 사용자에게 금액 재확인 요청 |
-| 결제 요청 | `PaymentFailed` 수신 시 주문 `cancelled` 전이, 재고 예약 해제, 포인트 복원 |
+| 단계           | 실패 시 처리                                                               |
+| -------------- | -------------------------------------------------------------------------- |
+| 재고 확인/예약 | 전체 품절이면 주문 생성 거부. 부분 품절이면 대체/부분 취소 진행            |
+| 프로모션 적용  | 프로모션 조건 미달 시 할인 없이 진행 (주문 생성은 차단하지 않음)           |
+| 포인트 차감    | 잔액 부족 시 포인트 사용 거부, 사용자에게 금액 재확인 요청                 |
+| 결제 요청      | `PaymentFailed` 수신 시 주문 `cancelled` 전이, 재고 예약 해제, 포인트 복원 |
 
 ## 부분 실패/부분 품절
 
@@ -171,11 +171,11 @@ flowchart TD
 
 ### 가격 차이 처리 규칙
 
-| 상황 | 처리 |
-| --- | --- |
-| 대체 상품이 원상품보다 저렴 | 차액만큼 주문 총액 감소, 환불 대상에 포함 |
-| 대체 상품이 원상품 대비 120% 이내로 비쌈 | 차액만큼 주문 총액 증가, 추가 결제 처리 |
-| 대체 상품이 원상품 대비 120% 초과로 비쌈 | 사용자 승인 필요, 승인 시 추가 결제 |
+| 상황                                     | 처리                                      |
+| ---------------------------------------- | ----------------------------------------- |
+| 대체 상품이 원상품보다 저렴              | 차액만큼 주문 총액 감소, 환불 대상에 포함 |
+| 대체 상품이 원상품 대비 120% 이내로 비쌈 | 차액만큼 주문 총액 증가, 추가 결제 처리   |
+| 대체 상품이 원상품 대비 120% 초과로 비쌈 | 사용자 승인 필요, 승인 시 추가 결제       |
 
 - 대체 적용 후 프로모션 할인은 **재계산하지 않는다** (주문 생성 시점 스냅샷 유지)
 - 대체 적용 후 포인트 적립은 **최종 결제 금액** 기준으로 산정
@@ -204,14 +204,14 @@ flowchart TD
 
 주문 취소(전체/부분) 시 `OrderCancelled` 이벤트를 발행하고, 각 도메인 소비자가 비동기로 후속 처리한다.
 
-| 후속 처리 | 담당 도메인 | 처리 내용 | 정책 참조 |
-| --- | --- | --- | --- |
-| 재고 복원 | inventory | `reserved` 감소, `available` 복원 | `../03-inventory/01-overview.md` |
-| 결제 환불 | payment | 결제 취소/환불 처리 | `../06-payment/01-overview.md` |
-| 포인트 롤백 | loyalty | 적립 포인트 회수 + 사용 포인트 복원 | `../09-loyalty/01-overview.md` |
-| 프로모션 롤백 | promotion | 쿠폰 사용 이력 롤백, 사용 카운트 복원 | `../08-promotion/01-overview.md` |
-| 배송 취소 | delivery | 배차 취소, SLA 해제 | `../07-delivery/01-overview.md` |
-| 알림 발송 | notification | 취소 완료 알림 | `../12-notification/01-overview.md` |
+| 후속 처리     | 담당 도메인  | 처리 내용                             | 정책 참조                           |
+| ------------- | ------------ | ------------------------------------- | ----------------------------------- |
+| 재고 복원     | inventory    | `reserved` 감소, `available` 복원     | `../03-inventory/01-overview.md`    |
+| 결제 환불     | payment      | 결제 취소/환불 처리                   | `../06-payment/01-overview.md`      |
+| 포인트 롤백   | loyalty      | 적립 포인트 회수 + 사용 포인트 복원   | `../09-loyalty/01-overview.md`      |
+| 프로모션 롤백 | promotion    | 쿠폰 사용 이력 롤백, 사용 카운트 복원 | `../08-promotion/01-overview.md`    |
+| 배송 취소     | delivery     | 배차 취소, SLA 해제                   | `../07-delivery/01-overview.md`     |
+| 알림 발송     | notification | 취소 완료 알림                        | `../12-notification/01-overview.md` |
 
 ### 주문 취소 연쇄 시퀀스 (이벤트 기반)
 
@@ -246,17 +246,17 @@ sequenceDiagram
 
 ## 연관 도메인
 
-| 도메인 | 연관 내용 | 참조 |
-| --- | --- | --- |
-| cart | 장바구니 → 주문 전환, `CartConverted` 이벤트 수신 | `../04-cart/01-overview.md` |
-| inventory | 주문 생성 시 재고 예약, 취소 시 복원, 배송 확정 시 차감 | `../03-inventory/01-overview.md` |
-| payment | 결제 요청/승인/취소/환불 연동 | `../06-payment/01-overview.md` |
-| delivery | 배차/배송 상태 연동, SLA 기준 시각 제공 | `../07-delivery/01-overview.md` |
-| promotion | 주문 생성 시 프로모션/쿠폰 할인 적용 | `../08-promotion/01-overview.md` |
-| loyalty | 포인트 적립(배송 완료 후)/사용(주문 생성 시)/롤백(취소 시) | `../09-loyalty/01-overview.md` |
-| notification | 주문 생성/상태 변경/취소 알림 발송 | `../12-notification/01-overview.md` |
-| review | 배송 완료 후 리뷰 작성 가능 | `../10-review/01-overview.md` |
-| inquiry | 주문 기반 고객 문의 생성 | `../11-inquiry/01-overview.md` |
+| 도메인       | 연관 내용                                                  | 참조                                |
+| ------------ | ---------------------------------------------------------- | ----------------------------------- |
+| cart         | 장바구니 → 주문 전환, `CartConverted` 이벤트 수신          | `../04-cart/01-overview.md`         |
+| inventory    | 주문 생성 시 재고 예약, 취소 시 복원, 배송 확정 시 차감    | `../03-inventory/01-overview.md`    |
+| payment      | 결제 요청/승인/취소/환불 연동                              | `../06-payment/01-overview.md`      |
+| delivery     | 배차/배송 상태 연동, SLA 기준 시각 제공                    | `../07-delivery/01-overview.md`     |
+| promotion    | 주문 생성 시 프로모션/쿠폰 할인 적용                       | `../08-promotion/01-overview.md`    |
+| loyalty      | 포인트 적립(배송 완료 후)/사용(주문 생성 시)/롤백(취소 시) | `../09-loyalty/01-overview.md`      |
+| notification | 주문 생성/상태 변경/취소 알림 발송                         | `../12-notification/01-overview.md` |
+| review       | 배송 완료 후 리뷰 작성 가능                                | `../10-review/01-overview.md`       |
+| inquiry      | 주문 기반 고객 문의 생성                                   | `../11-inquiry/01-overview.md`      |
 
 ## Stage 게이트 (주문 범위)
 

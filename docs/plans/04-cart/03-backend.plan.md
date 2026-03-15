@@ -14,6 +14,7 @@
 ## Scope
 
 **이 세션에서 하는 것**:
+
 - Cart route 등록 (index.ts)
 - 5개 handler 구현 (getCart, addItem, updateItem, deleteItem, clearCart)
 - getOrCreateCart, loadCartWithItems, validateProductPurchasable 헬퍼
@@ -22,17 +23,20 @@
 - app.ts 등록
 
 **이 세션에서 하지 않는 것**:
+
 - TTL 배치 만료 (별도 세션 또는 이벤트 인프라 이후)
 - CartConverted 이벤트 발행 (06-order-payment에서)
 - Frontend (04-store-ui에서)
 
 **생성할 파일**:
+
 - `apps/api/src/routes/cart/index.ts`
 - `apps/api/src/routes/cart/handlers.ts`
 - `apps/api/src/routes/cart/@shared/cart-helpers.ts`
 - `apps/api/src/routes/cart/handlers.test.ts`
 
 **수정할 파일**:
+
 - `apps/api/src/app.ts` (cart route 추가)
 
 ## Progressive Tasks
@@ -70,6 +74,7 @@
 파일: `apps/api/src/routes/cart/handlers.ts`
 
 #### GET /api/store/cart
+
 ```
 1. requireAuth → userId
 2. getOrCreateActiveCart(userId)
@@ -78,6 +83,7 @@
 ```
 
 #### POST /api/store/cart/items
+
 ```
 1. requireAuth → userId
 2. body: { productId, quantity }
@@ -95,6 +101,7 @@
 ```
 
 #### PATCH /api/store/cart/items/{cartItemId}
+
 ```
 1. requireAuth → userId
 2. cartItem + cart JOIN, cart.userId = userId 확인
@@ -106,6 +113,7 @@
 ```
 
 #### DELETE /api/store/cart/items/{cartItemId}
+
 ```
 1. requireAuth → userId
 2. cartItem + cart JOIN, userId 확인
@@ -116,6 +124,7 @@
 ```
 
 #### DELETE /api/store/cart
+
 ```
 1. requireAuth → userId
 2. cart 조회, userId 확인
@@ -177,14 +186,14 @@ describe('DELETE /api/store/cart')
 
 ### Business Rules
 
-| 규칙 | 값 | 검증 시점 | PRD 근거 |
-|------|------|-----------|----------|
-| 아이템당 최대 수량 | 15 | POST (합산), PATCH | `01-overview.md §2` |
-| 장바구니 최대 항목 | 30 | POST (새 항목일 때) | `01-overview.md §2` |
-| TTL | 7일 | 생성 시 설정, 변경 시 갱신 | `01-overview.md §2` |
-| 활성 장바구니 | 사용자당 1개 | getOrCreate에서 보장 | `01-overview.md §2` |
-| 낙관적 락 | version 필드 | refreshCartExpiry에서 검증 | `01-overview.md §5` |
-| 가격 스냅샷 | 추가 시점 가격 | POST (신규 아이템) | `01-overview.md §2` |
+| 규칙               | 값             | 검증 시점                  | PRD 근거            |
+| ------------------ | -------------- | -------------------------- | ------------------- |
+| 아이템당 최대 수량 | 15             | POST (합산), PATCH         | `01-overview.md §2` |
+| 장바구니 최대 항목 | 30             | POST (새 항목일 때)        | `01-overview.md §2` |
+| TTL                | 7일            | 생성 시 설정, 변경 시 갱신 | `01-overview.md §2` |
+| 활성 장바구니      | 사용자당 1개   | getOrCreate에서 보장       | `01-overview.md §2` |
+| 낙관적 락          | version 필드   | refreshCartExpiry에서 검증 | `01-overview.md §5` |
+| 가격 스냅샷        | 추가 시점 가격 | POST (신규 아이템)         | `01-overview.md §2` |
 
 ### Stock Display 계산
 

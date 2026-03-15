@@ -74,7 +74,10 @@ describe('CartSummary', () => {
   test('enables 주문하기 button when there are no out_of_stock items', async () => {
     // given
     const cart = createCartResponse({
-      items: [createCartItem({ stockDisplay: 'in_stock' }), createCartItem({ id: 'item-2', stockDisplay: 'low_stock' })],
+      items: [
+        createCartItem({ stockDisplay: 'in_stock' }),
+        createCartItem({ id: 'item-2', stockDisplay: 'low_stock' }),
+      ],
     })
 
     // when

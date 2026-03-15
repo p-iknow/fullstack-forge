@@ -31,7 +31,6 @@ describe('login page', () => {
 
     // visual regression — validation error
     await expect(page.getByRole('main')).toMatchScreenshot('login-validation-error')
-
   })
   it('logs in successfully and navigates to home', async () => {
     // given
@@ -83,13 +82,7 @@ describe('login page', () => {
     const kakaoLink = screen.getByRole('link', { name: 'Kakao로 계속하기' })
 
     // then
-    expect(googleLink).toHaveAttribute(
-      'href',
-      '/api/auth/oauth/google/start?redirect=/',
-    )
-    expect(kakaoLink).toHaveAttribute(
-      'href',
-      '/api/auth/oauth/kakao/start?redirect=/',
-    )
+    expect(googleLink).toHaveAttribute('href', '/api/auth/oauth/google/start?redirect=/')
+    expect(kakaoLink).toHaveAttribute('href', '/api/auth/oauth/kakao/start?redirect=/')
   })
 })

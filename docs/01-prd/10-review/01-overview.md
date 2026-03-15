@@ -85,12 +85,12 @@ stateDiagram-v2
 
 ## 6) 연관 도메인
 
-| 도메인 | 연관 내용 | 참조 |
-| --- | --- | --- |
-| order | 배송 완료 주문 기반 리뷰 작성 가능 여부 판단 | `../05-order/01-overview.md` |
-| delivery | `DeliveryStatusChanged`(delivered) 수신 시 `ReviewEligible` 발행 | `../07-delivery/05-events.md` |
-| notification | `ReviewEligible`(리뷰 작성 유도), `ReviewCreated`(등록 완료) 알림 발송 | `../12-notification/05-events.md` |
-| observability | 리뷰 작성 전환율, 모더레이션 처리율 메트릭 수집 | `../14-observability/01-overview.md` |
+| 도메인        | 연관 내용                                                              | 참조                                 |
+| ------------- | ---------------------------------------------------------------------- | ------------------------------------ |
+| order         | 배송 완료 주문 기반 리뷰 작성 가능 여부 판단                           | `../05-order/01-overview.md`         |
+| delivery      | `DeliveryStatusChanged`(delivered) 수신 시 `ReviewEligible` 발행       | `../07-delivery/05-events.md`        |
+| notification  | `ReviewEligible`(리뷰 작성 유도), `ReviewCreated`(등록 완료) 알림 발송 | `../12-notification/05-events.md`    |
+| observability | 리뷰 작성 전환율, 모더레이션 처리율 메트릭 수집                        | `../14-observability/01-overview.md` |
 
 ## 7) Stage 6 — Admin Operations (모더레이션)
 

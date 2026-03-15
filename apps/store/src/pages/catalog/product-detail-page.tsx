@@ -1,13 +1,7 @@
 import { useState } from 'react'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { Link } from '@tanstack/react-router'
-import {
-  ChevronRightIcon,
-  Loader2Icon,
-  MinusIcon,
-  PlusIcon,
-  ShoppingCartIcon,
-} from 'lucide-react'
+import { ChevronRightIcon, Loader2Icon, MinusIcon, PlusIcon, ShoppingCartIcon } from 'lucide-react'
 import { Button } from '@fullstack-forge/design-system/components/button'
 import { Skeleton } from '@fullstack-forge/design-system/components/skeleton'
 import { catalogDetailQueryOptions } from '~/@shared/queries/catalog'
@@ -22,7 +16,10 @@ export function ProductDetailPage({ productId }: Readonly<{ productId: string }>
   return (
     <main className="mx-auto w-full max-w-7xl px-4 py-6 pb-24 md:px-6 md:py-8 md:pb-8">
       {/* Breadcrumb */}
-      <nav aria-label="breadcrumb" className="flex items-center gap-1 text-sm text-muted-foreground">
+      <nav
+        aria-label="breadcrumb"
+        className="flex items-center gap-1 text-sm text-muted-foreground"
+      >
         <Link to="/" className="transition-colors hover:text-foreground">
           홈
         </Link>
@@ -69,11 +66,12 @@ function ProductDetailContent({
         ? '재고임박'
         : '판매중'
 
-  const stockColor = !product.isActive || product.stockDisplay === 'out_of_stock'
-    ? 'text-destructive'
-    : product.stockDisplay === 'low_stock'
-      ? 'text-amber-600'
-      : 'text-primary'
+  const stockColor =
+    !product.isActive || product.stockDisplay === 'out_of_stock'
+      ? 'text-destructive'
+      : product.stockDisplay === 'low_stock'
+        ? 'text-amber-600'
+        : 'text-primary'
 
   return (
     <section className="mt-6 grid gap-6 md:mt-8 md:grid-cols-2 md:gap-10">
@@ -103,9 +101,7 @@ function ProductDetailContent({
         <dl className="mt-6 border-t border-border pt-6">
           <div className="flex items-baseline justify-between py-2 text-sm">
             <dt className="text-muted-foreground">상태</dt>
-            <dd className={`font-semibold ${stockColor}`}>
-              {stockLabel}
-            </dd>
+            <dd className={`font-semibold ${stockColor}`}>{stockLabel}</dd>
           </div>
           <div className="flex items-baseline justify-between py-2 text-sm">
             <dt className="text-muted-foreground">가용 재고</dt>
@@ -118,9 +114,7 @@ function ProductDetailContent({
         </dl>
 
         {/* Description */}
-        <p className="mt-6 text-sm leading-relaxed text-muted-foreground">
-          {product.description}
-        </p>
+        <p className="mt-6 text-sm leading-relaxed text-muted-foreground">{product.description}</p>
 
         {/* Purchase */}
         <div className="mt-auto pt-8">

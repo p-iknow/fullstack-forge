@@ -22,20 +22,20 @@
 - 멱등성 키: `order_id + product_id`
 - payload:
 
-  | 필드 | 타입 | 설명 |
-  | --- | --- | --- |
-  | `product_id` | UUID | 상품 식별자 |
-  | `sku` | string | 상품 SKU |
-  | `quantity` | integer | 예약 수량 |
-  | `order_id` | UUID | 주문 식별자 |
-  | `available_after` | integer | 예약 후 가용 수량 |
-  | `reserved_at` | string (ISO 8601) | 예약 시각 |
+  | 필드              | 타입              | 설명              |
+  | ----------------- | ----------------- | ----------------- |
+  | `product_id`      | UUID              | 상품 식별자       |
+  | `sku`             | string            | 상품 SKU          |
+  | `quantity`        | integer           | 예약 수량         |
+  | `order_id`        | UUID              | 주문 식별자       |
+  | `available_after` | integer           | 예약 후 가용 수량 |
+  | `reserved_at`     | string (ISO 8601) | 예약 시각         |
 
 - 소비자:
 
-  | 소비 도메인 | 용도 |
-  | --- | --- |
-  | `order` | 주문 생성 확인 (재고 예약 성공 반영) |
+  | 소비 도메인 | 용도                                 |
+  | ----------- | ------------------------------------ |
+  | `order`     | 주문 생성 확인 (재고 예약 성공 반영) |
 
 ### InventoryReleased
 
@@ -43,20 +43,20 @@
 - 멱등성 키: `order_id + product_id`
 - payload:
 
-  | 필드 | 타입 | 설명 |
-  | --- | --- | --- |
-  | `product_id` | UUID | 상품 식별자 |
-  | `sku` | string | 상품 SKU |
-  | `quantity` | integer | 해제 수량 |
-  | `order_id` | UUID | 주문 식별자 |
-  | `available_after` | integer | 해제 후 가용 수량 |
-  | `released_at` | string (ISO 8601) | 해제 시각 |
+  | 필드              | 타입              | 설명              |
+  | ----------------- | ----------------- | ----------------- |
+  | `product_id`      | UUID              | 상품 식별자       |
+  | `sku`             | string            | 상품 SKU          |
+  | `quantity`        | integer           | 해제 수량         |
+  | `order_id`        | UUID              | 주문 식별자       |
+  | `available_after` | integer           | 해제 후 가용 수량 |
+  | `released_at`     | string (ISO 8601) | 해제 시각         |
 
 - 소비자:
 
-  | 소비 도메인 | 용도 |
-  | --- | --- |
-  | `order` | 주문 취소 확인 (재고 복원 성공 반영) |
+  | 소비 도메인 | 용도                                 |
+  | ----------- | ------------------------------------ |
+  | `order`     | 주문 취소 확인 (재고 복원 성공 반영) |
 
 ### InventoryDeducted
 
@@ -64,20 +64,20 @@
 - 멱등성 키: `order_id + product_id`
 - payload:
 
-  | 필드 | 타입 | 설명 |
-  | --- | --- | --- |
-  | `product_id` | UUID | 상품 식별자 |
-  | `sku` | string | 상품 SKU |
-  | `quantity` | integer | 차감 수량 |
-  | `order_id` | UUID | 주문 식별자 |
-  | `on_hand_after` | integer | 차감 후 총 재고 |
-  | `deducted_at` | string (ISO 8601) | 차감 시각 |
+  | 필드            | 타입              | 설명            |
+  | --------------- | ----------------- | --------------- |
+  | `product_id`    | UUID              | 상품 식별자     |
+  | `sku`           | string            | 상품 SKU        |
+  | `quantity`      | integer           | 차감 수량       |
+  | `order_id`      | UUID              | 주문 식별자     |
+  | `on_hand_after` | integer           | 차감 후 총 재고 |
+  | `deducted_at`   | string (ISO 8601) | 차감 시각       |
 
 - 소비자:
 
-  | 소비 도메인 | 용도 |
-  | --- | --- |
-  | `order` | 주문 완료 확인 (재고 차감 성공 반영) |
+  | 소비 도메인 | 용도                                 |
+  | ----------- | ------------------------------------ |
+  | `order`     | 주문 완료 확인 (재고 차감 성공 반영) |
 
 ### InventoryAdjusted
 
@@ -85,20 +85,20 @@
 - 멱등성 키: `idempotency_key` (조정 요청의 클라이언트 제공 키)
 - payload:
 
-  | 필드 | 타입 | 설명 |
-  | --- | --- | --- |
-  | `product_id` | UUID | 상품 식별자 |
-  | `sku` | string | 상품 SKU |
-  | `delta` | integer | 조정 수량 (양수=입고, 음수=차감) |
-  | `on_hand_after` | integer | 조정 후 총 재고 |
-  | `reason` | string | 조정 사유 |
-  | `adjusted_by` | UUID | 조정 실행자 식별자 |
-  | `adjusted_at` | string (ISO 8601) | 조정 시각 |
+  | 필드            | 타입              | 설명                             |
+  | --------------- | ----------------- | -------------------------------- |
+  | `product_id`    | UUID              | 상품 식별자                      |
+  | `sku`           | string            | 상품 SKU                         |
+  | `delta`         | integer           | 조정 수량 (양수=입고, 음수=차감) |
+  | `on_hand_after` | integer           | 조정 후 총 재고                  |
+  | `reason`        | string            | 조정 사유                        |
+  | `adjusted_by`   | UUID              | 조정 실행자 식별자               |
+  | `adjusted_at`   | string (ISO 8601) | 조정 시각                        |
 
 - 소비자:
 
-  | 소비 도메인 | 용도 |
-  | --- | --- |
+  | 소비 도메인    | 용도                  |
+  | -------------- | --------------------- |
   | `notification` | 운영자 재고 조정 알림 |
 
 ### InventoryLevelChanged
@@ -113,21 +113,21 @@
 - 멱등성 키: `product_id + changed_at`
 - payload:
 
-  | 필드 | 타입 | 설명 |
-  | --- | --- | --- |
-  | `product_id` | UUID | 상품 식별자 |
-  | `sku` | string | 상품 SKU |
-  | `previous_level` | string | 변경 전 상태 (`normal`, `low_stock`, `out_of_stock`) |
-  | `current_level` | string | 변경 후 상태 |
-  | `available` | integer | 변경 후 가용 수량 |
-  | `changed_at` | string (ISO 8601) | 상태 변경 시각 |
+  | 필드             | 타입              | 설명                                                 |
+  | ---------------- | ----------------- | ---------------------------------------------------- |
+  | `product_id`     | UUID              | 상품 식별자                                          |
+  | `sku`            | string            | 상품 SKU                                             |
+  | `previous_level` | string            | 변경 전 상태 (`normal`, `low_stock`, `out_of_stock`) |
+  | `current_level`  | string            | 변경 후 상태                                         |
+  | `available`      | integer           | 변경 후 가용 수량                                    |
+  | `changed_at`     | string (ISO 8601) | 상태 변경 시각                                       |
 
 - 소비자:
 
-  | 소비 도메인 | 용도 |
-  | --- | --- |
+  | 소비 도메인    | 용도                                      |
+  | -------------- | ----------------------------------------- |
   | `notification` | 품절/재입고 고객 알림, 저재고 운영자 알림 |
-  | `cart` | 활성 장바구니 내 해당 상품 품절 경고 표시 |
+  | `cart`         | 활성 장바구니 내 해당 상품 품절 경고 표시 |
 
 ---
 
@@ -135,15 +135,15 @@
 
 inventory 도메인이 다른 도메인에서 발행한 이벤트를 소비하여 처리하는 목록이다.
 
-| 소스 도메인 | 이벤트 | 처리 내용 | 소스 문서 |
-| --- | --- | --- | --- |
-| `catalog` | `ProductCreated` | 재고 레코드 자동 생성 (`on_hand=0`, `reserved=0`, `version=1`) | [catalog/05-events.md](../02-catalog/05-events.md) §2 |
-| `catalog` | `ProductDeactivated` | 비활성 상품 가용 재고 재계산 | [catalog/05-events.md](../02-catalog/05-events.md) §4 |
-| `catalog` | `ProductDeleted` | 해당 상품 재고 레코드 정리 (`reserved > 0`이면 거부) | [catalog/05-events.md](../02-catalog/05-events.md) §5 |
-| `order` | `OrderCreated` | reserve 실행 (주문 아이템별 `reserved` 증가) | [order/05-events.md](../05-order/05-events.md) |
-| `order` | `OrderCancelled` | 취소 아이템의 `reserved` 복원 (release 실행) | [order/05-events.md](../05-order/05-events.md) |
-| `order` | `SubstitutionResolved` | 대체 거절/타임아웃 시 대체 SKU 예약 해제 | [order/05-events.md](../05-order/05-events.md) |
-| `delivery` | `DeliveryStatusChanged` | new_status=`delivered`일 때 confirm-deduction 실행 (`on_hand` 차감) | [delivery/05-events.md](../07-delivery/05-events.md) |
+| 소스 도메인 | 이벤트                  | 처리 내용                                                           | 소스 문서                                             |
+| ----------- | ----------------------- | ------------------------------------------------------------------- | ----------------------------------------------------- |
+| `catalog`   | `ProductCreated`        | 재고 레코드 자동 생성 (`on_hand=0`, `reserved=0`, `version=1`)      | [catalog/05-events.md](../02-catalog/05-events.md) §2 |
+| `catalog`   | `ProductDeactivated`    | 비활성 상품 가용 재고 재계산                                        | [catalog/05-events.md](../02-catalog/05-events.md) §4 |
+| `catalog`   | `ProductDeleted`        | 해당 상품 재고 레코드 정리 (`reserved > 0`이면 거부)                | [catalog/05-events.md](../02-catalog/05-events.md) §5 |
+| `order`     | `OrderCreated`          | reserve 실행 (주문 아이템별 `reserved` 증가)                        | [order/05-events.md](../05-order/05-events.md)        |
+| `order`     | `OrderCancelled`        | 취소 아이템의 `reserved` 복원 (release 실행)                        | [order/05-events.md](../05-order/05-events.md)        |
+| `order`     | `SubstitutionResolved`  | 대체 거절/타임아웃 시 대체 SKU 예약 해제                            | [order/05-events.md](../05-order/05-events.md)        |
+| `delivery`  | `DeliveryStatusChanged` | new_status=`delivered`일 때 confirm-deduction 실행 (`on_hand` 차감) | [delivery/05-events.md](../07-delivery/05-events.md)  |
 
 ---
 

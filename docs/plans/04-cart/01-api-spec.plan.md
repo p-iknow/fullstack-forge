@@ -12,22 +12,26 @@
 ## Scope
 
 **이 세션에서 하는 것**:
+
 - Cart Zod 스키마 정의
 - Cart route contract 5개 정의
 - Route export 등록
 
 **이 세션에서 하지 않는 것**:
+
 - DB 스키마 (02-db-schema에서)
 - Backend handler 구현 (03-backend에서)
 - Frontend (04-store-ui에서)
 
 **생성할 파일**:
+
 - `packages/api-spec/src/cart-schemas.ts`
 - `packages/api-spec/src/routes/cart/cart/route.ts`
 - `packages/api-spec/src/routes/cart/items/route.ts`
 - `packages/api-spec/src/routes/cart/index.ts`
 
 **수정할 파일**:
+
 - `packages/api-spec/src/routes/index.ts` (cart export 추가)
 
 ## Progressive Tasks
@@ -120,24 +124,24 @@ export const deleteCartItemRoute = createRoute({ ... })
 
 ### Endpoints
 
-| Method | Path | Request | 성공 | 에러 코드 |
-|--------|------|---------|------|-----------|
-| GET | /api/store/cart | — | 200 cartResponse | 401 |
-| POST | /api/store/cart/items | addCartItemRequest | 201 cartResponse | 400 `quantity_exceeded`, `max_items_exceeded` / 409 `cart_not_active`, `version_conflict` / 422 `product_unavailable` |
-| PATCH | /api/store/cart/items/{cartItemId} | updateCartItemRequest | 200 cartResponse | 400 `quantity_exceeded` / 404 `item_not_found` / 409 `cart_not_active`, `version_conflict` |
-| DELETE | /api/store/cart/items/{cartItemId} | — | 200 cartResponse | 404 `item_not_found` / 409 `cart_not_active` |
-| DELETE | /api/store/cart | — | 204 | 409 `cart_not_active` |
+| Method | Path                               | Request               | 성공             | 에러 코드                                                                                                             |
+| ------ | ---------------------------------- | --------------------- | ---------------- | --------------------------------------------------------------------------------------------------------------------- |
+| GET    | /api/store/cart                    | —                     | 200 cartResponse | 401                                                                                                                   |
+| POST   | /api/store/cart/items              | addCartItemRequest    | 201 cartResponse | 400 `quantity_exceeded`, `max_items_exceeded` / 409 `cart_not_active`, `version_conflict` / 422 `product_unavailable` |
+| PATCH  | /api/store/cart/items/{cartItemId} | updateCartItemRequest | 200 cartResponse | 400 `quantity_exceeded` / 404 `item_not_found` / 409 `cart_not_active`, `version_conflict`                            |
+| DELETE | /api/store/cart/items/{cartItemId} | —                     | 200 cartResponse | 404 `item_not_found` / 409 `cart_not_active`                                                                          |
+| DELETE | /api/store/cart                    | —                     | 204              | 409 `cart_not_active`                                                                                                 |
 
 ### Error Codes
 
-| code | 의미 | HTTP |
-|------|------|------|
-| `quantity_exceeded` | 아이템당 최대 15개 초과 — `04-cart/01-overview.md §2` | 400 |
-| `max_items_exceeded` | 장바구니 최대 30항목 초과 — `04-cart/01-overview.md §2` | 400 |
-| `product_unavailable` | 비활성/품절 상품 추가 시도 — `04-cart/02-api.md §4` | 422 |
-| `cart_not_active` | converted/expired 장바구니 변경 시도 — `04-cart/01-overview.md §4` | 409 |
-| `version_conflict` | 낙관적 락 충돌 — `04-cart/01-overview.md §5` | 409 |
-| `item_not_found` | 존재하지 않는 cart_item_id | 404 |
+| code                  | 의미                                                               | HTTP |
+| --------------------- | ------------------------------------------------------------------ | ---- |
+| `quantity_exceeded`   | 아이템당 최대 15개 초과 — `04-cart/01-overview.md §2`              | 400  |
+| `max_items_exceeded`  | 장바구니 최대 30항목 초과 — `04-cart/01-overview.md §2`            | 400  |
+| `product_unavailable` | 비활성/품절 상품 추가 시도 — `04-cart/02-api.md §4`                | 422  |
+| `cart_not_active`     | converted/expired 장바구니 변경 시도 — `04-cart/01-overview.md §4` | 409  |
+| `version_conflict`    | 낙관적 락 충돌 — `04-cart/01-overview.md §5`                       | 409  |
+| `item_not_found`      | 존재하지 않는 cart_item_id                                         | 404  |
 
 ## Verification
 

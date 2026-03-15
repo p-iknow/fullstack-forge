@@ -77,7 +77,10 @@ export function LoginPage() {
         </div>
 
         {errorMessage ? (
-          <p role="alert" className="mt-5 rounded-lg bg-destructive/10 p-3 text-sm text-destructive">
+          <p
+            role="alert"
+            className="mt-5 rounded-lg bg-destructive/10 p-3 text-sm text-destructive"
+          >
             {errorMessage}
           </p>
         ) : null}
@@ -88,7 +91,13 @@ export function LoginPage() {
         <form className="mt-6 space-y-4" onSubmit={form.handleSubmit(onSubmit)} noValidate>
           <div className="space-y-1.5">
             <Label htmlFor="email">이메일</Label>
-            <Input id="email" type="email" autoComplete="email" required {...form.register('email')} />
+            <Input
+              id="email"
+              type="email"
+              autoComplete="email"
+              required
+              {...form.register('email')}
+            />
             {form.formState.errors.email?.message ? (
               <p role="alert" className="text-xs text-destructive">
                 {form.formState.errors.email.message}
@@ -127,10 +136,16 @@ export function LoginPage() {
         </div>
 
         <div className="grid gap-2">
-          <a className={buttonVariants({ variant: 'outline' }) + ' h-11 w-full'} href={googleStartUrl}>
+          <a
+            className={buttonVariants({ variant: 'outline' }) + ' h-11 w-full'}
+            href={googleStartUrl}
+          >
             Google로 계속하기
           </a>
-          <a className={buttonVariants({ variant: 'outline' }) + ' h-11 w-full'} href={kakaoStartUrl}>
+          <a
+            className={buttonVariants({ variant: 'outline' }) + ' h-11 w-full'}
+            href={kakaoStartUrl}
+          >
             Kakao로 계속하기
           </a>
         </div>
@@ -143,7 +158,10 @@ export function LoginPage() {
             </Link>
           </p>
           <p>
-            <Link to="/password-update" className="text-muted-foreground underline underline-offset-2 hover:text-foreground">
+            <Link
+              to="/password-update"
+              className="text-muted-foreground underline underline-offset-2 hover:text-foreground"
+            >
               비밀번호 재설정
             </Link>
           </p>

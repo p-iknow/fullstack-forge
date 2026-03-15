@@ -75,8 +75,18 @@ describe('CartPage', () => {
           createCartResponse({
             itemCount: 2,
             items: [
-              createCartItem({ id: 'item-1', productName: 'Apple Juice', createdAt: '2024-01-01T00:00:00.000Z' }),
-              createCartItem({ id: 'item-2', productId: 'prod-2', productName: 'Orange Juice', sku: 'SKU-2222', createdAt: '2024-01-02T00:00:00.000Z' }),
+              createCartItem({
+                id: 'item-1',
+                productName: 'Apple Juice',
+                createdAt: '2024-01-01T00:00:00.000Z',
+              }),
+              createCartItem({
+                id: 'item-2',
+                productId: 'prod-2',
+                productName: 'Orange Juice',
+                sku: 'SKU-2222',
+                createdAt: '2024-01-02T00:00:00.000Z',
+              }),
             ],
           }),
         )

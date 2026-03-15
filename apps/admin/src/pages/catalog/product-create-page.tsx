@@ -22,7 +22,10 @@ const productSchema = z.object({
   price: z.coerce.number().int().positive('가격은 0보다 커야 합니다'),
   categoryId: z.string().uuid('카테고리를 선택해주세요'),
   brand: z.string().optional(),
-  weight: z.union([z.coerce.number().int().positive('무게는 0보다 커야 합니다'), z.nan(), z.literal('')]).optional().transform((v) => (typeof v === 'number' && !Number.isNaN(v) ? v : undefined)),
+  weight: z
+    .union([z.coerce.number().int().positive('무게는 0보다 커야 합니다'), z.nan(), z.literal('')])
+    .optional()
+    .transform((v) => (typeof v === 'number' && !Number.isNaN(v) ? v : undefined)),
   isSubstitutable: z.boolean().default(false),
 })
 
@@ -54,19 +57,17 @@ export function ProductCreatePage() {
     },
   })
 
-  const handleDrop = (
-    ref: React.RefObject<HTMLInputElement | null>,
-    setPreview: (url: string | null) => void,
-  ) => (e: DragEvent<HTMLDivElement>) => {
-    e.preventDefault()
-    const file = e.dataTransfer.files[0]
-    if (!file?.type.startsWith('image/')) return
-    const dt = new DataTransfer()
-    dt.items.add(file)
-    if (ref.current) ref.current.files = dt.files
-    setPreview(URL.createObjectURL(file))
-  }
-
+  const handleDrop =
+    (ref: React.RefObject<HTMLInputElement | null>, setPreview: (url: string | null) => void) =>
+    (e: DragEvent<HTMLDivElement>) => {
+      e.preventDefault()
+      const file = e.dataTransfer.files[0]
+      if (!file?.type.startsWith('image/')) return
+      const dt = new DataTransfer()
+      dt.items.add(file)
+      if (ref.current) ref.current.files = dt.files
+      setPreview(URL.createObjectURL(file))
+    }
 
   const onSubmit = async (data: ProductFormValues) => {
     setErrorMsg(null)
@@ -188,9 +189,15 @@ export function ProductCreatePage() {
                   <p className="text-sm font-medium text-slate-700">썸네일 (400×400)</p>
                   <div className="flex items-center gap-3">
                     {thumbPreview ? (
-                      <img src={thumbPreview} alt="Thumb preview" className="h-24 w-24 rounded-md border object-cover" />
+                      <img
+                        src={thumbPreview}
+                        alt="Thumb preview"
+                        className="h-24 w-24 rounded-md border object-cover"
+                      />
                     ) : (
-                      <div className="flex h-24 w-24 items-center justify-center rounded-md border border-dashed bg-slate-50 text-xs text-slate-400">드래그 또는 선택</div>
+                      <div className="flex h-24 w-24 items-center justify-center rounded-md border border-dashed bg-slate-50 text-xs text-slate-400">
+                        드래그 또는 선택
+                      </div>
                     )}
                     <Input
                       ref={thumbRef}
@@ -211,9 +218,15 @@ export function ProductCreatePage() {
                   <p className="text-sm font-medium text-slate-700">상세 이미지 (800×600)</p>
                   <div className="flex items-center gap-3">
                     {detailPreview ? (
-                      <img src={detailPreview} alt="Detail preview" className="h-24 w-24 rounded-md border object-cover" />
+                      <img
+                        src={detailPreview}
+                        alt="Detail preview"
+                        className="h-24 w-24 rounded-md border object-cover"
+                      />
                     ) : (
-                      <div className="flex h-24 w-24 items-center justify-center rounded-md border border-dashed bg-slate-50 text-xs text-slate-400">드래그 또는 선택</div>
+                      <div className="flex h-24 w-24 items-center justify-center rounded-md border border-dashed bg-slate-50 text-xs text-slate-400">
+                        드래그 또는 선택
+                      </div>
                     )}
                     <Input
                       ref={detailRef}

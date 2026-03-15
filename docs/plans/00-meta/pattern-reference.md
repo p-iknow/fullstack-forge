@@ -67,10 +67,7 @@ export const getMyRoute = createRoute({
 **참조**: `packages/api-spec/src/routes/catalog/index.ts`
 
 ```typescript
-export {
-  getProductsRoute,
-  getProductByIdRoute,
-} from './products/route'
+export { getProductsRoute, getProductByIdRoute } from './products/route'
 ```
 
 ### Codegen Pipeline
@@ -157,7 +154,7 @@ import { requireAuth } from '~/routes/auth/@shared/http/middleware'
 
 // Protected route
 const protectedRouter = createRouter()
-protectedRouter.use('*', requireAuth)  // JWT 검증, authUser 컨텍스트 세팅
+protectedRouter.use('*', requireAuth) // JWT 검증, authUser 컨텍스트 세팅
 ```
 
 ## 4. DB Schema Pattern (Drizzle)
@@ -194,7 +191,14 @@ export const products = pgTable('products', {
 import { pgEnum } from 'drizzle-orm/pg-core'
 
 export const orderStatusEnum = pgEnum('order_status', [
-  'created', 'confirmed', 'preparing', 'ready', 'dispatched', 'delivered', 'cancelled', 'partially_cancelled',
+  'created',
+  'confirmed',
+  'preparing',
+  'ready',
+  'dispatched',
+  'delivered',
+  'cancelled',
+  'partially_cancelled',
 ])
 ```
 
@@ -311,7 +315,9 @@ const requestMutate = async <T>(method: string, path: string, body?: unknown): P
     body: body ? JSON.stringify(body) : undefined,
   })
   if (method === 'DELETE' && res.status === 204) return undefined as T
-  if (!res.ok) { /* throw ApiClientError */ }
+  if (!res.ok) {
+    /* throw ApiClientError */
+  }
   return res.json()
 }
 
@@ -327,7 +333,7 @@ export const uploadProductImages = async (productId: string, files: File[]) => {
   files.forEach((file) => formData.append('images', file))
   const res = await fetchWithRefresh(`/api/admin/products/${productId}/images`, {
     method: 'POST',
-    body: formData,  // Content-Type은 브라우저가 자동 설정
+    body: formData, // Content-Type은 브라우저가 자동 설정
   })
   // ...
 }

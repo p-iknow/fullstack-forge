@@ -35,16 +35,16 @@ stateDiagram-v2
 
 ### 전이 규칙 요약
 
-| 출발 상태           | 도착 상태            | 트리거                      | 주체          |
-| ------------------- | -------------------- | --------------------------- | ------------- |
-| `initiated`         | `authorized`         | PG 승인 응답 수신 (webhook) | 시스템 (PG)   |
-| `initiated`         | `failed`             | PG 실패 또는 30초 타임아웃  | 시스템        |
-| `authorized`        | `captured`           | PG 승인 즉시 자동 매출 확정 | 시스템        |
-| `authorized`        | `cancelled`          | 주문 취소 요청              | 사용자        |
-| `captured`          | `refund_requested`   | 주문 취소/환불 요청         | 사용자/운영자 |
-| `refund_requested`  | `refunded`           | PG 전액 환불 완료           | 시스템 (PG)   |
-| `refund_requested`  | `partially_refunded` | PG 부분 환불 완료           | 시스템 (PG)   |
-| `refund_requested`  | `captured`           | PG 환불 실패 시 원복        | 시스템        |
+| 출발 상태          | 도착 상태            | 트리거                      | 주체          |
+| ------------------ | -------------------- | --------------------------- | ------------- |
+| `initiated`        | `authorized`         | PG 승인 응답 수신 (webhook) | 시스템 (PG)   |
+| `initiated`        | `failed`             | PG 실패 또는 30초 타임아웃  | 시스템        |
+| `authorized`       | `captured`           | PG 승인 즉시 자동 매출 확정 | 시스템        |
+| `authorized`       | `cancelled`          | 주문 취소 요청              | 사용자        |
+| `captured`         | `refund_requested`   | 주문 취소/환불 요청         | 사용자/운영자 |
+| `refund_requested` | `refunded`           | PG 전액 환불 완료           | 시스템 (PG)   |
+| `refund_requested` | `partially_refunded` | PG 부분 환불 완료           | 시스템 (PG)   |
+| `refund_requested` | `captured`           | PG 환불 실패 시 원복        | 시스템        |
 
 - 종료 상태: `captured`, `failed`, `cancelled`, `refunded`, `partially_refunded` — 이후 전이 불가.
 - `captured`는 환불 요청이 없으면 종료 상태로 유지한다.

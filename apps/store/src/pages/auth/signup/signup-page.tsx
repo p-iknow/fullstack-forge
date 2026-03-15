@@ -74,7 +74,10 @@ export function SignupPage() {
         </div>
 
         {errorMessage ? (
-          <p role="alert" className="mt-5 rounded-lg bg-destructive/10 p-3 text-sm text-destructive">
+          <p
+            role="alert"
+            className="mt-5 rounded-lg bg-destructive/10 p-3 text-sm text-destructive"
+          >
             {errorMessage}
           </p>
         ) : null}
@@ -92,7 +95,13 @@ export function SignupPage() {
 
           <div className="space-y-1.5">
             <Label htmlFor="email">이메일</Label>
-            <Input id="email" type="email" autoComplete="email" required {...form.register('email')} />
+            <Input
+              id="email"
+              type="email"
+              autoComplete="email"
+              required
+              {...form.register('email')}
+            />
             {form.formState.errors.email?.message ? (
               <p role="alert" className="text-xs text-destructive">
                 {form.formState.errors.email.message}
@@ -129,7 +138,10 @@ export function SignupPage() {
             </Link>
           </p>
           <p>
-            <Link to="/" className="text-muted-foreground underline underline-offset-2 hover:text-foreground">
+            <Link
+              to="/"
+              className="text-muted-foreground underline underline-offset-2 hover:text-foreground"
+            >
               홈으로 돌아가기
             </Link>
           </p>

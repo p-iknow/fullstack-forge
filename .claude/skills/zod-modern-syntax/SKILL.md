@@ -19,28 +19,28 @@ This project uses **Zod v4** (`^4.1.5` in pnpm-workspace.yaml catalog).
 
 String format methods are deprecated. Use top-level `z` namespace functions.
 
-| Deprecated (v3)            | Modern (v4)          |
-| -------------------------- | -------------------- |
-| `z.string().uuid()`        | `z.uuid()`           |
-| `z.string().email()`       | `z.email()`          |
-| `z.string().url()`         | `z.url()`            |
-| `z.string().datetime()`    | `z.iso.datetime()`   |
-| `z.string().date()`        | `z.iso.date()`       |
-| `z.string().time()`        | `z.iso.time()`       |
-| `z.string().base64()`      | `z.base64()`         |
-| `z.string().nanoid()`      | `z.nanoid()`         |
-| `z.string().cuid()`        | `z.cuid()`           |
-| `z.string().cuid2()`       | `z.cuid2()`          |
-| `z.string().ulid()`        | `z.ulid()`           |
-| `z.string().ip()`          | `z.ipv4()` / `z.ipv6()` |
-| `z.string().emoji()`       | `z.emoji()`          |
+| Deprecated (v3)         | Modern (v4)             |
+| ----------------------- | ----------------------- |
+| `z.string().uuid()`     | `z.uuid()`              |
+| `z.string().email()`    | `z.email()`             |
+| `z.string().url()`      | `z.url()`               |
+| `z.string().datetime()` | `z.iso.datetime()`      |
+| `z.string().date()`     | `z.iso.date()`          |
+| `z.string().time()`     | `z.iso.time()`          |
+| `z.string().base64()`   | `z.base64()`            |
+| `z.string().nanoid()`   | `z.nanoid()`            |
+| `z.string().cuid()`     | `z.cuid()`              |
+| `z.string().cuid2()`    | `z.cuid2()`             |
+| `z.string().ulid()`     | `z.ulid()`              |
+| `z.string().ip()`       | `z.ipv4()` / `z.ipv6()` |
+| `z.string().emoji()`    | `z.emoji()`             |
 
 ### 2. Number/Integer → Top-Level `z.int()`
 
-| Deprecated (v3)            | Modern (v4)          |
-| -------------------------- | -------------------- |
-| `z.number().int()`         | `z.int()`            |
-| `z.number().safe()`        | `z.int()`            |
+| Deprecated (v3)     | Modern (v4) |
+| ------------------- | ----------- |
+| `z.number().int()`  | `z.int()`   |
+| `z.number().safe()` | `z.int()`   |
 
 `z.int()` returns `ZodNumber`, so all number refinements chain normally:
 
@@ -56,25 +56,25 @@ z.int().nonnegative()
 
 ### 3. Object Method Deprecations
 
-| Deprecated (v3)                             | Modern (v4)                       |
-| ------------------------------------------- | --------------------------------- |
-| `z.object({...}).strict()`                  | `z.strictObject({...})`           |
-| `z.object({...}).passthrough()`             | `z.looseObject({...})`            |
-| `z.object({...}).merge(otherSchema)`        | `z.object({...}).extend(other.shape)` or spread |
+| Deprecated (v3)                      | Modern (v4)                                     |
+| ------------------------------------ | ----------------------------------------------- |
+| `z.object({...}).strict()`           | `z.strictObject({...})`                         |
+| `z.object({...}).passthrough()`      | `z.looseObject({...})`                          |
+| `z.object({...}).merge(otherSchema)` | `z.object({...}).extend(other.shape)` or spread |
 
 ### 4. Error Formatting
 
-| Deprecated (v3)      | Modern (v4)           |
-| -------------------- | --------------------- |
-| `error.flatten()`    | `z.treeifyError(error)` |
-| `error.format()`     | `z.treeifyError(error)` |
-| `error.formErrors`   | `z.treeifyError(error)` |
+| Deprecated (v3)    | Modern (v4)             |
+| ------------------ | ----------------------- |
+| `error.flatten()`  | `z.treeifyError(error)` |
+| `error.format()`   | `z.treeifyError(error)` |
+| `error.formErrors` | `z.treeifyError(error)` |
 
 ### 5. Other Deprecations
 
-| Deprecated (v3)              | Modern (v4)         |
-| ---------------------------- | ------------------- |
-| `z.ZodString.create()`      | `z.string()`        |
+| Deprecated (v3)             | Modern (v4)          |
+| --------------------------- | -------------------- |
+| `z.ZodString.create()`      | `z.string()`         |
 | Any `.create()` static call | Use factory function |
 
 ## Workflow

@@ -31,7 +31,6 @@ describe('signup page', () => {
 
     // visual regression — validation error
     await expect(page.getByRole('main')).toMatchScreenshot('signup-validation-error')
-
   })
   it('signs up successfully and navigates to home', async () => {
     // given

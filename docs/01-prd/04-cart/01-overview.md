@@ -106,12 +106,12 @@ stateDiagram-v2
 
 ### 상태 전이 트리거
 
-| 전이                | 트리거                                | 주체           | 가드 조건                                    |
-| ------------------- | ------------------------------------- | -------------- | -------------------------------------------- |
-| `[*] → active`      | 첫 항목 추가                          | customer       | 기존 active 장바구니 없음                    |
-| `active → active`   | 항목 추가/수정/삭제                   | customer       | 정책 제한 미초과 (수량 ≤ 15, 항목 ≤ 30)     |
-| `active → converted` | 주문 생성 (`POST /api/store/orders`) | system         | 장바구니 항목 ≥ 1, 품절 항목 없음            |
-| `active → expired`  | TTL 배치 만료 처리                    | system (batch) | `expires_at < now`                           |
+| 전이                 | 트리거                               | 주체           | 가드 조건                               |
+| -------------------- | ------------------------------------ | -------------- | --------------------------------------- |
+| `[*] → active`       | 첫 항목 추가                         | customer       | 기존 active 장바구니 없음               |
+| `active → active`    | 항목 추가/수정/삭제                  | customer       | 정책 제한 미초과 (수량 ≤ 15, 항목 ≤ 30) |
+| `active → converted` | 주문 생성 (`POST /api/store/orders`) | system         | 장바구니 항목 ≥ 1, 품절 항목 없음       |
+| `active → expired`   | TTL 배치 만료 처리                   | system (batch) | `expires_at < now`                      |
 
 ## 5) 동시성/충돌 해소 정책
 

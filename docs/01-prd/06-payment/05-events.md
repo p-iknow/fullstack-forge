@@ -74,14 +74,14 @@
 - idempotency key: `payment:{payment_id}:refunded`
 - payload:
 
-| 필드            | 타입              | 설명                        |
-| --------------- | ----------------- | --------------------------- |
-| `payment_id`    | string (UUID)     | 결제 식별자                 |
-| `order_id`      | string (UUID)     | 연결된 주문 식별자          |
-| `refund_amount` | integer           | 환불 금액 (KRW)             |
-| `refund_type`   | string (enum)     | `full` 또는 `partial`       |
-| `reason`        | string            | 환불 사유                   |
-| `refunded_at`   | string (ISO 8601) | 환불 완료 시각              |
+| 필드            | 타입              | 설명                  |
+| --------------- | ----------------- | --------------------- |
+| `payment_id`    | string (UUID)     | 결제 식별자           |
+| `order_id`      | string (UUID)     | 연결된 주문 식별자    |
+| `refund_amount` | integer           | 환불 금액 (KRW)       |
+| `refund_type`   | string (enum)     | `full` 또는 `partial` |
+| `reason`        | string            | 환불 사유             |
+| `refunded_at`   | string (ISO 8601) | 환불 완료 시각        |
 
 ## 소비자
 
@@ -109,10 +109,10 @@
 
 payment 도메인이 다른 도메인에서 수신하여 처리하는 이벤트 목록.
 
-| 소스 도메인 | 이벤트 | 처리 내용 | 소스 문서 |
-| --- | --- | --- | --- |
-| `order` | `OrderCreated` | 결제 진행 (`initiated` 상태 생성) | [order/05-events.md](../05-order/05-events.md) |
-| `order` | `OrderCancelled` | 결제 취소/환불 처리 | [order/05-events.md](../05-order/05-events.md) |
+| 소스 도메인 | 이벤트           | 처리 내용                         | 소스 문서                                      |
+| ----------- | ---------------- | --------------------------------- | ---------------------------------------------- |
+| `order`     | `OrderCreated`   | 결제 진행 (`initiated` 상태 생성) | [order/05-events.md](../05-order/05-events.md) |
+| `order`     | `OrderCancelled` | 결제 취소/환불 처리               | [order/05-events.md](../05-order/05-events.md) |
 
 ## 메모
 

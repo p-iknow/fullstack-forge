@@ -8,10 +8,10 @@
 
 사용자가 수량 변경 버튼을 클릭하면:
 
-| 방식 | 체감 응답 시간 | 사용자 경험 |
-| --- | --- | --- |
-| 서버 응답 대기 후 반영 | 200~500ms+ | 버튼 클릭 후 지연 → 불안감 |
-| Optimistic update | ~0ms | 즉시 반영 → 자연스러운 인터랙션 |
+| 방식                   | 체감 응답 시간 | 사용자 경험                     |
+| ---------------------- | -------------- | ------------------------------- |
+| 서버 응답 대기 후 반영 | 200~500ms+     | 버튼 클릭 후 지연 → 불안감      |
+| Optimistic update      | ~0ms           | 즉시 반영 → 자연스러운 인터랙션 |
 
 특히 장바구니 수량 변경, 좋아요 토글, 삭제 같은 **빈번하고 예측 가능한 mutation**에서 효과가 크다.
 
@@ -28,6 +28,7 @@ User Action → cancelQueries → snapshot → setQueryData (optimistic) → mut
 ```
 
 **특징**:
+
 - 쿼리 캐시를 직접 조작하므로 **모든 구독 컴포넌트가 즉시 업데이트**
 - 장바구니 총액, 헤더 아이템 수 등 파생 데이터도 함께 갱신
 - 롤백이 명시적: `previous` 스냅샷을 `catch`에서 복원
@@ -44,6 +45,7 @@ User Action → startTransition(async () => {
 ```
 
 **특징**:
+
 - **컴포넌트 로컬 상태**만 관리 — 다른 컴포넌트는 모름
 - `startTransition` 내부에서만 호출 가능
 - 실패 시 자동 롤백 (value가 변경되지 않았으므로)
@@ -52,16 +54,16 @@ User Action → startTransition(async () => {
 
 ### 2.3 비교 매트릭스
 
-| 기준 | TQ Cache (Pattern 1) | useOptimistic (Pattern 3) |
-| --- | --- | --- |
-| 크로스 컴포넌트 동기화 | **O** — 캐시 구독으로 자동 | **X** — 로컬 상태만 |
-| 롤백 메커니즘 | 수동 (`previous` 스냅샷) | 자동 (transition 종료 시) |
-| 에러 표시 | `catch`에서 직접 처리 | `catch`에서 직접 처리 |
-| TypeScript 지원 | 강력 (캐시 타입 추론) | 기본 (제네릭) |
-| React 버전 | 16.8+ | 19+ |
-| TanStack Query 통합 | 네이티브 | 별도 관리 필요 |
-| 코드량 | 많음 (cancel + snapshot + restore) | 적음 (한 줄 선언) |
-| Concurrent 기능 | X | O (Transition 우선순위) |
+| 기준                   | TQ Cache (Pattern 1)               | useOptimistic (Pattern 3) |
+| ---------------------- | ---------------------------------- | ------------------------- |
+| 크로스 컴포넌트 동기화 | **O** — 캐시 구독으로 자동         | **X** — 로컬 상태만       |
+| 롤백 메커니즘          | 수동 (`previous` 스냅샷)           | 자동 (transition 종료 시) |
+| 에러 표시              | `catch`에서 직접 처리              | `catch`에서 직접 처리     |
+| TypeScript 지원        | 강력 (캐시 타입 추론)              | 기본 (제네릭)             |
+| React 버전             | 16.8+                              | 19+                       |
+| TanStack Query 통합    | 네이티브                           | 별도 관리 필요            |
+| 코드량                 | 많음 (cancel + snapshot + restore) | 적음 (한 줄 선언)         |
+| Concurrent 기능        | X                                  | O (Transition 우선순위)   |
 
 ---
 
@@ -141,13 +143,10 @@ const changeQuantity = async (newQty: number) => {
     queryClient.setQueryData<CartResponse>(cartQueryKeys.cart, {
       ...previous,
       totalAmount: previous.items.reduce(
-        (sum, i) =>
-          sum + i.unitPriceSnapshot * (i.id === item.id ? newQty : i.quantity),
+        (sum, i) => sum + i.unitPriceSnapshot * (i.id === item.id ? newQty : i.quantity),
         0,
       ),
-      items: previous.items.map((i) =>
-        i.id === item.id ? { ...i, quantity: newQty } : i,
-      ),
+      items: previous.items.map((i) => (i.id === item.id ? { ...i, quantity: newQty } : i)),
     })
   }
 
@@ -178,9 +177,7 @@ const removeItem = async () => {
     queryClient.setQueryData<CartResponse>(cartQueryKeys.cart, {
       ...previous,
       itemCount: filtered.length,
-      totalAmount: filtered.reduce(
-        (sum, i) => sum + i.unitPriceSnapshot * i.quantity, 0,
-      ),
+      totalAmount: filtered.reduce((sum, i) => sum + i.unitPriceSnapshot * i.quantity, 0),
       items: filtered,
     })
   }
@@ -204,7 +201,10 @@ const removeItem = async () => {
 ```tsx
 import { useOptimistic, startTransition } from 'react'
 
-function LikeButton({ isLiked, onToggle }: {
+function LikeButton({
+  isLiked,
+  onToggle,
+}: {
   isLiked: boolean
   onToggle: (newValue: boolean) => Promise<void>
 }) {
@@ -235,9 +235,15 @@ type CartAction =
   | { type: 'remove'; id: string }
   | { type: 'add'; item: CartItem }
 
-function CartList({ items, cartActions }: {
+function CartList({
+  items,
+  cartActions,
+}: {
   items: CartItem[]
-  cartActions: { update: (id: string, qty: number) => Promise<void>; remove: (id: string) => Promise<void> }
+  cartActions: {
+    update: (id: string, qty: number) => Promise<void>
+    remove: (id: string) => Promise<void>
+  }
 }) {
   const [optimisticItems, dispatch] = useOptimistic(
     items,
@@ -245,9 +251,7 @@ function CartList({ items, cartActions }: {
       switch (action.type) {
         case 'update_qty':
           return current.map((item) =>
-            item.id === action.id
-              ? { ...item, quantity: action.qty, pending: true }
-              : item,
+            item.id === action.id ? { ...item, quantity: action.qty, pending: true } : item,
           )
         case 'remove':
           return current.filter((item) => item.id !== action.id)
@@ -300,13 +304,10 @@ function CartItemRow({ item }: Readonly<{ item: CartItem }>) {
         queryClient.setQueryData<CartResponse>(cartQueryKeys.cart, {
           ...previous,
           totalAmount: previous.items.reduce(
-            (sum, i) =>
-              sum + i.unitPriceSnapshot * (i.id === item.id ? newQty : i.quantity),
+            (sum, i) => sum + i.unitPriceSnapshot * (i.id === item.id ? newQty : i.quantity),
             0,
           ),
-          items: previous.items.map((i) =>
-            i.id === item.id ? { ...i, quantity: newQty } : i,
-          ),
+          items: previous.items.map((i) => (i.id === item.id ? { ...i, quantity: newQty } : i)),
         })
       }
 
@@ -321,9 +322,7 @@ function CartItemRow({ item }: Readonly<{ item: CartItem }>) {
     })
   }
 
-  return (
-    <span className="tabular-nums">{optimisticQty}</span>
-  )
+  return <span className="tabular-nums">{optimisticQty}</span>
 }
 ```
 
@@ -339,7 +338,7 @@ function CartItemRow({ item }: Readonly<{ item: CartItem }>) {
 ```tsx
 // ❌ Warning: "An optimistic state update occurred outside a Transition or Action"
 function handleClick() {
-  setOptimistic(newValue)  // 경고 + 즉시 복귀
+  setOptimistic(newValue) // 경고 + 즉시 복귀
 }
 
 // ✅
@@ -352,7 +351,7 @@ function handleClick() {
 
 // ✅ Action prop 내부 — startTransition 불필요
 async function submitAction(formData: FormData) {
-  setOptimistic(newValue)  // Action prop이므로 이미 transition 내부
+  setOptimistic(newValue) // Action prop이므로 이미 transition 내부
   await serverAction(formData)
 }
 ```
@@ -373,12 +372,12 @@ const [isPending, startTransition] = useTransition()
 
 ### 5.3 Updater vs Reducer 선택
 
-| 상황 | 패턴 | 이유 |
-| --- | --- | --- |
-| 단순 값 교체 (토글, 숫자) | `setOptimistic(newValue)` | 간단 |
-| 기존 값 기반 계산 | `setOptimistic(prev => prev + 1)` | 동시 mutation 시 최신 값 기반 |
-| 복합 상태 (여러 필드) | `useOptimistic(state, reducer)` | 일관된 업데이트 보장 |
-| 여러 action 타입 | `useOptimistic(state, reducer)` + switch | 타입별 분기 |
+| 상황                      | 패턴                                     | 이유                          |
+| ------------------------- | ---------------------------------------- | ----------------------------- |
+| 단순 값 교체 (토글, 숫자) | `setOptimistic(newValue)`                | 간단                          |
+| 기존 값 기반 계산         | `setOptimistic(prev => prev + 1)`        | 동시 mutation 시 최신 값 기반 |
+| 복합 상태 (여러 필드)     | `useOptimistic(state, reducer)`          | 일관된 업데이트 보장          |
+| 여러 action 타입          | `useOptimistic(state, reducer)` + switch | 타입별 분기                   |
 
 ---
 

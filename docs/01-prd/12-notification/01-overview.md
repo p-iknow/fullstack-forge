@@ -42,12 +42,12 @@ stateDiagram-v2
 
 ### 상태 전이 트리거
 
-| 전이 | 트리거 | 수행 주체 | 전제 조건 |
-| --- | --- | --- | --- |
-| `[생성]` → `unread` | 이벤트 소비 완료 (notifications 큐) | system | 멱등 키 중복 아님 |
-| `unread` → `read` | 단건 읽음 처리 (항목 클릭/읽음 액션) | customer | 본인 소유 알림 |
-| `unread` → `read` | 다건 읽음 처리 (선택 항목 일괄) | customer | 본인 소유 알림 |
-| `unread` → `read` | 전체 읽음 처리 | customer | 본인 소유 알림 |
+| 전이                | 트리거                               | 수행 주체 | 전제 조건         |
+| ------------------- | ------------------------------------ | --------- | ----------------- |
+| `[생성]` → `unread` | 이벤트 소비 완료 (notifications 큐)  | system    | 멱등 키 중복 아님 |
+| `unread` → `read`   | 단건 읽음 처리 (항목 클릭/읽음 액션) | customer  | 본인 소유 알림    |
+| `unread` → `read`   | 다건 읽음 처리 (선택 항목 일괄)      | customer  | 본인 소유 알림    |
+| `unread` → `read`   | 전체 읽음 처리                       | customer  | 본인 소유 알림    |
 
 - `read` → `unread` 역전이는 허용하지 않음 (읽음 처리는 비가역)
 - 삭제 정책: MVP에서는 사용자 삭제 미지원. 보존 정책에 따라 시스템이 만료 처리
@@ -62,19 +62,19 @@ stateDiagram-v2
 
 ## 연관 도메인
 
-| 도메인 | 연관 내용 | 참조 |
-| --- | --- | --- |
-| event | 공통 envelope 규격을 준수한 이벤트를 `notifications` 큐에서 소비 | `../13-event/01-overview.md` |
-| order | 주문 생성/상태 변경/취소/대체상품 승인·결과 알림 매핑 | `../05-order/05-events.md` |
-| payment | 결제 완료/실패/취소/환불 이벤트 소비하여 사용자 알림 생성 | `../06-payment/05-events.md` |
-| delivery | 배송 생성/배차/상태변경/배차실패/배송취소 알림 매핑 | `../07-delivery/05-events.md` |
-| review | 리뷰 작성 가능 시점 및 작성 완료 후 후속 알림 정책 연계 | `../10-review/05-events.md` |
-| inventory | 품절/재입고 상태 변경 고객 알림 | `../03-inventory/05-events.md` |
-| cart | `CartExpired`(만료 안내) 및 `CartConverted`(전환 완료) 사용자 알림 | `../04-cart/05-events.md` |
-| loyalty | `PointsEarned`(적립), `PointsRedeemed`(사용), `PointsExpired`(만료), `PointsAdjusted`(조정) 알림 | `../09-loyalty/05-events.md` |
-| promotion | `PromotionApplied`(카테고리 할인 적용) 사용자 알림 | `../08-promotion/05-events.md` |
-| inquiry | `InquiryCreated`(접수), `InquiryReplied`(답변), `InquiryStatusChanged`(상태 변경) 고객 알림, `InquiryReopened`(재오픈) 운영자 알림 | `../11-inquiry/05-events.md` |
-| observability | 알림 소비 지연/DLQ 적체 관측 지표 제공 | `../14-observability/01-overview.md` |
+| 도메인        | 연관 내용                                                                                                                          | 참조                                 |
+| ------------- | ---------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------ |
+| event         | 공통 envelope 규격을 준수한 이벤트를 `notifications` 큐에서 소비                                                                   | `../13-event/01-overview.md`         |
+| order         | 주문 생성/상태 변경/취소/대체상품 승인·결과 알림 매핑                                                                              | `../05-order/05-events.md`           |
+| payment       | 결제 완료/실패/취소/환불 이벤트 소비하여 사용자 알림 생성                                                                          | `../06-payment/05-events.md`         |
+| delivery      | 배송 생성/배차/상태변경/배차실패/배송취소 알림 매핑                                                                                | `../07-delivery/05-events.md`        |
+| review        | 리뷰 작성 가능 시점 및 작성 완료 후 후속 알림 정책 연계                                                                            | `../10-review/05-events.md`          |
+| inventory     | 품절/재입고 상태 변경 고객 알림                                                                                                    | `../03-inventory/05-events.md`       |
+| cart          | `CartExpired`(만료 안내) 및 `CartConverted`(전환 완료) 사용자 알림                                                                 | `../04-cart/05-events.md`            |
+| loyalty       | `PointsEarned`(적립), `PointsRedeemed`(사용), `PointsExpired`(만료), `PointsAdjusted`(조정) 알림                                   | `../09-loyalty/05-events.md`         |
+| promotion     | `PromotionApplied`(카테고리 할인 적용) 사용자 알림                                                                                 | `../08-promotion/05-events.md`       |
+| inquiry       | `InquiryCreated`(접수), `InquiryReplied`(답변), `InquiryStatusChanged`(상태 변경) 고객 알림, `InquiryReopened`(재오픈) 운영자 알림 | `../11-inquiry/05-events.md`         |
+| observability | 알림 소비 지연/DLQ 적체 관측 지표 제공                                                                                             | `../14-observability/01-overview.md` |
 
 ## 이벤트 아키텍처 연결
 
@@ -96,22 +96,22 @@ stateDiagram-v2
 
 ## 엣지 케이스
 
-| 상황 | 처리 정책 |
-| --- | --- |
-| 대량 이벤트 동시 발생 (예: 프로모션 일괄 적용) | notifications 큐 독립 소비, backlog 증가 시 SLA 지표 알림 발동 |
+| 상황                                                           | 처리 정책                                                            |
+| -------------------------------------------------------------- | -------------------------------------------------------------------- |
+| 대량 이벤트 동시 발생 (예: 프로모션 일괄 적용)                 | notifications 큐 독립 소비, backlog 증가 시 SLA 지표 알림 발동       |
 | 이벤트 순서 역전 (OrderCancelled가 OrderCreated보다 먼저 도착) | 각 이벤트를 독립 알림으로 생성, 목록은 `created_at` 기준 최신순 정렬 |
-| 소비 실패 후 DLQ 이동 | 알림 미생성 상태 유지, redrive 후 정상 생성 |
-| 동일 이벤트 중복 수신 | `source_event_id` 유니크 제약으로 중복 생성 차단, 기존 알림 유지 |
-| 사용자 탈퇴 후 이벤트 도착 | `user_id` 유효성 검증 실패 시 알림 미생성, ack 처리 |
+| 소비 실패 후 DLQ 이동                                          | 알림 미생성 상태 유지, redrive 후 정상 생성                          |
+| 동일 이벤트 중복 수신                                          | `source_event_id` 유니크 제약으로 중복 생성 차단, 기존 알림 유지     |
+| 사용자 탈퇴 후 이벤트 도착                                     | `user_id` 유효성 검증 실패 시 알림 미생성, ack 처리                  |
 
 ## 실패 시나리오 및 복구
 
-| 실패 유형 | 영향 | 복구 방법 |
-| --- | --- | --- |
-| notifications 큐 소비 실패 | 해당 알림 미생성 | 자동 재시도 3회 → DLQ 이동 → 운영자 redrive |
-| DB 쓰기 실패 | 알림 레코드 미저장 | nack → 재시도. 반복 실패 시 DLQ |
-| 읽음 처리 API 실패 | 읽음 상태 미반영 | 클라이언트 재시도 (멱등 API) |
-| 대량 backlog 적체 | 알림 전달 지연 | consumer scale-out, SLA 알림 발동 |
+| 실패 유형                  | 영향               | 복구 방법                                   |
+| -------------------------- | ------------------ | ------------------------------------------- |
+| notifications 큐 소비 실패 | 해당 알림 미생성   | 자동 재시도 3회 → DLQ 이동 → 운영자 redrive |
+| DB 쓰기 실패               | 알림 레코드 미저장 | nack → 재시도. 반복 실패 시 DLQ             |
+| 읽음 처리 API 실패         | 읽음 상태 미반영   | 클라이언트 재시도 (멱등 API)                |
+| 대량 backlog 적체          | 알림 전달 지연     | consumer scale-out, SLA 알림 발동           |
 
 ## 알림 보존 정책
 

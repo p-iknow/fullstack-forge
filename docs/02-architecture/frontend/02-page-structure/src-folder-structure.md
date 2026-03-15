@@ -1,6 +1,6 @@
 ---
-title: "Source Folder Structure"
-description: "TanStack Router 기반 서비스별 응집도 중심 폴더 구조 설계. Route → Screen 분리, 파일/폴더 결정 규칙, Store 앱 실제 예시를 포함합니다."
+title: 'Source Folder Structure'
+description: 'TanStack Router 기반 서비스별 응집도 중심 폴더 구조 설계. Route → Screen 분리, 파일/폴더 결정 규칙, Store 앱 실제 예시를 포함합니다.'
 type: guide
 tags: [Architecture, React, TanStackRouter, BestPractice]
 order: 2
@@ -16,29 +16,29 @@ order: 2
 
 ### Route → Page → @shared 레이어
 
-| 레이어 | 위치 | 역할 |
-|--------|------|------|
-| **Route** | `src/routes/` | URL ↔ 컴포넌트 매핑 (thin wrapper) |
-| **Page** | `src/pages/` | 실제 페이지 컴포넌트 (비즈니스 로직) |
-| **@shared** | `src/@shared/` | 앱 인프라 (API client, query options) |
-| **Layout** | `src/routes/_layout.tsx` | Layout route는 routes에만 존재 |
+| 레이어      | 위치                     | 역할                                  |
+| ----------- | ------------------------ | ------------------------------------- |
+| **Route**   | `src/routes/`            | URL ↔ 컴포넌트 매핑 (thin wrapper)    |
+| **Page**    | `src/pages/`             | 실제 페이지 컴포넌트 (비즈니스 로직)  |
+| **@shared** | `src/@shared/`           | 앱 인프라 (API client, query options) |
+| **Layout**  | `src/routes/_layout.tsx` | Layout route는 routes에만 존재        |
 
 ### 분리 기준 (500줄)
 
-| 상황 | 구조 | 비고 |
-|------|------|------|
-| 500줄 이하 단일 페이지 | `{context}-page.tsx` | 분리 불필요 |
-| 500줄 초과 | `{context}-page.tsx` + `{context}-page.sub/` | sub로 분리 |
-| 탭/스텝 멀티뷰 | `{context}-page.tsx` + `{context}-page.views/` | 드문 케이스 |
+| 상황                   | 구조                                           | 비고        |
+| ---------------------- | ---------------------------------------------- | ----------- |
+| 500줄 이하 단일 페이지 | `{context}-page.tsx`                           | 분리 불필요 |
+| 500줄 초과             | `{context}-page.tsx` + `{context}-page.sub/`   | sub로 분리  |
+| 탭/스텝 멀티뷰         | `{context}-page.tsx` + `{context}-page.views/` | 드문 케이스 |
 
 ### 파일 vs 폴더 결정 규칙
 
 **모든 접미사(`.sub`, `.helper`, `.ui`)에 동일하게 적용되는 단일 규칙:**
 
-| 추출할 항목 수 | 형태 | 예시 |
-|---------------|------|------|
-| **1개** | **파일** | `cart-page.sub.tsx`, `header.helper.ts`, `header.ui.tsx` |
-| **2개 이상** | **폴더** | `cart-page.sub/`, `header.helper/`, `header.ui/` |
+| 추출할 항목 수 | 형태     | 예시                                                     |
+| -------------- | -------- | -------------------------------------------------------- |
+| **1개**        | **파일** | `cart-page.sub.tsx`, `header.helper.ts`, `header.ui.tsx` |
+| **2개 이상**   | **폴더** | `cart-page.sub/`, `header.helper/`, `header.ui/`         |
 
 ```
 결정 순서:
@@ -197,20 +197,20 @@ auth/login/page.tsx                 # ❌ 어떤 페이지인지 알 수 없음
 
 ### LLM 토큰 관점의 파일 크기 가이드
 
-| 코드 라인 수 | 대략적 토큰 | 판단 |
-|-------------|------------|------|
-| **≤ 500줄** | ~10K tokens | **단일 파일 유지** (최적) |
-| 500–700줄 | 10–14K tokens | 분리 고려 |
-| **700줄+** | 14K+ tokens | **분리 권장** |
+| 코드 라인 수 | 대략적 토큰   | 판단                      |
+| ------------ | ------------- | ------------------------- |
+| **≤ 500줄**  | ~10K tokens   | **단일 파일 유지** (최적) |
+| 500–700줄    | 10–14K tokens | 분리 고려                 |
+| **700줄+**   | 14K+ tokens   | **분리 권장**             |
 
 ### Store 앱 현재 상태
 
-| 파일 | 줄 수 | 판단 |
-|------|-------|------|
-| `login-page.tsx` | 154줄 | ✅ 단일 파일 유지 |
-| `product-detail-page.tsx` | 239줄 | ✅ 단일 파일 유지 |
-| `home-page.tsx` | 458줄 | ✅ 단일 파일 유지 (500줄 이하) |
-| `cart-page.tsx` + sub 3개 | 총 357줄 | ✅ 이미 적절히 분리됨 |
+| 파일                      | 줄 수    | 판단                           |
+| ------------------------- | -------- | ------------------------------ |
+| `login-page.tsx`          | 154줄    | ✅ 단일 파일 유지              |
+| `product-detail-page.tsx` | 239줄    | ✅ 단일 파일 유지              |
+| `home-page.tsx`           | 458줄    | ✅ 단일 파일 유지 (500줄 이하) |
+| `cart-page.tsx` + sub 3개 | 총 357줄 | ✅ 이미 적절히 분리됨          |
 
 ### 파일 내부 배치 순서 (500줄 이하일 때)
 
@@ -351,7 +351,10 @@ Sub 컴포넌트에서 순수 렌더링 컴포넌트 분리 필요
 
 ```tsx
 // header.ui.tsx — Presentational 컴포넌트 1개
-export function HeaderTitle({ title, subtitle }: Readonly<{
+export function HeaderTitle({
+  title,
+  subtitle,
+}: Readonly<{
   title: string
   subtitle: string
 }>) {
@@ -405,15 +408,15 @@ header/
 
 ### 4.5 한눈에 보는 전체 결정 테이블
 
-| 접미사 | 1개일 때 | 2개 이상일 때 | 포함하는 것 |
-|--------|---------|-------------|-----------|
-| `.sub` | `*.sub.tsx` | `*.sub/` | 하위 컴포넌트 |
-| `.helper` | `*.helper.ts` | `*.helper/` | hooks, 상수, 계산 함수, 유효성 검사 |
-| `.ui` | `*.ui.tsx` | `*.ui/` | Presentational(Dumb) 컴포넌트 |
-| `.views` | — | `*.views/` | 완전히 다른 화면 (항상 폴더, 드문 케이스) |
-| `.event` | `*.event.ts` | — | 이벤트 명세 (항상 파일) |
-| `.types` | `*.types.ts` | — | 공유 타입 (선택, 항상 파일) |
-| `.test` | `*.test.ts(x)` | — | 테스트 (항상 파일, co-located) |
+| 접미사    | 1개일 때       | 2개 이상일 때 | 포함하는 것                               |
+| --------- | -------------- | ------------- | ----------------------------------------- |
+| `.sub`    | `*.sub.tsx`    | `*.sub/`      | 하위 컴포넌트                             |
+| `.helper` | `*.helper.ts`  | `*.helper/`   | hooks, 상수, 계산 함수, 유효성 검사       |
+| `.ui`     | `*.ui.tsx`     | `*.ui/`       | Presentational(Dumb) 컴포넌트             |
+| `.views`  | —              | `*.views/`    | 완전히 다른 화면 (항상 폴더, 드문 케이스) |
+| `.event`  | `*.event.ts`   | —             | 이벤트 명세 (항상 파일)                   |
+| `.types`  | `*.types.ts`   | —             | 공유 타입 (선택, 항상 파일)               |
+| `.test`   | `*.test.ts(x)` | —             | 테스트 (항상 파일, co-located)            |
 
 ---
 
@@ -433,21 +436,21 @@ page-level
 └── {context}-page.views/       # 멀티뷰 (드문 케이스)
 ```
 
-| 폴더 | 의미 | 사용 시점 |
-|------|------|----------|
-| `*.sub/` | 모든 하위 컴포넌트 | 페이지 > 500줄, 기본 분리 방식 |
-| `*.views/` | 완전히 다른 화면 | 탭/스텝/조건부 렌더링 (드문 케이스) |
-| `*.helper/` | 비즈니스 로직 | sub 내부가 복잡할 때 |
-| `*.ui/` | Presentational 컴포넌트 | sub 내부에서 순수 UI 분리할 때 |
+| 폴더        | 의미                    | 사용 시점                           |
+| ----------- | ----------------------- | ----------------------------------- |
+| `*.sub/`    | 모든 하위 컴포넌트      | 페이지 > 500줄, 기본 분리 방식      |
+| `*.views/`  | 완전히 다른 화면        | 탭/스텝/조건부 렌더링 (드문 케이스) |
+| `*.helper/` | 비즈니스 로직           | sub 내부가 복잡할 때                |
+| `*.ui/`     | Presentational 컴포넌트 | sub 내부에서 순수 UI 분리할 때      |
 
 ### View vs Sub 선택 기준
 
-| 구분 | `*.sub/` (기본) | `*.views/` (드문 케이스) |
-|------|----------------|------------------------|
-| **용도** | 모든 하위 컴포넌트 | 완전히 다른 화면/UI |
-| **표시** | 동시에 화면에 표시될 수 있음 | 조건에 따라 하나만 표시됨 |
-| **예시** | 헤더, 콘텐츠, 버튼, 모달 | 탭1 화면, 탭2 화면 |
-| **빈도** | 대부분의 페이지 | 복잡한 멀티스텝/탭 페이지만 |
+| 구분     | `*.sub/` (기본)              | `*.views/` (드문 케이스)    |
+| -------- | ---------------------------- | --------------------------- |
+| **용도** | 모든 하위 컴포넌트           | 완전히 다른 화면/UI         |
+| **표시** | 동시에 화면에 표시될 수 있음 | 조건에 따라 하나만 표시됨   |
+| **예시** | 헤더, 콘텐츠, 버튼, 모달     | 탭1 화면, 탭2 화면          |
+| **빈도** | 대부분의 페이지              | 복잡한 멀티스텝/탭 페이지만 |
 
 ---
 
@@ -588,22 +591,24 @@ header/
 └── header.test.ts          # 테스트 (co-located)
 ```
 
-| 파일 유형 | 위치 | 포함 내용 |
-|----------|------|----------|
-| **메인 컴포넌트** | `*.tsx` | 상태 관리, 이벤트 핸들링, 렌더링 로직 |
-| **Helper** | `*.helper.ts` | 비즈니스 로직, hooks(useXxx), 상수, 계산 함수 |
-| **UI** | `*.ui.tsx` | Presentational 컴포넌트, 스타일 컴포넌트 |
-| **Types** | `*.types.ts` | 페이지/뷰 내 공유 타입 (선택사항) |
-| **Test** | `*.test.ts(x)` | 단위 테스트 (co-located) |
-| **Event** | `*.event.ts` | 이벤트 명세 |
+| 파일 유형         | 위치           | 포함 내용                                     |
+| ----------------- | -------------- | --------------------------------------------- |
+| **메인 컴포넌트** | `*.tsx`        | 상태 관리, 이벤트 핸들링, 렌더링 로직         |
+| **Helper**        | `*.helper.ts`  | 비즈니스 로직, hooks(useXxx), 상수, 계산 함수 |
+| **UI**            | `*.ui.tsx`     | Presentational 컴포넌트, 스타일 컴포넌트      |
+| **Types**         | `*.types.ts`   | 페이지/뷰 내 공유 타입 (선택사항)             |
+| **Test**          | `*.test.ts(x)` | 단위 테스트 (co-located)                      |
+| **Event**         | `*.event.ts`   | 이벤트 명세                                   |
 
 > **Helper에 포함되는 것들:**
+>
 > - 커스텀 hooks (`useHeaderData`, `useFormValidation`)
 > - 비즈니스 로직 함수 (`calculateProgress`, `formatProductData`)
 > - 상수 값 (`MAX_RETRY_COUNT`, `ANIMATION_DURATION_MS`)
 > - 유효성 검사 (`validateInput`, `isValidAmount`)
 >
 > **API 레이어는 `@shared/`에 중앙 관리:**
+>
 > - `@shared/queries/` — React Query options (`catalogListQueryOptions`, `cartQueryOptions`)
 > - `@shared/api/` — API client (`catalogApi.list()`, `authApi.login()`)
 > - 페이지 전용 가공 로직만 `*.helper.ts`에 포함
@@ -682,13 +687,13 @@ src/
 
 ### 승격/강등 규칙
 
-| 상황 | 액션 |
-|------|------|
-| 1곳에서만 사용 | 해당 페이지/컴포넌트 내부에 co-locate |
-| **같은 도메인 2+ 페이지에서 사용** | **`pages/{domain}/@shared/`로 승격** |
-| **2+ 도메인에서 사용** | **`src/@shared/`로 승격** |
-| **2+ 앱에서 사용** | **`packages/`로 승격** |
-| 사용처가 줄어 1곳만 남음 | **즉시 해당 위치로 강등 (co-locate)** |
+| 상황                               | 액션                                  |
+| ---------------------------------- | ------------------------------------- |
+| 1곳에서만 사용                     | 해당 페이지/컴포넌트 내부에 co-locate |
+| **같은 도메인 2+ 페이지에서 사용** | **`pages/{domain}/@shared/`로 승격**  |
+| **2+ 도메인에서 사용**             | **`src/@shared/`로 승격**             |
+| **2+ 앱에서 사용**                 | **`packages/`로 승격**                |
+| 사용처가 줄어 1곳만 남음           | **즉시 해당 위치로 강등 (co-locate)** |
 
 > **⚠️ 무조건 가장 좁은 scope에서 시작.** 필요할 때만 승격. 필요 없어지면 강등.
 
@@ -696,12 +701,12 @@ src/
 
 현재 Store 앱에서 auth/catalog/cart queries는 모두 cross-domain으로 사용 중이므로 `src/@shared/`에 위치합니다:
 
-| 리소스 | 사용 도메인 | 위치 | 이유 |
-|--------|-----------|------|------|
-| `queries/auth.ts` | auth + catalog | `src/@shared/` | store-top-nav(catalog)에서 meQuery 사용 |
-| `queries/catalog.ts` | home + catalog | `src/@shared/` | home-page + product-detail에서 사용 |
-| `queries/cart.ts` | cart + catalog | `src/@shared/` | store-top-nav + product-detail에서 사용 |
-| `api/core.ts` | 전체 | `src/@shared/` | 앱 인프라 |
+| 리소스               | 사용 도메인    | 위치           | 이유                                    |
+| -------------------- | -------------- | -------------- | --------------------------------------- |
+| `queries/auth.ts`    | auth + catalog | `src/@shared/` | store-top-nav(catalog)에서 meQuery 사용 |
+| `queries/catalog.ts` | home + catalog | `src/@shared/` | home-page + product-detail에서 사용     |
+| `queries/cart.ts`    | cart + catalog | `src/@shared/` | store-top-nav + product-detail에서 사용 |
+| `api/core.ts`        | 전체           | `src/@shared/` | 앱 인프라                               |
 
 향후 도메인-only 리소스가 생기면 해당 도메인 `@shared/`에 배치합니다:
 
@@ -721,12 +726,12 @@ pages/orders/
 
 ### @shared 내부 구성
 
-| 폴더 | 포함 내용 | 예시 |
-|------|----------|------|
-| `api/` | API client 함수 | `catalogApi.list()`, `authApi.login()` |
-| `queries/` | React Query options | `catalogListQueryOptions`, `cartQueryOptions` |
-| `ui/` | 공유 UI 컴포넌트/helpers | `AuthFormLayout`, `cartToast` |
-| `helper/` | 공유 비즈니스 로직 | `validateOrder`, `formatPrice` |
+| 폴더       | 포함 내용                | 예시                                          |
+| ---------- | ------------------------ | --------------------------------------------- |
+| `api/`     | API client 함수          | `catalogApi.list()`, `authApi.login()`        |
+| `queries/` | React Query options      | `catalogListQueryOptions`, `cartQueryOptions` |
+| `ui/`      | 공유 UI 컴포넌트/helpers | `AuthFormLayout`, `cartToast`                 |
+| `helper/`  | 공유 비즈니스 로직       | `validateOrder`, `formatPrice`                |
 
 > Cross-app 공유 (store + admin) → `packages/design-system` 또는 `packages/shared`
 
@@ -747,11 +752,11 @@ auth/login/page.tsx
 cart/page.tsx
 ```
 
-| 상황 | `page.tsx` | `login-page.tsx` |
-|------|-----------|------------------|
-| **파일 검색** | `page.tsx` 결과 수십 개 | `login-page` 검색 → 즉시 특정 |
-| **IDE 탭** | 탭 5개 모두 `page.tsx` → 구분 불가 | 각 페이지명으로 구분 |
-| **에러 스택** | `at page.tsx:42` → 어느 페이지? | `at login-page.tsx:42` → 명확 |
+| 상황          | `page.tsx`                         | `login-page.tsx`              |
+| ------------- | ---------------------------------- | ----------------------------- |
+| **파일 검색** | `page.tsx` 결과 수십 개            | `login-page` 검색 → 즉시 특정 |
+| **IDE 탭**    | 탭 5개 모두 `page.tsx` → 구분 불가 | 각 페이지명으로 구분          |
+| **에러 스택** | `at page.tsx:42` → 어느 페이지?    | `at login-page.tsx:42` → 명확 |
 
 ### Sub 컴포넌트 네이밍
 
@@ -767,11 +772,11 @@ export function CartSummary({ cart }: Readonly<{ cart: CartResponse }>) { ... }
 
 ### 컨벤션 요약
 
-| 규칙 | 내용 |
-|------|------|
-| **Kebab-case** | 모든 파일/폴더명 (`cart-item-row.tsx`, 한글·camelCase 금지) |
-| **No barrel exports** | `index.ts` 재export 금지 (tree-shaking, 순환 참조 방지) |
-| **직접 import** | `from './header.helper/calculateProgress'` |
+| 규칙                        | 내용                                                          |
+| --------------------------- | ------------------------------------------------------------- |
+| **Kebab-case**              | 모든 파일/폴더명 (`cart-item-row.tsx`, 한글·camelCase 금지)   |
+| **No barrel exports**       | `index.ts` 재export 금지 (tree-shaking, 순환 참조 방지)       |
+| **직접 import**             | `from './header.helper/calculateProgress'`                    |
 | **Declaration-time export** | `export function`, `export const` (trailing export 블록 금지) |
 
 ---

@@ -50,7 +50,10 @@ export function AdminCatalogPage() {
     ...deleteProductMutationOptions(queryClient),
     onError: async (error) => {
       const apiError = await readApiError(error)
-      await alertAction({ title: '삭제 실패', description: apiError.error || '상품 삭제에 실패했습니다' })
+      await alertAction({
+        title: '삭제 실패',
+        description: apiError.error || '상품 삭제에 실패했습니다',
+      })
     },
   })
   const updateActiveMutation = useMutation(updateProductActiveMutationOptions(queryClient))

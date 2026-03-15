@@ -34,9 +34,7 @@ export function CartSummary({ cart }: Readonly<{ cart: CartResponse }>) {
           주문하기
         </button>
         {hasOutOfStock ? (
-          <p className="mt-2 text-center text-xs text-rose-600">
-            품절 상품을 제거해주세요.
-          </p>
+          <p className="mt-2 text-center text-xs text-rose-600">품절 상품을 제거해주세요.</p>
         ) : null}
       </div>
     </div>
