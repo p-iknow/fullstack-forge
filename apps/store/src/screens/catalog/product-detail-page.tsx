@@ -20,7 +20,7 @@ export function ProductDetailPage({ productId }: Readonly<{ productId: string }>
   const productQuery = useQuery(catalogDetailQueryOptions(productId))
 
   return (
-    <main className="mx-auto w-full max-w-7xl px-4 py-6 md:px-6 md:py-8">
+    <main className="mx-auto w-full max-w-7xl px-4 py-6 pb-24 md:px-6 md:py-8 md:pb-8">
       {/* Breadcrumb */}
       <nav aria-label="breadcrumb" className="flex items-center gap-1 text-sm text-muted-foreground">
         <Link to="/" className="transition-colors hover:text-foreground">
@@ -83,7 +83,7 @@ function ProductDetailContent({
           src={product.detailUrl}
           alt={`${product.name} 이미지`}
           loading="lazy"
-          className="aspect-square w-full object-cover"
+          className="aspect-[4/3] w-full object-contain md:aspect-square md:object-cover"
         />
       </div>
 
@@ -165,46 +165,48 @@ function AddToCartControl({ productId }: Readonly<{ productId: string }>) {
   }
 
   return (
-    <div className="flex flex-col gap-3 md:flex-row md:items-center md:gap-4">
-      {/* Quantity stepper */}
-      <div className="inline-flex shrink-0 items-center rounded-lg border border-border">
-        <button
-          type="button"
-          onClick={() => setQuantity((q) => Math.max(1, q - 1))}
-          disabled={quantity <= 1}
-          className="flex h-10 w-10 items-center justify-center text-muted-foreground transition-colors hover:text-foreground disabled:opacity-30"
-        >
-          <MinusIcon className="h-4 w-4" />
-          <span className="sr-only">수량 감소</span>
-        </button>
-        <span className="flex h-10 w-14 items-center justify-center border-x border-border text-sm font-semibold tabular-nums text-foreground">
-          {quantity}
-        </span>
-        <button
-          type="button"
-          onClick={() => setQuantity((q) => Math.min(15, q + 1))}
-          disabled={quantity >= 15}
-          className="flex h-10 w-10 items-center justify-center text-muted-foreground transition-colors hover:text-foreground disabled:opacity-30"
-        >
-          <PlusIcon className="h-4 w-4" />
-          <span className="sr-only">수량 증가</span>
-        </button>
-      </div>
+    <div className="fixed inset-x-0 bottom-0 z-40 border-t border-border bg-background/95 px-4 py-3 backdrop-blur-sm md:static md:inset-auto md:z-auto md:border-t-0 md:bg-transparent md:px-0 md:py-0 md:backdrop-blur-none">
+      <div className="flex items-center gap-3 md:gap-4">
+        {/* Quantity stepper */}
+        <div className="inline-flex shrink-0 items-center rounded-lg border border-border">
+          <button
+            type="button"
+            onClick={() => setQuantity((q) => Math.max(1, q - 1))}
+            disabled={quantity <= 1}
+            className="flex h-10 w-10 items-center justify-center text-muted-foreground transition-colors hover:text-foreground disabled:opacity-30"
+          >
+            <MinusIcon className="h-4 w-4" />
+            <span className="sr-only">수량 감소</span>
+          </button>
+          <span className="flex h-10 w-14 items-center justify-center border-x border-border text-sm font-semibold tabular-nums text-foreground">
+            {quantity}
+          </span>
+          <button
+            type="button"
+            onClick={() => setQuantity((q) => Math.min(15, q + 1))}
+            disabled={quantity >= 15}
+            className="flex h-10 w-10 items-center justify-center text-muted-foreground transition-colors hover:text-foreground disabled:opacity-30"
+          >
+            <PlusIcon className="h-4 w-4" />
+            <span className="sr-only">수량 증가</span>
+          </button>
+        </div>
 
-      {/* Add to cart button */}
-      <Button
-        type="button"
-        onClick={onAdd}
-        disabled={addMutation.isPending}
-        className="relative h-12 w-full gap-2 text-sm font-semibold md:w-52"
-      >
-        <ShoppingCartIcon className="h-5 w-5" />
-        장바구니 담기
-        <Loader2Icon
-          className={`absolute right-4 h-4 w-4 transition-opacity duration-200 ${addMutation.isPending ? 'animate-spin opacity-60' : 'opacity-0'}`}
-          aria-hidden={!addMutation.isPending}
-        />
-      </Button>
+        {/* Add to cart button */}
+        <Button
+          type="button"
+          onClick={onAdd}
+          disabled={addMutation.isPending}
+          className="relative h-12 flex-1 gap-2 text-sm font-semibold md:w-52 md:flex-none"
+        >
+          <ShoppingCartIcon className="h-5 w-5" />
+          장바구니 담기
+          <Loader2Icon
+            className={`absolute right-4 h-4 w-4 transition-opacity duration-200 ${addMutation.isPending ? 'animate-spin opacity-60' : 'opacity-0'}`}
+            aria-hidden={!addMutation.isPending}
+          />
+        </Button>
+      </div>
     </div>
   )
 }
