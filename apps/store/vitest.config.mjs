@@ -1,11 +1,11 @@
 import { defineConfig } from 'vitest/config'
 import { playwright } from '@vitest/browser-playwright'
-import tsConfigPaths from 'vite-tsconfig-paths'
 import tailwindcss from '@tailwindcss/vite'
 
 export default defineConfig({
-  plugins: [tailwindcss(), tsConfigPaths()],
+  plugins: [tailwindcss()],
   resolve: {
+    tsconfigPaths: true,
     conditions: ['@fullstack-forge/source'],
   },
   test: {
