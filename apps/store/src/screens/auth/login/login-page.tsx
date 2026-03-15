@@ -11,8 +11,8 @@ import { readApiError } from '~/lib/api'
 import { authQueryKeys, loginMutationOptions } from '~/lib/queries/auth'
 import type { MeResponse } from '~/lib/queries/auth'
 
-const googleStartUrl = '/api/auth/oauth/google/start?redirect=/auth/callback/success'
-const kakaoStartUrl = '/api/auth/oauth/kakao/start?redirect=/auth/callback/success'
+const googleStartUrl = '/api/auth/oauth/google/start?redirect=/'
+const kakaoStartUrl = '/api/auth/oauth/kakao/start?redirect=/'
 
 const loginSchema = z.object({
   email: z.string().email('유효하지 않은 이메일 주소입니다.'),

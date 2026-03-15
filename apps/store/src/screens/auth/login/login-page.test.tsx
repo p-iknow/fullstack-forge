@@ -85,11 +85,11 @@ describe('login page', () => {
     // then
     expect(googleLink).toHaveAttribute(
       'href',
-      '/api/auth/oauth/google/start?redirect=/auth/callback/success',
+      '/api/auth/oauth/google/start?redirect=/',
     )
     expect(kakaoLink).toHaveAttribute(
       'href',
-      '/api/auth/oauth/kakao/start?redirect=/auth/callback/success',
+      '/api/auth/oauth/kakao/start?redirect=/',
     )
   })
 })
