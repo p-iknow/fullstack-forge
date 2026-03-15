@@ -11,7 +11,8 @@
     "preview": "vite preview",
     "start": "node .output/server/index.mjs",
     "typecheck": "tsc --noEmit",
-    "test": "vitest run --passWithNoTests",
+    "test": "vitest run --passWithNoTests --project store-unit",
+    "test:visual": "vitest run --passWithNoTests --project store-visual",
     "e2e": "playwright test"
   },
   "dependencies": {
