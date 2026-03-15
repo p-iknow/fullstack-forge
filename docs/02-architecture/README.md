@@ -64,8 +64,7 @@
 | ADR-0003 | API 계약 기준을 @fullstack-forge/api-spec로 관리 (생성 원천: @hono/zod-openapi) | Accepted | [integration/01-integration.adr.md](./integration/01-integration.adr.md) |
 | ADR-0004 | SNS -> SQS fanout + DLQ + Idempotency 선택                                     | Accepted | [backend/02-eventing.adr.md](./backend/02-eventing.adr.md)               |
 | ADR-0005 | Prometheus + Grafana 선택                                                       | Accepted | [base/08-observability.adr.md](./base/08-observability.adr.md)           |
-
-> ADR-0006 ~ ADR-0017 (도메인별 정책 ADR)은 PRD와 중복되어 삭제되었다. 도메인 정책은 [PRD](../01-prd/README.md)를 단일 기준으로 참조한다.
+| ADR-0006 | 비동기 상태 분기를 Suspensive 선언적 경계로 전환                                | Accepted | [frontend/03-suspensive-boundaries.adr.md](./frontend/03-suspensive-boundaries.adr.md) |
 
 ## 관련 문서
 
