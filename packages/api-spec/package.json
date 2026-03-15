@@ -49,6 +49,14 @@
       "types": "./src/cart-schemas.ts",
       "default": "./src/cart-schemas.ts"
     },
+    "./event-schemas": {
+      "types": "./src/event-schemas.ts",
+      "default": "./src/event-schemas.ts"
+    },
+    "./event-admin-schemas": {
+      "types": "./src/event-admin-schemas.ts",
+      "default": "./src/event-admin-schemas.ts"
+    },
     "./routes/cart": {
       "types": "./src/routes/cart/index.ts",
       "default": "./src/routes/cart/index.ts"
@@ -56,6 +64,10 @@
     "./routes/catalog": {
       "types": "./src/routes/catalog/index.ts",
       "default": "./src/routes/catalog/index.ts"
+    },
+    "./routes/events": {
+      "types": "./src/routes/events/index.ts",
+      "default": "./src/routes/events/index.ts"
     },
     "./client/admin/client.gen": {
       "types": "./generated/client/admin/client.gen.ts",
