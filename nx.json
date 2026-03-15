@@ -14,9 +14,9 @@
   },
   "targetDefaults": {
     "codegen": { "dependsOn": ["^codegen"], "cache": true },
-    "build": { "dependsOn": ["codegen", "^build"], "cache": true },
+    "build": { "dependsOn": ["^build"], "cache": true },
     "dev": { "cache": false },
-    "typecheck": { "dependsOn": ["codegen", "^typecheck"], "cache": true },
+    "typecheck": { "dependsOn": ["^typecheck"], "cache": true },
     "lint": { "cache": true },
     "test": { "cache": true },
     "storybook": { "cache": false },
